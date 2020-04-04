@@ -10,6 +10,11 @@
       <textarea name="message"></textarea>
       <input type="submit" value="Send" />
     </form>
-    <h1><%= message %></h1>
+    <p>
+      Whoami: <%= profile.id %>
+    </p>
+    <% posts.map(post => { %>
+    <div><%= post.text %></div>
+    <% }) %>
   </body>
 </html>

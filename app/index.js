@@ -1,6 +1,13 @@
-let server = require("./lib/express");
+let server;
 require("./lib/ssb");
-require("./lib/electron");
+
+setTimeout(() => {
+  server = require("./lib/express");
+}, 500);
+
+setTimeout(() => {
+  require("./lib/electron");
+}, 1000);
 
 if (process.env.NODE_ENV !== "production") {
   const chokidar = require("chokidar");
@@ -13,7 +20,7 @@ if (process.env.NODE_ENV !== "production") {
       Object.keys(require.cache).forEach((id) => {
         if (/[\/\\]lib[\/\\]/.test(id)) delete require.cache[id];
       });
-      server.close();
+      if (server) server.close();
       server = require("./lib/express");
       BrowserWindow.getAllWindows()[0].reload();
     });
