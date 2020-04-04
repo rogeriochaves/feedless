@@ -10,7 +10,7 @@ const createWindow = () => {
     },
   });
 
-  win.loadURL("http://localhost:3000");
+  win.loadURL(`http://localhost:${process.env.EXPRESS_PORT || 3000}`);
 };
 
 app.whenReady().then(createWindow);

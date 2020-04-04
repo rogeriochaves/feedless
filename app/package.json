@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "start:user-2": "SSB_PORT=8009 EXPRESS_PORT=3001 CONFIG_FOLDER=ssb-user2 electron ."
   },
   "author": "",
   "license": "ISC",
@@ -13,10 +14,14 @@
     "ejs": "^3.0.2",
     "express": "^4.17.1",
     "pull-stream": "^3.6.14",
+    "ssb-about": "^2.0.1",
     "ssb-backlinks": "^1.0.0",
     "ssb-client": "^4.9.0",
     "ssb-config": "^3.4.4",
+    "ssb-contacts": "0.0.2",
+    "ssb-friends": "^4.1.4",
     "ssb-gossip": "^1.1.1",
+    "ssb-keys": "^7.2.2",
     "ssb-master": "^1.0.3",
     "ssb-replicate": "^1.3.2",
     "ssb-server": "^15.2.0"

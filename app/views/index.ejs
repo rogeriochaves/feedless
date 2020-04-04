@@ -1,20 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Social</title>
-  </head>
-  <body>
-    <form action="publish" method="POST">
-      <textarea name="message"></textarea>
-      <input type="submit" value="Send" />
-    </form>
-    <p>
-      Whoami: <%= profile.id %>
-    </p>
-    <% posts.map(post => { %>
-    <div><%= post.text %></div>
-    <% }) %>
-  </body>
-</html>
+<%- include('_header') %>
+
+<form action="publish" method="POST">
+  <textarea name="message"></textarea>
+  <input type="submit" value="Send" />
+</form>
+<p>
+  Whoami: <%= profile.id %>
+</p>
+<% posts.map(post => { %>
+  <div><%= post.text %></div>
+<% }) %>
+<a href="new_invite">Create New Invite</a>
+
+<form action="add_invite" method="POST">
+  <textarea name="invite_code"></textarea>
+  <input type="submit" value="Add Invite" />
+</form>
+
+<%- include('_footer') %>

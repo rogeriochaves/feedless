@@ -1,13 +1,17 @@
 const Server = require("ssb-server");
-const config = require("ssb-config");
 const fs = require("fs");
 const path = require("path");
+const config = require("./ssb-config");
 
 // add plugins
 Server.use(require("ssb-master"))
   .use(require("ssb-gossip"))
   .use(require("ssb-replicate"))
-  .use(require("ssb-backlinks"));
+  .use(require("ssb-backlinks"))
+  .use(require("ssb-about"))
+  .use(require("ssb-contacts"))
+  .use(require("ssb-invite"))
+  .use(require("ssb-friends"));
 
 const server = Server(config);
 console.log("SSB server started at", config.port);
