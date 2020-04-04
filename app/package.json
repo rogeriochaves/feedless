@@ -1,0 +1,27 @@
+{
+  "name": "social-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chokidar": "^3.3.1",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "pull-stream": "^3.6.14",
+    "ssb-backlinks": "^1.0.0",
+    "ssb-client": "^4.9.0",
+    "ssb-config": "^3.4.4",
+    "ssb-gossip": "^1.1.1",
+    "ssb-master": "^1.0.3",
+    "ssb-replicate": "^1.3.2",
+    "ssb-server": "^15.2.0"
+  },
+  "devDependencies": {
+    "electron": "^8.2.0"
+  }
+}
