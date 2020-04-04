@@ -11,7 +11,11 @@ Server.use(require("ssb-master"))
   .use(require("ssb-about"))
   .use(require("ssb-contacts"))
   .use(require("ssb-invite"))
-  .use(require("ssb-friends"));
+  .use(require("ssb-friends"))
+  .use(require("ssb-query"))
+  .use(require("ssb-device-address"))
+  .use(require("ssb-identities"))
+  .use(require("ssb-peer-invites"));
 
 const server = Server(config);
 console.log("SSB server started at", config.port);

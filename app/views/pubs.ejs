@@ -1,0 +1,32 @@
+<%- include('_header') %>
+
+<h1>Pubs</h1>
+
+<h2>Connected to</h2>
+
+<div>
+  <p>You are connected to <%= peers.length %> pubs</p>
+  <ul>
+    <% peers.map(peer => { %>
+      <li><%= peer.address %></li>
+    <% }) %>
+  </ul>
+</div>
+
+<h2>Your Pub</h2>
+
+<div>
+  <p>Here is your pub address, copy and send to friends:</p>
+  <code style="width: 80%; word-wrap: break-word;"><%= invite %></code>
+</div>
+
+<h2>Connect to Pub</h2>
+
+<div>
+  <form action="pubs/add" method="POST">
+    <textarea name="invite_code"></textarea>
+    <input type="submit" value="Add Pub" />
+  </form>
+</div>
+
+<%- include('_footer') %>

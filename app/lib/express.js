@@ -6,6 +6,7 @@ const pull = require("pull-stream");
 const Client = require("ssb-client");
 const ssbKeys = require("ssb-keys");
 const ssbConfig = require("./ssb-config");
+const { promisify, asyncRouter } = require("./utils");
 
 let ssbServer;
 let profile;
@@ -13,16 +14,20 @@ let profile;
 let homeFolder =
   process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 let ssbSecret = ssbKeys.loadOrCreateSync(
-  `${homeFolder}/.${process.env.CONFIG_FOLDER || "ssb"}/secret`
+  `${homeFolder}/.${process.env.CONFIG_FOLDER || "social"}/secret`
 );
-Client(ssbSecret, ssbConfig, (err, server) => {
+Client(ssbSecret, ssbConfig, async (err, server) => {
   if (err) throw err;
   ssbServer = server;
-  ssbServer.whoami((err, keys) => {
-    if (err) throw err;
-    profile = keys;
-  });
-  console.log(ssbServer);
+  profile = await promisify(ssbServer.whoami);
+
+  console.log(
+    "nearby pubs",
+    await promisify(ssbServer.peerInvites.getNearbyPubs)
+  );
+  console.log("getState", await promisify(ssbServer.deviceAddress.getState));
+
+  console.log("ssbServer", ssbServer);
 });
 
 app.use(bodyParser.json());
@@ -30,9 +35,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-app.get("/", (_req, res) => {
+const router = asyncRouter(app);
+
+router.get("/", (_req, res) => {
+  if (!ssbServer) {
+    setTimeout(() => {
+      res.redirect("/");
+    }, 500);
+    return;
+  }
+
   pull(
-    ssbServer.createFeedStream(),
+    ssbServer.query.read({ limit: 10, reverse: true }),
     pull.collect((_err, msgs) => {
       const posts = msgs.map((x) => x.value.content);
 
@@ -41,30 +55,25 @@ app.get("/", (_req, res) => {
   );
 });
 
-app.post("/publish", (req, res) => {
-  ssbServer.publish({ type: "post", text: req.body.message }, (err, msg) => {
-    res.redirect("/");
-  });
+router.post("/publish", async (req, res) => {
+  await promisify(ssbServer.publish, { type: "post", text: req.body.message });
+
+  res.redirect("/");
 });
 
-app.get("/new_invite", (_req, res) => {
-  ssbServer.invite.create({ uses: 10 }, (err, invite) => {
-    if (err) throw err;
-    console.log("invite", invite);
+router.get("/pubs", async (_req, res) => {
+  const invite = await promisify(ssbServer.invite.create, { uses: 10 });
+  const peers = await promisify(ssbServer.gossip.peers);
 
-    res.render("new_invite", { invite });
-  });
+  res.render("pubs", { invite, peers });
 });
 
-app.post("/add_invite", (req, res) => {
+router.post("/pubs/add", async (req, res) => {
   const inviteCode = req.body.invite_code;
 
-  ssbServer.invite.accept(inviteCode, (err, result) => {
-    if (err) throw err;
-    console.log("result", result);
+  await promisify(ssbServer.invite.accept, inviteCode);
 
-    res.redirect("/");
-  });
+  res.redirect("/");
 });
 
 const expressServer = app.listen(port, () =>

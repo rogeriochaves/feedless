@@ -10,11 +10,5 @@
 <% posts.map(post => { %>
   <div><%= post.text %></div>
 <% }) %>
-<a href="new_invite">Create New Invite</a>
-
-<form action="add_invite" method="POST">
-  <textarea name="invite_code"></textarea>
-  <input type="submit" value="Add Invite" />
-</form>
 
 <%- include('_footer') %>
