@@ -2,11 +2,11 @@ const express = require("express");
 const app = express();
 const port = process.env.EXPRESS_PORT || 3000;
 const bodyParser = require("body-parser");
-const pull = require("pull-stream");
 const Client = require("ssb-client");
 const ssbKeys = require("ssb-keys");
 const ssbConfig = require("./ssb-config");
 const { promisify, asyncRouter } = require("./utils");
+const queries = require("./queries");
 
 let ssbServer;
 let profile;
@@ -37,7 +37,7 @@ app.use(express.static("public"));
 
 const router = asyncRouter(app);
 
-router.get("/", (_req, res) => {
+router.get("/", async (_req, res) => {
   if (!ssbServer) {
     setTimeout(() => {
       res.redirect("/");
@@ -49,56 +49,12 @@ router.get("/", (_req, res) => {
     res.redirect("/about");
   }
 
-  const getAuthorName = (data, callback) => {
-    let promises = [];
-
-    const authorNamePromise = promisify(ssbServer.about.latestValue, {
-      key: "name",
-      dest: data.value.author,
-    });
-    promises.push(authorNamePromise);
-
-    if (data.value.content.type == "contact") {
-      const contactNamePromise = promisify(ssbServer.about.latestValue, {
-        key: "name",
-        dest: data.value.content.contact,
-      });
-      promises.push(contactNamePromise);
-    }
-
-    Promise.all(promises)
-      .then(([authorName, contactName]) => {
-        data.value.authorName = authorName;
-        if (contactName) {
-          data.value.content.contactName = contactName;
-        }
-
-        callback(null, data);
-      })
-      .catch((err) => callback(err, null));
-  };
-
-  pull(
-    ssbServer.query.read({
-      reverse: true,
-      query: [
-        {
-          $filter: {
-            value: {
-              content: { type: { $in: ["post", "contact"] } },
-            },
-          },
-        },
-      ],
-      limit: 500,
-    }),
-    pull.asyncMap(getAuthorName),
-    pull.collect((_err, msgs) => {
-      const entries = msgs.map((x) => x.value);
-
-      res.render("index", { entries, profile });
-    })
-  );
+  const [posts, people, friends] = await Promise.all([
+    queries.getPosts(ssbServer),
+    queries.getPeople(ssbServer),
+    queries.getFriends(profile, ssbServer),
+  ]);
+  res.render("index", { profile, posts, people, friends });
 });
 
 router.post("/publish", async (req, res) => {
@@ -139,6 +95,12 @@ router.post("/about", async (req, res) => {
   }
 
   res.redirect("/");
+});
+
+router.get("/debug", async (_req, res) => {
+  const entries = await queries.getAllEntries(ssbServer);
+
+  res.render("debug", { profile, entries });
 });
 
 const expressServer = app.listen(port, () =>

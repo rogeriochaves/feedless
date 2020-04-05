@@ -5,12 +5,25 @@
   <input type="submit" value="Send" />
 </form>
 
-<% entries.map(entry => { %>
-  <% if (entry.content.type == "post") { %>
-    <div><%= entry.authorName %>: <%= entry.content.text %></div>
-  <% } else if (entry.content.type == "contact") { %>
-    <div><%= entry.authorName %> followed <%= entry.content.contactName %></div>
-  <% } %>
+<% posts.map(entry => { %>
+  <div><%= entry.authorName %>: <%= entry.content.text %></div>
+  <hr />
 <% }) %>
+
+<h2>All People</h2>
+
+<ul>
+  <% people.map(person => { %>
+    <li><%= person.content.name %> (<%= person.author.slice(0, 8) %>)</li>
+  <% }) %>
+</ul>
+
+<h2>Friends</h2>
+
+<ul>
+  <% friends.map(friend => { %>
+    <li><%= friend.content.contactName %> (<%= friend.content.contact.slice(0, 8) %>)</li>
+  <% }) %>
+</ul>
 
 <%- include('_footer') %>

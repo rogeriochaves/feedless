@@ -4,6 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Social</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+      }
+      header {
+        padding: 20px 10px;
+        border-bottom: 1px solid #666;
+      }
+      header a {
+        display: inline-block;
+        padding: 0 10px;
+      }
+      main {
+        padding: 10px;
+      }
+    </style>
   </head>
   <body>
     <% if (profile.name) { %>
@@ -15,6 +32,8 @@
           <a href="/">Home</a>
           <a href="/about">About me</a>
           <a href="/pubs">Pubs</a>
+          <a href="/debug">Debug</a>
         </nav>
       </header>
     <% } %>
+    <main>
