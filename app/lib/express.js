@@ -50,14 +50,18 @@ router.get("/", async (_req, res) => {
   }
 
   const [posts, friends] = await Promise.all([
-    queries.getPosts(ssbServer),
+    queries.getPosts(ssbServer, profile.id),
     queries.getFriends(profile, ssbServer),
   ]);
   res.render("index", { profile, posts, friends });
 });
 
 router.post("/publish", async (req, res) => {
-  await promisify(ssbServer.publish, { type: "post", text: req.body.message });
+  await promisify(ssbServer.publish, {
+    type: "post",
+    text: req.body.message,
+    wall: profile.id,
+  });
 
   res.redirect("/");
 });

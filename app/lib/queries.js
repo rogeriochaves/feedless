@@ -66,7 +66,7 @@ const mapAuthorName = (ssbServer) => (data, callback) => {
     .catch((err) => callback(err, null));
 };
 
-const getPosts = (ssbServer) =>
+const getPosts = (ssbServer, userId) =>
   new Promise((resolve, reject) => {
     pull(
       ssbServer.query.read({
@@ -75,12 +75,12 @@ const getPosts = (ssbServer) =>
           {
             $filter: {
               value: {
-                content: { type: "post" },
+                content: { type: "post", wall: userId },
               },
             },
           },
         ],
-        limit: 500,
+        limit: 100,
       }),
       pull.asyncMap(mapAuthorName(ssbServer)),
       pull.collect((err, msgs) => {
