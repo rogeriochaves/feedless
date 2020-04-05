@@ -1,0 +1,12 @@
+<%- include('_header') %>
+
+<h1>About me</h1>
+
+<form action="about" method="POST">
+  <p>
+    Name: <input type="text" name="name" value="<%= profile.name %>">
+  </p>
+  <input type="submit" value="Save">
+</form>
+
+<%- include('_footer') %>

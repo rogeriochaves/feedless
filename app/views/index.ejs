@@ -4,11 +4,13 @@
   <textarea name="message"></textarea>
   <input type="submit" value="Send" />
 </form>
-<p>
-  Whoami: <%= profile.id %>
-</p>
-<% posts.map(post => { %>
-  <div><%= post.text %></div>
+
+<% entries.map(entry => { %>
+  <% if (entry.content.type == "post") { %>
+    <div><%= entry.authorName %>: <%= entry.content.text %></div>
+  <% } else if (entry.content.type == "contact") { %>
+    <div><%= entry.authorName %> followed <%= entry.content.contactName %></div>
+  <% } %>
 <% }) %>
 
 <%- include('_footer') %>

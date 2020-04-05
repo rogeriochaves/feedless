@@ -6,9 +6,15 @@
     <title>Social</title>
   </head>
   <body>
-    <header>
-      <nav>
-        <a href="/">Home</a>
-        <a href="/pubs">Pubs</a>
-      </nav>
-    </header>
+    <% if (profile.name) { %>
+      <header>
+        <div style="float: right">
+          <%= profile.name %> (<%= profile.id.slice(0, 8) %>)
+        </div>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/about">About me</a>
+          <a href="/pubs">Pubs</a>
+        </nav>
+      </header>
+    <% } %>
