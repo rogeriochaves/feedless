@@ -28,6 +28,10 @@
         <div style="float: right">
           <%= profile.name %> (<%= profile.id.slice(0, 8) %>)
         </div>
+        <form action="search" method="GET" style="float: right; padding-right: 10px">
+          <input type="text" name="query" placeholder="Search for people...">
+          <input type="submit" value="Search" />
+        </form>
         <nav>
           <a href="/">Home</a>
           <a href="/about">About me</a>

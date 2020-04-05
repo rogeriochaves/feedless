@@ -1,0 +1,11 @@
+<%- include('_header') %>
+
+<h2>Results</h2>
+
+<ul>
+  <% people.map(person => { %>
+    <li><%= person.content.name %> (<%= person.author.slice(0, 8) %>)</li>
+  <% }) %>
+</ul>
+
+<%- include('_footer') %>

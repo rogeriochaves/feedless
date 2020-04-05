@@ -49,12 +49,11 @@ router.get("/", async (_req, res) => {
     res.redirect("/about");
   }
 
-  const [posts, people, friends] = await Promise.all([
+  const [posts, friends] = await Promise.all([
     queries.getPosts(ssbServer),
-    queries.getPeople(ssbServer),
     queries.getFriends(profile, ssbServer),
   ]);
-  res.render("index", { profile, posts, people, friends });
+  res.render("index", { profile, posts, friends });
 });
 
 router.post("/publish", async (req, res) => {
@@ -101,6 +100,14 @@ router.get("/debug", async (_req, res) => {
   const entries = await queries.getAllEntries(ssbServer);
 
   res.render("debug", { profile, entries });
+});
+
+router.get("/search", async (req, res) => {
+  const query = req.query.query;
+
+  const people = await queries.searchPeople(ssbServer, query);
+
+  res.render("search", { profile, people });
 });
 
 const expressServer = app.listen(port, () =>

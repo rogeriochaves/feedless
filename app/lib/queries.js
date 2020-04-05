@@ -92,7 +92,7 @@ const getPosts = (ssbServer) =>
     );
   });
 
-const getPeople = (ssbServer) =>
+const searchPeople = (ssbServer, search) =>
   new Promise((resolve, reject) => {
     pull(
       ssbServer.query.read({
@@ -111,7 +111,11 @@ const getPeople = (ssbServer) =>
         ],
       }),
       pull.filter((msg) => {
-        return msg.value.content && msg.value.author == msg.value.content.about;
+        return (
+          msg.value.content &&
+          msg.value.author == msg.value.content.about &&
+          msg.value.content.name.includes(search)
+        );
       }),
       pull.collect((err, msgs) => {
         const entries = msgs.map((x) => x.value);
@@ -170,7 +174,7 @@ const getAllEntries = (ssbServer) =>
 module.exports = {
   mapAuthorName,
   getPosts,
-  getPeople,
+  searchPeople,
   getFriends,
   getAllEntries,
 };
