@@ -1,17 +1,53 @@
 const { promisify } = require("./utils");
 const pull = require("pull-stream");
 
+const latestOwnerValue = (ssbServer) => ({ key, dest }, cb) => {
+  let value = null;
+  pull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              author: dest,
+              content: { type: "about", about: dest },
+            },
+          },
+        },
+      ],
+    }),
+    pull.filter((msg) => {
+      return (
+        msg.value.content &&
+        key in msg.value.content &&
+        !(msg.value.content[key] && msg.value.content[key].remove)
+      );
+    }),
+    pull.take(1),
+    pull.drain(
+      (msg) => {
+        value = msg.value.content[key];
+      },
+      (err) => {
+        if (err) return cb(err);
+        cb(null, value);
+      }
+    )
+  );
+};
+
 const mapAuthorName = (ssbServer) => (data, callback) => {
   let promises = [];
 
-  const authorNamePromise = promisify(ssbServer.about.latestValue, {
+  const authorNamePromise = promisify(latestOwnerValue(ssbServer), {
     key: "name",
     dest: data.value.author,
   });
   promises.push(authorNamePromise);
 
   if (data.value.content.type == "contact") {
-    const contactNamePromise = promisify(ssbServer.about.latestValue, {
+    const contactNamePromise = promisify(latestOwnerValue(ssbServer), {
       key: "name",
       dest: data.value.content.contact,
     });
@@ -73,19 +109,15 @@ const getPeople = (ssbServer) =>
             },
           },
         ],
-        limit: 500,
+      }),
+      pull.filter((msg) => {
+        return msg.value.content && msg.value.author == msg.value.content.about;
       }),
       pull.collect((err, msgs) => {
-        let people = {};
-        for (let person of msgs) {
-          const author = person.value.author;
-          if (author == person.value.content.about && !people[author]) {
-            people[author] = person.value;
-          }
-        }
+        const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
-        return resolve(Object.values(people));
+        return resolve(Object.values(entries));
       })
     );
   });
@@ -124,7 +156,7 @@ const getAllEntries = (ssbServer) =>
     pull(
       ssbServer.query.read({
         reverse: true,
-        limit: 100,
+        limit: 500,
       }),
       pull.collect((err, msgs) => {
         const entries = msgs.map((x) => x.value);

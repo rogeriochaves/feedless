@@ -6,7 +6,7 @@
 </form>
 
 <% posts.map(entry => { %>
-  <div><%= entry.authorName %>: <%= entry.content.text %></div>
+  <div><%= entry.authorName %> (<%= entry.author.slice(0, 8) %>): <%= entry.content.text %></div>
   <hr />
 <% }) %>
 
