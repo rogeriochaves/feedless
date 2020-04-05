@@ -1,8 +1,8 @@
 <%- include('_header') %>
 
-<h1>Home</h1>
+<h1><%= profile.name %>'s Profile</h1>
 
-<form action="/publish" method="POST">
+<form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
   <textarea name="message"></textarea>
   <input type="submit" value="Send" />
 </form>

@@ -9,7 +9,7 @@ const { promisify, asyncRouter } = require("./utils");
 const queries = require("./queries");
 
 let ssbServer;
-let profile;
+let context = {};
 
 let homeFolder =
   process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
@@ -18,11 +18,8 @@ let ssbSecret = ssbKeys.loadOrCreateSync(
 );
 Client(ssbSecret, ssbConfig, async (err, server) => {
   if (err) throw err;
-  profile = await promisify(server.whoami);
-  profile.name = await promisify(server.about.latestValue, {
-    key: "name",
-    dest: profile.id,
-  });
+  const whoami = await promisify(server.whoami);
+  context.profile = await queries.getProfile(server, whoami.id);
 
   console.log("nearby pubs", await promisify(server.peerInvites.getNearbyPubs));
   console.log("getState", await promisify(server.deviceAddress.getState));
@@ -34,6 +31,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use((_req, res, next) => {
+  res.locals.profileUrl = (id, path = "") => {
+    if (id.includes("/")) {
+      return `/profile/${encodeURIComponent(id)}${path}`;
+    }
+    return `/profile/${id}${path}`;
+  };
+  res.locals.context = context;
+  next();
+});
 
 const router = asyncRouter(app);
 
@@ -45,32 +52,61 @@ router.get("/", async (_req, res) => {
     return;
   }
 
-  if (!profile.name) {
+  if (!context.profile.name) {
     res.redirect("/about");
   }
 
   const [posts, friends] = await Promise.all([
-    queries.getPosts(ssbServer, profile.id),
-    queries.getFriends(profile, ssbServer),
+    queries.getPosts(ssbServer, context.profile),
+    queries.getFriends(ssbServer, context.profile),
   ]);
-  res.render("index", { profile, posts, friends });
+  res.render("index", { posts, friends });
+});
+
+router.get("/profile/:id", async (req, res) => {
+  const id = req.params.id;
+
+  if (id == context.profile.id) {
+    return res.redirect("/");
+  }
+
+  const profile = await queries.getProfile(ssbServer, id);
+
+  const [posts, friends] = await Promise.all([
+    queries.getPosts(ssbServer, profile),
+    queries.getFriends(ssbServer, profile),
+  ]);
+
+  res.render("profile", { profile, posts, friends });
 });
 
 router.post("/publish", async (req, res) => {
   await promisify(ssbServer.publish, {
     type: "post",
     text: req.body.message,
-    wall: profile.id,
+    wall: context.profile.id,
   });
 
   res.redirect("/");
+});
+
+router.post("/profile/:id/publish", async (req, res) => {
+  const id = req.params.id;
+
+  await promisify(ssbServer.publish, {
+    type: "post",
+    text: req.body.message,
+    wall: id,
+  });
+
+  res.redirect("/profile/" + id);
 });
 
 router.get("/pubs", async (_req, res) => {
   const invite = await promisify(ssbServer.invite.create, { uses: 10 });
   const peers = await promisify(ssbServer.gossip.peers);
 
-  res.render("pubs", { invite, peers, profile });
+  res.render("pubs", { invite, peers });
 });
 
 router.post("/pubs/add", async (req, res) => {
@@ -82,19 +118,19 @@ router.post("/pubs/add", async (req, res) => {
 });
 
 router.get("/about", (_req, res) => {
-  res.render("about", { profile });
+  res.render("about");
 });
 
 router.post("/about", async (req, res) => {
   const name = req.body.name;
 
-  if (name != profile.name) {
+  if (name != context.profile.name) {
     await promisify(ssbServer.publish, {
       type: "about",
-      about: profile.id,
+      about: context.profile.id,
       name: name,
     });
-    profile.name = name;
+    context.profile.name = name;
   }
 
   res.redirect("/");
@@ -103,7 +139,7 @@ router.post("/about", async (req, res) => {
 router.get("/debug", async (_req, res) => {
   const entries = await queries.getAllEntries(ssbServer);
 
-  res.render("debug", { profile, entries });
+  res.render("debug", { entries });
 });
 
 router.get("/search", async (req, res) => {
@@ -111,7 +147,7 @@ router.get("/search", async (req, res) => {
 
   const people = await queries.searchPeople(ssbServer, query);
 
-  res.render("search", { profile, people });
+  res.render("search", { people });
 });
 
 const expressServer = app.listen(port, () =>

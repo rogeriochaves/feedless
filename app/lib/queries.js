@@ -31,7 +31,11 @@ const latestOwnerValue = (ssbServer) => ({ key, dest }, cb) => {
       },
       (err) => {
         if (err) return cb(err);
-        cb(null, value);
+        if (!value) {
+          ssbServer.about.latestValue({ key, dest }, cb);
+        } else {
+          cb(null, value);
+        }
       }
     )
   );
@@ -66,7 +70,7 @@ const mapAuthorName = (ssbServer) => (data, callback) => {
     .catch((err) => callback(err, null));
 };
 
-const getPosts = (ssbServer, userId) =>
+const getPosts = (ssbServer, profile) =>
   new Promise((resolve, reject) => {
     pull(
       ssbServer.query.read({
@@ -75,7 +79,7 @@ const getPosts = (ssbServer, userId) =>
           {
             $filter: {
               value: {
-                content: { type: "post", wall: userId },
+                content: { type: "post", wall: profile.id },
               },
             },
           },
@@ -126,7 +130,7 @@ const searchPeople = (ssbServer, search) =>
     );
   });
 
-const getFriends = (profile, ssbServer) =>
+const getFriends = (ssbServer, profile) =>
   new Promise((resolve, reject) => {
     pull(
       ssbServer.query.read({
@@ -171,10 +175,20 @@ const getAllEntries = (ssbServer) =>
     );
   });
 
+const getProfile = async (ssbServer, id) => {
+  const name = await promisify(latestOwnerValue(ssbServer), {
+    key: "name",
+    dest: id,
+  });
+
+  return { id, name };
+};
+
 module.exports = {
   mapAuthorName,
   getPosts,
   searchPeople,
   getFriends,
   getAllEntries,
+  getProfile,
 };

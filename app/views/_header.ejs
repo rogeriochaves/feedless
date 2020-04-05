@@ -23,10 +23,10 @@
     </style>
   </head>
   <body>
-    <% if (profile.name) { %>
+    <% if (context.profile.name) { %>
       <header>
         <div style="float: right">
-          <%= profile.name %> (<%= profile.id.slice(0, 8) %>)
+          <%= context.profile.name %> (<%= context.profile.id.slice(0, 8) %>)
         </div>
         <form action="search" method="GET" style="float: right; padding-right: 10px">
           <input type="text" name="query" placeholder="Search for people...">
