@@ -4,7 +4,11 @@
 
 <ul>
   <% people.map(person => { %>
-    <li><%= person.content.name %> (<%= person.author.slice(0, 8) %>)</li>
+    <li>
+      <a href="<%= profileUrl(person.author) %>">
+        <%= person.content.name %> (<%= person.author.slice(0, 8) %>)
+      </a>
+    </li>
   <% }) %>
 </ul>
 

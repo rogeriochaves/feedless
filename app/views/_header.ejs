@@ -28,7 +28,7 @@
         <div style="float: right">
           <%= context.profile.name %> (<%= context.profile.id.slice(0, 8) %>)
         </div>
-        <form action="search" method="GET" style="float: right; padding-right: 10px">
+        <form action="/search" method="GET" style="float: right; padding-right: 10px">
           <input type="text" name="query" placeholder="Search for people...">
           <input type="submit" value="Search" />
         </form>

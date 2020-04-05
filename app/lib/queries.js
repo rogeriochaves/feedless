@@ -176,12 +176,15 @@ const getAllEntries = (ssbServer) =>
   });
 
 const getProfile = async (ssbServer, id) => {
-  const name = await promisify(latestOwnerValue(ssbServer), {
-    key: "name",
-    dest: id,
-  });
+  let [name, imageHash] = await Promise.all([
+    promisify(latestOwnerValue(ssbServer), { key: "name", dest: id }),
+    promisify(latestOwnerValue(ssbServer), { key: "image", dest: id }),
+  ]);
+  imageHash =
+    imageHash && typeof imageHash == "object" ? imageHash.link : imageHash;
 
-  return { id, name };
+  const image = imageHash && `/blob/${encodeURIComponent(imageHash)}`;
+  return { id, name, image };
 };
 
 module.exports = {

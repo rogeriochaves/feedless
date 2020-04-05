@@ -1,5 +1,8 @@
 <%- include('_header') %>
 
+<% if (profile.image) { %>
+  <img src="<%= profile.image %>" />
+<% } %>
 <h1><%= profile.name %>'s Profile</h1>
 
 <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">

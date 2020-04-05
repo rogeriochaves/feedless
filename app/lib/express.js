@@ -7,6 +7,7 @@ const ssbKeys = require("ssb-keys");
 const ssbConfig = require("./ssb-config");
 const { promisify, asyncRouter } = require("./utils");
 const queries = require("./queries");
+const serveBlobs = require("./serve-blobs");
 
 let ssbServer;
 let context = {};
@@ -20,9 +21,6 @@ Client(ssbSecret, ssbConfig, async (err, server) => {
   if (err) throw err;
   const whoami = await promisify(server.whoami);
   context.profile = await queries.getProfile(server, whoami.id);
-
-  console.log("nearby pubs", await promisify(server.peerInvites.getNearbyPubs));
-  console.log("getState", await promisify(server.deviceAddress.getState));
 
   ssbServer = server;
 });
@@ -148,6 +146,10 @@ router.get("/search", async (req, res) => {
   const people = await queries.searchPeople(ssbServer, query);
 
   res.render("search", { people });
+});
+
+router.get("/blob/*", (req, res) => {
+  serveBlobs(ssbServer)(req, res);
 });
 
 const expressServer = app.listen(port, () =>
