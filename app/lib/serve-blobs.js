@@ -1,14 +1,14 @@
-var pull = require("pull-stream");
-var cat = require("pull-cat");
-var toPull = require("stream-to-pull-stream");
-var ident = require("pull-identify-filetype");
-var mime = require("mime-types");
-var URL = require("url");
+const pull = require("pull-stream");
+const cat = require("pull-cat");
+const toPull = require("stream-to-pull-stream");
+const ident = require("pull-identify-filetype");
+const mime = require("mime-types");
+const URL = require("url");
 
 const serveBlobs = (sbot) => {
   return (req, res) => {
-    var parsed = URL.parse(req.url, true);
-    var hash = decodeURIComponent(parsed.pathname.replace("/blob/", ""));
+    const parsed = URL.parse(req.url, true);
+    const hash = decodeURIComponent(parsed.pathname.replace("/blob/", ""));
 
     waitFor(hash, function (_, has) {
       if (!has) return respond(res, 404, "File not found");

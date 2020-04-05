@@ -1,5 +1,6 @@
 const { promisify } = require("./utils");
 const pull = require("pull-stream");
+const cat = require("pull-cat");
 
 const latestOwnerValue = (ssbServer) => ({ key, dest }, cb) => {
   let value = null;
@@ -73,19 +74,40 @@ const mapAuthorName = (ssbServer) => (data, callback) => {
 const getPosts = (ssbServer, profile) =>
   new Promise((resolve, reject) => {
     pull(
-      ssbServer.query.read({
-        reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                content: { type: "post", wall: profile.id },
+      // @ts-ignore
+      cat([
+        ssbServer.query.read({
+          reverse: true,
+          query: [
+            {
+              $filter: {
+                value: {
+                  content: { type: "post", wall: profile.id },
+                },
               },
             },
-          },
-        ],
-        limit: 100,
-      }),
+          ],
+          limit: 100,
+        }),
+        ssbServer.query.read({
+          reverse: true,
+          query: [
+            {
+              $filter: {
+                value: {
+                  author: profile.id,
+                  content: {
+                    type: "post",
+                    wall: { $not: true },
+                    root: { $not: true },
+                  },
+                },
+              },
+            },
+          ],
+          limit: 100,
+        }),
+      ]),
       pull.asyncMap(mapAuthorName(ssbServer)),
       pull.collect((err, msgs) => {
         const entries = msgs.map((x) => x.value);
