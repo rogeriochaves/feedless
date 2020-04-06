@@ -145,7 +145,7 @@ router.get("/search", async (req, res) => {
 
   const people = await queries.searchPeople(ssbServer, query);
 
-  res.render("search", { people });
+  res.render("search", { people, query });
 });
 
 router.get("/blob/*", (req, res) => {

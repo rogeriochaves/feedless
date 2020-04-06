@@ -4,40 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Social</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        margin: 0;
-      }
-      header {
-        padding: 20px 10px;
-        border-bottom: 1px solid #666;
-      }
-      header a {
-        display: inline-block;
-        padding: 0 10px;
-      }
-      main {
-        padding: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
     <% if (context.profile.name) { %>
       <header>
-        <div style="float: right">
-          <%= context.profile.name %> (<%= context.profile.id.slice(0, 8) %>)
+        <div class="logo">
+          Social
         </div>
-        <form action="/search" method="GET" style="float: right; padding-right: 10px">
-          <input type="text" name="query" placeholder="Search for people...">
-          <input type="submit" value="Search" />
-        </form>
         <nav>
           <a href="/">Home</a>
           <a href="/about">About me</a>
           <a href="/pubs">Pubs</a>
           <a href="/debug">Debug</a>
         </nav>
+        <div class="right-items">
+          <div style="padding-right: 10px">
+            <%= context.profile.name %> (<%= context.profile.id.slice(0, 8) %>)
+          </div>
+          <form action="/search" method="GET">
+            <div class="search-icon">🔎</div>
+            <input type="search" class="input-search" name="query" placeholder="Search for people...">
+          </form>
+        </div>
       </header>
     <% } %>
     <main>
