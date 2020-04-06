@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const Client = require("ssb-client");
 const ssbKeys = require("ssb-keys");
 const ssbConfig = require("./ssb-config");
-const { promisify, asyncRouter } = require("./utils");
+const { asyncRouter } = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
 
@@ -19,7 +19,7 @@ let ssbSecret = ssbKeys.loadOrCreateSync(
 );
 Client(ssbSecret, ssbConfig, async (err, server) => {
   if (err) throw err;
-  const whoami = await promisify(server.whoami);
+  const whoami = await server.whoami();
   context.profile = await queries.getProfile(server, whoami.id);
 
   ssbServer = server;
@@ -90,7 +90,7 @@ router.get("/profile/:id", async (req, res) => {
 });
 
 router.post("/publish", async (req, res) => {
-  await promisify(ssbServer.publish, {
+  await ssbServer.publish({
     type: "post",
     text: req.body.message,
     root: context.profile.id,
@@ -102,7 +102,7 @@ router.post("/publish", async (req, res) => {
 router.post("/profile/:id/publish", async (req, res) => {
   const id = req.params.id;
 
-  await promisify(ssbServer.publish, {
+  await ssbServer.publish({
     type: "post",
     text: req.body.message,
     root: id,
@@ -112,8 +112,8 @@ router.post("/profile/:id/publish", async (req, res) => {
 });
 
 router.get("/pubs", async (_req, res) => {
-  const invite = await promisify(ssbServer.invite.create, { uses: 10 });
-  const peers = await promisify(ssbServer.gossip.peers);
+  const invite = await ssbServer.invite.create({ uses: 10 });
+  const peers = await ssbServer.gossip.peers();
 
   res.render("pubs", { invite, peers });
 });
@@ -121,7 +121,7 @@ router.get("/pubs", async (_req, res) => {
 router.post("/pubs/add", async (req, res) => {
   const inviteCode = req.body.invite_code;
 
-  await promisify(ssbServer.invite.accept, inviteCode);
+  await ssbServer.invite.accept(inviteCode);
 
   res.redirect("/");
 });
@@ -134,7 +134,7 @@ router.post("/about", async (req, res) => {
   const name = req.body.name;
 
   if (name != context.profile.name) {
-    await promisify(ssbServer.publish, {
+    await ssbServer.publish({
       type: "about",
       about: context.profile.id,
       name: name,

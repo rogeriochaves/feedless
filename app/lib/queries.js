@@ -1,48 +1,51 @@
-const { promisify } = require("./utils");
 const pull = require("pull-stream");
 const cat = require("pull-cat");
 const debug = require("debug")("queries");
 const paramap = require("pull-paramap");
 
-const latestOwnerValue = (ssbServer) => ({ key, dest }, cb) => {
-  let value = null;
-  pull(
-    ssbServer.query.read({
-      reverse: true,
-      query: [
-        {
-          $filter: {
-            value: {
-              author: dest,
-              content: { type: "about", about: dest },
+const latestOwnerValue = (ssbServer, { key, dest }) =>
+  new Promise((resolve, reject) => {
+    let value = null;
+    pull(
+      ssbServer.query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                author: dest,
+                content: { type: "about", about: dest },
+              },
             },
           },
+        ],
+      }),
+      pull.filter((msg) => {
+        return (
+          msg.value.content &&
+          key in msg.value.content &&
+          !(msg.value.content[key] && msg.value.content[key].remove)
+        );
+      }),
+      pull.take(1),
+      pull.drain(
+        (msg) => {
+          value = msg.value.content[key];
         },
-      ],
-    }),
-    pull.filter((msg) => {
-      return (
-        msg.value.content &&
-        key in msg.value.content &&
-        !(msg.value.content[key] && msg.value.content[key].remove)
-      );
-    }),
-    pull.take(1),
-    pull.drain(
-      (msg) => {
-        value = msg.value.content[key];
-      },
-      (err) => {
-        if (err) return cb(err);
-        if (!value) {
-          ssbServer.about.latestValue({ key, dest }, cb);
-        } else {
-          cb(null, value);
+        (err) => {
+          if (err) return reject(err);
+          if (!value) {
+            ssbServer.about
+              .latestValue({ key, dest })
+              .then(resolve)
+              .catch(reject);
+          } else {
+            resolve(value);
+          }
         }
-      }
-    )
-  );
-};
+      )
+    );
+  });
 
 const mapProfiles = (ssbServer) => (data, callback) => {
   const authorPromise = getProfile(ssbServer, data.value.author);
@@ -211,8 +214,7 @@ let profileCache = {};
 const getProfile = async (ssbServer, id) => {
   if (profileCache[id]) return profileCache[id];
 
-  let getKey = (key) =>
-    promisify(latestOwnerValue(ssbServer), { key, dest: id });
+  let getKey = (key) => latestOwnerValue(ssbServer, { key, dest: id });
 
   let [name, image, description] = await Promise.all([
     getKey("name"),
