@@ -2,10 +2,10 @@
 
 <div class="columns">
   <div class="about">
-    <% if (profile.image) { %>
-      <img src="<%= imageUrl(profile.image) %>" />
-    <% } %>
-    <h1><%= profile.name %>'s Profile</h1>
+    <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
+    <h1><%= profile.name %></h1>
+
+    <%= profile.description %>
 
     <h2>Friends</h2>
 
@@ -31,7 +31,9 @@
 
     <% posts.map(entry => { %>
       <div class="post">
-        <img src="<%= imageUrl(entry.authorProfile.image) %>" class="post-profile-pic" />
+        <div>
+          <img src="<%= profileImageUrl(entry.authorProfile) %>" class="post-profile-pic" />
+        </div>
         <div class="post-content">
           <div class="content-header">
             <%= entry.authorProfile.name %>

@@ -23,6 +23,7 @@ Client(ssbSecret, ssbConfig, async (err, server) => {
   context.profile = await queries.getProfile(server, whoami.id);
 
   ssbServer = server;
+  console.log("SSB Client ready");
 });
 
 app.use(bodyParser.json());
@@ -40,6 +41,12 @@ app.use((_req, res, next) => {
     const imageHash = blob && typeof blob == "object" ? blob.link : blob;
 
     return imageHash && `/blob/${encodeURIComponent(imageHash)}`;
+  };
+  res.locals.profileImageUrl = (profile) => {
+    if (profile.image) {
+      return res.locals.imageUrl(profile.image);
+    }
+    return "/images/no-avatar.png";
   };
   res.locals.context = context;
   next();
@@ -73,11 +80,10 @@ router.get("/profile/:id", async (req, res) => {
     return res.redirect("/");
   }
 
-  const profile = await queries.getProfile(ssbServer, id);
-
-  const [posts, friends] = await Promise.all([
-    queries.getPosts(ssbServer, profile),
-    queries.getFriends(ssbServer, profile),
+  const [profile, posts, friends] = await Promise.all([
+    queries.getProfile(ssbServer, id),
+    queries.getPosts(ssbServer, { id }),
+    queries.getFriends(ssbServer, { id }),
   ]);
 
   res.render("profile", { profile, posts, friends });
@@ -139,10 +145,12 @@ router.post("/about", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/debug", async (_req, res) => {
-  const entries = await queries.getAllEntries(ssbServer);
+router.get("/debug", async (req, res) => {
+  const query = req.query || {};
 
-  res.render("debug", { entries });
+  const entries = await queries.getAllEntries(ssbServer, query);
+
+  res.render("debug", { entries, query });
 });
 
 router.get("/search", async (req, res) => {

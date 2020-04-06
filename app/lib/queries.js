@@ -1,6 +1,8 @@
 const { promisify } = require("./utils");
 const pull = require("pull-stream");
 const cat = require("pull-cat");
+const debug = require("debug")("queries");
+const paramap = require("pull-paramap");
 
 const latestOwnerValue = (ssbServer) => ({ key, dest }, cb) => {
   let value = null;
@@ -43,57 +45,24 @@ const latestOwnerValue = (ssbServer) => ({ key, dest }, cb) => {
 };
 
 const mapProfiles = (ssbServer) => (data, callback) => {
-  let promises = [];
+  const authorPromise = getProfile(ssbServer, data.value.author);
+  const contactPromise =
+    data.value.content.type == "contact" &&
+    getProfile(ssbServer, data.value.content.contact);
 
-  promises.push(
-    promisify(latestOwnerValue(ssbServer), {
-      key: "name",
-      dest: data.value.author,
-    })
-  );
-  promises.push(
-    promisify(latestOwnerValue(ssbServer), {
-      key: "image",
-      dest: data.value.author,
-    })
-  );
-
-  if (data.value.content.type == "contact") {
-    promises.push(
-      promisify(latestOwnerValue(ssbServer), {
-        key: "name",
-        dest: data.value.content.contact,
-      })
-    );
-    promises.push(
-      promisify(latestOwnerValue(ssbServer), {
-        key: "image",
-        dest: data.value.content.contact,
-      })
-    );
-  }
-
-  return Promise.all(promises)
-    .then(([authorName, authorImage, contactName, contactImage]) => {
-      data.value.authorProfile = {
-        id: data.value.author,
-        name: authorName,
-        image: authorImage,
-      };
-      if (contactName) {
-        data.value.content.contactProfile = {
-          id: data.value.content.contact,
-          name: contactName,
-          image: contactImage,
-        };
+  return Promise.all([authorPromise, contactPromise])
+    .then(([author, contact]) => {
+      data.value.authorProfile = author;
+      if (contact) {
+        data.value.content.contactProfile = contact;
       }
-
       callback(null, data);
     })
     .catch((err) => callback(err, null));
 };
 
 const getPosts = (ssbServer, profile) =>
+  debug("Fetching posts") ||
   new Promise((resolve, reject) => {
     pull(
       // @ts-ignore
@@ -130,8 +99,9 @@ const getPosts = (ssbServer, profile) =>
           limit: 100,
         }),
       ]),
-      pull.asyncMap(mapProfiles(ssbServer)),
+      paramap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
+        debug("Done fetching posts");
         const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
@@ -141,6 +111,7 @@ const getPosts = (ssbServer, profile) =>
   });
 
 const searchPeople = (ssbServer, search) =>
+  debug("Searching people") ||
   new Promise((resolve, reject) => {
     pull(
       ssbServer.query.read({
@@ -166,6 +137,7 @@ const searchPeople = (ssbServer, search) =>
         );
       }),
       pull.collect((err, msgs) => {
+        debug("Done searching people");
         const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
@@ -175,6 +147,7 @@ const searchPeople = (ssbServer, search) =>
   });
 
 const getFriends = (ssbServer, profile) =>
+  debug("Fetching friends") ||
   new Promise((resolve, reject) => {
     pull(
       ssbServer.query.read({
@@ -191,10 +164,11 @@ const getFriends = (ssbServer, profile) =>
             },
           },
         ],
-        limit: 500,
+        limit: 20,
       }),
-      pull.asyncMap(mapProfiles(ssbServer)),
+      paramap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
+        debug("Done fetching friends");
         const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
@@ -203,14 +177,25 @@ const getFriends = (ssbServer, profile) =>
     );
   });
 
-const getAllEntries = (ssbServer) =>
+const getAllEntries = (ssbServer, query) =>
+  debug("Fetching All Entries") ||
   new Promise((resolve, reject) => {
+    let queries = [];
+    if (query.author) {
+      queries.push({ $filter: { value: { author: query.author } } });
+    }
+    if (query.type) {
+      queries.push({ $filter: { value: { content: { type: query.type } } } });
+    }
+
     pull(
       ssbServer.query.read({
         reverse: true,
         limit: 500,
+        query: queries,
       }),
       pull.collect((err, msgs) => {
+        debug("Done fetching all entries");
         const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
@@ -219,14 +204,31 @@ const getAllEntries = (ssbServer) =>
     );
   });
 
+let profileCache = {};
 const getProfile = async (ssbServer, id) => {
-  let [name, image] = await Promise.all([
-    promisify(latestOwnerValue(ssbServer), { key: "name", dest: id }),
-    promisify(latestOwnerValue(ssbServer), { key: "image", dest: id }),
-  ]);
+  if (profileCache[id]) return profileCache[id];
 
-  return { id, name, image };
+  let getKey = (key) =>
+    promisify(latestOwnerValue(ssbServer), { key, dest: id });
+
+  let [name, image, description] = await Promise.all([
+    getKey("name"),
+    getKey("image"),
+    getKey("description"),
+  ]).catch((err) => {
+    console.error("Could not retrieve profile for", id, err);
+  });
+
+  let profile = { id, name, image, description };
+  profileCache[id] = profile;
+
+  return profile;
 };
+
+setInterval(() => {
+  debug("Clearing profile cache");
+  profileCache = {};
+}, 5 * 60 * 1000);
 
 module.exports = {
   mapProfiles,

@@ -1,5 +1,13 @@
 <%- include('_header') %>
 
+<p>
+  <form action="/debug" method="GET">
+    Author: <input type="text" name="author" value="<%= query.author %>">
+    Type: <input type="text" name="type" value="<%= query.type %>">
+    <input type="submit" value="Filter">
+  </form>
+</p>
+
 <% entries.map(entry => { %>
   <code style="width: 80%; word-wrap: break-word;"><%= JSON.stringify(entry) %></code>
   <hr />

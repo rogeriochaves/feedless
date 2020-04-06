@@ -4,11 +4,13 @@ const toPull = require("stream-to-pull-stream");
 const ident = require("pull-identify-filetype");
 const mime = require("mime-types");
 const URL = require("url");
+const debug = require("debug")("server-blobs");
 
 const serveBlobs = (sbot) => {
   return (req, res) => {
     const parsed = URL.parse(req.url, true);
     const hash = decodeURIComponent(parsed.pathname.replace("/blob/", ""));
+    debug("fetching", hash);
 
     waitFor(hash, function (_, has) {
       if (!has) return respond(res, 404, "File not found");
@@ -22,17 +24,32 @@ const serveBlobs = (sbot) => {
 
       // serve
       res.setHeader("Content-Security-Policy", BlobCSP());
+
       respondSource(res, sbot.blobs.get(hash), false);
     });
   };
 
   function waitFor(hash, cb) {
+    let finished = false;
+    let wrappedCb = (err, result) => {
+      if (finished) return;
+      finished = true;
+      cb(err, result);
+    };
+
+    setTimeout(() => {
+      debug("timeout for", hash);
+      wrappedCb(null, false);
+    }, 1000);
+
     sbot.blobs.has(hash, function (err, has) {
-      if (err) return cb(err);
+      if (err) return wrappedCb(err);
+      debug("has is ", has, "for", hash);
       if (has) {
-        cb(null, has);
+        wrappedCb(null, has);
       } else {
-        sbot.blobs.want(hash, cb);
+        debug("calling want for", hash);
+        sbot.blobs.want(hash, wrappedCb);
       }
     });
   }

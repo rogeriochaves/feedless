@@ -2,6 +2,7 @@ body {
   font-family: sans-serif;
   margin: 0;
   line-height: 1.3em;
+  word-wrap: break-word;
 }
 header {
   padding: 0 30px;
@@ -55,15 +56,18 @@ main {
 
 .columns {
   display: flex;
+  align-content: stretch;
 }
 
 h1 {
   text-transform: uppercase;
   font-weight: bold;
+  line-height: 1.3em;
 }
 
 .wall {
   padding: 20px;
+  flex-grow: 1;
 }
 
 .post {
@@ -89,4 +93,12 @@ h1 {
 .content-body {
   font-family: Georgia, Times, "Times New Roman", serif;
   font-size: 18px;
+}
+
+.about {
+  max-width: 300px;
+}
+
+.profile-pic {
+  width: 300px;
 }

@@ -13,8 +13,11 @@ module.exports.promisify = (method, options = null) => {
 };
 
 module.exports.asyncRouter = (app) => {
-  let wrapper = (fn) => async (req, res, next) => {
+  const debug = require("debug")("router");
+
+  let wrapper = (debugMsg, fn) => async (req, res, next) => {
     try {
+      debug(debugMsg);
       await fn(req, res);
     } catch (e) {
       next(e);
@@ -22,10 +25,11 @@ module.exports.asyncRouter = (app) => {
   };
   return {
     get: (path, fn) => {
-      app.get(path, wrapper(fn));
+      app.get(path, wrapper(`GET ${path}`, fn));
     },
     post: (path, fn) => {
-      app.post(path, wrapper(fn));
+      debug(`POST ${path}`);
+      app.post(path, wrapper(`POST ${path}`, fn));
     },
   };
 };
