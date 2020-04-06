@@ -25,6 +25,9 @@ header a {
 header a:hover {
   background: #000;
 }
+header .logo a:hover {
+  background: none;
+}
 .logo {
   text-transform: uppercase;
   font-weight: bold;
@@ -63,6 +66,7 @@ h1 {
   text-transform: uppercase;
   font-weight: bold;
   line-height: 1.3em;
+  margin: 0;
 }
 
 .wall {
@@ -78,7 +82,7 @@ h1 {
 
 .post-profile-pic {
   width: 64px;
-  height: 64px;
+  max-height: 200px;
 }
 
 .post-content {
@@ -101,4 +105,5 @@ h1 {
 
 .profile-pic {
   width: 300px;
+  padding-bottom: 10px;
 }

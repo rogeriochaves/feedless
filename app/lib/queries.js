@@ -73,7 +73,9 @@ const getPosts = (ssbServer, profile) =>
             {
               $filter: {
                 value: {
-                  content: { type: "post", wall: profile.id },
+                  content: {
+                    root: profile.id,
+                  },
                 },
               },
             },
@@ -89,7 +91,6 @@ const getPosts = (ssbServer, profile) =>
                   author: profile.id,
                   content: {
                     type: "post",
-                    wall: { $not: true },
                     root: { $not: true },
                   },
                 },
@@ -99,6 +100,7 @@ const getPosts = (ssbServer, profile) =>
           limit: 100,
         }),
       ]),
+      pull.filter((msg) => msg.value.content.type == "post"),
       paramap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
         debug("Done fetching posts");
@@ -187,12 +189,13 @@ const getAllEntries = (ssbServer, query) =>
     if (query.type) {
       queries.push({ $filter: { value: { content: { type: query.type } } } });
     }
+    const queryOpts = queries.length > 0 ? { query: queries } : {};
 
     pull(
       ssbServer.query.read({
         reverse: true,
         limit: 500,
-        query: queries,
+        ...queryOpts,
       }),
       pull.collect((err, msgs) => {
         debug("Done fetching all entries");

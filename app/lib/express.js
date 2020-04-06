@@ -93,7 +93,7 @@ router.post("/publish", async (req, res) => {
   await promisify(ssbServer.publish, {
     type: "post",
     text: req.body.message,
-    wall: context.profile.id,
+    root: context.profile.id,
   });
 
   res.redirect("/");
@@ -105,7 +105,7 @@ router.post("/profile/:id/publish", async (req, res) => {
   await promisify(ssbServer.publish, {
     type: "post",
     text: req.body.message,
-    wall: id,
+    root: id,
   });
 
   res.redirect("/profile/" + id);
