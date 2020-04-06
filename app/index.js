@@ -12,7 +12,6 @@ setTimeout(() => {
 if (process.env.NODE_ENV !== "production") {
   const chokidar = require("chokidar");
   const watcher = chokidar.watch("./lib");
-  const { BrowserWindow } = require("electron");
 
   watcher.on("ready", () => {
     watcher.on("all", () => {
@@ -22,7 +21,6 @@ if (process.env.NODE_ENV !== "production") {
       });
       if (server) server.close();
       server = require("./lib/express");
-      BrowserWindow.getAllWindows()[0].reload();
     });
   });
 }
