@@ -8,7 +8,7 @@
 </form>
 
 <% posts.map(entry => { %>
-  <div><%= entry.authorName %> (<%= entry.author.slice(0, 8) %>): <%= entry.content.text %></div>
+  <div><%= entry.authorProfile.name %> (<%= entry.author.slice(0, 8) %>): <%= entry.content.text %></div>
   <hr />
 <% }) %>
 
@@ -18,7 +18,7 @@
   <% friends.map(friend => { %>
     <li>
       <a href="<%= profileUrl(friend.content.contact) %>">
-        <%= friend.content.contactName %> (<%= friend.content.contact.slice(0, 8) %>)
+        <%= friend.content.contactProfile && friend.content.contactProfile.name %> (<%= friend.content.contact.slice(0, 8) %>)
       </a>
     </li>
   <% }) %>

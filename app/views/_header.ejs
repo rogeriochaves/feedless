@@ -19,9 +19,9 @@
           <a href="/debug">Debug</a>
         </nav>
         <div class="right-items">
-          <div style="padding-right: 10px">
+          <a href="/" style="margin-right: 10px">
             <%= context.profile.name %> (<%= context.profile.id.slice(0, 8) %>)
-          </div>
+          </a>
           <form action="/search" method="GET">
             <div class="search-icon">🔎</div>
             <input type="search" class="input-search" name="query" placeholder="Search for people...">

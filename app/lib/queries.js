@@ -42,28 +42,50 @@ const latestOwnerValue = (ssbServer) => ({ key, dest }, cb) => {
   );
 };
 
-const mapAuthorName = (ssbServer) => (data, callback) => {
+const mapProfiles = (ssbServer) => (data, callback) => {
   let promises = [];
 
-  const authorNamePromise = promisify(latestOwnerValue(ssbServer), {
-    key: "name",
-    dest: data.value.author,
-  });
-  promises.push(authorNamePromise);
+  promises.push(
+    promisify(latestOwnerValue(ssbServer), {
+      key: "name",
+      dest: data.value.author,
+    })
+  );
+  promises.push(
+    promisify(latestOwnerValue(ssbServer), {
+      key: "image",
+      dest: data.value.author,
+    })
+  );
 
   if (data.value.content.type == "contact") {
-    const contactNamePromise = promisify(latestOwnerValue(ssbServer), {
-      key: "name",
-      dest: data.value.content.contact,
-    });
-    promises.push(contactNamePromise);
+    promises.push(
+      promisify(latestOwnerValue(ssbServer), {
+        key: "name",
+        dest: data.value.content.contact,
+      })
+    );
+    promises.push(
+      promisify(latestOwnerValue(ssbServer), {
+        key: "image",
+        dest: data.value.content.contact,
+      })
+    );
   }
 
   return Promise.all(promises)
-    .then(([authorName, contactName]) => {
-      data.value.authorName = authorName;
+    .then(([authorName, authorImage, contactName, contactImage]) => {
+      data.value.authorProfile = {
+        id: data.value.author,
+        name: authorName,
+        image: authorImage,
+      };
       if (contactName) {
-        data.value.content.contactName = contactName;
+        data.value.content.contactProfile = {
+          id: data.value.content.contact,
+          name: contactName,
+          image: contactImage,
+        };
       }
 
       callback(null, data);
@@ -108,7 +130,7 @@ const getPosts = (ssbServer, profile) =>
           limit: 100,
         }),
       ]),
-      pull.asyncMap(mapAuthorName(ssbServer)),
+      pull.asyncMap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
         const entries = msgs.map((x) => x.value);
 
@@ -171,7 +193,7 @@ const getFriends = (ssbServer, profile) =>
         ],
         limit: 500,
       }),
-      pull.asyncMap(mapAuthorName(ssbServer)),
+      pull.asyncMap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
         const entries = msgs.map((x) => x.value);
 
@@ -198,19 +220,16 @@ const getAllEntries = (ssbServer) =>
   });
 
 const getProfile = async (ssbServer, id) => {
-  let [name, imageHash] = await Promise.all([
+  let [name, image] = await Promise.all([
     promisify(latestOwnerValue(ssbServer), { key: "name", dest: id }),
     promisify(latestOwnerValue(ssbServer), { key: "image", dest: id }),
   ]);
-  imageHash =
-    imageHash && typeof imageHash == "object" ? imageHash.link : imageHash;
 
-  const image = imageHash && `/blob/${encodeURIComponent(imageHash)}`;
   return { id, name, image };
 };
 
 module.exports = {
-  mapAuthorName,
+  mapProfiles,
   getPosts,
   searchPeople,
   getFriends,

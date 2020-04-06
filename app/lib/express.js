@@ -36,6 +36,11 @@ app.use((_req, res, next) => {
     }
     return `/profile/${id}${path}`;
   };
+  res.locals.imageUrl = (blob) => {
+    const imageHash = blob && typeof blob == "object" ? blob.link : blob;
+
+    return imageHash && `/blob/${encodeURIComponent(imageHash)}`;
+  };
   res.locals.context = context;
   next();
 });

@@ -1,30 +1,48 @@
 <%- include('_header') %>
 
-<% if (profile.image) { %>
-  <img src="<%= profile.image %>" />
-<% } %>
-<h1><%= profile.name %>'s Profile</h1>
+<div class="columns">
+  <div class="about">
+    <% if (profile.image) { %>
+      <img src="<%= imageUrl(profile.image) %>" />
+    <% } %>
+    <h1><%= profile.name %>'s Profile</h1>
 
-<form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
-  <textarea name="message"></textarea>
-  <input type="submit" value="Send" />
-</form>
+    <h2>Friends</h2>
 
-<% posts.map(entry => { %>
-  <div><%= entry.authorName %> (<%= entry.author.slice(0, 8) %>): <%= entry.content.text %></div>
-  <hr />
-<% }) %>
+    <ul>
+      <% friends.map(friend => { %>
+        <li>
+          <a href="<%= profileUrl(friend.content.contact) %>">
+            <%= friend.content.contactProfile?.name %> (<%= friend.content.contact.slice(0, 8) %>)
+          </a>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
 
-<h2>Friends</h2>
+  <div class="wall">
+    <h1><%= profile.name %>'s Wall</h1>
+  <!--
+    <h2>Leave <%= profile.name %> a message</h2>
+    <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
+      <textarea name="message"></textarea>
+      <input type="submit" value="Send" />
+    </form> -->
 
-<ul>
-  <% friends.map(friend => { %>
-    <li>
-      <a href="<%= profileUrl(friend.content.contact) %>">
-        <%= friend.content.contactName %> (<%= friend.content.contact.slice(0, 8) %>)
-      </a>
-    </li>
-  <% }) %>
-</ul>
+    <% posts.map(entry => { %>
+      <div class="post">
+        <img src="<%= imageUrl(entry.authorProfile.image) %>" class="post-profile-pic" />
+        <div class="post-content">
+          <div class="content-header">
+            <%= entry.authorProfile.name %>
+          </div>
+          <div class="content-body">
+            <%= entry.content.text.slice(0, 140) %>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
 
 <%- include('_footer') %>
