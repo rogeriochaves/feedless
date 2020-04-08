@@ -108,7 +108,6 @@ router.post("/publish", async (req, res) => {
 router.post("/profile/:id/publish", async (req, res) => {
   const id = req.params.id;
   const visibility = req.body.visibility;
-  console.log("req.body", req.body);
 
   if (visibility == "vanishing") {
     await ssbServer.private.publish(

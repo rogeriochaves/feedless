@@ -131,13 +131,14 @@ button.vanishing-message {
   padding: 10px;
   cursor: pointer;
   color: #000;
+  margin-right: 8px;
 }
 
 .overlay {
   display: none;
   position: fixed;
   z-index: 1;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   top: 0;
   left: 0;
   width: 100%;
@@ -153,6 +154,7 @@ button.vanishing-message {
   left: 50%;
   transform: translate(-50%, -50%);
   min-width: 400px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
 }
 
 .modal-header {

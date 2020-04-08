@@ -145,7 +145,6 @@ const getVanishingMessages = (ssbServer, profile) =>
             {
               $filter: {
                 value: {
-                  author: profile.id,
                   private: true,
                   content: {
                     type: "post",
