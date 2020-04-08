@@ -25,20 +25,20 @@
     <% if (vanishingMessages.length > 0) { %>
       <div class="vanishing-messages" style="padding-bottom: 20px">
         <h2>Vanishing Messages</h2>
-        <% vanishingMessages.reverse().map(post => { %>
+        <% vanishingMessages.reverse().map(message => { %>
           <span>
-            <button class="vanishing-message">
-              <div><img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" /></div>
-              <div><%= post.authorProfile.name %></div>
+            <button class="vanishing-message" data-key="<%= message.key %>">
+              <div><img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" /></div>
+              <div><%= message.value.authorProfile.name %></div>
             </button>
             <div class="overlay"></div>
             <div class="modal">
-              <div class="modal-header">
-                <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" style="padding-right: 10px" />
-                <%= post.authorProfile.name %>
-              </div>
+              <a href="<%= profileUrl(message.value.authorProfile.id) %>" class="modal-header">
+                <img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" style="padding-right: 10px" />
+                <%= message.value.authorProfile.name %>
+              </a>
               <div class="modal-body">
-                <%= post.content.text %>
+                <%= message.value.content.text %>
               </div>
               <div class="modal-footer">
                 after you close this box the message will be gone forever

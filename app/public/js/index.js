@@ -25,5 +25,11 @@ messages.forEach((message) => {
     overlay.addEventListener("click", onClose);
     closeButton.addEventListener("click", onClose);
     escCallback = onClose;
+
+    fetch("/vanish", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "key=" + encodeURIComponent(message.dataset.key),
+    });
   });
 });

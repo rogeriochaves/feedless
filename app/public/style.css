@@ -163,6 +163,8 @@ button.vanishing-message {
   padding: 10px;
   padding-bottom: 0;
   font-weight: bold;
+  text-decoration: none;
+  color: #000;
 }
 
 .modal-body {

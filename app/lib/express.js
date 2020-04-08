@@ -107,6 +107,18 @@ router.post("/publish", async (req, res) => {
   res.redirect("/");
 });
 
+// TODO: tie reading with deleting
+router.post("/vanish", async (req, res) => {
+  const key = req.body.key;
+
+  await ssbServer.publish({
+    type: "delete",
+    dest: key,
+  });
+
+  res.send("ok");
+});
+
 router.post("/profile/:id/publish", async (req, res) => {
   const id = req.params.id;
   const visibility = req.body.visibility;

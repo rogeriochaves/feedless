@@ -117,9 +117,9 @@ const getPosts = (ssbServer, profile) =>
     );
   });
 
-const getVanishingMessages = (ssbServer, profile) =>
-  debug("Fetching vanishing messages") ||
-  new Promise((resolve, reject) => {
+const getVanishingMessages = async (ssbServer, profile) => {
+  debug("Fetching vanishing messages");
+  const messagesPromise = new Promise((resolve, reject) => {
     pull(
       // @ts-ignore
       cat([
@@ -165,14 +165,45 @@ const getVanishingMessages = (ssbServer, profile) =>
       ),
       paramap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
-        debug("Done fetching vanishing messages");
-        const entries = msgs.map((x) => x.value);
-
         if (err) return reject(err);
-        return resolve(entries);
+        return resolve(msgs);
       })
     );
   });
+
+  const deletedPromise = new Promise((resolve, reject) => {
+    pull(
+      ssbServer.query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                author: profile.id,
+                content: {
+                  type: "delete",
+                },
+              },
+            },
+          },
+        ],
+      }),
+      pull.collect((err, msgs) => {
+        if (err) return reject(err);
+        return resolve(Object.values(msgs));
+      })
+    );
+  });
+
+  const [messages, deleted] = await Promise.all([
+    messagesPromise,
+    deletedPromise,
+  ]);
+  const deletedIds = deleted.map((x) => x.value.content.dest);
+
+  debug("Done fetching vanishing messages");
+  return messages.filter((m) => !deletedIds.includes(m.key));
+};
 
 const searchPeople = (ssbServer, search) =>
   debug("Searching people") ||
@@ -261,10 +292,9 @@ const getAllEntries = (ssbServer, query) =>
       }),
       pull.collect((err, msgs) => {
         debug("Done fetching all entries");
-        const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
-        return resolve(entries);
+        return resolve(msgs);
       })
     );
   });
