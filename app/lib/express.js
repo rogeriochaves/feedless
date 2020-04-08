@@ -26,17 +26,19 @@ Client(ssbSecret, ssbConfig, async (err, server) => {
   console.log("SSB Client ready");
 });
 
+let profileUrl = (id, path = "") => {
+  if (id.includes("/")) {
+    return `/profile/${encodeURIComponent(id)}${path}`;
+  }
+  return `/profile/${id}${path}`;
+};
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use((_req, res, next) => {
-  res.locals.profileUrl = (id, path = "") => {
-    if (id.includes("/")) {
-      return `/profile/${encodeURIComponent(id)}${path}`;
-    }
-    return `/profile/${id}${path}`;
-  };
+  res.locals.profileUrl = profileUrl;
   res.locals.imageUrl = (blob) => {
     const imageHash = blob && typeof blob == "object" ? blob.link : blob;
 
@@ -126,7 +128,7 @@ router.post("/profile/:id/publish", async (req, res) => {
     });
   }
 
-  res.redirect("/profile/" + id);
+  res.redirect(profileUrl(id));
 });
 
 router.get("/pubs", async (_req, res) => {

@@ -1,3 +1,9 @@
+let escCallback = () => {};
+document.onkeydown = (e) => {
+  const isEsc = e.key === "Escape" || e.key === "Esc";
+  if (isEsc) escCallback();
+};
+
 const messages = document.querySelectorAll(".vanishing-message");
 messages.forEach((message) => {
   message.addEventListener("click", () => {
@@ -18,5 +24,6 @@ messages.forEach((message) => {
 
     overlay.addEventListener("click", onClose);
     closeButton.addEventListener("click", onClose);
+    escCallback = onClose;
   });
 });
