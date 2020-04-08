@@ -5,12 +5,15 @@ const bodyParser = require("body-parser");
 const Client = require("ssb-client");
 const ssbKeys = require("ssb-keys");
 const ssbConfig = require("./ssb-config");
-const { asyncRouter } = require("./utils");
+const { asyncRouter, writeKey } = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
+const cookieParser = require("cookie-parser");
+const leftpad = require("left-pad"); // I don't believe I'm depending on this
+const debug = require("debug")("express");
 
 let ssbServer;
-let context = {};
+let mode = process.env.MODE || "server";
 
 let homeFolder =
   process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
@@ -19,8 +22,6 @@ let ssbSecret = ssbKeys.loadOrCreateSync(
 );
 Client(ssbSecret, ssbConfig, async (err, server) => {
   if (err) throw err;
-  const whoami = await server.whoami();
-  context.profile = await queries.getProfile(server, whoami.id);
 
   ssbServer = server;
   console.log("SSB Client ready");
@@ -37,7 +38,46 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use((_req, res, next) => {
+app.use(cookieParser());
+app.use(async (req, res, next) => {
+  if (!ssbServer) {
+    setTimeout(() => {
+      console.log("Waiting for SSB to load...");
+
+      res.redirect("/");
+    }, 500);
+    return;
+  }
+
+  req.context = {};
+  try {
+    if (mode == "client") {
+      const whoami = await server.whoami();
+      req.context.profile = await queries.getProfile(server, whoami.id);
+
+      next();
+    } else {
+      const identities = await ssbServer.identities.list();
+      const key = req.cookies["ssb_key"];
+      if (!key) return next();
+
+      const parsedKey = JSON.parse(key);
+      if (!identities.includes(parsedKey.id)) {
+        const filename =
+          "secret_" + leftpad(identities.length - 1, 2, "0") + ".butt";
+
+        writeKey(key, `/identities/${filename}`);
+        ssbServer.identities.refresh();
+      }
+      req.context.profile = await queries.getProfile(ssbServer, parsedKey.id);
+
+      next();
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+app.use((req, res, next) => {
   res.locals.profileUrl = profileUrl;
   res.locals.imageUrl = (blob) => {
     const imageHash = blob && typeof blob == "object" ? blob.link : blob;
@@ -50,41 +90,74 @@ app.use((_req, res, next) => {
     }
     return "/images/no-avatar.png";
   };
-  res.locals.context = context;
+  res.locals.context = req.context;
   next();
 });
 
 const router = asyncRouter(app);
 
-router.get("/", async (_req, res) => {
-  if (!ssbServer) {
-    setTimeout(() => {
-      res.redirect("/");
-    }, 500);
-    return;
+router.get("/", async (req, res) => {
+  if (!req.context.profile) {
+    return res.render("index");
   }
-
-  if (!context.profile.name) {
+  if (!req.context.profile.name) {
     return res.redirect("/about");
   }
 
   const [posts, friends, vanishingMessages] = await Promise.all([
-    queries.getPosts(ssbServer, context.profile),
-    queries.getFriends(ssbServer, context.profile),
-    queries.getVanishingMessages(ssbServer, context.profile),
+    queries.getPosts(ssbServer, req.context.profile),
+    queries.getFriends(ssbServer, req.context.profile),
+    queries.getVanishingMessages(ssbServer, req.context.profile),
   ]);
-  res.render("index", {
+  res.render("home", {
     posts,
     friends,
     vanishingMessages,
-    profile: context.profile,
+    profile: req.context.profile,
   });
+});
+
+router.post("/login", async (req, res) => {
+  const submittedKey = req.body.ssb_key;
+
+  // From ssb-keys
+  const reconstructKeys = (keyfile) => {
+    var privateKey = keyfile
+      .replace(/\s*\#[^\n]*/g, "")
+      .split("\n")
+      .filter((x) => x)
+      .join("");
+
+    var keys = JSON.parse(privateKey);
+    const hasSigil = (x) => /^(@|%|&)/.test(x);
+
+    if (!hasSigil(keys.id)) keys.id = "@" + keys.public;
+    return keys;
+  };
+
+  try {
+    const decodedKey = reconstructKeys(submittedKey);
+    res.cookie("ssb_key", JSON.stringify(decodedKey));
+
+    decodedKey.private = "[removed]";
+    debug("Login with key", decodedKey);
+
+    res.redirect("/");
+  } catch (e) {
+    debug("Error on login", e);
+    res.send("Invalid key");
+  }
+});
+
+router.get("/logout", async (_req, res) => {
+  res.clearCookie("ssb_key");
+  res.redirect("/");
 });
 
 router.get("/profile/:id", async (req, res) => {
   const id = req.params.id;
 
-  if (id == context.profile.id) {
+  if (id == req.context.profile.id) {
     return res.redirect("/");
   }
 
@@ -101,7 +174,7 @@ router.post("/publish", async (req, res) => {
   await ssbServer.publish({
     type: "post",
     text: req.body.message,
-    root: context.profile.id,
+    root: req.context.profile.id,
   });
 
   res.redirect("/");
@@ -165,13 +238,13 @@ router.get("/about", (_req, res) => {
 router.post("/about", async (req, res) => {
   const name = req.body.name;
 
-  if (name != context.profile.name) {
+  if (name != req.context.profile.name) {
     await ssbServer.publish({
       type: "about",
-      about: context.profile.id,
+      about: req.context.profile.id,
       name: name,
     });
-    context.profile.name = name;
+    req.context.profile.name = name;
   }
 
   res.redirect("/");

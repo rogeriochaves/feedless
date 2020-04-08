@@ -19,13 +19,16 @@
           <a href="/debug">Debug</a>
         </nav>
         <div class="right-items">
-          <a href="/" style="margin-right: 10px">
-            <%= context.profile.name %> (<%= context.profile.id.slice(0, 8) %>)
-          </a>
-          <form action="/search" method="GET">
+          <form action="/search" method="GET" style="margin-right: 10px">
             <div class="search-icon">🔎</div>
             <input type="search" class="input-search" name="query" placeholder="Search for people...">
           </form>
+          <a href="/" style="margin-right: 10px">
+            <%= context.profile.name %> (<%= context.profile.id.slice(0, 8) %>)
+          </a>
+          <a href="/logout" style="margin-right: 10px">
+            Logout
+          </a>
         </div>
       </header>
     <% } %>

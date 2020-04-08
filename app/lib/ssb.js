@@ -1,17 +1,15 @@
 const fs = require("fs");
 const path = require("path");
+const { writeKey } = require("./utils");
 
-let homeFolder =
-  process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-let ssbFolder = `${homeFolder}/.${process.env.CONFIG_FOLDER || "social"}`;
-let secretPath = `${ssbFolder}/secret`;
 let envKey =
   process.env.SSB_KEY &&
   Buffer.from(process.env.SSB_KEY, "base64").toString("utf8");
 if (envKey) {
-  console.log("Using env SSB_KEY");
-  fs.mkdirSync(ssbFolder, { recursive: true });
-  fs.writeFileSync(secretPath, envKey);
+  try {
+    writeKey(envKey, "/secret");
+    console.log("Writing SSB_KEY from env");
+  } catch (_) {}
 }
 
 const Server = require("ssb-server");
@@ -28,7 +26,7 @@ Server.use(require("ssb-master"))
   .use(require("ssb-friends"))
   .use(require("ssb-query"))
   .use(require("ssb-device-address"))
-  .use(require("ssb-identities"))
+  .use(require("./monkeypatch/ssb-identities"))
   .use(require("ssb-peer-invites"))
   .use(require("ssb-blobs"))
   .use(require("ssb-private"));

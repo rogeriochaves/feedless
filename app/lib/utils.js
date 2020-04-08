@@ -1,16 +1,4 @@
-module.exports.promisify = (method, options = null) => {
-  return new Promise((resolve, reject) => {
-    const callback = (err, result) => {
-      if (err) return reject(err);
-      return resolve(result);
-    };
-    if (options) {
-      method(options, callback);
-    } else {
-      method(callback);
-    }
-  });
-};
+const fs = require("fs");
 
 module.exports.asyncRouter = (app) => {
   const debug = require("debug")("router");
@@ -32,4 +20,15 @@ module.exports.asyncRouter = (app) => {
       app.post(path, wrapper(`POST ${path}`, fn));
     },
   };
+};
+
+module.exports.writeKey = (key, path) => {
+  let homeFolder =
+    process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+  let ssbFolder = `${homeFolder}/.${process.env.CONFIG_FOLDER || "social"}`;
+  let secretPath = `${ssbFolder}${path}`;
+
+  // Same options ssb-keys use
+  fs.mkdirSync(ssbFolder, { recursive: true });
+  fs.writeFileSync(secretPath, key, { mode: 0x100, flag: "wx" });
 };
