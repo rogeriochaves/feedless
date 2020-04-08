@@ -1,6 +1,20 @@
-const Server = require("ssb-server");
 const fs = require("fs");
 const path = require("path");
+
+let homeFolder =
+  process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+let ssbFolder = `${homeFolder}/.${process.env.CONFIG_FOLDER || "social"}`;
+let secretPath = `${ssbFolder}/secret`;
+let envKey =
+  process.env.SSB_KEY &&
+  Buffer.from(process.env.SSB_KEY, "base64").toString("utf8");
+if (envKey) {
+  console.log("Using env SSB_KEY");
+  fs.mkdirSync(ssbFolder, { recursive: true });
+  fs.writeFileSync(secretPath, envKey);
+}
+
+const Server = require("ssb-server");
 const config = require("./ssb-config");
 
 // add plugins

@@ -65,7 +65,7 @@ router.get("/", async (_req, res) => {
   }
 
   if (!context.profile.name) {
-    res.redirect("/about");
+    return res.redirect("/about");
   }
 
   const [posts, friends, vanishingMessages] = await Promise.all([
