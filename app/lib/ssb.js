@@ -16,7 +16,8 @@ Server.use(require("ssb-master"))
   .use(require("ssb-device-address"))
   .use(require("ssb-identities"))
   .use(require("ssb-peer-invites"))
-  .use(require("ssb-blobs"));
+  .use(require("ssb-blobs"))
+  .use(require("ssb-private"));
 
 const server = Server(config);
 console.log("SSB server started at", config.port);

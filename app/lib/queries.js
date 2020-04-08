@@ -76,6 +76,7 @@ const getPosts = (ssbServer, profile) =>
             {
               $filter: {
                 value: {
+                  private: { $not: true },
                   content: {
                     root: profile.id,
                   },
@@ -92,6 +93,7 @@ const getPosts = (ssbServer, profile) =>
               $filter: {
                 value: {
                   author: profile.id,
+                  private: { $not: true },
                   content: {
                     type: "post",
                     root: { $not: true },
@@ -107,6 +109,64 @@ const getPosts = (ssbServer, profile) =>
       paramap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
         debug("Done fetching posts");
+        const entries = msgs.map((x) => x.value);
+
+        if (err) return reject(err);
+        return resolve(entries);
+      })
+    );
+  });
+
+const getVanishingMessages = (ssbServer, profile) =>
+  debug("Fetching vanishing messages") ||
+  new Promise((resolve, reject) => {
+    pull(
+      // @ts-ignore
+      cat([
+        ssbServer.query.read({
+          reverse: true,
+          query: [
+            {
+              $filter: {
+                value: {
+                  private: true,
+                  content: {
+                    root: profile.id,
+                  },
+                },
+              },
+            },
+          ],
+          limit: 100,
+        }),
+        ssbServer.query.read({
+          reverse: true,
+          query: [
+            {
+              $filter: {
+                value: {
+                  author: profile.id,
+                  private: true,
+                  content: {
+                    type: "post",
+                    root: { $not: true },
+                  },
+                },
+              },
+            },
+          ],
+          limit: 100,
+        }),
+      ]),
+      pull.filter(
+        (msg) =>
+          msg.value.content.type == "post" &&
+          (msg.value.content.root ||
+            msg.value.content.recps.includes(profile.id))
+      ),
+      paramap(mapProfiles(ssbServer)),
+      pull.collect((err, msgs) => {
+        debug("Done fetching vanishing messages");
         const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
@@ -242,4 +302,5 @@ module.exports = {
   getFriends,
   getAllEntries,
   getProfile,
+  getVanishingMessages,
 };

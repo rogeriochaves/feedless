@@ -66,11 +66,17 @@ router.get("/", async (_req, res) => {
     res.redirect("/about");
   }
 
-  const [posts, friends] = await Promise.all([
+  const [posts, friends, vanishingMessages] = await Promise.all([
     queries.getPosts(ssbServer, context.profile),
     queries.getFriends(ssbServer, context.profile),
+    queries.getVanishingMessages(ssbServer, context.profile),
   ]);
-  res.render("index", { posts, friends });
+  res.render("index", {
+    posts,
+    friends,
+    vanishingMessages,
+    profile: context.profile,
+  });
 });
 
 router.get("/profile/:id", async (req, res) => {
@@ -101,12 +107,25 @@ router.post("/publish", async (req, res) => {
 
 router.post("/profile/:id/publish", async (req, res) => {
   const id = req.params.id;
+  const visibility = req.body.visibility;
+  console.log("req.body", req.body);
 
-  await ssbServer.publish({
-    type: "post",
-    text: req.body.message,
-    root: id,
-  });
+  if (visibility == "vanishing") {
+    await ssbServer.private.publish(
+      {
+        type: "post",
+        text: req.body.message,
+        root: id,
+      },
+      [id]
+    );
+  } else {
+    await ssbServer.publish({
+      type: "post",
+      text: req.body.message,
+      root: id,
+    });
+  }
 
   res.redirect("/profile/" + id);
 });

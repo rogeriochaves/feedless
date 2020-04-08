@@ -22,27 +22,25 @@
 
   <div class="wall">
     <h1><%= profile.name %>'s Wall</h1>
-  <!--
+
     <h2>Leave <%= profile.name %> a message</h2>
     <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
+      <div>
+        <label>
+          <input type="radio" name="visibility" value="public">
+          Public
+        </label>
+        <label>
+          <input type="radio" name="visibility" value="vanishing">
+          Vanishing
+        </label>
+      </div>
       <textarea name="message"></textarea>
       <input type="submit" value="Send" />
-    </form> -->
+    </form>
 
-    <% posts.map(entry => { %>
-      <div class="post">
-        <div>
-          <img src="<%= profileImageUrl(entry.authorProfile) %>" class="post-profile-pic" />
-        </div>
-        <div class="post-content">
-          <div class="content-header">
-            <%= entry.authorProfile.name %>
-          </div>
-          <div class="content-body">
-            <%= entry.content.text.slice(0, 140) %>
-          </div>
-        </div>
-      </div>
+    <% posts.map(post => { %>
+      <%- include('_post', { post }) %>
     <% }) %>
   </div>
 </div>

@@ -1,27 +1,66 @@
 <%- include('_header') %>
 
-<h1>Home</h1>
+<div class="columns">
+  <div class="about">
+    <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
+    <h1><%= profile.name %></h1>
 
-<form action="/publish" method="POST">
-  <textarea name="message"></textarea>
-  <input type="submit" value="Send" />
-</form>
+    <%= profile.description %>
 
-<% posts.map(entry => { %>
-  <div><%= entry.authorProfile.name %> (<%= entry.author.slice(0, 8) %>): <%= entry.content.text %></div>
-  <hr />
-<% }) %>
+    <h2>Friends</h2>
 
-<h2>Friends</h2>
+    <ul>
+      <% friends.map(friend => { %>
+        <li>
+          <a href="<%= profileUrl(friend.content.contact) %>">
+            <%= friend.content.contactProfile?.name %> (<%= friend.content.contact.slice(0, 8) %>)
+          </a>
+        </li>
+      <% }) %>
+    </ul>
 
-<ul>
-  <% friends.map(friend => { %>
-    <li>
-      <a href="<%= profileUrl(friend.content.contact) %>">
-        <%= friend.content.contactProfile && friend.content.contactProfile.name %> (<%= friend.content.contact.slice(0, 8) %>)
-      </a>
-    </li>
-  <% }) %>
-</ul>
+  </div>
+
+  <div class="wall">
+    <% if (vanishingMessages.length > 0) { %>
+      <div class="vanishing-messages" style="padding-bottom: 20px">
+        <h2>Vanishing Messages</h2>
+        <% vanishingMessages.map(post => { %>
+          <span>
+            <button class="vanishing-message">
+              <div><img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" /></div>
+              <div><%= post.authorProfile.name %></div>
+            </button>
+            <div class="overlay"></div>
+            <div class="modal">
+              <div class="modal-header">
+                <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" style="padding-right: 10px" />
+                <%= post.authorProfile.name %>
+              </div>
+              <div class="modal-body">
+                <%= post.content.text %>
+              </div>
+              <div class="modal-footer">
+                after you close this box the message will be gone forever
+                <button class="modal-close">Close</button>
+              </div>
+            </div>
+          </span>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <h2>Your Wall</h2>
+
+    <form action="/publish" method="POST">
+      <textarea name="message"></textarea>
+      <input type="submit" value="Send" />
+    </form>
+
+    <% posts.map(post => { %>
+      <%- include('_post', { post }) %>
+    <% }) %>
+  </div>
+</div>
 
 <%- include('_footer') %>

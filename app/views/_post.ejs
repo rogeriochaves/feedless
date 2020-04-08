@@ -1,0 +1,13 @@
+<div class="post">
+  <div>
+    <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" />
+  </div>
+  <div class="post-content">
+    <div class="content-header">
+      <%= post.authorProfile.name %>
+    </div>
+    <div class="content-body">
+      <%= post.content.text.slice(0, 140) %>
+    </div>
+  </div>
+</div>
