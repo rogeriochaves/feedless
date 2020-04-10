@@ -1,10 +1,34 @@
-<h1>Welcome to Social</h1>
+<%- include('_header', { body_class: "entrance" }) %>
 
-<h2>Login</h2>
+<div class="entrance-content">
+  <h1 style="padding-top: 50px">Welcome to Social</h1>
+  <h2 style="padding: 20px 0">The non-addictive social network</h2>
 
-<form method="POST" action="/login">
-  <textarea name="ssb_key" id="" cols="30" rows="10"></textarea>
-  <input type="submit" value="Login">
-</form>
+  <div style="padding-top: 20px">
+    <a href="/signup" class="button button-big button-primary">Create account</a>
+    <a href="/login" class="button button-big" style="margin-left: 10px">Login</a>
+  </div>
 
-<h2>Create account</h2>
+  <div style="padding-top: 100px">
+    <p>
+      Social combines the best original ideas of popular social networks but without the bad parts
+    </p>
+
+    <ul>
+      <li>There is no feed to scroll forever, no cassino slot machine addiction</li>
+      <li>There are no likes nor any mindless interactions, if you like something, you tell the person, like a human</li>
+      <li>You have your own wall, but you can only post with 140 characters, like original Twitter</li>
+      <li>If you want to check on others you have to go to their profile, like original Facebook or Orkut</li>
+      <li>You can send vanishing messages, like original Snapchat, but there are no stories</li>
+    </ul>
+
+    <p>
+      Because Social is not a business, so we don't need to make people
+      addicted just to sell more ads and please shareholders. Social is built on top of
+      <a href="https://scuttlebutt.nz/" target="_blank" style="color: #FFF">SSB</a>,
+      a decentralized social network protocol, which means the community sustains it, not a corporation.
+    </p>
+  </div>
+</div>
+
+<%- include('_footer') %>

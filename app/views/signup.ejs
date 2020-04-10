@@ -1,0 +1,28 @@
+<%- include('_header') %>
+
+<div style="max-width: 800px; margin: 0 auto">
+  <h1 style="padding-top: 50px">Create account</h1>
+
+  <form method="POST" action="/signup">
+    <div style="padding-top: 30px">
+      <label>
+        Profile picture:
+        <div class="columns" style="margin-top: 20px; align-items: center;">
+          <div class="profile-pic-placeholder">
+            <img class="js-profile-pic-placeholder">
+          </div>
+          <input type="file" name="pic" class="js-profile-pic-upload" />
+        </div>
+      </label>
+    </div>
+    <div style="padding: 20px 0 30px 0">
+      <label>
+        Name:<br />
+        <input type="text" name="name" />
+      </label>
+    </div>
+    <input class="button button-big button-primary" type="submit" value="Sign up" />
+  </form>
+</div>
+
+<%- include('_footer') %>

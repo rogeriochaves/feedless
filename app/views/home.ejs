@@ -27,7 +27,7 @@
         <h2>Vanishing Messages</h2>
         <% vanishingMessages.reverse().map(message => { %>
           <span>
-            <button class="vanishing-message" data-key="<%= message.key %>">
+            <button class="vanishing-message js-vanishing-message" data-key="<%= message.key %>">
               <div><img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" /></div>
               <div><%= message.value.authorProfile.name %></div>
             </button>

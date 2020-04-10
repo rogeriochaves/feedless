@@ -2,12 +2,18 @@
   box-sizing: border-box;
 }
 body {
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; */
   margin: 0;
   line-height: 1.3em;
   word-wrap: break-word;
+  font-size: 16px;
 }
-button {
+button,
+a.button,
+input.button {
   font-size: 14px;
   background: #ddd;
   color: #5f5f5f;
@@ -15,11 +21,42 @@ button {
   padding: 8px 10px;
   border: none;
   cursor: pointer;
+  text-decoration: none;
 }
-button:hover {
+button:hover,
+a.button:hover,
+input.button {
   background: #959eab;
   color: #fff;
 }
+button.button-big,
+a.button.button-big,
+input.button.button-big {
+  padding: 16px 20px;
+  font-size: 18px;
+}
+button.button-primary,
+a.button.button-primary,
+input.button.button-primary {
+  background: #08d;
+  color: #fff;
+}
+button.button-primary:hover,
+a.button.button-primary:hover,
+input.button.button-primary:hover {
+  background: #06b;
+  color: #fff;
+}
+
+input:not([type="submit"]),
+textarea {
+  line-height: 32px;
+  padding: 0 6px;
+  width: 100%;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
 header {
   padding: 0 30px;
   border-bottom: 1px solid #666;
@@ -79,10 +116,15 @@ main {
 }
 
 h1 {
-  text-transform: uppercase;
   font-weight: bold;
   line-height: 1.3em;
-  margin: 10px 0 0 0;
+  margin: 0;
+  padding: 10px 0 0 0;
+  font-weight: 200;
+}
+
+h2 {
+  font-weight: 200;
 }
 
 .wall {
@@ -179,4 +221,41 @@ button.vanishing-message {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.entrance {
+  background: url("/images/bg.jpg") center center #000;
+  background-size: cover;
+}
+
+.entrance main {
+  margin: 0;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  min-height: 100vh;
+  max-width: none;
+}
+
+.entrance-content {
+  color: #fff;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.entrance h1 {
+  font-size: 60px;
+}
+
+.profile-pic-placeholder {
+  min-width: 100px;
+  width: 100px;
+  height: 100px;
+  border: 5px solid #fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  background: #ddd;
+}
+
+.profile-pic-placeholder img {
+  max-width: 100%;
+  display: block;
 }

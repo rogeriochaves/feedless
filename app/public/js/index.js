@@ -4,7 +4,7 @@ document.onkeydown = (e) => {
   if (isEsc) escCallback();
 };
 
-const messages = document.querySelectorAll(".vanishing-message");
+const messages = document.querySelectorAll(".js-vanishing-message");
 messages.forEach((message) => {
   message.addEventListener("click", () => {
     const overlay = message.parentElement.querySelector(".overlay");
@@ -33,3 +33,22 @@ messages.forEach((message) => {
     });
   });
 });
+
+const profilePicUpload = document.querySelector(".js-profile-pic-upload");
+if (profilePicUpload) {
+  const placeholder = document.querySelector(".js-profile-pic-placeholder");
+
+  const previewImage = () => {
+    if (profilePicUpload.files && profilePicUpload.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        placeholder.src = e.target.result;
+        placeholder.parentElement.style.height = "auto";
+      };
+      reader.readAsDataURL(profilePicUpload.files[0]);
+    }
+  };
+
+  profilePicUpload.addEventListener("change", previewImage);
+  previewImage();
+}

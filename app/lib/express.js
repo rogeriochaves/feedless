@@ -50,6 +50,7 @@ app.use(async (req, res, next) => {
   }
 
   req.context = {};
+  res.locals.context = req.context;
   try {
     if (mode == "client") {
       const whoami = await server.whoami();
@@ -90,7 +91,6 @@ app.use((req, res, next) => {
     }
     return "/images/no-avatar.png";
   };
-  res.locals.context = req.context;
   next();
 });
 
@@ -115,6 +115,10 @@ router.get("/", async (req, res) => {
     vanishingMessages,
     profile: req.context.profile,
   });
+});
+
+router.get("/login", (_req, res) => {
+  res.render("login");
 });
 
 router.post("/login", async (req, res) => {
@@ -152,6 +156,10 @@ router.post("/login", async (req, res) => {
 router.get("/logout", async (_req, res) => {
   res.clearCookie("ssb_key");
   res.redirect("/");
+});
+
+router.get("/signup", (_req, res) => {
+  res.render("signup");
 });
 
 router.get("/profile/:id", async (req, res) => {

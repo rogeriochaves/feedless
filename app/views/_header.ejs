@@ -6,8 +6,8 @@
     <title>Social</title>
     <link rel="stylesheet" href="/style.css">
   </head>
-  <body>
-    <% if (context.profile.name) { %>
+  <body <%- typeof body_class == "undefined" ? "" : `class="${body_class}"` %>>
+    <% if (context.profile) { %>
       <header>
         <div class="logo">
           <a href="/">Social</a>
