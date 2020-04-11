@@ -201,13 +201,33 @@ router.get("/profile/:id", async (req, res) => {
     return res.redirect("/");
   }
 
-  const [profile, posts, friends] = await Promise.all([
+  const [profile, posts, friends, friendshipStatus] = await Promise.all([
     queries.getProfile(ssbServer, id),
     queries.getPosts(ssbServer, { id }),
     queries.getFriends(ssbServer, { id }),
+    queries.getFriendshipStatus(ssbServer, req.context.profile.id, id),
   ]);
 
-  res.render("profile", { profile, posts, friends });
+  res.render("profile", { profile, posts, friends, friendshipStatus });
+});
+
+router.post("/profile/:id/add_friend", async (req, res) => {
+  const id = req.params.id;
+  if (id == req.context.profile.id) {
+    throw "cannot befriend yourself";
+  }
+
+  await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "contact",
+      contact: id,
+      following: true,
+    },
+  });
+
+  res.redirect(`/profile/${id}`);
 });
 
 router.post("/publish", async (req, res) => {

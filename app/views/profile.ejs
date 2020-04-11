@@ -7,6 +7,18 @@
 
     <%= profile.description %>
 
+    <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST" style="margin-top: 20px" >
+      <% if (friendshipStatus == "no_relation") { %>
+        <input type="submit" value="Add as friend" />
+      <% } else if (friendshipStatus == "friends") { %>
+        ✅ Friends
+      <% } else if (friendshipStatus == "request_sent") { %>
+        <button disabled>Request sent</button>
+      <% } else if (friendshipStatus == "request_received") { %>
+        <input type="submit" value="Accept friendship" />
+      <% } %>
+    </form>
+
     <h2>Friends</h2>
 
     <ul>
@@ -36,7 +48,7 @@
         </label>
       </div>
       <textarea name="message"></textarea>
-      <input type="submit" class="button button-primary" value="Send" />
+      <input type="submit" value="Send" />
     </form>
 
     <% posts.map(post => { %>

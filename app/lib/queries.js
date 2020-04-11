@@ -272,6 +272,25 @@ const getFriends = (ssbServer, profile) =>
     );
   });
 
+const getFriendshipStatus = async (ssbServer, source, dest) => {
+  debug("Fetching friendship status");
+  const [isFollowing, isFollowingBack] = await Promise.all([
+    ssbServer.friends.isFollowing({ source: source, dest: dest }),
+    ssbServer.friends.isFollowing({ source: dest, dest: source }),
+  ]);
+
+  let status = "no_relation";
+  if (isFollowing && isFollowingBack) {
+    status = "friends";
+  } else if (isFollowing && !isFollowingBack) {
+    status = "request_sent";
+  } else if (!isFollowing && isFollowingBack) {
+    status = "request_received";
+  }
+
+  return status;
+};
+
 const getAllEntries = (ssbServer, query) =>
   debug("Fetching All Entries") ||
   new Promise((resolve, reject) => {
@@ -333,4 +352,5 @@ module.exports = {
   getProfile,
   getVanishingMessages,
   profileCache,
+  getFriendshipStatus,
 };
