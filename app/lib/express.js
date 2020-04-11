@@ -129,7 +129,10 @@ router.get("/login", (_req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const submittedKey = req.body.ssb_key;
+  const submittedKey =
+    req.files && req.files.ssb_key
+      ? req.files.ssb_key.data.toString()
+      : req.body.ssb_key;
 
   try {
     const decodedKey = reconstructKeys(submittedKey);

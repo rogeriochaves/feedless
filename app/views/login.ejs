@@ -1,10 +1,21 @@
 <%- include('_header') %>
 
-<h1>Login</h1>
+<div style="max-width: 800px; margin: 0 auto">
+  <h1 style="padding-top: 50px">Login</h1>
 
-<form method="POST" action="/login">
-  <textarea name="ssb_key" id="" cols="30" rows="10"></textarea>
-  <input type="submit" value="Login">
-</form>
+  <form method="POST" action="/login" enctype="multipart/form-data">
+    <div style="padding: 20px 0 10px 0">
+      <label>
+        Select your key: <br />
+        <input type="file" name="ssb_key" />
+      </label>
+    </div>
+    <div style="padding: 20px 0 30px 0">
+      Or paste it here: <br />
+      <textarea name="ssb_key" style="max-width: 300px"></textarea>
+    </div>
+    <input class="button button-big button-primary" type="submit" value="Login" />
+  </form>
+</div>
 
 <%- include('_footer') %>
