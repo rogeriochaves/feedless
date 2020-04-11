@@ -1,6 +1,11 @@
 const pull = require("pull-stream");
 const cat = require("pull-cat");
-const debug = require("debug")("queries");
+const debugPosts = require("debug")("queries:posts"),
+  debugMessages = require("debug")("queries:messages"),
+  debugFriends = require("debug")("queries:friends"),
+  debugFriendshipStatus = require("debug")("queries:friendship_status"),
+  debugPeople = require("debug")("queries:people"),
+  debugProfile = require("debug")("queries:profile");
 const paramap = require("pull-paramap");
 
 const latestOwnerValue = (ssbServer, { key, dest }) =>
@@ -47,25 +52,16 @@ const latestOwnerValue = (ssbServer, { key, dest }) =>
     );
   });
 
-const mapProfiles = (ssbServer) => (data, callback) => {
-  const authorPromise = getProfile(ssbServer, data.value.author);
-  const contactPromise =
-    data.value.content.type == "contact" &&
-    getProfile(ssbServer, data.value.content.contact);
-
-  return Promise.all([authorPromise, contactPromise])
-    .then(([author, contact]) => {
+const mapProfiles = (ssbServer) => (data, callback) =>
+  getProfile(ssbServer, data.value.author)
+    .then((author) => {
       data.value.authorProfile = author;
-      if (contact) {
-        data.value.content.contactProfile = contact;
-      }
       callback(null, data);
     })
     .catch((err) => callback(err, null));
-};
 
 const getPosts = (ssbServer, profile) =>
-  debug("Fetching posts") ||
+  debugPosts("Fetching") ||
   new Promise((resolve, reject) => {
     pull(
       // @ts-ignore
@@ -108,7 +104,7 @@ const getPosts = (ssbServer, profile) =>
       pull.filter((msg) => msg.value.content.type == "post"),
       paramap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
-        debug("Done fetching posts");
+        debugPosts("Done");
         const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
@@ -118,7 +114,7 @@ const getPosts = (ssbServer, profile) =>
   });
 
 const getVanishingMessages = async (ssbServer, profile) => {
-  debug("Fetching vanishing messages");
+  debugMessages("Fetching");
   const messagesPromise = new Promise((resolve, reject) => {
     pull(
       // @ts-ignore
@@ -200,13 +196,12 @@ const getVanishingMessages = async (ssbServer, profile) => {
     deletedPromise,
   ]);
   const deletedIds = deleted.map((x) => x.value.content.dest);
-
-  debug("Done fetching vanishing messages");
+  debugMessages("Done");
   return messages.filter((m) => !deletedIds.includes(m.key));
 };
 
 const searchPeople = (ssbServer, search) =>
-  debug("Searching people") ||
+  debugPeople("Fetching") ||
   new Promise((resolve, reject) => {
     pull(
       ssbServer.query.read({
@@ -232,7 +227,7 @@ const searchPeople = (ssbServer, search) =>
         );
       }),
       pull.collect((err, msgs) => {
-        debug("Done searching people");
+        debugPeople("Done");
         const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
@@ -241,9 +236,10 @@ const searchPeople = (ssbServer, search) =>
     );
   });
 
-const getFriends = (ssbServer, profile) =>
-  debug("Fetching friends") ||
-  new Promise((resolve, reject) => {
+const getFriends = async (ssbServer, profile) => {
+  debugFriends("Fetching");
+
+  let followingPromise = new Promise((resolve, reject) => {
     pull(
       ssbServer.query.read({
         reverse: true,
@@ -259,11 +255,9 @@ const getFriends = (ssbServer, profile) =>
             },
           },
         ],
-        limit: 20,
+        limit: 100,
       }),
-      paramap(mapProfiles(ssbServer)),
       pull.collect((err, msgs) => {
-        debug("Done fetching friends");
         const entries = msgs.map((x) => x.value);
 
         if (err) return reject(err);
@@ -272,8 +266,86 @@ const getFriends = (ssbServer, profile) =>
     );
   });
 
+  let followersPromise = new Promise((resolve, reject) => {
+    pull(
+      ssbServer.query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                content: {
+                  type: "contact",
+                  contact: profile.id,
+                },
+              },
+            },
+          },
+        ],
+        limit: 100,
+      }),
+      pull.collect((err, msgs) => {
+        const entries = msgs.map((x) => x.value);
+
+        if (err) return reject(err);
+        return resolve(entries);
+      })
+    );
+  });
+
+  const [following, followers] = await Promise.all([
+    followingPromise,
+    followersPromise,
+  ]);
+
+  const allContacts = following.concat(followers).reverse();
+
+  let network = {};
+  for (let contact of allContacts) {
+    if (contact.content.following) {
+      network[contact.author] = network[contact.author] || {};
+      network[contact.author][contact.content.contact] = true;
+    } else if (contact.content.blocking || contact.content.flagged) {
+      delete network[contact.author][contact.content.contact];
+    }
+  }
+
+  let friends = [];
+  let requests_sent = [];
+  let requests_received = [];
+
+  const unique = (x) => Array.from(new Set(x));
+  const allIds = unique(
+    Object.keys(network).concat(Object.keys(network[profile.id]))
+  );
+  const profilesList = await Promise.all(
+    allIds.map((id) => getProfile(ssbServer, id))
+  );
+  const profilesHash = profilesList.reduce((hash, profile) => {
+    hash[profile.id] = profile;
+    return hash;
+  }, {});
+
+  for (let key of allIds) {
+    if (key == profile.id) continue;
+
+    let isFollowing = network[profile.id][key];
+    let isFollowingBack = network[key] && network[key][profile.id];
+    if (isFollowing && isFollowingBack) {
+      friends.push(profilesHash[key]);
+    } else if (isFollowing && !isFollowingBack) {
+      requests_sent.push(profilesHash[key]);
+    } else if (!isFollowing && isFollowingBack) {
+      requests_received.push(profilesHash[key]);
+    }
+  }
+
+  debugFriends("Done");
+  return { friends, requests_sent, requests_received };
+};
+
 const getFriendshipStatus = async (ssbServer, source, dest) => {
-  debug("Fetching friendship status");
+  debugFriendshipStatus("Fetching");
   const [isFollowing, isFollowingBack] = await Promise.all([
     ssbServer.friends.isFollowing({ source: source, dest: dest }),
     ssbServer.friends.isFollowing({ source: dest, dest: source }),
@@ -287,12 +359,12 @@ const getFriendshipStatus = async (ssbServer, source, dest) => {
   } else if (!isFollowing && isFollowingBack) {
     status = "request_received";
   }
+  debugFriendshipStatus("Done");
 
   return status;
 };
 
 const getAllEntries = (ssbServer, query) =>
-  debug("Fetching All Entries") ||
   new Promise((resolve, reject) => {
     let queries = [];
     if (query.author) {
@@ -310,8 +382,6 @@ const getAllEntries = (ssbServer, query) =>
         ...queryOpts,
       }),
       pull.collect((err, msgs) => {
-        debug("Done fetching all entries");
-
         if (err) return reject(err);
         return resolve(msgs);
       })
@@ -339,7 +409,7 @@ const getProfile = async (ssbServer, id) => {
 };
 
 setInterval(() => {
-  debug("Clearing profile cache");
+  debugProfile("Clearing profile cache");
   profileCache = {};
 }, 5 * 60 * 1000);
 

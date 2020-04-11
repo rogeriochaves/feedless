@@ -22,10 +22,10 @@
     <h2>Friends</h2>
 
     <ul>
-      <% friends.map(friend => { %>
+      <% friends.friends.map(friend => { %>
         <li>
-          <a href="<%= profileUrl(friend.content.contact) %>">
-            <%= friend.content.contactProfile?.name %> (<%= friend.content.contact.slice(0, 8) %>)
+          <a href="<%= profileUrl(friend.id) %>">
+            <%= friend.name %> (<%= friend.id.slice(0, 8) %>)
           </a>
         </li>
       <% }) %>
