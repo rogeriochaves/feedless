@@ -1,5 +1,7 @@
 const fs = require("fs");
 const leftpad = require("left-pad"); // I don't believe I'm depending on this
+const pull = require("pull-stream");
+const split = require("split-buffer");
 
 module.exports.asyncRouter = (app) => {
   const debug = require("debug")("router");
@@ -62,4 +64,19 @@ module.exports.readKey = (path) => {
 
   let keyfile = fs.readFileSync(secretPath, "utf8");
   return module.exports.reconstructKeys(keyfile);
+};
+
+module.exports.uploadPicture = async (ssbServer, picture) => {
+  const maxSize = 5 * 1024 * 1024; // 5 MB
+  if (picture.size > maxSize) throw "Max size exceeded";
+
+  return await new Promise((resolve, reject) =>
+    pull(
+      pull.values(split(picture.data, 64 * 1024)),
+      ssbServer.blobs.add((err, result) => {
+        if (err) return reject(err);
+        return resolve(result);
+      })
+    )
+  );
 };

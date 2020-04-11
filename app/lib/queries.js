@@ -332,4 +332,5 @@ module.exports = {
   getAllEntries,
   getProfile,
   getVanishingMessages,
+  profileCache,
 };

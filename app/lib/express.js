@@ -11,14 +11,13 @@ const {
   nextIdentityFilename,
   reconstructKeys,
   readKey,
+  uploadPicture,
 } = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
 const cookieParser = require("cookie-parser");
 const debug = require("debug")("express");
 const fileUpload = require("express-fileupload");
-const pull = require("pull-stream");
-const split = require("split-buffer");
 
 let ssbServer;
 let mode = process.env.MODE || "server";
@@ -163,21 +162,7 @@ router.post("/signup", async (req, res) => {
   const name = req.body.name;
   const picture = req.files && req.files.pic;
 
-  let pictureLink;
-  if (picture) {
-    const maxSize = 5 * 1024 * 1024; // 5 MB
-    if (picture.size > maxSize) throw "Max size exceeded";
-
-    pictureLink = await new Promise((resolve, reject) =>
-      pull(
-        pull.values(split(picture.data, 64 * 1024)),
-        ssbServer.blobs.add((err, result) => {
-          if (err) return reject(err);
-          return resolve(result);
-        })
-      )
-    );
-  }
+  const pictureLink = picture && (await uploadPicture(ssbServer, picture));
 
   const filename = await nextIdentityFilename(ssbServer);
   const profileId = await ssbServer.identities.create();
@@ -303,18 +288,29 @@ router.get("/about", (_req, res) => {
 
 router.post("/about", async (req, res) => {
   const name = req.body.name;
+  const picture = req.files && req.files.pic;
 
-  if (name != req.context.profile.name) {
+  const pictureLink = picture && (await uploadPicture(ssbServer, picture));
+
+  let update = {
+    type: "about",
+    about: req.context.profile.id,
+  };
+  if (name && name != req.context.profile.name) {
+    update.name = name;
+  }
+  if (pictureLink) {
+    update.image = pictureLink;
+  }
+
+  if (update.name || update.image) {
     await ssbServer.identities.publishAs({
       id: req.context.profile.id,
       private: false,
-      content: {
-        type: "about",
-        about: req.context.profile.id,
-        name: name,
-      },
+      content: update,
     });
-    req.context.profile.name = name;
+
+    delete queries.profileCache[req.context.profile.id];
   }
 
   res.redirect("/");
