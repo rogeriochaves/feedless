@@ -48,7 +48,7 @@ input.button.button-primary:hover {
   color: #fff;
 }
 
-input:not([type="submit"]),
+input[type="text"],
 textarea {
   line-height: 32px;
   padding: 0 6px;

@@ -5,12 +5,20 @@ const bodyParser = require("body-parser");
 const Client = require("ssb-client");
 const ssbKeys = require("ssb-keys");
 const ssbConfig = require("./ssb-config");
-const { asyncRouter, writeKey } = require("./utils");
+const {
+  asyncRouter,
+  writeKey,
+  nextIdentityFilename,
+  reconstructKeys,
+  readKey,
+} = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
 const cookieParser = require("cookie-parser");
-const leftpad = require("left-pad"); // I don't believe I'm depending on this
 const debug = require("debug")("express");
+const fileUpload = require("express-fileupload");
+const pull = require("pull-stream");
+const split = require("split-buffer");
 
 let ssbServer;
 let mode = process.env.MODE || "server";
@@ -39,6 +47,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(cookieParser());
+app.use(fileUpload());
 app.use(async (req, res, next) => {
   if (!ssbServer) {
     setTimeout(() => {
@@ -64,8 +73,7 @@ app.use(async (req, res, next) => {
 
       const parsedKey = JSON.parse(key);
       if (!identities.includes(parsedKey.id)) {
-        const filename =
-          "secret_" + leftpad(identities.length - 1, 2, "0") + ".butt";
+        const filename = await nextIdentityFilename(ssbServer);
 
         writeKey(key, `/identities/${filename}`);
         ssbServer.identities.refresh();
@@ -78,7 +86,7 @@ app.use(async (req, res, next) => {
     next(e);
   }
 });
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
   res.locals.profileUrl = profileUrl;
   res.locals.imageUrl = (blob) => {
     const imageHash = blob && typeof blob == "object" ? blob.link : blob;
@@ -124,21 +132,6 @@ router.get("/login", (_req, res) => {
 router.post("/login", async (req, res) => {
   const submittedKey = req.body.ssb_key;
 
-  // From ssb-keys
-  const reconstructKeys = (keyfile) => {
-    var privateKey = keyfile
-      .replace(/\s*\#[^\n]*/g, "")
-      .split("\n")
-      .filter((x) => x)
-      .join("");
-
-    var keys = JSON.parse(privateKey);
-    const hasSigil = (x) => /^(@|%|&)/.test(x);
-
-    if (!hasSigil(keys.id)) keys.id = "@" + keys.public;
-    return keys;
-  };
-
   try {
     const decodedKey = reconstructKeys(submittedKey);
     res.cookie("ssb_key", JSON.stringify(decodedKey));
@@ -158,8 +151,59 @@ router.get("/logout", async (_req, res) => {
   res.redirect("/");
 });
 
-router.get("/signup", (_req, res) => {
+router.get("/signup", (req, res) => {
+  if (req.context.profile) {
+    return res.redirect("/");
+  }
+
   res.render("signup");
+});
+
+router.post("/signup", async (req, res) => {
+  const name = req.body.name;
+  const picture = req.files && req.files.pic;
+
+  let pictureLink;
+  if (picture) {
+    const maxSize = 5 * 1024 * 1024; // 5 MB
+    if (picture.size > maxSize) throw "Max size exceeded";
+
+    pictureLink = await new Promise((resolve, reject) =>
+      pull(
+        pull.values(split(picture.data, 64 * 1024)),
+        ssbServer.blobs.add((err, result) => {
+          if (err) return reject(err);
+          return resolve(result);
+        })
+      )
+    );
+  }
+
+  const filename = await nextIdentityFilename(ssbServer);
+  const profileId = await ssbServer.identities.create();
+  const key = readKey(`/identities/${filename}`);
+  if (key.id != profileId)
+    throw "profileId and key.id don't match, probably race condition, bailing out for safety";
+
+  debug("Created new user with id", profileId);
+
+  res.cookie("ssb_key", JSON.stringify(key));
+  key.private = "[removed]";
+  debug("Generated key", key);
+
+  await ssbServer.identities.publishAs({
+    id: profileId,
+    private: false,
+    content: {
+      type: "about",
+      about: profileId,
+      name: name,
+      ...(pictureLink ? { image: pictureLink } : {}),
+    },
+  });
+  debug("Published about", { about: profileId, name, image: pictureLink });
+
+  res.redirect("/");
 });
 
 router.get("/profile/:id", async (req, res) => {
@@ -179,10 +223,14 @@ router.get("/profile/:id", async (req, res) => {
 });
 
 router.post("/publish", async (req, res) => {
-  await ssbServer.publish({
-    type: "post",
-    text: req.body.message,
-    root: req.context.profile.id,
+  await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "post",
+      text: req.body.message,
+      root: req.context.profile.id,
+    },
   });
 
   res.redirect("/");
@@ -192,9 +240,13 @@ router.post("/publish", async (req, res) => {
 router.post("/vanish", async (req, res) => {
   const key = req.body.key;
 
-  await ssbServer.publish({
-    type: "delete",
-    dest: key,
+  await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "delete",
+      dest: key,
+    },
   });
 
   res.send("ok");
@@ -205,19 +257,25 @@ router.post("/profile/:id/publish", async (req, res) => {
   const visibility = req.body.visibility;
 
   if (visibility == "vanishing") {
-    await ssbServer.private.publish(
-      {
+    await ssbServer.identities.publishAs({
+      id: req.context.profile.id,
+      private: true,
+      content: {
+        type: "post",
+        text: req.body.message,
+        root: id,
+        recps: [id],
+      },
+    });
+  } else {
+    await ssbServer.identities.publishAs({
+      id: req.context.profile.id,
+      private: false,
+      content: {
         type: "post",
         text: req.body.message,
         root: id,
       },
-      [id]
-    );
-  } else {
-    await ssbServer.publish({
-      type: "post",
-      text: req.body.message,
-      root: id,
     });
   }
 
@@ -247,10 +305,14 @@ router.post("/about", async (req, res) => {
   const name = req.body.name;
 
   if (name != req.context.profile.name) {
-    await ssbServer.publish({
-      type: "about",
-      about: req.context.profile.id,
-      name: name,
+    await ssbServer.identities.publishAs({
+      id: req.context.profile.id,
+      private: false,
+      content: {
+        type: "about",
+        about: req.context.profile.id,
+        name: name,
+      },
     });
     req.context.profile.name = name;
   }

@@ -1,4 +1,5 @@
-// Monkeypatched to include the refresh function
+// 1) Monkeypatched to include the refresh function
+// 2) Monkeypatched to allow secret messages without published in the recps
 var leftpad = require("left-pad");
 var path = require("path");
 var mkdirp = require("mkdirp");
@@ -94,15 +95,11 @@ exports.init = function (sbot, config) {
       else if (!content.recps && opts.private)
         return cb(new Error("opts.private set, but content.recps not set"));
       else if (!!content.recps && opts.private) {
-        if (!Array.isArray(content.recps) || !~recps.indexOf(id))
+        if (!Array.isArray(content.recps) || !content.recps.length)
           return cb(
             new Error(
-              "content.recps must be an array containing publisher id:" +
-                id +
-                " was:" +
-                JSON.stringify(recps) +
-                " indexOf:" +
-                recps.indexOf(id)
+              "content.recps must be an array containing at least one id, was:" +
+                JSON.stringify(recps)
             )
           );
         content = ssbKeys.box(content, recps);
