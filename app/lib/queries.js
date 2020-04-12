@@ -207,94 +207,41 @@ const searchPeople = async (ssbServer, search) => {
 const getFriends = async (ssbServer, profile) => {
   debugFriends("Fetching");
 
-  let contacts = await promisePull(
-    // @ts-ignore
-    cat([
-      ssbServer.query.read({
-        reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                author: profile.id,
-                content: {
-                  type: "contact",
-                },
-              },
-            },
-          },
-        ],
-        limit: 100,
-      }),
-      ssbServer.query.read({
-        reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                content: {
-                  type: "contact",
-                  contact: profile.id,
-                },
-              },
-            },
-          },
-        ],
-        limit: 100,
-      }),
-    ])
-  ).then(mapValues);
+  let graph = await ssbServer.friends.getGraph();
 
-  let network = {};
-  let requestRejections = [];
-  for (let contact of contacts.reverse()) {
-    if (contact.content.following) {
-      network[contact.author] = network[contact.author] || {};
-      network[contact.author][contact.content.contact] = true;
-    } else {
-      // contact.content.blocking or contact.content.flagged or !contact.content.following
-      if (contact.author == profile.id && contact.content.following === false) {
-        requestRejections.push(contact.content.contact);
-      }
-
-      if (network[contact.author])
-        delete network[contact.author][contact.content.contact];
+  let connections = {};
+  for (let key in graph) {
+    let isFollowing = graph[profile.id][key] > 0;
+    let isFollowingBack = graph[key] && graph[key][profile.id] > 0;
+    if (isFollowing && isFollowingBack) {
+      connections[key] = "friends";
+    } else if (isFollowing && !isFollowingBack) {
+      connections[key] = "requestsSent";
+    } else if (!isFollowing && isFollowingBack) {
+      if (graph[profile.id][key] === undefined)
+        connections[key] = "requestsReceived";
     }
   }
 
-  let friends = [];
-  let requestsSent = [];
-  let requestsReceived = [];
-
-  const unique = (x) => Array.from(new Set(x));
-  const allIds = unique(
-    Object.keys(network).concat(Object.keys(network[profile.id]))
-  );
   const profilesList = await Promise.all(
-    allIds.map((id) => getProfile(ssbServer, id))
+    Object.keys(connections).map((id) => getProfile(ssbServer, id))
   );
   const profilesHash = profilesList.reduce((hash, profile) => {
     hash[profile.id] = profile;
     return hash;
   }, {});
 
-  for (let key of allIds) {
-    if (key == profile.id) continue;
-
-    let isFollowing = network[profile.id][key];
-    let isFollowingBack = network[key] && network[key][profile.id];
-    if (isFollowing && isFollowingBack) {
-      friends.push(profilesHash[key]);
-    } else if (isFollowing && !isFollowingBack) {
-      requestsSent.push(profilesHash[key]);
-    } else if (!isFollowing && isFollowingBack) {
-      if (!requestRejections.includes(key))
-        requestsReceived.push(profilesHash[key]);
-    }
+  let result = {
+    friends: [],
+    requestsSent: [],
+    requestsReceived: [],
+  };
+  for (let key in connections) {
+    result[connections[key]].push(profilesHash[key]);
   }
 
   debugFriends("Done");
-  return { friends, requestsSent, requestsReceived };
+  return result;
 };
 
 const getFriendshipStatus = async (ssbServer, source, dest) => {
