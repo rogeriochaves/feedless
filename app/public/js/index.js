@@ -17,7 +17,7 @@ messages.forEach((message) => {
     const onClose = () => {
       const parent = modal.parentElement;
       parent.parentElement.removeChild(parent);
-      if (document.querySelectorAll(".vanishing-message").length == 0) {
+      if (document.querySelectorAll(".js-vanishing-message").length == 0) {
         document.querySelector(".js-vanishing-messages").style.display = "none";
       }
     };

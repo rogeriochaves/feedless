@@ -7,50 +7,38 @@ const debugPosts = require("debug")("queries:posts"),
   debugPeople = require("debug")("queries:people"),
   debugProfile = require("debug")("queries:profile");
 const paramap = require("pull-paramap");
+const { promisePull, mapValues } = require("./utils");
 
-const latestOwnerValue = (ssbServer, { key, dest }) =>
-  new Promise((resolve, reject) => {
-    let value = null;
-    pull(
-      ssbServer.query.read({
-        reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                author: dest,
-                content: { type: "about", about: dest },
-              },
+const latestOwnerValue = (ssbServer, { key, dest }) => {
+  return promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              author: dest,
+              content: { type: "about", about: dest },
             },
           },
-        ],
-      }),
-      pull.filter((msg) => {
-        return (
-          msg.value.content &&
-          key in msg.value.content &&
-          !(msg.value.content[key] && msg.value.content[key].remove)
-        );
-      }),
-      pull.take(1),
-      pull.drain(
-        (msg) => {
-          value = msg.value.content[key];
         },
-        (err) => {
-          if (err) return reject(err);
-          if (!value) {
-            ssbServer.about
-              .latestValue({ key, dest })
-              .then(resolve)
-              .catch(reject);
-          } else {
-            resolve(value);
-          }
-        }
-      )
-    );
+      ],
+    }),
+    pull.filter((msg) => {
+      return (
+        msg.value.content &&
+        key in msg.value.content &&
+        !(msg.value.content[key] && msg.value.content[key].remove)
+      );
+    }),
+    pull.take(1)
+  ).then(([entry]) => {
+    if (entry) {
+      return entry.value.content[key];
+    }
+    return ssbServer.about.latestValue({ key, dest });
   });
+};
 
 const mapProfiles = (ssbServer) => (data, callback) =>
   getProfile(ssbServer, data.value.author)
@@ -60,115 +48,28 @@ const mapProfiles = (ssbServer) => (data, callback) =>
     })
     .catch((err) => callback(err, null));
 
-const getPosts = (ssbServer, profile) =>
-  debugPosts("Fetching") ||
-  new Promise((resolve, reject) => {
-    pull(
-      // @ts-ignore
-      cat([
-        ssbServer.query.read({
-          reverse: true,
-          query: [
-            {
-              $filter: {
-                value: {
-                  private: { $not: true },
-                  content: {
-                    root: profile.id,
-                  },
-                },
-              },
-            },
-          ],
-          limit: 100,
-        }),
-        ssbServer.query.read({
-          reverse: true,
-          query: [
-            {
-              $filter: {
-                value: {
-                  author: profile.id,
-                  private: { $not: true },
-                  content: {
-                    type: "post",
-                    root: { $not: true },
-                  },
-                },
-              },
-            },
-          ],
-          limit: 100,
-        }),
-      ]),
-      pull.filter((msg) => msg.value.content.type == "post"),
-      paramap(mapProfiles(ssbServer)),
-      pull.collect((err, msgs) => {
-        debugPosts("Done");
-        const entries = msgs.map((x) => x.value);
+const getPosts = async (ssbServer, profile) => {
+  debugPosts("Fetching");
 
-        if (err) return reject(err);
-        return resolve(entries);
-      })
-    );
-  });
-
-const getVanishingMessages = async (ssbServer, profile) => {
-  debugMessages("Fetching");
-  const messagesPromise = new Promise((resolve, reject) => {
-    pull(
-      // @ts-ignore
-      cat([
-        ssbServer.query.read({
-          reverse: true,
-          query: [
-            {
-              $filter: {
-                value: {
-                  private: true,
-                  content: {
-                    root: profile.id,
-                  },
+  const posts = await promisePull(
+    // @ts-ignore
+    cat([
+      ssbServer.query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                private: { $not: true },
+                content: {
+                  root: profile.id,
                 },
               },
             },
-          ],
-          limit: 100,
-        }),
-        ssbServer.query.read({
-          reverse: true,
-          query: [
-            {
-              $filter: {
-                value: {
-                  private: true,
-                  content: {
-                    type: "post",
-                    root: { $not: true },
-                  },
-                },
-              },
-            },
-          ],
-          limit: 100,
-        }),
-      ]),
-      pull.filter(
-        (msg) =>
-          msg.value.content.type == "post" &&
-          (msg.value.content.root ||
-            msg.value.content.recps.includes(profile.id))
-      ),
-      paramap(mapProfiles(ssbServer)),
-      pull.collect((err, msgs) => {
-        if (err) return reject(err);
-        return resolve(msgs);
-      })
-    );
-  });
-
-  const deletedPromise = new Promise((resolve, reject) => {
-    pull(
+          },
+        ],
+        limit: 100,
+      }),
       ssbServer.query.read({
         reverse: true,
         query: [
@@ -176,20 +77,91 @@ const getVanishingMessages = async (ssbServer, profile) => {
             $filter: {
               value: {
                 author: profile.id,
+                private: { $not: true },
                 content: {
-                  type: "delete",
+                  type: "post",
+                  root: { $not: true },
                 },
               },
             },
           },
         ],
+        limit: 100,
       }),
-      pull.collect((err, msgs) => {
-        if (err) return reject(err);
-        return resolve(Object.values(msgs));
-      })
-    );
-  });
+    ]),
+    pull.filter((msg) => msg.value.content.type == "post"),
+    paramap(mapProfiles(ssbServer))
+  );
+
+  debugPosts("Done");
+
+  return mapValues(posts);
+};
+
+const getVanishingMessages = async (ssbServer, profile) => {
+  debugMessages("Fetching");
+  const messagesPromise = promisePull(
+    // @ts-ignore
+    cat([
+      ssbServer.query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                private: true,
+                content: {
+                  root: profile.id,
+                },
+              },
+            },
+          },
+        ],
+        limit: 100,
+      }),
+      ssbServer.query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                private: true,
+                content: {
+                  type: "post",
+                  root: { $not: true },
+                },
+              },
+            },
+          },
+        ],
+        limit: 100,
+      }),
+    ]),
+    pull.filter(
+      (msg) =>
+        msg.value.content.type == "post" &&
+        (msg.value.content.root || msg.value.content.recps.includes(profile.id))
+    ),
+    paramap(mapProfiles(ssbServer))
+  );
+
+  const deletedPromise = promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              author: profile.id,
+              content: {
+                type: "delete",
+              },
+            },
+          },
+        },
+      ],
+    })
+  ).then(Object.values);
 
   const [messages, deleted] = await Promise.all([
     messagesPromise,
@@ -200,10 +172,60 @@ const getVanishingMessages = async (ssbServer, profile) => {
   return messages.filter((m) => !deletedIds.includes(m.key));
 };
 
-const searchPeople = (ssbServer, search) =>
-  debugPeople("Fetching") ||
-  new Promise((resolve, reject) => {
-    pull(
+const searchPeople = async (ssbServer, search) => {
+  debugPeople("Fetching");
+
+  const people = await promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              content: {
+                type: "about",
+                name: { $is: "string" },
+              },
+            },
+          },
+        },
+      ],
+    }),
+    pull.filter((msg) => {
+      return (
+        msg.value.content &&
+        msg.value.author == msg.value.content.about &&
+        msg.value.content.name.includes(search)
+      );
+    })
+  );
+
+  debugPeople("Done");
+  return Object.values(mapValues(people));
+};
+
+const getFriends = async (ssbServer, profile) => {
+  debugFriends("Fetching");
+
+  let contacts = await promisePull(
+    // @ts-ignore
+    cat([
+      ssbServer.query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                author: profile.id,
+                content: {
+                  type: "contact",
+                },
+              },
+            },
+          },
+        ],
+        limit: 100,
+      }),
       ssbServer.query.read({
         reverse: true,
         query: [
@@ -211,79 +233,17 @@ const searchPeople = (ssbServer, search) =>
             $filter: {
               value: {
                 content: {
-                  type: "about",
-                  name: { $is: "string" },
+                  type: "contact",
+                  contact: profile.id,
                 },
               },
             },
           },
         ],
+        limit: 100,
       }),
-      pull.filter((msg) => {
-        return (
-          msg.value.content &&
-          msg.value.author == msg.value.content.about &&
-          msg.value.content.name.includes(search)
-        );
-      }),
-      pull.collect((err, msgs) => {
-        debugPeople("Done");
-        const entries = msgs.map((x) => x.value);
-
-        if (err) return reject(err);
-        return resolve(Object.values(entries));
-      })
-    );
-  });
-
-const getFriends = async (ssbServer, profile) => {
-  debugFriends("Fetching");
-
-  let contacts = await new Promise((resolve, reject) => {
-    pull(
-      // @ts-ignore
-      cat([
-        ssbServer.query.read({
-          reverse: true,
-          query: [
-            {
-              $filter: {
-                value: {
-                  author: profile.id,
-                  content: {
-                    type: "contact",
-                  },
-                },
-              },
-            },
-          ],
-          limit: 100,
-        }),
-        ssbServer.query.read({
-          reverse: true,
-          query: [
-            {
-              $filter: {
-                value: {
-                  content: {
-                    type: "contact",
-                    contact: profile.id,
-                  },
-                },
-              },
-            },
-          ],
-          limit: 100,
-        }),
-      ]),
-      pull.collect((err, msgs) => {
-        const entries = msgs.map((x) => x.value);
-
-        if (err) return reject(err);
-        return resolve(entries);
-      })
-    );
-  });
+    ])
+  ).then(mapValues);
 
   let network = {};
   let requestRejections = [];
@@ -340,33 +300,25 @@ const getFriends = async (ssbServer, profile) => {
 const getFriendshipStatus = async (ssbServer, source, dest) => {
   debugFriendshipStatus("Fetching");
 
-  let requestRejectionsPromise = new Promise((resolve, reject) => {
-    pull(
-      ssbServer.query.read({
-        reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                author: source,
-                content: {
-                  type: "contact",
-                  following: false,
-                },
+  let requestRejectionsPromise = promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              author: source,
+              content: {
+                type: "contact",
+                following: false,
               },
             },
           },
-        ],
-        limit: 100,
-      }),
-      pull.collect((err, msgs) => {
-        const entries = msgs.map((x) => x.value);
-
-        if (err) return reject(err);
-        return resolve(entries);
-      })
-    );
-  });
+        },
+      ],
+      limit: 100,
+    })
+  ).then(mapValues);
 
   const [isFollowing, isFollowingBack, requestRejections] = await Promise.all([
     ssbServer.friends.isFollowing({ source: source, dest: dest }),
@@ -391,29 +343,24 @@ const getFriendshipStatus = async (ssbServer, source, dest) => {
   return status;
 };
 
-const getAllEntries = (ssbServer, query) =>
-  new Promise((resolve, reject) => {
-    let queries = [];
-    if (query.author) {
-      queries.push({ $filter: { value: { author: query.author } } });
-    }
-    if (query.type) {
-      queries.push({ $filter: { value: { content: { type: query.type } } } });
-    }
-    const queryOpts = queries.length > 0 ? { query: queries } : {};
+const getAllEntries = (ssbServer, query) => {
+  let queries = [];
+  if (query.author) {
+    queries.push({ $filter: { value: { author: query.author } } });
+  }
+  if (query.type) {
+    queries.push({ $filter: { value: { content: { type: query.type } } } });
+  }
+  const queryOpts = queries.length > 0 ? { query: queries } : {};
 
-    pull(
-      ssbServer.query.read({
-        reverse: true,
-        limit: 500,
-        ...queryOpts,
-      }),
-      pull.collect((err, msgs) => {
-        if (err) return reject(err);
-        return resolve(msgs);
-      })
-    );
-  });
+  return promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      limit: 500,
+      ...queryOpts,
+    })
+  );
+};
 
 let profileCache = {};
 const getProfile = async (ssbServer, id) => {

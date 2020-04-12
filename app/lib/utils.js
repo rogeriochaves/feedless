@@ -80,3 +80,16 @@ module.exports.uploadPicture = async (ssbServer, picture) => {
     )
   );
 };
+
+module.exports.promisePull = (...streams) =>
+  new Promise((resolve, reject) => {
+    pull(
+      ...streams,
+      pull.collect((err, msgs) => {
+        if (err) return reject(err);
+        return resolve(msgs);
+      })
+    );
+  });
+
+module.exports.mapValues = (x) => x.map((y) => y.value);
