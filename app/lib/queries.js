@@ -239,24 +239,43 @@ const searchPeople = (ssbServer, search) =>
 const getFriends = async (ssbServer, profile) => {
   debugFriends("Fetching");
 
-  let followingPromise = new Promise((resolve, reject) => {
+  let contacts = await new Promise((resolve, reject) => {
     pull(
-      ssbServer.query.read({
-        reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                author: profile.id,
-                content: {
-                  type: "contact",
+      // @ts-ignore
+      cat([
+        ssbServer.query.read({
+          reverse: true,
+          query: [
+            {
+              $filter: {
+                value: {
+                  author: profile.id,
+                  content: {
+                    type: "contact",
+                  },
                 },
               },
             },
-          },
-        ],
-        limit: 100,
-      }),
+          ],
+          limit: 100,
+        }),
+        ssbServer.query.read({
+          reverse: true,
+          query: [
+            {
+              $filter: {
+                value: {
+                  content: {
+                    type: "contact",
+                    contact: profile.id,
+                  },
+                },
+              },
+            },
+          ],
+          limit: 100,
+        }),
+      ]),
       pull.collect((err, msgs) => {
         const entries = msgs.map((x) => x.value);
 
@@ -265,43 +284,9 @@ const getFriends = async (ssbServer, profile) => {
       })
     );
   });
-
-  let followersPromise = new Promise((resolve, reject) => {
-    pull(
-      ssbServer.query.read({
-        reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                content: {
-                  type: "contact",
-                  contact: profile.id,
-                },
-              },
-            },
-          },
-        ],
-        limit: 100,
-      }),
-      pull.collect((err, msgs) => {
-        const entries = msgs.map((x) => x.value);
-
-        if (err) return reject(err);
-        return resolve(entries);
-      })
-    );
-  });
-
-  const [following, followers] = await Promise.all([
-    followingPromise,
-    followersPromise,
-  ]);
-
-  const allContacts = following.concat(followers).reverse();
 
   let network = {};
-  for (let contact of allContacts) {
+  for (let contact of contacts.reverse()) {
     if (contact.content.following) {
       network[contact.author] = network[contact.author] || {};
       network[contact.author][contact.content.contact] = true;

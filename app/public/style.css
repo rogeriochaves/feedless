@@ -170,20 +170,29 @@ h2 {
   width: 300px;
 }
 
-button.vanishing-message {
+.notifications {
+  display: flex;
+  align-content: flex-start;
+}
+
+a.notification-box,
+button.notification-box {
   background: none;
-  width: 84px;
   text-align: center;
   border: 1px solid #333;
-  padding: 10px;
   cursor: pointer;
   color: #000;
   margin-right: 8px;
+  padding: 5px;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
 }
 
-button.vanishing-message:hover {
-  background: #ddd;
-  color: #5f5f5f;
+a.notification-box:hover,
+button.notification-box:hover {
+  background: #e2e2e2;
+  color: #000;
 }
 
 .overlay {
