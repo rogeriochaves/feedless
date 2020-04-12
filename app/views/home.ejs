@@ -52,10 +52,10 @@
       </div>
     <% } %>
 
-    <% if (friends.requests_received) { %>
+    <% if (friends.requestsReceived.length) { %>
       <h2>Friend Requests</h2>
       <div class="notifications" style="padding-bottom: 20px">
-        <% friends.requests_received.map(friend => { %>
+        <% friends.requestsReceived.map(friend => { %>
           <a href="<%= profileUrl(friend.id) %>" class="notification-box">
             <div><img src="<%= profileImageUrl(friend) %>" class="post-profile-pic" /></div>
             <div><%= friend.name %></div>

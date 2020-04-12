@@ -230,6 +230,25 @@ router.post("/profile/:id/add_friend", async (req, res) => {
   res.redirect(`/profile/${id}`);
 });
 
+router.post("/profile/:id/reject_friend", async (req, res) => {
+  const id = req.params.id;
+  if (id == req.context.profile.id) {
+    throw "cannot reject yourself";
+  }
+
+  await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "contact",
+      contact: id,
+      following: false,
+    },
+  });
+
+  res.redirect(`/profile/${id}`);
+});
+
 router.post("/publish", async (req, res) => {
   await ssbServer.identities.publishAs({
     id: req.context.profile.id,
