@@ -81,6 +81,7 @@ const getPosts = async (ssbServer, profile) => {
                 content: {
                   type: "post",
                   root: { $not: true },
+                  channel: { $not: true },
                 },
               },
             },

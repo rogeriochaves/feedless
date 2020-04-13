@@ -7,23 +7,12 @@
 
     <%= profile.description %>
 
-    <h2>Friends</h2>
-
-    <ul>
-      <% friends.friends.map(friend => { %>
-        <li>
-          <a href="<%= profileUrl(friend.id) %>">
-            <%= friend.name %> (<%= friend.id.slice(0, 8) %>)
-          </a>
-        </li>
-      <% }) %>
-    </ul>
-
+    <%- include('_friends', { friends }) %>
   </div>
 
   <div class="wall">
     <% if (vanishingMessages.length > 0) { %>
-      <div class="js-vanishing-messages" style="padding-bottom: 20px">
+      <div class="js-vanishing-messages">
         <h2>Vanishing Messages</h2>
         <div class="notifications">
           <% vanishingMessages.reverse().map(message => { %>
@@ -54,7 +43,7 @@
 
     <% if (friends.requestsReceived.length) { %>
       <h2>Friend Requests</h2>
-      <div class="notifications" style="padding-bottom: 20px">
+      <div class="notifications">
         <% friends.requestsReceived.map(friend => { %>
           <a href="<%= profileUrl(friend.id) %>" class="notification-box">
             <div><img src="<%= profileImageUrl(friend) %>" class="post-profile-pic" /></div>
@@ -64,16 +53,15 @@
       </div>
     <% } %>
 
-    <h2>Your Wall</h2>
-
-    <form action="/publish" method="POST">
-      <textarea name="message"></textarea>
-      <input type="submit" value="Send" />
+    <form action="/publish" method="POST" style="padding-top: 20px;">
+      <textarea name="message" class="compose-post"></textarea>
+      <div class="reverse-columns" style="margin-top: 10px">
+        <input type="submit" value="Publish" />
+      </div>
     </form>
 
-    <% posts.map(post => { %>
-      <%- include('_post', { post }) %>
-    <% }) %>
+    <h2 style="margin: 0">Your Wall</h2>
+    <%- include('_posts', { posts }) %>
   </div>
 </div>
 

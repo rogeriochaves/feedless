@@ -52,3 +52,16 @@ if (profilePicUpload) {
   profilePicUpload.addEventListener("change", previewImage);
   previewImage();
 }
+
+const jsPublicOption = document.querySelector(".js-public-option");
+const jsVanishingOption = document.querySelector(".js-vanishing-option");
+const jsVanishingMessage = document.querySelector(".js-vanishing-message");
+if (jsVanishingOption) {
+  const onVisibilityChange = () => {
+    const vanishing = jsVanishingOption.checked;
+    jsVanishingMessage.style.display = vanishing ? "block" : "none";
+  };
+  jsPublicOption.addEventListener("change", onVisibilityChange);
+  jsVanishingOption.addEventListener("change", onVisibilityChange);
+  onVisibilityChange();
+}

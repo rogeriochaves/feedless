@@ -35,41 +35,33 @@
       <% } %>
     </div>
 
-    <h2>Friends</h2>
-
-    <ul>
-      <% friends.friends.map(friend => { %>
-        <li>
-          <a href="<%= profileUrl(friend.id) %>">
-            <%= friend.name %> (<%= friend.id.slice(0, 8) %>)
-          </a>
-        </li>
-      <% }) %>
-    </ul>
+    <%- include('_friends', { friends }) %>
   </div>
 
   <div class="wall">
-    <h1><%= profile.name %>'s Wall</h1>
-
     <h2>Leave <%= profile.name %> a message</h2>
     <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
       <div>
         <label>
-          <input type="radio" name="visibility" value="public" checked=checked>
+          <input type="radio" name="visibility" value="public" checked="checked" class="js-public-option">
           Public
         </label>
         <label>
-          <input type="radio" name="visibility" value="vanishing">
+          <input type="radio" name="visibility" value="vanishing" class="js-vanishing-option">
           Vanishing
         </label>
       </div>
-      <textarea name="message"></textarea>
-      <input type="submit" value="Send" />
+      <div style="display: none; padding-top: 20px; font-size: 13px; color: #666" class="js-vanishing-message">
+        Vanishing messages are private and disapear right after being read
+      </div>
+      <textarea name="message" class="compose-post"></textarea>
+      <div class="reverse-columns" style="margin-top: 10px">
+        <input type="submit" value="Publish" />
+      </div>
     </form>
 
-    <% posts.map(post => { %>
-      <%- include('_post', { post }) %>
-    <% }) %>
+    <h2 style="margin: 0"><%= profile.name %>'s Wall</h2>
+    <%- include('_posts', { posts }) %>
   </div>
 </div>
 
