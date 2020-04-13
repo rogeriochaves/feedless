@@ -19,6 +19,7 @@ exports.manifest = {
   create: "async",
   publishAs: "async",
   help: "sync",
+  refresh: "sync",
 };
 
 exports.init = function (sbot, config) {
