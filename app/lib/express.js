@@ -227,7 +227,7 @@ router.post("/profile/:id/add_friend", async (req, res) => {
     },
   });
 
-  res.redirect(`/profile/${id}`);
+  res.redirect(profileUrl(id));
 });
 
 router.post("/profile/:id/reject_friend", async (req, res) => {
@@ -246,7 +246,7 @@ router.post("/profile/:id/reject_friend", async (req, res) => {
     },
   });
 
-  res.redirect(`/profile/${id}`);
+  res.redirect(profileUrl(id));
 });
 
 router.post("/publish", async (req, res) => {
@@ -329,7 +329,7 @@ router.get("/about", (_req, res) => {
 });
 
 router.post("/about", async (req, res) => {
-  const name = req.body.name;
+  const { name, description } = req.body;
   const picture = req.files && req.files.pic;
 
   const pictureLink = picture && (await uploadPicture(ssbServer, picture));
@@ -341,11 +341,14 @@ router.post("/about", async (req, res) => {
   if (name && name != req.context.profile.name) {
     update.name = name;
   }
+  if (description && description != req.context.profile.description) {
+    update.description = description;
+  }
   if (pictureLink) {
     update.image = pictureLink;
   }
 
-  if (update.name || update.image) {
+  if (update.name || update.image || update.description) {
     await ssbServer.identities.publishAs({
       id: req.context.profile.id,
       private: false,

@@ -18,7 +18,9 @@
           <input type="submit" class="button-secondary" value="unfriend" />
         </form>
       <% } else if (friendshipStatus == "request_sent") { %>
-        <button disabled>Request sent</button>
+        <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline" method="POST">
+          <button class="button-secondary undo-request">Request sent</button>
+        </form>
       <% } else if (friendshipStatus == "request_received") { %>
         <p><%= profile.name %> sent you a friendship request</p>
         <form action="<%= profileUrl(profile.id, "/add_friend") %>" style="display:inline" method="POST">
@@ -35,7 +37,8 @@
       <% } %>
     </div>
 
-    <%- include('_friends', { friends }) %>
+    <h2 style="margin-top: 30px">Friends</h2>
+    <%- include('_friends', { friends: friends.friends }) %>
   </div>
 
   <div class="wall">
