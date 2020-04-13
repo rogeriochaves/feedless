@@ -23,6 +23,7 @@ exports.manifest = {
 
 exports.init = function (sbot, config) {
   var dir = path.join(config.path, "identities");
+  console.log("identities directory", config.path);
   mkdirp.sync(dir);
 
   function readKeys() {
