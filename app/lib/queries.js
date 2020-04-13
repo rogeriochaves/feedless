@@ -103,44 +103,16 @@ const getVanishingMessages = async (ssbServer, profile) => {
   const messagesPromise = promisePull(
     // @ts-ignore
     cat([
-      ssbServer.query.read({
+      ssbServer.private.read({
         reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                private: true,
-                content: {
-                  root: profile.id,
-                },
-              },
-            },
-          },
-        ],
-        limit: 100,
-      }),
-      ssbServer.query.read({
-        reverse: true,
-        query: [
-          {
-            $filter: {
-              value: {
-                private: true,
-                content: {
-                  type: "post",
-                  root: { $not: true },
-                },
-              },
-            },
-          },
-        ],
         limit: 100,
       }),
     ]),
     pull.filter(
       (msg) =>
         msg.value.content.type == "post" &&
-        (msg.value.content.root || msg.value.content.recps.includes(profile.id))
+        (msg.value.content.root == profile.id ||
+          msg.value.content.recps.includes(profile.id))
     ),
     paramap(mapProfiles(ssbServer))
   );
