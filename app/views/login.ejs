@@ -14,7 +14,15 @@
       Or paste it here: <br />
       <textarea name="ssb_key" style="max-width: 300px"></textarea>
     </div>
-    <input class="button-big" type="submit" value="Login" />
+    <p>
+      <input class="button-big" type="submit" value="Login" />
+    </p>
+    <% if (mode == "server") { %>
+      <p>or</p>
+      <p>
+        <a href="/download">I don't trust this server</a>
+      </p>
+    <% } %>
   </form>
 </div>
 

@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "SSB_PORT=8009 EXPRESS_PORT=3000 electron .",
+    "start": "MODE=server SSB_PORT=8009 electron .",
+    "start:client": "electron .",
     "start:user-2": "SSB_PORT=8010 EXPRESS_PORT=3001 CONFIG_FOLDER=social-user2 electron .",
     "start:user-3": "SSB_PORT=8011 EXPRESS_PORT=3002 CONFIG_FOLDER=social-user3 electron .",
     "clear": "rm -rf ~/.social; rm -rf ~/.social-user2; rm -rf ~/.social-user3",
-    "start:prod": "NODE_ENV=production electron ."
+    "start:prod": "NODE_ENV=production electron .",
+    "package": "electron-packager . --platform=darwin --arch=x64 --out out/ --overwrite"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +19,7 @@
     "cookie-parser": "^1.4.5",
     "debug": "^4.1.1",
     "ejs": "^3.0.2",
+    "electron-packager": "^14.2.1",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.7-alpha.3",
     "pull-stream": "^3.6.14",

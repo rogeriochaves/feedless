@@ -5,9 +5,12 @@ setTimeout(() => {
   server = require("./lib/express");
 }, 500);
 
-setTimeout(() => {
-  require("./lib/electron");
-}, 1000);
+let mode = process.env.MODE || "client";
+if (mode == "client") {
+  setTimeout(() => {
+    require("./lib/electron");
+  }, 1000);
+}
 
 if (process.env.NODE_ENV !== "production") {
   const chokidar = require("chokidar");

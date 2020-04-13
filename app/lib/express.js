@@ -20,7 +20,7 @@ const debug = require("debug")("express");
 const fileUpload = require("express-fileupload");
 
 let ssbServer;
-let mode = process.env.MODE || "server";
+let mode = process.env.MODE || "client";
 
 let homeFolder =
   process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
@@ -60,27 +60,20 @@ app.use(async (req, res, next) => {
   req.context = {};
   res.locals.context = req.context;
   try {
-    if (mode == "client") {
-      const whoami = await server.whoami();
-      req.context.profile = await queries.getProfile(server, whoami.id);
+    const identities = await ssbServer.identities.list();
+    const key = req.cookies["ssb_key"];
+    if (!key) return next();
 
-      next();
-    } else {
-      const identities = await ssbServer.identities.list();
-      const key = req.cookies["ssb_key"];
-      if (!key) return next();
+    const parsedKey = JSON.parse(key);
+    if (!identities.includes(parsedKey.id)) {
+      const filename = await nextIdentityFilename(ssbServer);
 
-      const parsedKey = JSON.parse(key);
-      if (!identities.includes(parsedKey.id)) {
-        const filename = await nextIdentityFilename(ssbServer);
-
-        writeKey(key, `/identities/${filename}`);
-        ssbServer.identities.refresh();
-      }
-      req.context.profile = await queries.getProfile(ssbServer, parsedKey.id);
-
-      next();
+      writeKey(key, `/identities/${filename}`);
+      ssbServer.identities.refresh();
     }
+    req.context.profile = await queries.getProfile(ssbServer, parsedKey.id);
+
+    next();
   } catch (e) {
     next(e);
   }
@@ -125,7 +118,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/login", (_req, res) => {
-  res.render("login");
+  res.render("login", { mode });
 });
 
 router.post("/login", async (req, res) => {
@@ -148,6 +141,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/download", (_req, res) => {
+  res.render("download");
+});
+
 router.get("/logout", async (_req, res) => {
   res.clearCookie("ssb_key");
   res.redirect("/");
@@ -158,7 +155,7 @@ router.get("/signup", (req, res) => {
     return res.redirect("/");
   }
 
-  res.render("signup");
+  res.render("signup", { mode });
 });
 
 router.post("/signup", async (req, res) => {

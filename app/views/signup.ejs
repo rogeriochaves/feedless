@@ -21,7 +21,15 @@
         <input type="text" name="name" />
       </label>
     </div>
-    <input class="button-big" type="submit" value="Sign up" />
+    <p>
+      <input class="button-big" type="submit" value="Sign up" />
+    </p>
+    <% if (mode == "server") { %>
+      <p>or</p>
+      <p>
+        <a href="/download">I don't trust this server</a>
+      </p>
+    <% } %>
   </form>
 </div>
 

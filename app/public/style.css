@@ -9,6 +9,9 @@ body {
   word-wrap: break-word;
   font-size: 16px;
 }
+a {
+  color: #666;
+}
 button,
 a.button,
 input[type="submit"] {
