@@ -184,14 +184,14 @@ const getFriends = async (ssbServer, profile) => {
 
   let connections = {};
   for (let key in graph) {
-    let isFollowing = graph[profile.id][key] > 0;
+    let isFollowing = graph[profile.id] && graph[profile.id][key] > 0;
     let isFollowingBack = graph[key] && graph[key][profile.id] > 0;
     if (isFollowing && isFollowingBack) {
       connections[key] = "friends";
     } else if (isFollowing && !isFollowingBack) {
       connections[key] = "requestsSent";
     } else if (!isFollowing && isFollowingBack) {
-      if (graph[profile.id][key] === undefined)
+      if (!graph[profile.id] || graph[profile.id][key] === undefined)
         connections[key] = "requestsReceived";
     }
   }
