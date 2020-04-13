@@ -1,0 +1,3422 @@
+[
+  {
+    "address": "net:ssb-pub.picodevelopment.nl:8008~shs:UFDjYpDN89OTdow4sqZP5eEGGcy+1eN/HNc5DMdMI0M=",
+    "key": "@UFDjYpDN89OTdow4sqZP5eEGGcy+1eN/HNc5DMdMI0M=.ed25519",
+    "source": "stored",
+    "announcers": 1142,
+    "duration": {
+      "mean": 2195995.6885245903,
+      "stdev": 5397368.865116755,
+      "count": 61,
+      "sum": 133955737,
+      "sqsum": 2071193251539169
+    },
+    "stateChange": 1586746201544,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 137,
+        "stdev": 0,
+        "count": 1,
+        "sum": 137,
+        "sqsum": 18769
+      },
+      "skew": {
+        "mean": -20.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -20.5,
+        "sqsum": 420.25
+      }
+    },
+    "failure": 0,
+    "host": "ssb-pub.picodevelopment.nl",
+    "port": 8008
+  },
+  {
+    "host": "ssb.learningsocieties.org",
+    "port": 8008,
+    "key": "@uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo=.ed25519",
+    "address": "net:ssb.learningsocieties.org:8008~shs:uMiN0TRVMGVNTQUb6KCbiOi/8UQYcyojiA83rCghxGo=",
+    "source": "stored",
+    "announcers": 15,
+    "duration": {
+      "mean": 6534148.428571428,
+      "stdev": 10483427.64829201,
+      "count": 14,
+      "sum": 91478078,
+      "sqsum": 2136362913210062
+    },
+    "stateChange": 1586772300875,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 276,
+        "stdev": 0,
+        "count": 1,
+        "sum": 276,
+        "sqsum": 76176
+      },
+      "skew": {
+        "mean": 77,
+        "stdev": 0,
+        "count": 1,
+        "sum": 77,
+        "sqsum": 5929
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "pub.everlife.ai",
+    "port": 8008,
+    "key": "@q68IdbW1X3mTYGyIp/Zt1NJtJLe61W5o6NFfmgvVMMc=.ed25519",
+    "address": "net:pub.everlife.ai:8008~shs:q68IdbW1X3mTYGyIp/Zt1NJtJLe61W5o6NFfmgvVMMc=",
+    "source": "stored",
+    "announcers": 10,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 29,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586761203209,
+    "error": "Error: connect ECONNREFUSED 66.42.53.218:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 29
+  },
+  {
+    "host": "organicdesign.pub",
+    "port": 8008,
+    "key": "@XgC5wDA2EW++ufaDrjRDHXA7Dyd1ce5bTenCm2u6PZU=.ed25519",
+    "address": "net:organicdesign.pub:8008~shs:XgC5wDA2EW++ufaDrjRDHXA7Dyd1ce5bTenCm2u6PZU=",
+    "source": "stored",
+    "announcers": 73,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 32,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765935356,
+    "error": "Error: connect ECONNREFUSED 213.5.71.227:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 32
+  },
+  {
+    "host": "butt.caasih.net",
+    "port": 8008,
+    "key": "@QIlKZ8DMw9XpjpRZ96RBLpfkLnOUZSqamC6WMddGh3I=.ed25519",
+    "address": "net:butt.caasih.net:8008~shs:QIlKZ8DMw9XpjpRZ96RBLpfkLnOUZSqamC6WMddGh3I=",
+    "source": "stored",
+    "announcers": 65,
+    "duration": {
+      "mean": 4488153.166666667,
+      "stdev": 4503906.390136342,
+      "count": 12,
+      "sum": 53857838,
+      "sqsum": 485144299422852
+    },
+    "stateChange": 1586772322801,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 920,
+        "stdev": 0,
+        "count": 1,
+        "sum": 920,
+        "sqsum": 846400
+      },
+      "skew": {
+        "mean": 72,
+        "stdev": 0,
+        "count": 1,
+        "sum": 72,
+        "sqsum": 5184
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "zie.one",
+    "port": 8008,
+    "key": "@tgzHDm9HEN0k5wFRLFmNPyGZYNF/M5KpkZqCRhgowVE=.ed25519",
+    "address": "net:zie.one:8008~shs:tgzHDm9HEN0k5wFRLFmNPyGZYNF/M5KpkZqCRhgowVE=",
+    "source": "stored",
+    "announcers": 53,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 28,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766514732,
+    "error": "Error: shs.client: error when expecting server to accept challenge (phase 1).\npossibly the server is busy, does not speak shs or uses a different application cap\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:44:24)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:0 but wanted:64\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 28
+  },
+  {
+    "host": "publibertynetwork.tk",
+    "port": 8008,
+    "key": "@FWHrnoH/YwtiVSng8MiWrb6ekZDX9R+i3XlXLlmtaiE=.ed25519",
+    "address": "net:publibertynetwork.tk:8008~shs:FWHrnoH/YwtiVSng8MiWrb6ekZDX9R+i3XlXLlmtaiE=",
+    "source": "stored",
+    "announcers": 19,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 27,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586770660183,
+    "error": "Error: connect ETIMEDOUT 195.20.47.97:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 27
+  },
+  {
+    "host": "ssb.webcookies.pub",
+    "port": 8008,
+    "key": "@VktnvwfOPj7vOL1BqGOv5CWUhNXG3jywAueCzH8QxPw=.ed25519",
+    "address": "net:ssb.webcookies.pub:8008~shs:VktnvwfOPj7vOL1BqGOv5CWUhNXG3jywAueCzH8QxPw=",
+    "source": "stored",
+    "announcers": 127,
+    "duration": {
+      "mean": 277918.125,
+      "stdev": 1152403.2142418842,
+      "count": 24,
+      "sum": 6670035,
+      "sqsum": 33726519657565
+    },
+    "stateChange": 1586728292910,
+    "failure": 2,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 63,
+        "stdev": 0,
+        "count": 1,
+        "sum": 63,
+        "sqsum": 3969
+      },
+      "skew": {
+        "mean": 78.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 78.5,
+        "sqsum": 6162.25
+      }
+    },
+    "error": "Error: connect ECONNREFUSED 217.163.11.185:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)"
+  },
+  {
+    "host": "bar.quark.rocks",
+    "port": 8008,
+    "key": "@f7ZttK5cvdBL/t6utZYyP/rSRqgnrsB23yFWr5/J83s=.ed25519",
+    "address": "net:bar.quark.rocks:8008~shs:f7ZttK5cvdBL/t6utZYyP/rSRqgnrsB23yFWr5/J83s=",
+    "source": "stored",
+    "announcers": 12,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 29,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766765614,
+    "error": "Error: getaddrinfo ENOTFOUND bar.quark.rocks\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 29
+  },
+  {
+    "host": "usw.ssbpeer.net",
+    "port": 8008,
+    "key": "@MauI+NQ1dOg4Eo5NPs4OKxVQgWXMjlp5pjQ87CdRJtQ=.ed25519",
+    "address": "net:usw.ssbpeer.net:8008~shs:MauI+NQ1dOg4Eo5NPs4OKxVQgWXMjlp5pjQ87CdRJtQ=",
+    "source": "stored",
+    "announcers": 154,
+    "duration": {
+      "mean": 2022187.9090909092,
+      "stdev": 2499216.5110558313,
+      "count": 11,
+      "sum": 22244067,
+      "sqsum": 113688598196883
+    },
+    "stateChange": 1586771146931,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 579.5,
+        "stdev": 208.5,
+        "count": 2,
+        "sum": 1159,
+        "sqsum": 758585
+      },
+      "skew": {
+        "mean": -10.75,
+        "stdev": 47.25,
+        "count": 2,
+        "sum": -21.5,
+        "sqsum": 4696.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.marmorkuchen.net",
+    "port": 8008,
+    "key": "@2xyUYzn3krBIHtkRWFMIIOG7HVthpfERDyTSvlPmHoA=.ed25519",
+    "address": "net:ssb.marmorkuchen.net:8008~shs:2xyUYzn3krBIHtkRWFMIIOG7HVthpfERDyTSvlPmHoA=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 20,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764856795,
+    "error": "Error: connect ETIMEDOUT 46.166.182.63:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 20
+  },
+  {
+    "host": "pub.chuanyan.live",
+    "port": 8008,
+    "key": "@AnnTkXjX2LkvuP3IRzd7EtGl2gwEx2lENy74pb1IE90=.ed25519",
+    "address": "net:pub.chuanyan.live:8008~shs:AnnTkXjX2LkvuP3IRzd7EtGl2gwEx2lENy74pb1IE90=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 20,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586770660183,
+    "error": "Error: connect ETIMEDOUT 35.237.19.98:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 20
+  },
+  {
+    "host": "ssb.rootsystems.nz",
+    "port": 8008,
+    "key": "@L+nPFTMUHWXuchOwuzT6Z8Ea8wD/Rtd7leVRxGaknVk=.ed25519",
+    "address": "net:ssb.rootsystems.nz:8008~shs:L+nPFTMUHWXuchOwuzT6Z8Ea8wD/Rtd7leVRxGaknVk=",
+    "source": "stored",
+    "announcers": 10,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 15,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586761532266,
+    "error": "Error: connect ETIMEDOUT 139.59.100.248:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 15
+  },
+  {
+    "host": "ssb.exitsystemcall.com",
+    "port": 8008,
+    "key": "@gSb2Dt4qtUSIt0jV1yrugKPiBriKPIUFfYB574vWhrM=.ed25519",
+    "address": "net:ssb.exitsystemcall.com:8008~shs:gSb2Dt4qtUSIt0jV1yrugKPiBriKPIUFfYB574vWhrM=",
+    "source": "stored",
+    "announcers": 8,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 15,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765935278,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.exitsystemcall.com\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 15
+  },
+  {
+    "host": "nyc.pub.kiliman.io",
+    "port": 8008,
+    "key": "@1MCDaYSDpjsgtMkgB2CfqrouffoxvLiRu/QICE7LQPs=.ed25519",
+    "address": "net:nyc.pub.kiliman.io:8008~shs:1MCDaYSDpjsgtMkgB2CfqrouffoxvLiRu/QICE7LQPs=",
+    "source": "stored",
+    "announcers": 8,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 15,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771392757,
+    "error": "Error: connect ECONNREFUSED 159.203.174.217:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 15
+  },
+  {
+    "host": "ssb.ekata.social",
+    "port": 8008,
+    "key": "@FJDMuATvh0a3qIcIPcstUANVIj362fWkYCG5bnkZ5nA=.ed25519",
+    "address": "net:ssb.ekata.social:8008~shs:FJDMuATvh0a3qIcIPcstUANVIj362fWkYCG5bnkZ5nA=",
+    "source": "stored",
+    "announcers": 9,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 15,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766187801,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.ekata.social\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 15
+  },
+  {
+    "host": "ssb.hypersignal.xyz",
+    "port": 8008,
+    "key": "@XRg7pXoQqsWDDk4dmgvSWHUqzwS6BmqMo4IdbMKPjWA=.ed25519",
+    "address": "net:ssb.hypersignal.xyz:8008~shs:XRg7pXoQqsWDDk4dmgvSWHUqzwS6BmqMo4IdbMKPjWA=",
+    "source": "stored",
+    "announcers": 10,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 14,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766262972,
+    "error": "Error: connect ETIMEDOUT 46.101.185.61:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 14
+  },
+  {
+    "host": "pub.heropunch.io",
+    "port": 8008,
+    "key": "@So2yhYGA2ZOwRh2043whISASD+55PL1P9+peIy/qbj8=.ed25519",
+    "address": "net:pub.heropunch.io:8008~shs:So2yhYGA2ZOwRh2043whISASD+55PL1P9+peIy/qbj8=",
+    "source": "stored",
+    "announcers": 15,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 14,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765936494,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:64 but wanted:80\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 14
+  },
+  {
+    "host": "pub.tachyon.software",
+    "port": 8008,
+    "key": "@sQTjKITG7O/lboIBQbYx3H4+Hy7zv7snfsEgrci9VE4=.ed25519",
+    "address": "net:pub.tachyon.software:8008~shs:sQTjKITG7O/lboIBQbYx3H4+Hy7zv7snfsEgrci9VE4=",
+    "source": "stored",
+    "announcers": 8,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 14,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764781474,
+    "error": "Error: getaddrinfo ENOTFOUND pub.tachyon.software\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 14
+  },
+  {
+    "host": "qypea1.dyndns.info",
+    "port": 8009,
+    "key": "@6lOh+rLq4MQubPQoKenbB9ipq75NVc2FAjy30MTc08o=.ed25519",
+    "address": "net:qypea1.dyndns.info:8009~shs:6lOh+rLq4MQubPQoKenbB9ipq75NVc2FAjy30MTc08o=",
+    "source": "stored",
+    "announcers": 7,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 11,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586762288202,
+    "error": "Error: connect ECONNREFUSED 104.177.115.28:8009\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 11
+  },
+  {
+    "host": "128.199.76.241",
+    "port": 8008,
+    "key": "@7xMrWP8708+LDvaJrRMRQJEixWYp4Oipa9ohqY7+NyQ=.ed25519",
+    "address": "net:128.199.76.241:8008~shs:7xMrWP8708+LDvaJrRMRQJEixWYp4Oipa9ohqY7+NyQ=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 11,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771140370,
+    "error": "Error: connect ECONNREFUSED 128.199.76.241:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 11
+  },
+  {
+    "host": "pub.mixmix.io",
+    "port": 8008,
+    "key": "@uRECWB4KIeKoNMis2UYWyB2aQPvWmS3OePQvBj2zClg=.ed25519",
+    "address": "net:pub.mixmix.io:8008~shs:uRECWB4KIeKoNMis2UYWyB2aQPvWmS3OePQvBj2zClg=",
+    "source": "stored",
+    "announcers": 8,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 10,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763871425,
+    "error": "Error: connect ECONNREFUSED 206.189.154.219:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 10
+  },
+  {
+    "host": "138.68.27.255",
+    "port": 8008,
+    "key": "@MflVZCcOBOUe6BLrm/8TyirkTu9/JtdnIJALcd8v5bc=.ed25519",
+    "address": "net:138.68.27.255:8008~shs:MflVZCcOBOUe6BLrm/8TyirkTu9/JtdnIJALcd8v5bc=",
+    "source": "stored",
+    "announcers": 5,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 10,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765358439,
+    "error": "Error: connect ECONNREFUSED 138.68.27.255:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 10
+  },
+  {
+    "host": "code.0qz.fun",
+    "port": 8008,
+    "key": "@tSRPq7o2TmKrdcYAA5YDL230v2qRIFWR1mos0qRWmMA=.ed25519",
+    "address": "net:code.0qz.fun:8008~shs:tSRPq7o2TmKrdcYAA5YDL230v2qRIFWR1mos0qRWmMA=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 10,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765107312,
+    "error": "Error: getaddrinfo ENOTFOUND code.0qz.fun\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 10
+  },
+  {
+    "host": "ssb.scuttle-butt.in",
+    "port": 8008,
+    "key": "@G6wY9Ekf3mzp0b3N0KJ6M4d/JCMTe+pV2/gqfYhr9xA=.ed25519",
+    "address": "net:ssb.scuttle-butt.in:8008~shs:G6wY9Ekf3mzp0b3N0KJ6M4d/JCMTe+pV2/gqfYhr9xA=",
+    "source": "stored",
+    "announcers": 7,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 10,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765358533,
+    "error": "Error: connect ECONNREFUSED 172.104.184.11:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 10
+  },
+  {
+    "host": "ssb.dweb.tools",
+    "port": 8008,
+    "key": "@eFg4A4PYVdzu6fwzP0Xl1Iuv7FIhqyaaVWUlIOFkAZo=.ed25519",
+    "remote": "net:ssb.dweb.tools:8008~shs:eFg4A4PYVdzu6fwzP0Xl1Iuv7FIhqyaaVWUlIOFkAZo=:Rxm5G0B42TV1VrQJwpqc7C2KUbg+mIq3W0TsqabkU2A=",
+    "address": "net:ssb.dweb.tools:8008~shs:eFg4A4PYVdzu6fwzP0Xl1Iuv7FIhqyaaVWUlIOFkAZo=",
+    "source": "stored",
+    "announcers": 94,
+    "duration": {
+      "mean": 533328.3,
+      "stdev": 641500.7087107621,
+      "count": 10,
+      "sum": 5333283,
+      "sqsum": 6959622348573
+    },
+    "stateChange": 1586761633800,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 381,
+        "stdev": 0,
+        "count": 1,
+        "sum": 381,
+        "sqsum": 145161
+      },
+      "skew": {
+        "mean": 85.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 85.5,
+        "sqsum": 7310.25
+      }
+    }
+  },
+  {
+    "host": "cociubaandrei.ddns.net",
+    "port": 8008,
+    "key": "@dLlKuBrbB91FP6HCiFPiLq+FEQxTB16V6cV7Pk3ypRw=.ed25519",
+    "address": "net:cociubaandrei.ddns.net:8008~shs:dLlKuBrbB91FP6HCiFPiLq+FEQxTB16V6cV7Pk3ypRw=",
+    "source": "stored",
+    "announcers": 16,
+    "duration": {
+      "mean": 2807299.375,
+      "stdev": 5747680.54908108,
+      "count": 8,
+      "sum": 22458395,
+      "sqsum": 327334091801283
+    },
+    "stateChange": 1586746201132,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 139,
+        "stdev": 0,
+        "count": 1,
+        "sum": 139,
+        "sqsum": 19321
+      },
+      "skew": {
+        "mean": 18.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 18.5,
+        "sqsum": 342.25
+      }
+    }
+  },
+  {
+    "host": "many.butt.nz",
+    "port": 8008,
+    "key": "@o3OcykTU7zdsm+WKoGl74XAoyDI/SWlVbIeyHHinQXQ=.ed25519",
+    "address": "net:many.butt.nz:8008~shs:o3OcykTU7zdsm+WKoGl74XAoyDI/SWlVbIeyHHinQXQ=",
+    "source": "stored",
+    "announcers": 49,
+    "duration": {
+      "mean": 3376698.3333333335,
+      "stdev": 2785842.1531118536,
+      "count": 6,
+      "sum": 20260190,
+      "sqsum": 114978048818346
+    },
+    "stateChange": 1586772302019,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 511,
+        "stdev": 0,
+        "count": 1,
+        "sum": 511,
+        "sqsum": 261121
+      },
+      "skew": {
+        "mean": -19.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -19.5,
+        "sqsum": 380.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.0l.de",
+    "port": 8009,
+    "key": "@aQEHAleDcdljpwI6pB2r17VTl+iYWVaVQWgQk0b0X2E=.ed25519",
+    "address": "net:ssb.0l.de:8009~shs:aQEHAleDcdljpwI6pB2r17VTl+iYWVaVQWgQk0b0X2E=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 10,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767024388,
+    "error": "Error: shs.client: error when expecting server to accept challenge (phase 1).\npossibly the server is busy, does not speak shs or uses a different application cap\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:44:24)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:0 but wanted:64\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 10
+  },
+  {
+    "host": "pub.planetary.computer",
+    "port": 8008,
+    "key": "@lpndu3X4QnrPl3kOZ4wqv8H74986C/OvcXIpiTR2IGs=.ed25519",
+    "address": "net:pub.planetary.computer:8008~shs:lpndu3X4QnrPl3kOZ4wqv8H74986C/OvcXIpiTR2IGs=",
+    "source": "stored",
+    "announcers": 14,
+    "duration": {
+      "mean": 5871878.2,
+      "stdev": 7471330.653457453,
+      "count": 5,
+      "sum": 29359391,
+      "sqsum": 451498676644641
+    },
+    "stateChange": 1586725921452,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 119,
+        "stdev": 0,
+        "count": 1,
+        "sum": 119,
+        "sqsum": 14161
+      },
+      "skew": {
+        "mean": -18.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -18.5,
+        "sqsum": 342.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.e-mesh.net",
+    "port": 8008,
+    "key": "@AWf8Wn299ZUH7t+JAJL6B217LhDxfHEjgoGOXoYmNjY=.ed25519",
+    "address": "net:ssb.e-mesh.net:8008~shs:AWf8Wn299ZUH7t+JAJL6B217LhDxfHEjgoGOXoYmNjY=",
+    "source": "stored",
+    "announcers": 5,
+    "duration": {
+      "mean": 981372.6,
+      "stdev": 595196.6935387326,
+      "count": 5,
+      "sum": 4906863,
+      "sqsum": 6586756420151
+    },
+    "stateChange": 1586762462373,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 415,
+        "stdev": 103,
+        "count": 2,
+        "sum": 830,
+        "sqsum": 365668
+      },
+      "skew": {
+        "mean": -33.5,
+        "stdev": 36.5,
+        "count": 2,
+        "sum": -67,
+        "sqsum": 4909
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "pub.vaporsoft.xyz",
+    "port": 8008,
+    "key": "@F6DJ2QTrbCxyaHoujhEqUh+GqgE+j5zOaH29g/nHmzU=.ed25519",
+    "address": "net:pub.vaporsoft.xyz:8008~shs:F6DJ2QTrbCxyaHoujhEqUh+GqgE+j5zOaH29g/nHmzU=",
+    "source": "stored",
+    "announcers": 8,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 9,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771969068,
+    "error": "Error: getaddrinfo ENOTFOUND pub.vaporsoft.xyz\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 9
+  },
+  {
+    "host": "167.114.97.142",
+    "port": 8008,
+    "key": "@Ub5IQL0Tt2Dcwfckh30o7wKn5SyL8g+9mUjNtYS2+XU=.ed25519",
+    "address": "net:167.114.97.142:8008~shs:Ub5IQL0Tt2Dcwfckh30o7wKn5SyL8g+9mUjNtYS2+XU=",
+    "source": "stored",
+    "announcers": 5,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586761784066,
+    "error": "Error: connect ECONNREFUSED 167.114.97.142:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 8
+  },
+  {
+    "host": "yomills.com",
+    "port": 8008,
+    "key": "@klgybaGWFd03ZEr6pDGW0Vrdr7seH6ssLldRCVPAxvs=.ed25519",
+    "address": "net:yomills.com:8008~shs:klgybaGWFd03ZEr6pDGW0Vrdr7seH6ssLldRCVPAxvs=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763619497,
+    "error": "Error: connect ECONNREFUSED 138.197.153.234:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 8
+  },
+  {
+    "host": "us-east.ssbpeer.net",
+    "port": 8008,
+    "key": "@sTO03jpVivj65BEAJMhlwtHXsWdLd9fLwyKAT1qAkc0=.ed25519",
+    "address": "net:us-east.ssbpeer.net:8008~shs:sTO03jpVivj65BEAJMhlwtHXsWdLd9fLwyKAT1qAkc0=",
+    "source": "stored",
+    "announcers": 76,
+    "duration": {
+      "mean": 709888.25,
+      "stdev": 853256.4752430464,
+      "count": 4,
+      "sum": 2839553,
+      "sqsum": 4927951760129
+    },
+    "stateChange": 1586769640631,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 2272,
+        "stdev": 0,
+        "count": 1,
+        "sum": 2272,
+        "sqsum": 5161984
+      },
+      "skew": {
+        "mean": -1000,
+        "stdev": 0,
+        "count": 1,
+        "sum": -1000,
+        "sqsum": 1000000
+      }
+    }
+  },
+  {
+    "host": "ssb.ockchain.net",
+    "port": 8008,
+    "key": "@fhbv9gTpATSReuCFwRQUcHBbKuq/8Hgmm0eNp36+mNE=.ed25519",
+    "address": "net:ssb.ockchain.net:8008~shs:fhbv9gTpATSReuCFwRQUcHBbKuq/8Hgmm0eNp36+mNE=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586762538623,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.ockchain.net\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 8
+  },
+  {
+    "host": "qypea1.dyndns.info",
+    "port": 8008,
+    "key": "@1sw77BWBwCzMlQuPG0YkZw8uiHRpEeBe5uLjzXGY36w=.ed25519",
+    "address": "net:qypea1.dyndns.info:8008~shs:1sw77BWBwCzMlQuPG0YkZw8uiHRpEeBe5uLjzXGY36w=",
+    "source": "stored",
+    "announcers": 5,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763367296,
+    "error": "Error: connect ECONNREFUSED 104.177.115.28:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 8
+  },
+  {
+    "host": "ssb.celehner.com",
+    "port": 8008,
+    "key": "@5XaVcAJ5DklwuuIkjGz4lwm2rOnMHHovhNg7BFFnyJ8=.ed25519",
+    "address": "net:ssb.celehner.com:8008~shs:5XaVcAJ5DklwuuIkjGz4lwm2rOnMHHovhNg7BFFnyJ8=",
+    "source": "stored",
+    "announcers": 17,
+    "duration": {
+      "mean": 8794,
+      "stdev": 7999.079462663188,
+      "count": 8,
+      "sum": 70352,
+      "sqsum": 1130557666
+    },
+    "stateChange": 1586770597196,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 2848,
+        "stdev": 0,
+        "count": 1,
+        "sum": 2848,
+        "sqsum": 8111104
+      },
+      "skew": {
+        "mean": -1196,
+        "stdev": 0,
+        "count": 1,
+        "sum": -1196,
+        "sqsum": 1430416
+      }
+    }
+  },
+  {
+    "host": "ssb.pub",
+    "port": 8008,
+    "key": "@Pjax8DtaImGrm/xGMfNkyd4BaVG/cFP2W1iFTpCMj8U=.ed25519",
+    "address": "net:ssb.pub:8008~shs:Pjax8DtaImGrm/xGMfNkyd4BaVG/cFP2W1iFTpCMj8U=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764856753,
+    "error": "Error: connect ETIMEDOUT 159.203.32.73:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 8
+  },
+  {
+    "host": "eu-west.ssbpeer.net",
+    "port": 8008,
+    "key": "@4TG/WLESyhThgTvmi5W3baX//tbF0HyskFprREqHbyc=.ed25519",
+    "address": "net:eu-west.ssbpeer.net:8008~shs:4TG/WLESyhThgTvmi5W3baX//tbF0HyskFprREqHbyc=",
+    "source": "stored",
+    "announcers": 112,
+    "duration": {
+      "mean": 1635009.2857142857,
+      "stdev": 2847564.3449429707,
+      "count": 7,
+      "sum": 11445065,
+      "sqsum": 75473146440737
+    },
+    "stateChange": 1586798901379,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 191,
+        "stdev": 0,
+        "count": 1,
+        "sum": 191,
+        "sqsum": 36481
+      },
+      "skew": {
+        "mean": -50.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -50.5,
+        "sqsum": 2550.25
+      }
+    }
+  },
+  {
+    "host": "scuttle.us",
+    "port": 8008,
+    "key": "@ihnyNrsm+7pqHkhnF4u5CkU5VSGlK6YNqRDfHwiUPWM=.ed25519",
+    "address": "net:scuttle.us:8008~shs:ihnyNrsm+7pqHkhnF4u5CkU5VSGlK6YNqRDfHwiUPWM=",
+    "source": "stored",
+    "announcers": 71,
+    "duration": {
+      "mean": 1062892.5,
+      "stdev": 1027483.01379962,
+      "count": 4,
+      "sum": 4251570,
+      "sqsum": 8741847240812
+    },
+    "stateChange": 1586770587474,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 171,
+        "stdev": 0,
+        "count": 1,
+        "sum": 171,
+        "sqsum": 29241
+      },
+      "skew": {
+        "mean": -28.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -28.5,
+        "sqsum": 812.25
+      }
+    }
+  },
+  {
+    "host": "one.butt.nz",
+    "port": 8008,
+    "key": "@VJM7w1W19ZsKmG2KnfaoKIM66BRoreEkzaVm/J//wl8=.ed25519",
+    "address": "net:one.butt.nz:8008~shs:VJM7w1W19ZsKmG2KnfaoKIM66BRoreEkzaVm/J//wl8=",
+    "source": "stored",
+    "announcers": 10,
+    "duration": {
+      "mean": 3196700,
+      "stdev": 3893008.0122755463,
+      "count": 5,
+      "sum": 15983500,
+      "sqsum": 126872011368208
+    },
+    "stateChange": 1586770682349,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 3068,
+        "stdev": 0,
+        "count": 1,
+        "sum": 3068,
+        "sqsum": 9412624
+      },
+      "skew": {
+        "mean": -1441,
+        "stdev": 0,
+        "count": 1,
+        "sum": -1441,
+        "sqsum": 2076481
+      }
+    }
+  },
+  {
+    "host": "mattanddaves.pub",
+    "port": 8008,
+    "key": "@KifTtl1AIldjAgSAhY4DkIOn0k7S2ZGA7WkP+fNaoYA=.ed25519",
+    "address": "net:mattanddaves.pub:8008~shs:KifTtl1AIldjAgSAhY4DkIOn0k7S2ZGA7WkP+fNaoYA=",
+    "source": "stored",
+    "announcers": 6,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764198363,
+    "error": "Error: getaddrinfo ENOTFOUND mattanddaves.pub\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 8
+  },
+  {
+    "host": "diefreien.club",
+    "port": 8008,
+    "key": "@Y2fxCQla30qvtLJufJ57Im0on1QO72H5KECXio5xQZs=.ed25519",
+    "address": "net:diefreien.club:8008~shs:Y2fxCQla30qvtLJufJ57Im0on1QO72H5KECXio5xQZs=",
+    "source": "stored",
+    "announcers": 13,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764454839,
+    "error": "Error: getaddrinfo ENOTFOUND diefreien.club\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 8
+  },
+  {
+    "host": "chaos.family",
+    "port": 8008,
+    "key": "@1Wc5iBViAUN3/NDBTZKz9IFcDHjThYKTQ2GH9gqRa6Y=.ed25519",
+    "address": "net:chaos.family:8008~shs:1Wc5iBViAUN3/NDBTZKz9IFcDHjThYKTQ2GH9gqRa6Y=",
+    "source": "stored",
+    "announcers": 9,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765107373,
+    "error": "Error: shs.client: error when expecting server to accept challenge (phase 1).\npossibly the server is busy, does not speak shs or uses a different application cap\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:44:24)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:0 but wanted:64\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 8
+  },
+  {
+    "host": "pub.huskyeye.de",
+    "port": 8008,
+    "key": "@W7t16vPRx5vFuYVlI0ew3qYXJch8mkD0GmCWkRMVYuw=.ed25519",
+    "address": "net:pub.huskyeye.de:8008~shs:W7t16vPRx5vFuYVlI0ew3qYXJch8mkD0GmCWkRMVYuw=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766514400,
+    "error": "Error: connect ECONNREFUSED 144.76.220.79:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 8
+  },
+  {
+    "host": "167.71.78.37",
+    "port": 8008,
+    "key": "@pwdhBryofNspNYWxBOnAhxPG7LXwvsqH0uz9FVKa/44=.ed25519",
+    "address": "net:167.71.78.37:8008~shs:pwdhBryofNspNYWxBOnAhxPG7LXwvsqH0uz9FVKa/44=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 8,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765358289,
+    "error": "Error: connect ECONNREFUSED 167.71.78.37:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 8
+  },
+  {
+    "host": "ssb.aseriesoftubez.com",
+    "port": 8008,
+    "key": "@zWr5Ox+8AKbNOburgsZdoIukDvGJmVdsTbKeKs6PDK8=.ed25519",
+    "address": "net:ssb.aseriesoftubez.com:8008~shs:zWr5Ox+8AKbNOburgsZdoIukDvGJmVdsTbKeKs6PDK8=",
+    "source": "stored",
+    "announcers": 10,
+    "duration": {
+      "mean": 749247.2,
+      "stdev": 405480.7470602767,
+      "count": 5,
+      "sum": 3746236,
+      "sqsum": 3628930014722
+    },
+    "stateChange": 1586770077174,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 753,
+        "stdev": 0,
+        "count": 1,
+        "sum": 753,
+        "sqsum": 567009
+      },
+      "skew": {
+        "mean": 116.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 116.5,
+        "sqsum": 13572.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "pub.delatech.net",
+    "port": 8008,
+    "key": "@DAO2l0sO7PtoPHO9BnqWc0vi27QAbUszuCF9lHzOpPE=.ed25519",
+    "address": "net:pub.delatech.net:8008~shs:DAO2l0sO7PtoPHO9BnqWc0vi27QAbUszuCF9lHzOpPE=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 7,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763366965,
+    "error": "Error: connect ECONNREFUSED 51.15.92.212:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 7
+  },
+  {
+    "host": "128.199.41.108",
+    "port": 8008,
+    "key": "@UZnDjmefaQo//6JcMNLlfzhXqPzO7Ktn3ZoXy2yVGz8=.ed25519",
+    "address": "net:128.199.41.108:8008~shs:UZnDjmefaQo//6JcMNLlfzhXqPzO7Ktn3ZoXy2yVGz8=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 7,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765683935,
+    "error": "Error: connect ETIMEDOUT 128.199.41.108:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 7
+  },
+  {
+    "host": "ssb.alarum.de",
+    "port": 8008,
+    "key": "@TRE4lNNXrtx3KK9Tgks2so2PjCP6w9tRvsy7wyqiyo4=.ed25519",
+    "address": "net:ssb.alarum.de:8008~shs:TRE4lNNXrtx3KK9Tgks2so2PjCP6w9tRvsy7wyqiyo4=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 752897,
+      "stdev": 532581.6128676117,
+      "count": 3,
+      "sum": 2258691,
+      "sqsum": 2551491200921
+    },
+    "stateChange": 1586746222930,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 74,
+        "stdev": 0,
+        "count": 1,
+        "sum": 74,
+        "sqsum": 5476
+      },
+      "skew": {
+        "mean": 828,
+        "stdev": 0,
+        "count": 1,
+        "sum": 828,
+        "sqsum": 685584
+      }
+    },
+    "failure": 1,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:46:23)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:151:5)\n    at Socket.emit (events.js:215:7)\n    at emitErrorNT (internal/streams/destroy.js:92:8)\n  Error: read ECONNRESET\n    at TCP.onStreamRead (internal/stream_base_commons.js:201:27)"
+  },
+  {
+    "host": "libra.fraction.io",
+    "port": 8008,
+    "key": "@gTsBPQbdSd763h0qoZsBjPlgWbhKKmMFW8kmTv/XrV8=.ed25519",
+    "address": "net:libra.fraction.io:8008~shs:gTsBPQbdSd763h0qoZsBjPlgWbhKKmMFW8kmTv/XrV8=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 7,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771392717,
+    "error": "Error: getaddrinfo ENOTFOUND libra.fraction.io\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 7
+  },
+  {
+    "host": "ssb.sexwork.work",
+    "port": 8008,
+    "key": "@JouZJsfM39Hc+bBwf3bQ7tYOVKF77nvYtwJLA5g/hkA=.ed25519",
+    "address": "net:ssb.sexwork.work:8008~shs:JouZJsfM39Hc+bBwf3bQ7tYOVKF77nvYtwJLA5g/hkA=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586762035702,
+    "error": "Error: shs.client: error when expecting server to accept challenge (phase 1).\npossibly the server is busy, does not speak shs or uses a different application cap\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:44:24)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:0 but wanted:64\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 6
+  },
+  {
+    "host": "gossip.noisebridge.info",
+    "port": 8008,
+    "key": "@2NANnQVdsoqk0XPiJG2oMZqaEpTeoGrxOHJkLIqs7eY=.ed25519",
+    "address": "net:gossip.noisebridge.info:8008~shs:2NANnQVdsoqk0XPiJG2oMZqaEpTeoGrxOHJkLIqs7eY=",
+    "source": "stored",
+    "announcers": 15,
+    "duration": {
+      "mean": 2226726.6666666665,
+      "stdev": 1333941.5056066827,
+      "count": 3,
+      "sum": 6680180,
+      "sqsum": 20213134765274
+    },
+    "stateChange": 1586762469672,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 305,
+        "stdev": 0,
+        "count": 1,
+        "sum": 305,
+        "sqsum": 93025
+      },
+      "skew": {
+        "mean": 60.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 60.5,
+        "sqsum": 3660.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.dweb.tools",
+    "port": 8008,
+    "key": "@aWJxjhFFrzmwllUV8urXcsVGGvmc5SDxCwurMbsfiyM=.ed25519",
+    "address": "net:ssb.dweb.tools:8008~shs:aWJxjhFFrzmwllUV8urXcsVGGvmc5SDxCwurMbsfiyM=",
+    "source": "stored",
+    "announcers": 8,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586762288596,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:64 but wanted:80\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 6
+  },
+  {
+    "host": "pub.tshirt.horse",
+    "port": 8008,
+    "key": "@s4shurQwrASqNj2LunBOB24r2/ubNOjn0+5EBz8CNBo=.ed25519",
+    "address": "net:pub.tshirt.horse:8008~shs:s4shurQwrASqNj2LunBOB24r2/ubNOjn0+5EBz8CNBo=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586761784155,
+    "error": "Error: connect ECONNREFUSED 138.68.238.148:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 6
+  },
+  {
+    "host": "sbom.tilde.website",
+    "port": 8008,
+    "key": "@FgG26a7IUtLBpbr5z1GBYp16gMMvcS6j4koumlMoWIk=.ed25519",
+    "address": "net:sbom.tilde.website:8008~shs:FgG26a7IUtLBpbr5z1GBYp16gMMvcS6j4koumlMoWIk=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586762035363,
+    "error": "Error: connect ECONNREFUSED 51.15.142.40:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 6
+  },
+  {
+    "host": "pub.lua.cz",
+    "port": 8008,
+    "key": "@xYSW6eVu8gTS/nTSXZiH97dgKZ+wp7NkomR6WKK/PBI=.ed25519",
+    "address": "net:pub.lua.cz:8008~shs:xYSW6eVu8gTS/nTSXZiH97dgKZ+wp7NkomR6WKK/PBI=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586762538784,
+    "error": "Error: connect ECONNREFUSED 81.201.60.131:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 6
+  },
+  {
+    "host": "pub.unknown.place",
+    "port": 8008,
+    "key": "@y0Wo8bip2jzJivzmsrdHVidfPbB5EwfKoVsp1NnFlCw=.ed25519",
+    "address": "net:pub.unknown.place:8008~shs:y0Wo8bip2jzJivzmsrdHVidfPbB5EwfKoVsp1NnFlCw=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586762788961,
+    "error": "Error: connect ECONNREFUSED 51.15.213.174:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 6
+  },
+  {
+    "host": "yesthatssb.me",
+    "port": 8008,
+    "key": "@WRHxNf+w6XCLicBYM6neo8bC1gzYgfnfzra9pp9RupI=.ed25519",
+    "address": "net:yesthatssb.me:8008~shs:WRHxNf+w6XCLicBYM6neo8bC1gzYgfnfzra9pp9RupI=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763040459,
+    "error": "Error: getaddrinfo ENOTFOUND yesthatssb.me\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 6
+  },
+  {
+    "host": "fyber.space",
+    "port": 8008,
+    "key": "@gf897ZXhmaWthuB18fcIr1iKY1FYhz9z325/mfVIoLk=.ed25519",
+    "address": "net:fyber.space:8008~shs:gf897ZXhmaWthuB18fcIr1iKY1FYhz9z325/mfVIoLk=",
+    "source": "stored",
+    "announcers": 7,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763946213,
+    "error": "Error: connect ETIMEDOUT 78.47.154.76:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 6
+  },
+  {
+    "host": "ssb.pacov.city",
+    "port": 8008,
+    "key": "@Yf5dYyvybrw+9zeHFThAsXDuq+rr/mjmbFtclpNB+K4=.ed25519",
+    "address": "net:ssb.pacov.city:8008~shs:Yf5dYyvybrw+9zeHFThAsXDuq+rr/mjmbFtclpNB+K4=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764530223,
+    "error": "Error: connect ETIMEDOUT 159.69.201.31:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 6
+  },
+  {
+    "host": "pub.ssb.beroal.in.ua",
+    "port": 8008,
+    "key": "@47jWRSNW16VeUAeklLdvMWt1Ql4+vLxgaOYXhwHXBwM=.ed25519",
+    "address": "net:pub.ssb.beroal.in.ua:8008~shs:47jWRSNW16VeUAeklLdvMWt1Ql4+vLxgaOYXhwHXBwM=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763619999,
+    "error": "Error: shs.client: error when expecting server to accept challenge (phase 1).\npossibly the server is busy, does not speak shs or uses a different application cap\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:44:24)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:46:23)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:151:5)\n    at Socket.emit (events.js:215:7)\n    at errorOrDestroy (internal/streams/destroy.js:108:12)\n  Error: write EPIPE\n    at afterWriteDispatched (internal/stream_base_commons.js:150:25)\n    at writeGeneric (internal/stream_base_commons.js:141:3)\n    at Socket._writeGeneric (net.js:770:11)\n    at Socket._write (net.js:782:8)\n    at doWrite (_stream_writable.js:431:12)\n    at writeOrBuffer (_stream_writable.js:415:5)\n    at Socket.Writable.write (_stream_writable.js:305:11)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:63:30\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-cat/index.js:35:13\n    at callback (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-pushable/index.js:84:5)",
+    "failure": 6
+  },
+  {
+    "host": "localhost",
+    "port": 18008,
+    "key": "@G+0wQyvRjLBwy9i/AauWalaYbSqt/KoI7l5Y4MPz1Xo=.ed25519",
+    "address": "net:localhost:18008~shs:G+0wQyvRjLBwy9i/AauWalaYbSqt/KoI7l5Y4MPz1Xo=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766187803,
+    "error": "Error: connect ECONNREFUSED 127.0.0.1:18008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 6
+  },
+  {
+    "host": "165.227.160.248",
+    "port": 8008,
+    "key": "@ogZghfR8z4TkMw+BhElj68Kxop/s9VIQq6IZECZ11Ck=.ed25519",
+    "address": "net:165.227.160.248:8008~shs:ogZghfR8z4TkMw+BhElj68Kxop/s9VIQq6IZECZ11Ck=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 6,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768760964,
+    "error": "Error: connect ETIMEDOUT 165.227.160.248:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 6
+  },
+  {
+    "host": "ssb.mauve.moe",
+    "port": 8008,
+    "key": "@PLmjGGd34eQzcJCC2EtcKiFEs3SiS/TFDAVnk3QukdE=.ed25519",
+    "address": "net:ssb.mauve.moe:8008~shs:PLmjGGd34eQzcJCC2EtcKiFEs3SiS/TFDAVnk3QukdE=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 1397513.6666666667,
+      "stdev": 1581866.9676839313,
+      "count": 3,
+      "sum": 4192541,
+      "sqsum": 13366042655909
+    },
+    "stateChange": 1586763367411,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 411,
+        "stdev": 128.29575207309082,
+        "count": 10,
+        "sum": 4110,
+        "sqsum": 1853808
+      },
+      "skew": {
+        "mean": -15.6,
+        "stdev": 47.24447057593089,
+        "count": 10,
+        "sum": -156,
+        "sqsum": 24754
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.pbu.duckdns.org",
+    "port": 8008,
+    "key": "@KScg9/0RXLkpV79dmV8dzI0sPQXhVOGrPYEMuzZh4Zw=.ed25519",
+    "address": "net:ssb.pbu.duckdns.org:8008~shs:KScg9/0RXLkpV79dmV8dzI0sPQXhVOGrPYEMuzZh4Zw=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763041466,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.pbu.duckdns.org\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 5
+  },
+  {
+    "host": "pub.datenknoten.me",
+    "port": 8008,
+    "key": "@A0hwv7MmQyPco0/d9fUsWWsg6gI5cwbI3j5vg3TgHUQ=.ed25519",
+    "address": "net:pub.datenknoten.me:8008~shs:A0hwv7MmQyPco0/d9fUsWWsg6gI5cwbI3j5vg3TgHUQ=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766515402,
+    "error": "Error: getaddrinfo ENOTFOUND pub.datenknoten.me\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 5
+  },
+  {
+    "host": "ssb.hubbz.de",
+    "port": 8008,
+    "key": "@fmoLhN3dVZCaTLDr9y/VvvMR1uG3AdbpDJlrUkMZSRo=.ed25519",
+    "address": "net:ssb.hubbz.de:8008~shs:fmoLhN3dVZCaTLDr9y/VvvMR1uG3AdbpDJlrUkMZSRo=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766772751,
+    "error": "Error: connect ENETUNREACH 176.9.194.109:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 5
+  },
+  {
+    "host": "pub.alltinget.net",
+    "port": 8008,
+    "key": "@oiLoor+V21JZ9beFfKnAVVBq7XCrfTcKcVa4Zmn4XZw=.ed25519",
+    "address": "net:pub.alltinget.net:8008~shs:oiLoor+V21JZ9beFfKnAVVBq7XCrfTcKcVa4Zmn4XZw=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 1043353.5,
+      "stdev": 1011146.5,
+      "count": 2,
+      "sum": 2086707,
+      "sqsum": 4222007540849
+    },
+    "stateChange": 1586798900540,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 645,
+        "stdev": 0,
+        "count": 1,
+        "sum": 645,
+        "sqsum": 416025
+      },
+      "skew": {
+        "mean": 91.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 91.5,
+        "sqsum": 8372.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.alltinget.net",
+    "port": 8008,
+    "key": "@GYXAP7YPxwNDTCMJbWejgrybiXHqYWIqVzTeThPAQhU=.ed25519",
+    "address": "net:ssb.alltinget.net:8008~shs:GYXAP7YPxwNDTCMJbWejgrybiXHqYWIqVzTeThPAQhU=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 1498010.6666666667,
+      "stdev": 1063021.1479157987,
+      "count": 3,
+      "sum": 4494032,
+      "sqsum": 10122149755090
+    },
+    "stateChange": 1586728287173,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 360,
+        "stdev": 0,
+        "count": 1,
+        "sum": 360,
+        "sqsum": 129600
+      },
+      "skew": {
+        "mean": 46,
+        "stdev": 0,
+        "count": 1,
+        "sum": 46,
+        "sqsum": 2116
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "pub.doge.haus",
+    "port": 8008,
+    "key": "@7nTbqZVRYRo7FokY8BBYGpXvvveRPb4u+G1vunRmNn4=.ed25519",
+    "address": "net:pub.doge.haus:8008~shs:7nTbqZVRYRo7FokY8BBYGpXvvveRPb4u+G1vunRmNn4=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767024329,
+    "error": "Error: getaddrinfo ENOTFOUND pub.doge.haus\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 5
+  },
+  {
+    "host": "core.bc8.org",
+    "port": 8008,
+    "key": "@GeBGEENLQkAUKjSBjidsVa9FLYGQQR2/JK5Tw6dtPyA=.ed25519",
+    "address": "net:core.bc8.org:8008~shs:GeBGEENLQkAUKjSBjidsVa9FLYGQQR2/JK5Tw6dtPyA=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768106853,
+    "error": "Error: getaddrinfo ENOTFOUND core.bc8.org\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 5
+  },
+  {
+    "host": "kemo.rocks",
+    "port": 8008,
+    "key": "@TaSBYv4eCGdWshpyeC07RZUdxh+UIQmkcI90EWnyCO8=.ed25519",
+    "address": "net:kemo.rocks:8008~shs:TaSBYv4eCGdWshpyeC07RZUdxh+UIQmkcI90EWnyCO8=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 8364528.333333333,
+      "stdev": 8741090.024638435,
+      "count": 3,
+      "sum": 25093585,
+      "sqsum": 439115967173909
+    },
+    "stateChange": 1586725921416,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 165,
+        "stdev": 0,
+        "count": 1,
+        "sum": 165,
+        "sqsum": 27225
+      },
+      "skew": {
+        "mean": -7.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -7.5,
+        "sqsum": 56.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.staltz.com",
+    "port": 8008,
+    "key": "@9RrCXihWSGUNrnzWSzOib48RGc3Bonmy3nVQQj+3TCU=.ed25519",
+    "address": "net:ssb.staltz.com:8008~shs:9RrCXihWSGUNrnzWSzOib48RGc3Bonmy3nVQQj+3TCU=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586769012291,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.staltz.com\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 5
+  },
+  {
+    "host": "178.62.13.18",
+    "port": 8008,
+    "key": "@m0HdeivbApjy4CFP8B/KKE+hbq2jO96woqyzDPOOq4U=.ed25519",
+    "address": "net:178.62.13.18:8008~shs:m0HdeivbApjy4CFP8B/KKE+hbq2jO96woqyzDPOOq4U=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586772044214,
+    "error": "Error: connect ETIMEDOUT 178.62.13.18:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 5
+  },
+  {
+    "host": "ssb.cosmocr.at",
+    "port": 8008,
+    "key": "@LpZ+epop8kWHacm9xCVU6u67GmUE1Y9HgnrKXxdzT/A=.ed25519",
+    "address": "net:ssb.cosmocr.at:8008~shs:LpZ+epop8kWHacm9xCVU6u67GmUE1Y9HgnrKXxdzT/A=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586770324238,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:64 but wanted:80\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 5
+  },
+  {
+    "host": "ssb.cosmocr.at",
+    "port": 8008,
+    "key": "@j/y8UOQuY+wgBDk/EbnDMz7sDfN090JCLx6c8wWU8k4=.ed25519",
+    "address": "net:ssb.cosmocr.at:8008~shs:j/y8UOQuY+wgBDk/EbnDMz7sDfN090JCLx6c8wWU8k4=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 4622175,
+      "stdev": 4731455.170934625,
+      "count": 4,
+      "sum": 18488700,
+      "sqsum": 175004679060756
+    },
+    "stateChange": 1586752618963,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 577,
+        "stdev": 0,
+        "count": 1,
+        "sum": 577,
+        "sqsum": 332929
+      },
+      "skew": {
+        "mean": 172.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 172.5,
+        "sqsum": 29756.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "docker.superior",
+    "port": 8008,
+    "key": "@phptpGRf4lH3x4Ha5cg+C0nF8ziQ0P0/QwvSeCwJrTI=.ed25519",
+    "address": "net:docker.superior:8008~shs:phptpGRf4lH3x4Ha5cg+C0nF8ziQ0P0/QwvSeCwJrTI=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586770323570,
+    "error": "Error: getaddrinfo ENOTFOUND docker.superior\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 5
+  },
+  {
+    "host": "pub.ssb.rosenberg-watt.com",
+    "port": 8008,
+    "key": "@naAtv38roUHahJzE+3dAApkLUk/rdVx0Ku5A1Hfu4zw=.ed25519",
+    "address": "net:pub.ssb.rosenberg-watt.com:8008~shs:naAtv38roUHahJzE+3dAApkLUk/rdVx0Ku5A1Hfu4zw=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 3270160.3333333335,
+      "stdev": 3772294.316911158,
+      "count": 3,
+      "sum": 9810481,
+      "sqsum": 74772459057321
+    },
+    "stateChange": 1586761202144,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 550,
+        "stdev": 0,
+        "count": 1,
+        "sum": 550,
+        "sqsum": 302500
+      },
+      "skew": {
+        "mean": 34,
+        "stdev": 0,
+        "count": 1,
+        "sum": 34,
+        "sqsum": 1156
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "45.56.87.205",
+    "port": 8008,
+    "key": "@fUgj/1YzBob0InuXqkWWgcxh1/0h8RX3e8t70Kylxic=.ed25519",
+    "address": "net:45.56.87.205:8008~shs:fUgj/1YzBob0InuXqkWWgcxh1/0h8RX3e8t70Kylxic=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771643683,
+    "error": "Error: connect ECONNREFUSED 45.56.87.205:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 5
+  },
+  {
+    "host": "188.166.172.225",
+    "port": 8008,
+    "key": "@YXquIbh1OqCCdMuqCO4tSJuYR7RL811CTuu59n7G0pk=.ed25519",
+    "address": "net:188.166.172.225:8008~shs:YXquIbh1OqCCdMuqCO4tSJuYR7RL811CTuu59n7G0pk=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 5,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586798899350,
+    "error": "Error: connect ECONNREFUSED 188.166.172.225:8008\n    at Object._errnoException (util.js:992:11)\n    at _exceptionWithHostPort (util.js:1014:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1186:14)",
+    "failure": 5
+  },
+  {
+    "host": "ssb.arching-kaos.tk",
+    "port": 8008,
+    "key": "@BVq6HRudjrzO8ALzCPKbclANwHepUzQnA9c4m6WxNzo=.ed25519",
+    "address": "net:ssb.arching-kaos.tk:8008~shs:BVq6HRudjrzO8ALzCPKbclANwHepUzQnA9c4m6WxNzo=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 6182402,
+      "stdev": 4322203,
+      "count": 2,
+      "sum": 12364804,
+      "sqsum": 113807066525626
+    },
+    "stateChange": 1586771140766,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 67.5,
+        "stdev": 26.5,
+        "count": 2,
+        "sum": 135,
+        "sqsum": 10517
+      },
+      "skew": {
+        "mean": -7.25,
+        "stdev": 2.25,
+        "count": 2,
+        "sum": -14.5,
+        "sqsum": 115.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "dispatch.sprig.gs",
+    "port": 8008,
+    "key": "@xp+ZlMOuhjiDHywThMB8pPsGvWjZH7qFKnRK8Y/0VTE=.ed25519",
+    "remote": "net:dispatch.sprig.gs:8008~shs:xp+ZlMOuhjiDHywThMB8pPsGvWjZH7qFKnRK8Y/0VTE=:X7PlLQ77+oaUcZEKYGICEcRn6bNDI72UglUjhIxvi9g=",
+    "address": "net:dispatch.sprig.gs:8008~shs:xp+ZlMOuhjiDHywThMB8pPsGvWjZH7qFKnRK8Y/0VTE=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 1178882.5,
+      "stdev": 1178882.5,
+      "count": 2,
+      "sum": 2357765,
+      "sqsum": 5559055795225
+    },
+    "stateChange": 1586728287644,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 122,
+        "stdev": 0,
+        "count": 1,
+        "sum": 122,
+        "sqsum": 14884
+      },
+      "skew": {
+        "mean": 36,
+        "stdev": 0,
+        "count": 1,
+        "sum": 36,
+        "sqsum": 1296
+      }
+    }
+  },
+  {
+    "host": "ssb.gutepost.de",
+    "port": 8008,
+    "key": "@Zig5AiMlJpdlrt0HYS+XWsloPqf/jn6nUWEIFOalh/o=.ed25519",
+    "address": "net:ssb.gutepost.de:8008~shs:Zig5AiMlJpdlrt0HYS+XWsloPqf/jn6nUWEIFOalh/o=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 4,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586762788989,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:64 but wanted:80\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 4
+  },
+  {
+    "host": "pub.liebechaos.org",
+    "port": 8008,
+    "key": "@w3NNEeEPWeqEF7yzIMn74IKk8MBxO6uD1eEbBbc/dL0=.ed25519",
+    "address": "net:pub.liebechaos.org:8008~shs:w3NNEeEPWeqEF7yzIMn74IKk8MBxO6uD1eEbBbc/dL0=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 1946287,
+      "stdev": 1941904,
+      "count": 2,
+      "sum": 3892574,
+      "sqsum": 15118048463170
+    },
+    "stateChange": 1586771140779,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 1143.5,
+        "stdev": 1065.5,
+        "count": 2,
+        "sum": 2287,
+        "sqsum": 4885765
+      },
+      "skew": {
+        "mean": -510.25,
+        "stdev": 502.25,
+        "count": 2,
+        "sum": -1020.5,
+        "sqsum": 1025220.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "hermiesroom.staltz.com",
+    "port": 8008,
+    "key": "@W18NyiHagiiVE4/jm2sxzqQqIwmUw2p9pKZ0lHH9OXA=.ed25519",
+    "address": "net:hermiesroom.staltz.com:8008~shs:W18NyiHagiiVE4/jm2sxzqQqIwmUw2p9pKZ0lHH9OXA=",
+    "source": "stored",
+    "announcers": 11,
+    "duration": {
+      "mean": 118687.25,
+      "stdev": 98657.11009951336,
+      "count": 4,
+      "sum": 474749,
+      "sqsum": 95279554743
+    },
+    "stateChange": 1586772321128,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 277,
+        "stdev": 0,
+        "count": 1,
+        "sum": 277,
+        "sqsum": 76729
+      },
+      "skew": {
+        "mean": 84.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 84.5,
+        "sqsum": 7140.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "eight45.net",
+    "port": 8008,
+    "key": "@eM4e8pmRiZpeCBitqp6vq3lT8EwC5UjjKuajHbpWnNI=.ed25519",
+    "address": "net:eight45.net:8008~shs:eM4e8pmRiZpeCBitqp6vq3lT8EwC5UjjKuajHbpWnNI=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 4,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767024510,
+    "error": "Error: connect ECONNREFUSED 198.199.97.80:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 4
+  },
+  {
+    "host": "jon.sprig.gs",
+    "port": 8008,
+    "key": "@EFWzZK2K+b++CbBszsVkAB+WHlRJtX2kX8ynaJp0nHA=.ed25519",
+    "remote": "net:jon.sprig.gs:8008~shs:EFWzZK2K+b++CbBszsVkAB+WHlRJtX2kX8ynaJp0nHA=:36iwxm+wHaHK/tEhErsgMj0uWQLL2EyHffQyAJPiFok=",
+    "address": "net:jon.sprig.gs:8008~shs:EFWzZK2K+b++CbBszsVkAB+WHlRJtX2kX8ynaJp0nHA=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 90269,
+      "stdev": 123490.52532347034,
+      "count": 3,
+      "sum": 270807,
+      "sqsum": 70195206617
+    },
+    "stateChange": 1586798899757,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 88,
+        "stdev": 0,
+        "count": 1,
+        "sum": 88,
+        "sqsum": 7744
+      },
+      "skew": {
+        "mean": -5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -5,
+        "sqsum": 25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb-pub.macacomaluco.space",
+    "port": 8008,
+    "key": "@i9/j8rICHubAf9d9FTef9ExR0xIP0f8oNEd9+uLhMYY=.ed25519",
+    "address": "net:ssb-pub.macacomaluco.space:8008~shs:i9/j8rICHubAf9d9FTef9ExR0xIP0f8oNEd9+uLhMYY=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 4,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586770073122,
+    "error": "Error: connect ECONNREFUSED 165.227.254.190:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 4
+  },
+  {
+    "host": "207.154.204.200",
+    "port": 8008,
+    "key": "@GF8UXwmSBvu/qcVrj18SUYPXzya694n7u30RUFajPws=.ed25519",
+    "address": "net:207.154.204.200:8008~shs:GF8UXwmSBvu/qcVrj18SUYPXzya694n7u30RUFajPws=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 4,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586769716080,
+    "error": "Error: connect ETIMEDOUT 207.154.204.200:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 4
+  },
+  {
+    "host": "pub.locksmithdon.net",
+    "port": 8008,
+    "key": "@5Iy0jt/wxI84VmdFeTdDedXjI1zyAU6BXQvb4DUyZIE=.ed25519",
+    "address": "net:pub.locksmithdon.net:8008~shs:5Iy0jt/wxI84VmdFeTdDedXjI1zyAU6BXQvb4DUyZIE=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765107312,
+    "error": "Error: getaddrinfo ENOTFOUND pub.locksmithdon.net\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 3
+  },
+  {
+    "host": "ssb.yakczar.com",
+    "port": 8008,
+    "key": "@vHSrdIVVyCc6L2Cn97Qamhe6ItEjFqwSCX/K7YmiXK0=.ed25519",
+    "address": "net:ssb.yakczar.com:8008~shs:vHSrdIVVyCc6L2Cn97Qamhe6ItEjFqwSCX/K7YmiXK0=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765608697,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.yakczar.com\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 3
+  },
+  {
+    "host": "pub.locksmithdon.net",
+    "port": 8008,
+    "key": "@CFaZuctqiVxiHentlafdtBDhMf2IDGF+b831SxwGoIA=.ed25519",
+    "address": "net:pub.locksmithdon.net:8008~shs:CFaZuctqiVxiHentlafdtBDhMf2IDGF+b831SxwGoIA=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586765608669,
+    "error": "Error: getaddrinfo ENOTFOUND pub.locksmithdon.net\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 3
+  },
+  {
+    "host": "solarpunk.network",
+    "port": 8008,
+    "key": "@vU/bDokQrQro6t835MkjGct+dmygIv4zkd4oV3UNhgc=.ed25519",
+    "remote": "net:solarpunk.network:8008~shs:vU/bDokQrQro6t835MkjGct+dmygIv4zkd4oV3UNhgc=:DxCUQRCQrjg6H9oNbHkkMBjxuv5/+l4Cvj088qXaxA8=",
+    "address": "net:solarpunk.network:8008~shs:vU/bDokQrQro6t835MkjGct+dmygIv4zkd4oV3UNhgc=",
+    "source": "stored",
+    "announcers": 5,
+    "duration": {
+      "mean": 1033807.5,
+      "stdev": 1032337.5,
+      "count": 2,
+      "sum": 2067615,
+      "sqsum": 4268957321925
+    },
+    "stateChange": 1586770073107,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 63,
+        "stdev": 0,
+        "count": 1,
+        "sum": 63,
+        "sqsum": 3969
+      },
+      "skew": {
+        "mean": 7.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 7.5,
+        "sqsum": 56.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "pub.t4l3.net",
+    "port": 8008,
+    "key": "@WndnBREUvtFVF14XYEq01icpt91753bA+nVycEJIAX4=.ed25519",
+    "address": "net:pub.t4l3.net:8008~shs:WndnBREUvtFVF14XYEq01icpt91753bA+nVycEJIAX4=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 2433537,
+      "stdev": 0,
+      "count": 1,
+      "sum": 2433537,
+      "sqsum": 5922102330369
+    },
+    "stateChange": 1586763366979,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 90.6,
+        "stdev": 13.639648089302042,
+        "count": 10,
+        "sum": 906,
+        "sqsum": 83944
+      },
+      "skew": {
+        "mean": -6.3,
+        "stdev": 15.463182078731402,
+        "count": 10,
+        "sum": -63,
+        "sqsum": 2788
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.catbutts.today",
+    "port": 8008,
+    "key": "@6Tl07CcdHrZ+mcHG8vP4bAZnpqvlqyDw3N7gHIg1vdw=.ed25519",
+    "address": "net:ssb.catbutts.today:8008~shs:6Tl07CcdHrZ+mcHG8vP4bAZnpqvlqyDw3N7gHIg1vdw=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 6763074.5,
+      "stdev": 3527910.5,
+      "count": 2,
+      "sum": 13526149,
+      "sqsum": 116370658377121
+    },
+    "stateChange": 1586770682339,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 91,
+        "stdev": 0,
+        "count": 1,
+        "sum": 91,
+        "sqsum": 8281
+      },
+      "skew": {
+        "mean": -50.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -50.5,
+        "sqsum": 2550.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.losno.co",
+    "port": 8008,
+    "key": "@uuo21lZqwCw/RIq7LNSj3l6ne5eMMLd73UP/pXcATFU=.ed25519",
+    "address": "net:ssb.losno.co:8008~shs:uuo21lZqwCw/RIq7LNSj3l6ne5eMMLd73UP/pXcATFU=",
+    "source": "stored",
+    "announcers": 5,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586766765636,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.losno.co\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 3
+  },
+  {
+    "host": "ssb.yakczar.com",
+    "port": 8008,
+    "key": "@1G1wXeIbew4tpFGLKcd0utl6xgTUkThS0UGXWRT4Tus=.ed25519",
+    "address": "net:ssb.yakczar.com:8008~shs:1G1wXeIbew4tpFGLKcd0utl6xgTUkThS0UGXWRT4Tus=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767274681,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.yakczar.com\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 3
+  },
+  {
+    "host": "cblgh.org",
+    "port": 9001,
+    "key": "@lFrLlPq5kd1h5i9z2RbUBoM7xoumgo0JkAVtGch/dmw=.ed25519",
+    "address": "net:cblgh.org:9001~shs:lFrLlPq5kd1h5i9z2RbUBoM7xoumgo0JkAVtGch/dmw=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767274890,
+    "error": "Error: connect ECONNREFUSED 78.82.181.89:9001\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 3
+  },
+  {
+    "host": "45.79.73.250",
+    "port": 8008,
+    "key": "@VbGP5Fxpt2BEfUAPRMQV3FzYrqEySkDEYLNCIw/6V6A=.ed25519",
+    "remote": "net:45.79.73.250:8008~shs:VbGP5Fxpt2BEfUAPRMQV3FzYrqEySkDEYLNCIw/6V6A=:s1tz4GgUAHa3kCI2bTxz3DVbKhAbiQqyFz4ulhRjwdc=",
+    "address": "net:45.79.73.250:8008~shs:VbGP5Fxpt2BEfUAPRMQV3FzYrqEySkDEYLNCIw/6V6A=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767854357,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:64 but wanted:80\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 3
+  },
+  {
+    "host": "104.236.163.171",
+    "port": 8008,
+    "key": "@gS8Tbg3NdML4zKTr076plSYjYlPqDlfxqp4t/aXcWu8=.ed25519",
+    "address": "net:104.236.163.171:8008~shs:gS8Tbg3NdML4zKTr076plSYjYlPqDlfxqp4t/aXcWu8=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767853846,
+    "error": "Error: connect ECONNREFUSED 104.236.163.171:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 3
+  },
+  {
+    "host": "gossip.kiben.net",
+    "port": 8008,
+    "key": "@g4YE3lV/QNLc3TEsCsDtogammDRSEn2ktnzaIwTSvZU=.ed25519",
+    "address": "net:gossip.kiben.net:8008~shs:g4YE3lV/QNLc3TEsCsDtogammDRSEn2ktnzaIwTSvZU=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 3,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768433115,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:64 but wanted:80\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 3
+  },
+  {
+    "host": "ssb.nootch.net",
+    "port": 8008,
+    "key": "@1ZCF+Z9cUjcXGHkOPd5jNnoiuu3VJn+o6L8XEliV6Cs=.ed25519",
+    "address": "net:ssb.nootch.net:8008~shs:1ZCF+Z9cUjcXGHkOPd5jNnoiuu3VJn+o6L8XEliV6Cs=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586761456570,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.nootch.net\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "ssb.pwarren.id.au",
+    "port": 8008,
+    "key": "@oQRoB9PwGveZ0cAiM0ztW0yyARCDFSokedp9cpYxJcY=.ed25519",
+    "address": "net:ssb.pwarren.id.au:8008~shs:oQRoB9PwGveZ0cAiM0ztW0yyARCDFSokedp9cpYxJcY=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 3466737,
+      "stdev": 2937874,
+      "count": 2,
+      "sum": 6933474,
+      "sqsum": 41298738134090
+    },
+    "stateChange": 1586752615213,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 1130,
+        "stdev": 0,
+        "count": 1,
+        "sum": 1130,
+        "sqsum": 1276900
+      },
+      "skew": {
+        "mean": 313,
+        "stdev": 0,
+        "count": 1,
+        "sum": 313,
+        "sqsum": 97969
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "lumi.cahoots.pl",
+    "port": 6007,
+    "key": "@4J5RQ0Tp099HloSQI33Mp3uPqVQ+ZzeBA1CgF6kBcYw=.ed25519",
+    "address": "net:lumi.cahoots.pl:6007~shs:4J5RQ0Tp099HloSQI33Mp3uPqVQ+ZzeBA1CgF6kBcYw=",
+    "source": "stored",
+    "announcers": 6,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763619462,
+    "error": "Error: connect ECONNREFUSED 159.69.2.118:6007\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "ssbagents.southcentralus.cloudapp.azure.com",
+    "port": 8008,
+    "key": "@9WWopzkhX12W0PQIN9mTQA7wnBlrhdvT44DHXWyMMTI=.ed25519",
+    "address": "net:ssbagents.southcentralus.cloudapp.azure.com:8008~shs:9WWopzkhX12W0PQIN9mTQA7wnBlrhdvT44DHXWyMMTI=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763870936,
+    "error": "Error: getaddrinfo ENOTFOUND ssbagents.southcentralus.cloudapp.azure.com\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "165.22.103.168",
+    "port": 8008,
+    "key": "@ZPXx+5e+m5KcwI6Qb8fOqjoJyPY4RyeGUzY/s8BVbgY=.ed25519",
+    "address": "net:165.22.103.168:8008~shs:ZPXx+5e+m5KcwI6Qb8fOqjoJyPY4RyeGUzY/s8BVbgY=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764203830,
+    "error": "Error: shs.client: error when expecting server to accept challenge (phase 1).\npossibly the server is busy, does not speak shs or uses a different application cap\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:44:24)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:0 but wanted:64\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:147:5)\n    at Socket.emit (events.js:215:7)\n    at TCP.<anonymous> (net.js:658:12)",
+    "failure": 2
+  },
+  {
+    "host": "ssb.victor.earth",
+    "port": 8008,
+    "key": "@+OGmu4xyq4sLK7KXRMYKs2dvt3A8ow/QVFL2HxTSeK0=.ed25519",
+    "address": "net:ssb.victor.earth:8008~shs:+OGmu4xyq4sLK7KXRMYKs2dvt3A8ow/QVFL2HxTSeK0=",
+    "source": "stored",
+    "announcers": 5,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764198513,
+    "error": "Error: connect ECONNREFUSED 159.203.191.176:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "ssbagents.southcentralus.cloudapp.azure.com",
+    "port": 8008,
+    "key": "@z/yg8kztMU7JGOVV95LBvIGd23k904FuT9zhPXuj67s=.ed25519",
+    "address": "net:ssbagents.southcentralus.cloudapp.azure.com:8008~shs:z/yg8kztMU7JGOVV95LBvIGd23k904FuT9zhPXuj67s=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586764454879,
+    "error": "Error: getaddrinfo ENOTFOUND ssbagents.southcentralus.cloudapp.azure.com\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "hub.devcontrol.org",
+    "port": 8008,
+    "key": "@nSCVHJ5OSajcynWgo3Xh0bChZN3e4oV1ooIuFWdxrmg=.ed25519",
+    "address": "net:hub.devcontrol.org:8008~shs:nSCVHJ5OSajcynWgo3Xh0bChZN3e4oV1ooIuFWdxrmg=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 1297,
+      "stdev": 0,
+      "count": 1,
+      "sum": 1297,
+      "sqsum": 1682209
+    },
+    "stateChange": 1586769640521,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 30,
+        "stdev": 0,
+        "count": 1,
+        "sum": 30,
+        "sqsum": 900
+      },
+      "skew": {
+        "mean": -46,
+        "stdev": 0,
+        "count": 1,
+        "sum": -46,
+        "sqsum": 2116
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb.joelmello.com",
+    "port": 8008,
+    "key": "@nRk7cZFeBoCARklvbrOMvUjZ5MZ0NC429k+gccGGHOE=.ed25519",
+    "address": "net:ssb.joelmello.com:8008~shs:nRk7cZFeBoCARklvbrOMvUjZ5MZ0NC429k+gccGGHOE=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767274864,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.joelmello.com\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "ssb.interweb.technology",
+    "port": 8008,
+    "key": "@CQSMJsDjpn5t59MXqMp1q3JJ3+19K9Jn0Z3LQfZkVBI=.ed25519",
+    "address": "net:ssb.interweb.technology:8008~shs:CQSMJsDjpn5t59MXqMp1q3JJ3+19K9Jn0Z3LQfZkVBI=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767527159,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.interweb.technology\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "pub.nuage.space",
+    "port": 8008,
+    "key": "@nvuk9ZOLMNHqOyVVFX+Qk2jcSBiwyHe4Z8fvYscD1Po=.ed25519",
+    "address": "net:pub.nuage.space:8008~shs:nvuk9ZOLMNHqOyVVFX+Qk2jcSBiwyHe4Z8fvYscD1Po=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767527142,
+    "error": "Error: getaddrinfo ENOTFOUND pub.nuage.space\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "pub.voodoohop.com",
+    "port": 8008,
+    "key": "@uP7sDZW9ETaOhNMFIYaEcGVwtFijX8/OnRtsHCKZYS8=.ed25519",
+    "address": "net:pub.voodoohop.com:8008~shs:uP7sDZW9ETaOhNMFIYaEcGVwtFijX8/OnRtsHCKZYS8=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767602584,
+    "error": "Error: connect ETIMEDOUT 104.236.242.204:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "ssb.microcultu.re",
+    "port": 8008,
+    "key": "@wXIn0d7W57npReOBRuapAPGE1FIhOvtdJaA5clSH2v0=.ed25519",
+    "address": "net:ssb.microcultu.re:8008~shs:wXIn0d7W57npReOBRuapAPGE1FIhOvtdJaA5clSH2v0=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768182201,
+    "error": "Error: connect ETIMEDOUT 35.190.185.60:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "ssb.ter0.net",
+    "port": 8008,
+    "key": "@EISbnu+GMTb50m3G5N8QBCOKtsPbtvJe8dsMC6yYOrw=.ed25519",
+    "address": "net:ssb.ter0.net:8008~shs:EISbnu+GMTb50m3G5N8QBCOKtsPbtvJe8dsMC6yYOrw=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586767853946,
+    "error": "Error: getaddrinfo ENOTFOUND ssb.ter0.net\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "us.scuttle.social",
+    "port": 8008,
+    "key": "@mZGZCJlmMAW1DJ17TE8bJ1PqqGIn4VPGA8Lj2D2Eghs=.ed25519",
+    "address": "net:us.scuttle.social:8008~shs:mZGZCJlmMAW1DJ17TE8bJ1PqqGIn4VPGA8Lj2D2Eghs=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768107804,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:64 but wanted:80\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 2
+  },
+  {
+    "host": "freedombone.net",
+    "port": 8008,
+    "key": "@O7hjOwoA+4zveowq/FOUkAzFxpKBt4QPrMbM5SXMIls=.ed25519",
+    "address": "net:freedombone.net:8008~shs:O7hjOwoA+4zveowq/FOUkAzFxpKBt4QPrMbM5SXMIls=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768761231,
+    "error": "Error: connect ETIMEDOUT 147.148.108.92:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "hulk.ccom.uprrp.edu",
+    "port": 8008,
+    "key": "@QJ/UQmIXv89XMMR+RfJdxQSPEAlifNLVCNOx69vrpts=.ed25519",
+    "address": "net:hulk.ccom.uprrp.edu:8008~shs:QJ/UQmIXv89XMMR+RfJdxQSPEAlifNLVCNOx69vrpts=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768433580,
+    "error": "Error: shs.client: server hung up when we sent hello (phase 3).\nPossibly we dailed a wrong number, or the server does not wish to talk to us.\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:52:26)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:64 but wanted:80\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:143:5)\n    at Socket.emit (events.js:215:7)\n    at endReadableNT (_stream_readable.js:1183:12)\n    at processTicksAndRejections (internal/process/task_queues.js:80:21)",
+    "failure": 2
+  },
+  {
+    "host": "diasp.club",
+    "port": 8008,
+    "key": "@DNatJUQOFr1NZewA3oRG9i/r0XJZLbKYTyB225J9St0=.ed25519",
+    "address": "net:diasp.club:8008~shs:DNatJUQOFr1NZewA3oRG9i/r0XJZLbKYTyB225J9St0=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768432904,
+    "error": "Error: getaddrinfo ENOTFOUND diasp.club\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "freedombone.net",
+    "port": 8008,
+    "key": "@aCjZYf6p0k7VINLoXF2J361VLW7SX7SzzBuiE4JoQEQ=.ed25519",
+    "address": "net:freedombone.net:8008~shs:aCjZYf6p0k7VINLoXF2J361VLW7SX7SzzBuiE4JoQEQ=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586769338134,
+    "error": "Error: connect ETIMEDOUT 147.148.108.92:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "45.79.73.250",
+    "port": 8008,
+    "key": "@zRiO4u9V6uodhn+ebUej8UIW2bTe4po5k0Pp7qpZ7iY=.ed25519",
+    "remote": "net:45.79.73.250:8008~shs:zRiO4u9V6uodhn+ebUej8UIW2bTe4po5k0Pp7qpZ7iY=:altr9BNnByT8mG1MSuguYwHevdlsHmRPyJM2ZuxU9vI=",
+    "address": "net:45.79.73.250:8008~shs:zRiO4u9V6uodhn+ebUej8UIW2bTe4po5k0Pp7qpZ7iY=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 1,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586768686158,
+    "failure": 0,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 519,
+        "stdev": 81,
+        "count": 2,
+        "sum": 1038,
+        "sqsum": 551844
+      },
+      "skew": {
+        "mean": 100.5,
+        "stdev": 36.5,
+        "count": 2,
+        "sum": 201,
+        "sqsum": 22865
+      }
+    }
+  },
+  {
+    "host": "fc44:a875:6a78:0001:335e:b2b6:2873:c4cc",
+    "port": 8008,
+    "key": "@SOJaamc8LB5js+OKLM40J76YUgxUfLhlR7CxGeLluC8=.ed25519",
+    "address": "net:fc44:a875:6a78:0001:335e:b2b6:2873:c4cc:8008~shs:SOJaamc8LB5js+OKLM40J76YUgxUfLhlR7CxGeLluC8=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586769012272,
+    "error": "Error: connect EHOSTUNREACH fc44:a875:6a78:0001:335e:b2b6:2873:c4cc:8008 - Local (:::52772)\n    at internalConnect (net.js:907:16)\n    at defaultTriggerAsyncIdScope (internal/async_hooks.js:301:12)\n    at net.js:998:9\n    at processTicksAndRejections (internal/process/task_queues.js:75:11)",
+    "failure": 2
+  },
+  {
+    "host": "celehner.com",
+    "port": 18008,
+    "key": "@f/6sQ6d2CMxRUhLpspgGIulDxDCwYD7DzFzPNr7u5AU=.ed25519",
+    "address": "net:celehner.com:18008~shs:f/6sQ6d2CMxRUhLpspgGIulDxDCwYD7DzFzPNr7u5AU=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586769268131,
+    "error": "Error: shs.client: error when expecting server to accept challenge (phase 1).\npossibly the server is busy, does not speak shs or uses a different application cap\n    at abort (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:37:45)\n    at Object.cb (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-handshake/protocol.js:44:24)\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:23)\n  Error: stream ended with:0 but wanted:64\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:43:26)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:63:18\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/pull-reader/index.js:20:7\n    at drain (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:126:18)\n    at Socket.<anonymous> (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/stream-to-pull-stream/index.js:147:5)\n    at Socket.emit (events.js:215:7)\n    at TCP.<anonymous> (net.js:658:12)",
+    "failure": 2
+  },
+  {
+    "host": "80.240.20.193",
+    "port": 8008,
+    "key": "@wg453Nkclq7GjoQ/8f6inqr4T0ubL4XAGWH4JFKJDvg=.ed25519",
+    "address": "net:80.240.20.193:8008~shs:wg453Nkclq7GjoQ/8f6inqr4T0ubL4XAGWH4JFKJDvg=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586769640323,
+    "error": "Error: connect ECONNREFUSED 80.240.20.193:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "braindead.space",
+    "port": 8008,
+    "key": "@l/nYGCaSrZ7p7aMv9Fvo2YYdZOpRs5OtR93zfx7oo5M=.ed25519",
+    "address": "net:braindead.space:8008~shs:l/nYGCaSrZ7p7aMv9Fvo2YYdZOpRs5OtR93zfx7oo5M=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586770398899,
+    "error": "Error: connect ETIMEDOUT 101.100.138.111:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "pub.hacky.af",
+    "port": 30434,
+    "key": "@VqbBx7dr72FQwO5ztq4FULpareSMFSwegY1Ruh7XpjA=.ed25519",
+    "address": "net:pub.hacky.af:30434~shs:VqbBx7dr72FQwO5ztq4FULpareSMFSwegY1Ruh7XpjA=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586770073016,
+    "error": "Error: getaddrinfo ENOTFOUND pub.hacky.af\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "pod.copylaradio.com",
+    "port": 8008,
+    "key": "@UeiA9iqZ0/XTjmYBht230KGr44bsr+Tl5BXSUDFv8vo=.ed25519",
+    "address": "net:pod.copylaradio.com:8008~shs:UeiA9iqZ0/XTjmYBht230KGr44bsr+Tl5BXSUDFv8vo=",
+    "source": "stored",
+    "announcers": 7,
+    "duration": {
+      "mean": 1145,
+      "stdev": 0,
+      "count": 1,
+      "sum": 1145,
+      "sqsum": 1311025
+    },
+    "stateChange": 1586725923214,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 157,
+        "stdev": 0,
+        "count": 1,
+        "sum": 157,
+        "sqsum": 24649
+      },
+      "skew": {
+        "mean": 20.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": 20.5,
+        "sqsum": 420.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb-pub.romuloalv.es",
+    "port": 8008,
+    "key": "@nbdRF5za2vQiSiNFVooOOGeJGEPdQXvPBv5crskWRGU=.ed25519",
+    "address": "net:ssb-pub.romuloalv.es:8008~shs:nbdRF5za2vQiSiNFVooOOGeJGEPdQXvPBv5crskWRGU=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771140292,
+    "error": "Error: getaddrinfo ENOTFOUND ssb-pub.romuloalv.es\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "vps289031.vps.ovh.ca",
+    "port": 8008,
+    "key": "@gef/9v+r4Y9mzyFP9t0BFN2AQjzSNcS6bfvvor/aE8E=.ed25519",
+    "address": "net:vps289031.vps.ovh.ca:8008~shs:gef/9v+r4Y9mzyFP9t0BFN2AQjzSNcS6bfvvor/aE8E=",
+    "source": "stored",
+    "announcers": 4,
+    "duration": {
+      "mean": 2395,
+      "stdev": 0,
+      "count": 1,
+      "sum": 2395,
+      "sqsum": 5736025
+    },
+    "stateChange": 1586728292907,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 471,
+        "stdev": 0,
+        "count": 1,
+        "sum": 471,
+        "sqsum": 221841
+      },
+      "skew": {
+        "mean": -49.5,
+        "stdev": 0,
+        "count": 1,
+        "sum": -49.5,
+        "sqsum": 2450.25
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "pub.sito.org",
+    "port": 8008,
+    "key": "@ItVrWJk1lAuGIAsQ7vP8R6Nrp7ZkkZ030KVdHY/B7Dg=.ed25519",
+    "address": "net:pub.sito.org:8008~shs:ItVrWJk1lAuGIAsQ7vP8R6Nrp7ZkkZ030KVdHY/B7Dg=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771393001,
+    "error": "Error: connect ECONNREFUSED 108.59.86.247:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "scuttlandia.lv11.co",
+    "port": 8008,
+    "key": "@qOY0Hq4iPsZE66dGDtYRiRxVVO/JR6aw5QRGCcTRd44=.ed25519",
+    "address": "net:scuttlandia.lv11.co:8008~shs:qOY0Hq4iPsZE66dGDtYRiRxVVO/JR6aw5QRGCcTRd44=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771718573,
+    "error": "Error: connect ETIMEDOUT 159.89.142.105:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "hi.jack.tf",
+    "port": 8008,
+    "key": "@VO9WFmFFAZPzko11099zN/EGMQ9NFBW+FxRAE7Pm3Po=.ed25519",
+    "address": "net:hi.jack.tf:8008~shs:VO9WFmFFAZPzko11099zN/EGMQ9NFBW+FxRAE7Pm3Po=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771643337,
+    "error": "Error: getaddrinfo ENOTFOUND hi.jack.tf\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 2
+  },
+  {
+    "host": "social.sacrideo.us",
+    "port": 8008,
+    "key": "@nk+ZHJvzVMu3cZnapPN6gsqw/XDbWOPbdkN6a1WsV54=.ed25519",
+    "address": "net:social.sacrideo.us:8008~shs:nk+ZHJvzVMu3cZnapPN6gsqw/XDbWOPbdkN6a1WsV54=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771969577,
+    "error": "Error: connect ECONNREFUSED 152.44.40.101:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 2
+  },
+  {
+    "host": "165.22.203.85",
+    "port": 8008,
+    "key": "@XDAWVcvWQOT0VVOgm7OoNDdCNmNjasfFXeAETcBMLwc=.ed25519",
+    "remote": "net:165.22.203.85:8008~shs:XDAWVcvWQOT0VVOgm7OoNDdCNmNjasfFXeAETcBMLwc=:rV8N+/1GV99IT5szAbzBKr3pPjBS5iyKR1bLLNUrIZw=",
+    "address": "net:165.22.203.85:8008~shs:XDAWVcvWQOT0VVOgm7OoNDdCNmNjasfFXeAETcBMLwc=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 8580954,
+      "stdev": 0,
+      "count": 1,
+      "sum": 8580954,
+      "sqsum": 73632771550116
+    },
+    "stateChange": 1586761202736,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 162,
+        "stdev": 0,
+        "count": 1,
+        "sum": 162,
+        "sqsum": 26244
+      },
+      "skew": {
+        "mean": 947,
+        "stdev": 0,
+        "count": 1,
+        "sum": 947,
+        "sqsum": 896809
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "45.14.224.132",
+    "port": 8008,
+    "key": "@Fb+z7zk1IQeLX0GS2A8+R1RsxRv3d+90F1cDbNYqd3o=.ed25519",
+    "remote": "net:45.14.224.132:8008~shs:Fb+z7zk1IQeLX0GS2A8+R1RsxRv3d+90F1cDbNYqd3o=:6klFupUBDoomk5aB6nfxUZDzf1FtF4Dl3vZaankudSM=",
+    "address": "net:45.14.224.132:8008~shs:Fb+z7zk1IQeLX0GS2A8+R1RsxRv3d+90F1cDbNYqd3o=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 2,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586798899350,
+    "error": "Error: connect ECONNREFUSED 45.14.224.132:8008\n    at Object._errnoException (util.js:992:11)\n    at _exceptionWithHostPort (util.js:1014:20)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1186:14)",
+    "failure": 2
+  },
+  {
+    "host": "pub.amora.services",
+    "port": 8008,
+    "key": "@kEfnghHBlq5TKhOl9EnPYWClOXLcGpWM7wQXiIZTw7E=.ed25519",
+    "address": "net:pub.amora.services:8008~shs:kEfnghHBlq5TKhOl9EnPYWClOXLcGpWM7wQXiIZTw7E=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 1,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586761205327,
+    "error": "Error: getaddrinfo ENOTFOUND pub.amora.services\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)",
+    "failure": 1
+  },
+  {
+    "host": "45.33.75.69",
+    "port": 8008,
+    "key": "@W8qPD6af5BHPN1n5x1OLOYFgfVMoH0xjWoBQHblOHQQ=.ed25519",
+    "address": "net:45.33.75.69:8008~shs:W8qPD6af5BHPN1n5x1OLOYFgfVMoH0xjWoBQHblOHQQ=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null,
+    "stateChange": 1586761207805,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 330.75,
+        "stdev": 57.664438781626934,
+        "count": 4,
+        "sum": 1323,
+        "sqsum": 450883
+      },
+      "skew": {
+        "mean": 0.875,
+        "stdev": 39.864418658748804,
+        "count": 4,
+        "sum": 3.5,
+        "sqsum": 6359.75
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "vps.kiefte.eu",
+    "port": 8008,
+    "key": "@MoF2Bv3dP7b2omCc9mMgqfwvkstcFt6/8yuJ+m2D6rQ=.ed25519",
+    "address": "net:vps.kiefte.eu:8008~shs:MoF2Bv3dP7b2omCc9mMgqfwvkstcFt6/8yuJ+m2D6rQ=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 1,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586763366949,
+    "error": "Error: connect ECONNREFUSED 5.189.164.44:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 1
+  },
+  {
+    "host": "pub.usinette.org",
+    "port": 8008,
+    "key": "@HcAAjlSzrzicWkigoGfBBBipMrwvTdOWJOHqTgLNAIw=.ed25519",
+    "address": "net:pub.usinette.org:8008~shs:HcAAjlSzrzicWkigoGfBBBipMrwvTdOWJOHqTgLNAIw=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 1,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586769716166,
+    "error": "Error: connect ETIMEDOUT 82.227.0.130:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 1
+  },
+  {
+    "host": "165.227.73.137",
+    "port": 8008,
+    "key": "@wu82gJxzZTUAIf0uu6PdfHcliiDU00BkK83Vj+OyEnU=.ed25519",
+    "address": "net:165.227.73.137:8008~shs:wu82gJxzZTUAIf0uu6PdfHcliiDU00BkK83Vj+OyEnU=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 1,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586770073122,
+    "error": "Error: connect ECONNREFUSED 165.227.73.137:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 1
+  },
+  {
+    "host": "104.207.159.170",
+    "port": 8008,
+    "key": "@ryKYcSN/xYQB14tXoFtiMndYo12MhffFAJkhzgYxAyc=.ed25519",
+    "address": "net:104.207.159.170:8008~shs:ryKYcSN/xYQB14tXoFtiMndYo12MhffFAJkhzgYxAyc=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null,
+    "stateChange": 1586770587519,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 2816,
+        "stdev": 0,
+        "count": 1,
+        "sum": 2816,
+        "sqsum": 7929856
+      },
+      "skew": {
+        "mean": -1262,
+        "stdev": 0,
+        "count": 1,
+        "sum": -1262,
+        "sqsum": 1592644
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "ssb-pub.lollipopcloud.solutions",
+    "port": 8088,
+    "key": "@QWWXXgRBVyCBVD0Q4mFecSHqZMzG9gb1Qd763EKEuo8=.ed25519",
+    "address": "net:ssb-pub.lollipopcloud.solutions:8088~shs:QWWXXgRBVyCBVD0Q4mFecSHqZMzG9gb1Qd763EKEuo8=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": null,
+    "stateChange": 1586770682474,
+    "client": true,
+    "ping": {
+      "rtt": {
+        "mean": 2800,
+        "stdev": 0,
+        "count": 1,
+        "sum": 2800,
+        "sqsum": 7840000
+      },
+      "skew": {
+        "mean": -1220,
+        "stdev": 0,
+        "count": 1,
+        "sum": -1220,
+        "sqsum": 1488400
+      }
+    },
+    "failure": 0
+  },
+  {
+    "host": "pub.verse.app",
+    "port": 8008,
+    "key": "@yMaO5gJFAqdYhavDy018778FGqOvXRb8fIgG6DpV2Lo=.ed25519",
+    "address": "net:pub.verse.app:8008~shs:yMaO5gJFAqdYhavDy018778FGqOvXRb8fIgG6DpV2Lo=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 1,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586771140600,
+    "error": "Error: connect ECONNREFUSED 34.74.255.110:8008\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1128:14)",
+    "failure": 1
+  },
+  {
+    "host": "4fqstkswahy3n7mupr2gvvp2qcsp6juwzn3mnqvhkaixxepvxrrtfbid.onion",
+    "port": 8008,
+    "key": "@lbocEWqF2Fg6WMYLgmfYvqJlMfL7hiqVAV6ANjHWNw8=.ed25519",
+    "address": "onion:4fqstkswahy3n7mupr2gvvp2qcsp6juwzn3mnqvhkaixxepvxrrtfbid.onion:8008~shs:lbocEWqF2Fg6WMYLgmfYvqJlMfL7hiqVAV6ANjHWNw8=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 1,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586772300567,
+    "error": "Error: could not connect to:onion:4fqstkswahy3n7mupr2gvvp2qcsp6juwzn3mnqvhkaixxepvxrrtfbid.onion:8008~shs:lbocEWqF2Fg6WMYLgmfYvqJlMfL7hiqVAV6ANjHWNw8=, only know:net~shs\n    at Object.client (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/multiserver/index.js:26:15)\n    at EventEmitter.connect (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/secret-stack/core.js:224:21)\n    at EventEmitter.hooked [as connect] (/Users/rchaves/Projects/social/app/node_modules/ssb-server/node_modules/hoox/index.js:10:15)\n    at Object.connect (/Users/rchaves/Projects/social/app/node_modules/ssb-gossip/index.js:201:16)\n    at /Users/rchaves/Projects/social/app/node_modules/ssb-gossip/schedule.js:136:16\n    at Array.forEach (<anonymous>)\n    at connect (/Users/rchaves/Projects/social/app/node_modules/ssb-gossip/schedule.js:135:8)\n    at Timeout._onTimeout (/Users/rchaves/Projects/social/app/node_modules/ssb-gossip/schedule.js:210:11)\n    at ontimeout (timers.js:498:11)\n    at Timer.unrefdHandle (timers.js:611:5)",
+    "failure": 1
+  },
+  {
+    "host": "pub.dyne.org",
+    "port": 8008,
+    "key": "@3PYCB2ys+AixeErs5j/lBIkYokg/tP84+jQFbbVOhsI=.ed25519",
+    "address": "net:pub.dyne.org:8008~shs:3PYCB2ys+AixeErs5j/lBIkYokg/tP84+jQFbbVOhsI=",
+    "source": "stored",
+    "announcers": 3,
+    "duration": {
+      "mean": 0,
+      "stdev": 0,
+      "count": 1,
+      "sum": 0,
+      "sqsum": 0
+    },
+    "stateChange": 1586798899314,
+    "error": "Error: getaddrinfo ENOTFOUND pub.dyne.org pub.dyne.org:8008\n    at errnoException (dns.js:50:10)\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:92:26)",
+    "failure": 1
+  },
+  {
+    "host": "raspberrypi.red.quintana.libre.org.ar",
+    "port": 8008,
+    "key": "@YRSqGsK+elQEK7BDWh5IUHTQ8oifLU8v2+Z9wHr8NA4=.ed25519",
+    "address": "net:raspberrypi.red.quintana.libre.org.ar:8008~shs:YRSqGsK+elQEK7BDWh5IUHTQ8oifLU8v2+Z9wHr8NA4=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "ssb.georepublic.net",
+    "port": 8008,
+    "key": "@ZDbgYBJFBtQecByg58Rb2LK3dCnjhRUEvv4oA00qIPw=.ed25519",
+    "address": "net:ssb.georepublic.net:8008~shs:ZDbgYBJFBtQecByg58Rb2LK3dCnjhRUEvv4oA00qIPw=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "ssb.y.dweb.tools",
+    "port": 8008,
+    "key": "@mJ6lgf+hZtjJEVGs5EELZ9lMmzPY5eKBlmOjQSjhaf0=.ed25519",
+    "address": "net:ssb.y.dweb.tools:8008~shs:mJ6lgf+hZtjJEVGs5EELZ9lMmzPY5eKBlmOjQSjhaf0=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "y.dweb.tools",
+    "port": 8008,
+    "key": "@XX/8jCGOQaT8/ZUskSBb7Ax1JTvEM9rq+d0XXSEijtQ=.ed25519",
+    "address": "net:y.dweb.tools:8008~shs:XX/8jCGOQaT8/ZUskSBb7Ax1JTvEM9rq+d0XXSEijtQ=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "y.evbogue.com",
+    "port": 8008,
+    "key": "@J2VKbbf69rK38vXIRLOCwaZdEm+0vzv/LMeaxmJks3k=.ed25519",
+    "address": "net:y.evbogue.com:8008~shs:J2VKbbf69rK38vXIRLOCwaZdEm+0vzv/LMeaxmJks3k=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "pub.luandro.com",
+    "port": 8008,
+    "key": "@zmUGY5XFvJNseNs6OQRxj2pUiY0H/X05Y950JBDrBfk=.ed25519",
+    "address": "net:pub.luandro.com:8008~shs:zmUGY5XFvJNseNs6OQRxj2pUiY0H/X05Y950JBDrBfk=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "oasis-demo.fraction.io",
+    "port": 8008,
+    "key": "@samhAxb0x+iykkzoUCsuEBQfFUuYQrVFyNBuMpibidc=.ed25519",
+    "address": "net:oasis-demo.fraction.io:8008~shs:samhAxb0x+iykkzoUCsuEBQfFUuYQrVFyNBuMpibidc=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "159.65.63.184",
+    "port": 8008,
+    "key": "@GotIdBWNL0FyjwXixX7jPXRxC+crbw2qjSyfBCaP2HM=.ed25519",
+    "address": "net:159.65.63.184:8008~shs:GotIdBWNL0FyjwXixX7jPXRxC+crbw2qjSyfBCaP2HM=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "grassroot.space",
+    "port": 8008,
+    "key": "@abyH3UFbKHfn17I4u5DziLAq1vOhJ4bKwyHBckJ2ZiQ=.ed25519",
+    "address": "net:grassroot.space:8008~shs:abyH3UFbKHfn17I4u5DziLAq1vOhJ4bKwyHBckJ2ZiQ=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "scuttlebutt.ianglover.com",
+    "port": 80,
+    "key": "@Br9Iem1M/N4GPg/vFTaGyMqloGrnoA2wqU47D/RFRR4=.ed25519",
+    "address": "net:scuttlebutt.ianglover.com:80~shs:Br9Iem1M/N4GPg/vFTaGyMqloGrnoA2wqU47D/RFRR4=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "gossip.kiben.net",
+    "port": 8008,
+    "key": "@mwcQo4OCyLC5h9lt8lpeT4bSNtmhNU82BoGAQ7G1XnM=.ed25519",
+    "address": "net:gossip.kiben.net:8008~shs:mwcQo4OCyLC5h9lt8lpeT4bSNtmhNU82BoGAQ7G1XnM=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "pub.locksmithdon.net",
+    "port": 8008,
+    "key": "@H/LX/ilXqn42MEikWw3O3jm7oTbF15UqK7zNC6fKfxE=.ed25519",
+    "address": "net:pub.locksmithdon.net:8008~shs:H/LX/ilXqn42MEikWw3O3jm7oTbF15UqK7zNC6fKfxE=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "pi.bret.io",
+    "port": 8008,
+    "key": "@j3qWwQrWPzTM9zNgk0SI0FcqP1ULGquuINYEWfL330g=.ed25519",
+    "address": "net:pi.bret.io:8008~shs:j3qWwQrWPzTM9zNgk0SI0FcqP1ULGquuINYEWfL330g=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  },
+  {
+    "host": "ssb.timjrobinson.com",
+    "port": 8008,
+    "key": "@yH24II8DjCgSvYRtG9C3nWXzx0mSCRNjh8DjTWyN9Mk=.ed25519",
+    "address": "net:ssb.timjrobinson.com:8008~shs:yH24II8DjCgSvYRtG9C3nWXzx0mSCRNjh8DjTWyN9Mk=",
+    "source": "stored",
+    "announcers": 2,
+    "duration": null
+  }
+]

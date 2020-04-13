@@ -302,6 +302,18 @@ const getProfile = async (ssbServer, id) => {
   return profile;
 };
 
+const progress = (ssbServer, callback) => {
+  pull(
+    ssbServer.replicate.changes(),
+    pull.drain(
+      callback,
+      (err) => {
+        console.error("Progress drain error", err);
+      }
+    )
+  );
+};
+
 setInterval(() => {
   debugProfile("Clearing profile cache");
   profileCache = {};
@@ -317,4 +329,5 @@ module.exports = {
   getVanishingMessages,
   profileCache,
   getFriendshipStatus,
+  progress,
 };

@@ -65,3 +65,19 @@ if (jsVanishingOption) {
   jsVanishingOption.addEventListener("change", onVisibilityChange);
   onVisibilityChange();
 }
+
+const jsSyncing = document.querySelector(".js-syncing");
+if (jsSyncing) {
+  let checkSyncInterval;
+  const checkSync = () => {
+    fetch("/syncing")
+      .then((result) => result.json())
+      .then((result) => {
+        if (!result.syncing) {
+          clearInterval(checkSyncInterval);
+          jsSyncing.parentElement.removeChild(jsSyncing);
+        }
+      });
+  };
+  checkSyncInterval = setInterval(checkSync, 5000);
+}

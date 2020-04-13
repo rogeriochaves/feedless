@@ -18,7 +18,13 @@
           <a href="/pubs">Pubs</a>
           <a href="/debug">Debug</a>
         </nav>
-        <div class="right-items">
+        <div class="right-items"></div>
+          <% if (context.syncing) { %>
+            <div class="columns js-syncing" style="align-items: center; padding-right: 30px;">
+              <img src="/images/syncing.gif" width="24" style="margin-right: 10px; filter: invert();">
+              <span>Syncing</span>
+            </div>
+          <% } %>
           <form action="/search" method="GET" style="margin-right: 10px">
             <div class="search-icon">🔎</div>
             <input type="search" class="input-search" name="query" placeholder="Search for people...">

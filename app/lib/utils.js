@@ -30,12 +30,15 @@ const ssbFolder = () => {
     process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
   return `${homeFolder}/.${process.env.CONFIG_FOLDER || "social"}`;
 };
+module.exports.ssbFolder = ssbFolder;
 
 module.exports.writeKey = (key, path) => {
   let secretPath = `${ssbFolder()}${path}`;
 
   // Same options ssb-keys use
-  fs.mkdirSync(ssbFolder(), { recursive: true });
+  try {
+    fs.mkdirSync(ssbFolder(), { recursive: true });
+  } catch (e) {}
   fs.writeFileSync(secretPath, key, { mode: 0x100, flag: "wx" });
 };
 

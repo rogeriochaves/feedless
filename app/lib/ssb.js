@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { writeKey } = require("./utils");
+const { writeKey, ssbFolder } = require("./utils");
 
 let envKey =
   process.env.SSB_KEY &&
@@ -10,6 +10,9 @@ if (envKey) {
     writeKey(envKey, "/secret");
     console.log("Writing SSB_KEY from env");
   } catch (_) {}
+  if (!fs.existsSync(`${ssbFolder()}/gossip.json`)) {
+    fs.copyFileSync("gossip.json", `${ssbFolder()}/gossip.json`);
+  }
 }
 
 const Server = require("ssb-server");

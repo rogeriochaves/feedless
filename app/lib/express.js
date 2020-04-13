@@ -27,10 +27,20 @@ let homeFolder =
 let ssbSecret = ssbKeys.loadOrCreateSync(
   `${homeFolder}/.${process.env.CONFIG_FOLDER || "social"}/secret`
 );
+let syncing = false;
+
 Client(ssbSecret, ssbConfig, async (err, server) => {
   if (err) throw err;
 
   ssbServer = server;
+  queries.progress(ssbServer, (data) => {
+    if (data.incompleteFeeds > 0) {
+      if (!syncing) debug("syncing");
+      syncing = true;
+    } else {
+      syncing = false;
+    }
+  });
   console.log("SSB Client ready");
 });
 
@@ -57,7 +67,9 @@ app.use(async (req, res, next) => {
     return;
   }
 
-  req.context = {};
+  req.context = {
+    syncing: syncing,
+  };
   res.locals.context = req.context;
   try {
     const identities = await ssbServer.identities.list();
@@ -376,6 +388,10 @@ router.get("/search", async (req, res) => {
 
 router.get("/blob/*", (req, res) => {
   serveBlobs(ssbServer)(req, res);
+});
+
+router.get("/syncing", (req, res) => {
+  res.json({ syncing });
 });
 
 const expressServer = app.listen(port, () =>
