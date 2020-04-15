@@ -408,6 +408,7 @@ router.get("/search", async (req, res) => {
   const query = req.query.query;
 
   const people = await queries.searchPeople(ssbServer, query);
+  metrics.searchResults.observe(people.length);
 
   res.render("search", { people, query });
 });

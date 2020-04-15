@@ -2,13 +2,15 @@ const fs = require("fs");
 const leftpad = require("left-pad"); // I don't believe I'm depending on this
 const pull = require("pull-stream");
 const split = require("split-buffer");
+const metrics = require("./metrics");
 
 module.exports.asyncRouter = (app) => {
   const debug = require("debug")("router");
 
-  let wrapper = (debugMsg, fn) => async (req, res, next) => {
+  let wrapper = (method, path, fn) => async (req, res, next) => {
     try {
-      debug(debugMsg);
+      debug(`${method} ${path}`);
+      metrics.router.inc({ method, path });
       await fn(req, res);
     } catch (e) {
       next(e);
@@ -16,11 +18,11 @@ module.exports.asyncRouter = (app) => {
   };
   return {
     get: (path, fn) => {
-      app.get(path, wrapper(`GET ${path}`, fn));
+      app.get(path, wrapper("GET", path, fn));
     },
     post: (path, fn) => {
       debug(`POST ${path}`);
-      app.post(path, wrapper(`POST ${path}`, fn));
+      app.post(path, wrapper("POST", path, fn));
     },
   };
 };

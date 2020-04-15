@@ -20,6 +20,7 @@ if (process.env.NODE_ENV != "production") {
     watcher.on("all", () => {
       console.log("Clearing /lib/ module cache from server");
       Object.keys(require.cache).forEach((id) => {
+        if (id.includes("metrics")) return;
         if (/[\/\\]lib[\/\\]/.test(id)) delete require.cache[id];
       });
       if (server) server.close();
