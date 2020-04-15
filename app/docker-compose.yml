@@ -1,0 +1,7 @@
+version: "2"
+services:
+  social:
+    build: .
+    restart: always
+    network_mode: host
+    env_file: .evn
