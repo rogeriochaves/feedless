@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.7-alpha.3",
     "mime-types": "^2.1.26",
+    "prom-client": "^12.0.0",
     "pull-cat": "^1.1.11",
     "pull-identify-filetype": "^1.1.0",
     "pull-stream": "^3.6.14",

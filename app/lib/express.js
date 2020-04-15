@@ -19,6 +19,7 @@ const cookieParser = require("cookie-parser");
 const debug = require("debug")("express");
 const fileUpload = require("express-fileupload");
 const Sentry = require("@sentry/node");
+const metrics = require("./metrics");
 
 let ssbServer;
 let mode = process.env.MODE || "client";
@@ -34,14 +35,23 @@ Client(ssbSecret, ssbConfig, async (err, server) => {
   if (err) throw err;
 
   ssbServer = server;
-  queries.progress(ssbServer, (data) => {
-    if (data.incompleteFeeds > 0) {
-      if (!syncing) debug("syncing");
-      syncing = true;
-    } else {
-      syncing = false;
+  queries.progress(
+    ssbServer,
+    ({ rate, feeds, incompleteFeeds, progress, total }) => {
+      if (incompleteFeeds > 0) {
+        if (!syncing) debug("syncing");
+        syncing = true;
+      } else {
+        syncing = false;
+      }
+
+      metrics.ssbProgressRate.set(rate);
+      metrics.ssbProgressFeeds.set(feeds);
+      metrics.ssbProgressIncompleteFeeds.set(incompleteFeeds);
+      metrics.ssbProgressProgress.set(progress);
+      metrics.ssbProgressTotal.set(total);
     }
-  });
+  );
   console.log("SSB Client ready");
 });
 
@@ -408,6 +418,11 @@ router.get("/blob/*", (req, res) => {
 
 router.get("/syncing", (req, res) => {
   res.json({ syncing });
+});
+
+router.get("/metrics", (_req, res) => {
+  res.set("Content-Type", metrics.register.contentType);
+  res.end(metrics.register.metrics());
 });
 
 if (SENTRY_DSN) {
