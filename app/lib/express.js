@@ -18,6 +18,7 @@ const serveBlobs = require("./serve-blobs");
 const cookieParser = require("cookie-parser");
 const debug = require("debug")("express");
 const fileUpload = require("express-fileupload");
+const Sentry = require("@sentry/node");
 
 let ssbServer;
 let mode = process.env.MODE || "client";
@@ -51,6 +52,14 @@ let profileUrl = (id, path = "") => {
   return `/profile/${id}${path}`;
 };
 
+const SENTRY_DSN = process.env.SENTRY_DSN;
+if (SENTRY_DSN) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+  });
+  // Sentry request handler must be the first middleware on the app
+  app.use(Sentry.Handlers.requestHandler());
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -378,6 +387,13 @@ router.get("/debug", async (req, res) => {
   res.render("debug", { entries, query });
 });
 
+router.get("/debug-error", (_req, res) => {
+  const object = {};
+  object.isUndefinedAFunction();
+
+  res.send("should never reach here");
+});
+
 router.get("/search", async (req, res) => {
   const query = req.query.query;
 
@@ -392,6 +408,16 @@ router.get("/blob/*", (req, res) => {
 
 router.get("/syncing", (req, res) => {
   res.json({ syncing });
+});
+
+if (SENTRY_DSN) {
+  // The error handler must be before any other error middleware and after all controllers
+  app.use(Sentry.Handlers.errorHandler());
+}
+
+app.use((error, _req, res, _next) => {
+  res.statusCode = 500;
+  res.render("error", { error });
 });
 
 const expressServer = app.listen(port, () =>
