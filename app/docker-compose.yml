@@ -4,4 +4,4 @@ services:
     build: .
     restart: always
     network_mode: host
-    env_file: .evn
+    env_file: .env
