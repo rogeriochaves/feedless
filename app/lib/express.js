@@ -154,7 +154,7 @@ router.post("/login", async (req, res) => {
   const submittedKey =
     req.files && req.files.ssb_key
       ? req.files.ssb_key.data.toString()
-      : req.body.ssb_key;
+      : req.body.ssb_key || req.body.x_ssb_key; // x_ssb_key is because hotmail for some reason appends the x_
 
   try {
     const decodedKey = reconstructKeys(submittedKey);
