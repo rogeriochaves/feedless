@@ -56,9 +56,6 @@ Client(ssbSecret, ssbConfig, async (err, server) => {
 });
 
 let profileUrl = (id, path = "") => {
-  if (id.includes("/")) {
-    return `/profile/${encodeURIComponent(id)}${path}`;
-  }
   return `/profile/${id}${path}`;
 };
 
@@ -222,7 +219,7 @@ router.post("/signup", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/profile/:id", async (req, res) => {
+router.get("/profile/:id(*)", async (req, res) => {
   const id = req.params.id;
 
   if (id == req.context.profile.id) {
