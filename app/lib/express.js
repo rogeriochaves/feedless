@@ -211,7 +211,7 @@ router.post("/signup", async (req, res) => {
 
   await queries.autofollow(ssbServer, profileId);
 
-  res.redirect("/");
+  res.redirect("/keys");
 });
 
 router.get("/keys", (req, res) => {
