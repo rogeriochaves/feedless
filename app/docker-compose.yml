@@ -5,3 +5,8 @@ services:
     restart: always
     network_mode: host
     env_file: .env
+    volumes:
+      - social_ssb:/root/.social
+
+volumes:
+  social_ssb:
