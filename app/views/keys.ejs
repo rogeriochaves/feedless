@@ -16,8 +16,13 @@
     <form action="/keys/email" method="POST">
       <div style="padding: 20px 0 30px 0">
         <label>
+          <input type="hidden" name="origin" id="origin" />
+          <script>
+            const origin = document.querySelector("#origin");
+            origin.value = window.location.origin;
+          </script>
           Email: <br />
-          <input type="email" name="email">
+          <input type="email" name="email" />
         </label>
       </div>
       <input class="button-big" type="submit" value="Send">

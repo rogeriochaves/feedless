@@ -223,9 +223,10 @@ router.get("/keys", (req, res) => {
 
 router.post("/keys/email", async (req, res) => {
   const email = req.body.email;
+  const origin = req.body.origin;
 
   let html = await ejs.renderFile("views/email_sign_in.ejs", {
-    host: `http://${req.headers.host}`,
+    origin,
     ssb_key: req.cookies["ssb_key"],
   });
 
