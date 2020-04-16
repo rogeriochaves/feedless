@@ -239,7 +239,7 @@ router.post("/keys/email", async (req, res) => {
   };
   await sgMail.send(msg);
 
-  res.render("keys_sent");
+  res.redirect("/");
 });
 
 router.get("/keys/copy", (req, res) => {
