@@ -44,9 +44,13 @@ module.exports.writeKey = (key, path) => {
   fs.writeFileSync(secretPath, key, { mode: 0x100, flag: "wx" });
 };
 
+module.exports.identityFilename = (index) => {
+  return "secret_" + leftpad(index, 2, "0") + ".butt";
+};
+
 module.exports.nextIdentityFilename = async (ssbServer) => {
   const identities = await ssbServer.identities.list();
-  return "secret_" + leftpad(identities.length - 1, 2, "0") + ".butt";
+  return module.exports.identityFilename(identities.length - 1);
 };
 
 // From ssb-keys

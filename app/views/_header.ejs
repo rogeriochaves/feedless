@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="/style.css">
   </head>
   <body <%- typeof body_class == "undefined" ? "" : `class="${body_class}"` %>>
-    <% if (context.profile) { %>
+    <% if (context.profile && typeof hideHeader == "undefined") { %>
       <header>
         <div class="logo">
           <a href="/">Social</a>
         </div>
         <nav>
-          <a href="/">Home</a>
+          <a href="/">Profile</a>
           <a href="/about">About me</a>
           <a href="/pubs">Pubs</a>
           <a href="/debug">Debug</a>

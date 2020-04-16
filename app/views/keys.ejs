@@ -1,0 +1,41 @@
+<%- include('_header', { hideHeader: true }) %>
+
+<div style="max-width: 800px; margin: 0 auto">
+  <h1 style="padding-top: 50px">Save your keys</h1>
+
+  <p style="padding-top: 20px">
+    Congratulations! Your account was created successfully.
+  </p>
+  <% if (useEmail) { %>
+    <p>
+      Now we will send you an email that allows you to sign back in next time, your email addess will not be stored or used for anything else.
+    </p>
+    <p>
+      <b>Never delete or forward this email, it will be your only way back in.</b>
+    </p>
+    <form action="/keys/email" method="POST">
+      <div style="padding: 20px 0 30px 0">
+        <label>
+          Email: <br />
+          <input type="email" name="email">
+        </label>
+      </div>
+      <input class="button-big" type="submit" value="Send">
+    </form>
+    <p>or</p>
+    <p>
+      <a href="/keys/copy">No thanks, just let me download my key</a>
+    </p>
+  <% } else { %>
+    <p>
+      Now please download or copy your key, <b>it is your only way to sign back in.</b>
+    </p>
+    <pre class="key-block"><%= key %></pre>
+    <p style="margin: 30px 0 20px 0">
+      <a class="button button-big" href="/keys/download">Download Key</a>
+    </p>
+    <p>then <a href="/">continue to profile</a></p>
+  <% } %>
+</div>
+
+<%- include('_footer') %>

@@ -23,6 +23,7 @@ input[type="submit"] {
   border: none;
   cursor: pointer;
   text-decoration: none;
+  display: inline-block;
 }
 button.button-big,
 a.button.button-big,
@@ -44,6 +45,7 @@ input[type="submit"].button-secondary:hover {
 }
 
 input[type="text"],
+input[type="email"],
 textarea {
   line-height: 32px;
   padding: 0 6px;
@@ -303,4 +305,12 @@ button.notification-box:hover {
 
 .undo-request:hover:after {
   content: " (undo)";
+}
+
+.key-block {
+  white-space: pre-wrap;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 10px;
 }

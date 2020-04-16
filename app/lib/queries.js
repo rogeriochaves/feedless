@@ -305,13 +305,28 @@ const getProfile = async (ssbServer, id) => {
 const progress = (ssbServer, callback) => {
   pull(
     ssbServer.replicate.changes(),
-    pull.drain(
-      callback,
-      (err) => {
-        console.error("Progress drain error", err);
-      }
-    )
+    pull.drain(callback, (err) => {
+      console.error("Progress drain error", err);
+    })
   );
+};
+
+const autofollow = async (ssbServer, id) => {
+  console.log("ssbServer.id", ssbServer.id);
+
+  const isFollowing = await ssbServer.friends.isFollowing({
+    source: ssbServer.id,
+    dest: id,
+  });
+
+  if (!isFollowing) {
+    await ssbServer.publish({
+      type: "contact",
+      contact: id,
+      following: true,
+      autofollow: true,
+    });
+  }
 };
 
 setInterval(() => {
@@ -330,4 +345,5 @@ module.exports = {
   profileCache,
   getFriendshipStatus,
   progress,
+  autofollow,
 };

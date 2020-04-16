@@ -12,6 +12,8 @@ const {
   reconstructKeys,
   readKey,
   uploadPicture,
+  identityFilename,
+  ssbFolder,
 } = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
@@ -20,6 +22,8 @@ const debug = require("debug")("express");
 const fileUpload = require("express-fileupload");
 const Sentry = require("@sentry/node");
 const metrics = require("./metrics");
+const sgMail = require("@sendgrid/mail");
+const ejs = require("ejs");
 
 let ssbServer;
 let mode = process.env.MODE || "client";
@@ -60,7 +64,7 @@ let profileUrl = (id, path = "") => {
 };
 
 const SENTRY_DSN = process.env.SENTRY_DSN;
-if (SENTRY_DSN) {
+if (SENTRY_DSN && process.env.NODE_ENV == "production") {
   Sentry.init({
     dsn: SENTRY_DSN,
   });
@@ -128,9 +132,6 @@ router.get("/", async (req, res) => {
   if (!req.context.profile) {
     return res.render("index");
   }
-  if (!req.context.profile.name) {
-    return res.redirect("/about");
-  }
 
   const [posts, friends, vanishingMessages] = await Promise.all([
     queries.getPosts(ssbServer, req.context.profile),
@@ -161,6 +162,8 @@ router.post("/login", async (req, res) => {
 
     decodedKey.private = "[removed]";
     debug("Login with key", decodedKey);
+
+    await queries.autofollow(ssbServer, decodedKey.id);
 
     res.redirect("/");
   } catch (e) {
@@ -204,19 +207,52 @@ router.post("/signup", async (req, res) => {
   key.private = "[removed]";
   debug("Generated key", key);
 
-  await ssbServer.identities.publishAs({
-    id: profileId,
-    private: false,
-    content: {
-      type: "about",
-      about: profileId,
-      name: name,
-      ...(pictureLink ? { image: pictureLink } : {}),
-    },
-  });
   debug("Published about", { about: profileId, name, image: pictureLink });
 
+  await queries.autofollow(ssbServer, profileId);
+
   res.redirect("/");
+});
+
+router.get("/keys", (req, res) => {
+  res.render("keys", {
+    useEmail: process.env.SENDGRID_API_KEY,
+    key: req.cookies["ssb_key"],
+  });
+});
+
+router.post("/keys/email", async (req, res) => {
+  const email = req.body.email;
+
+  let html = await ejs.renderFile("views/email_sign_in.ejs", {
+    host: `http://${req.headers.host}`,
+    ssb_key: req.cookies["ssb_key"],
+  });
+
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const msg = {
+    to: email,
+    from: "nobody@social.com",
+    subject: `Login button for ${req.context.profile.name}`,
+    html,
+  };
+  await sgMail.send(msg);
+
+  res.render("keys_sent");
+});
+
+router.get("/keys/copy", (req, res) => {
+  res.render("keys_copy", { key: req.cookies["ssb_key"] });
+});
+
+router.get("/keys/download", async (req, res) => {
+  const identities = await ssbServer.identities.list();
+  const index = identities.indexOf(req.context.profile.id) - 1;
+  const filename = identityFilename(index);
+  const secretPath = `${ssbFolder()}/identities/${filename}`;
+
+  res.attachment("secret");
+  res.sendFile(secretPath);
 });
 
 router.get("/profile/:id(*)", async (req, res) => {
@@ -423,7 +459,7 @@ router.get("/metrics", (_req, res) => {
   res.end(metrics.register.metrics());
 });
 
-if (SENTRY_DSN) {
+if (SENTRY_DSN && process.env.NODE_ENV == "production") {
   // The error handler must be before any other error middleware and after all controllers
   app.use(Sentry.Handlers.errorHandler());
 }

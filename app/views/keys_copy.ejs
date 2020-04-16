@@ -1,0 +1,19 @@
+<%- include('_header', { hideHeader: true }) %>
+
+<div style="max-width: 800px; margin: 0 auto">
+  <h1 style="padding-top: 50px">Save your keys</h1>
+
+  <p>
+    Your <a href="/keys/download">download</a> is starting, alternatively, you can copy your key as text:
+  </p>
+  <pre class="key-block"><%= key %></pre>
+  <a href="/">Continue to profile</a>
+</div>
+
+<script>
+  setTimeout(() => {
+    window.location = "/keys/download";
+  }, 500);
+</script>
+
+<%- include('_footer') %>
