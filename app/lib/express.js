@@ -264,6 +264,10 @@ router.get("/keys/download", async (req, res) => {
 });
 
 router.get("/profile/:id(*)", async (req, res) => {
+  if (!req.context.profile) {
+    return res.render("index");
+  }
+
   const id = req.params.id;
 
   if (id == req.context.profile.id) {
@@ -394,6 +398,10 @@ router.post("/pubs/add", async (req, res) => {
 });
 
 router.get("/about", (_req, res) => {
+  if (!req.context.profile) {
+    return res.render("index");
+  }
+
   res.render("about");
 });
 
@@ -446,6 +454,10 @@ router.get("/debug-error", (_req, res) => {
 });
 
 router.get("/search", async (req, res) => {
+  if (!req.context.profile) {
+    return res.render("index");
+  }
+
   const query = req.query.query;
 
   const people = await queries.searchPeople(ssbServer, query);
