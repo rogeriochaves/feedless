@@ -105,6 +105,13 @@ app.use(async (req, res, next) => {
     }
     req.context.profile = await queries.getProfile(ssbServer, parsedKey.id);
 
+    const isRootUser =
+      req.context.profile.id == ssbServer.id ||
+      process.env.NODE_ENV != "production";
+
+    req.context.profile.debug = isRootUser;
+    req.context.profile.admin = isRootUser || mode == "client";
+
     next();
   } catch (e) {
     next(e);
