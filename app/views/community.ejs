@@ -1,0 +1,28 @@
+<%- include('_header') %>
+<style>
+  main {
+    max-width: none;
+    margin: 0 auto;
+  }
+</style>
+
+<div style="background: #666; color: #FFF; padding: 50px 0">
+  <div style="max-width: 1200px; margin: 0 auto">
+    <h1 style="font-size: 60px">#<%= community.name %></h1>
+  </div>
+</div>
+
+<div style="max-width: 1200px; margin: 0 auto">
+  <div class="columns">
+    <div class="about">
+      <h2>Members</h2>
+      <%- include('_friends', { friends: community.members }) %>
+    </div>
+    <div class="wall">
+      <h2>Posts</h2>
+      <%- include('_posts', { posts: community.posts }) %>
+    </div>
+  </div>
+</div>
+
+<%- include('_footer') %>

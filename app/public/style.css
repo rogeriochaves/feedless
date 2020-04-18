@@ -102,6 +102,11 @@ header .logo a:hover {
   margin-left: 7px;
 }
 
+.no-link-style {
+  text-decoration: none;
+  color: #000;
+}
+
 main {
   max-width: 1200px;
   margin: 0 auto;
@@ -277,7 +282,7 @@ button.notification-box:hover {
   display: block;
 }
 
-.friend-item {
+.link-block {
   border: 1px solid #ddd;
   border-radius: 3px;
   padding: 5px;
@@ -289,7 +294,7 @@ button.notification-box:hover {
   background: #fff;
 }
 
-.friend-item:hover {
+.link-block:hover {
   background: #f0f0f0;
 }
 

@@ -1,5 +1,5 @@
 <% friends.map(friend => { %>
-  <a class="friend-item" href="<%= profileUrl(friend.id) %>">
+  <a class="link-block" href="<%= profileUrl(friend.id) %>">
     <img style="width: 32px; max-height: 100px; margin-right: 5px;" src="<%= profileImageUrl(friend) %>" />
     <div><%= friend.name %></div>
   </a>

@@ -5,7 +5,10 @@ const debugPosts = require("debug")("queries:posts"),
   debugFriends = require("debug")("queries:friends"),
   debugFriendshipStatus = require("debug")("queries:friendship_status"),
   debugPeople = require("debug")("queries:people"),
-  debugProfile = require("debug")("queries:profile");
+  debugProfile = require("debug")("queries:profile"),
+  debugCommunities = require("debug")("queries:communities"),
+  debugCommunityMembers = require("debug")("queries:communityMembers"),
+  debugCommunityPosts = require("debug")("queries:communityPosts");
 const paramap = require("pull-paramap");
 const { promisePull, mapValues } = require("./utils");
 
@@ -276,7 +279,7 @@ const getAllEntries = (ssbServer, query) => {
   return promisePull(
     ssbServer.query.read({
       reverse: true,
-      limit: 500,
+      limit: 1000,
       ...queryOpts,
     })
   );
@@ -327,6 +330,96 @@ const autofollow = async (ssbServer, id) => {
   }
 };
 
+const getCommunities = async (ssbServer) => {
+  debugCommunities("Fetching");
+
+  const communitiesPosts = await promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              private: { $not: true },
+              content: {
+                type: "post",
+                channel: { $truthy: true },
+              },
+            },
+          },
+        },
+      ],
+      limit: 1000,
+    })
+  );
+
+  const communities = Array.from(
+    new Set(communitiesPosts.map((p) => p.value.content.channel))
+  );
+
+  debugCommunities("Done");
+
+  return communities;
+};
+
+const getCommunityMembers = async (ssbServer, name) => {
+  debugCommunityMembers("Fetching");
+
+  const communityMembers = await promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              content: {
+                type: "channel",
+                channel: name,
+              },
+            },
+          },
+        },
+      ],
+      limit: 100,
+    }),
+    paramap(mapProfiles(ssbServer))
+  );
+
+  debugCommunityMembers("Done");
+
+  return communityMembers.map((x) => x.value.authorProfile);
+};
+
+const getCommunityPosts = async (ssbServer, name) => {
+  debugCommunityPosts("Fetching");
+
+  const communityPosts = await promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              content: {
+                type: "post",
+                channel: name,
+                reply: { $not: true },
+                root: { $not: true },
+              },
+            },
+          },
+        },
+      ],
+      limit: 100,
+    }),
+    paramap(mapProfiles(ssbServer))
+  );
+
+  debugCommunityPosts("Done");
+
+  return mapValues(communityPosts);
+};
+
 setInterval(() => {
   debugProfile("Clearing profile cache");
   profileCache = {};
@@ -342,6 +435,9 @@ module.exports = {
   getVanishingMessages,
   profileCache,
   getFriendshipStatus,
+  getCommunities,
+  getCommunityMembers,
+  getCommunityPosts,
   progress,
   autofollow,
 };

@@ -294,7 +294,7 @@ router.get("/profile/:id(*)", async (req, res) => {
   res.render("profile", { profile, posts, friends, friendshipStatus });
 });
 
-router.post("/profile/:id/add_friend", async (req, res) => {
+router.post("/profile/:id(*)/add_friend", async (req, res) => {
   const id = req.params.id;
   if (id == req.context.profile.id) {
     throw "cannot befriend yourself";
@@ -313,7 +313,7 @@ router.post("/profile/:id/add_friend", async (req, res) => {
   res.redirect(profileUrl(id));
 });
 
-router.post("/profile/:id/reject_friend", async (req, res) => {
+router.post("/profile/:id(*)/reject_friend", async (req, res) => {
   const id = req.params.id;
   if (id == req.context.profile.id) {
     throw "cannot reject yourself";
@@ -362,7 +362,7 @@ router.post("/vanish", async (req, res) => {
   res.send("ok");
 });
 
-router.post("/profile/:id/publish", async (req, res) => {
+router.post("/profile/:id(*)/publish", async (req, res) => {
   const id = req.params.id;
   const visibility = req.body.visibility;
 
@@ -407,7 +407,7 @@ router.post("/pubs/add", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/about", (_req, res) => {
+router.get("/about", (req, res) => {
   if (!req.context.profile) {
     return res.render("index");
   }
@@ -448,19 +448,26 @@ router.post("/about", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/debug", async (req, res) => {
-  const query = req.query || {};
+router.get("/communities", async (req, res) => {
+  if (!req.context.profile) {
+    return res.render("index");
+  }
+  const communities = await queries.getCommunities(ssbServer);
 
-  const entries = await queries.getAllEntries(ssbServer, query);
-
-  res.render("debug", { entries, query });
+  res.render("communities", { communities });
 });
 
-router.get("/debug-error", (_req, res) => {
-  const object = {};
-  object.isUndefinedAFunction();
+router.get("/communities/:name", async (req, res) => {
+  const name = req.params.name;
+  if (!req.context.profile) {
+    return res.render("index");
+  }
+  const [members, posts] = await Promise.all([
+    queries.getCommunityMembers(ssbServer, name),
+    queries.getCommunityPosts(ssbServer, name),
+  ]);
 
-  res.send("should never reach here");
+  res.render("community", { community: { name, members, posts } });
 });
 
 router.get("/search", async (req, res) => {
@@ -482,6 +489,21 @@ router.get("/blob/*", (req, res) => {
 
 router.get("/syncing", (req, res) => {
   res.json({ syncing });
+});
+
+router.get("/debug", async (req, res) => {
+  const query = req.query || {};
+
+  const entries = await queries.getAllEntries(ssbServer, query);
+
+  res.render("debug", { entries, query });
+});
+
+router.get("/debug-error", (_req, res) => {
+  const object = {};
+  object.isUndefinedAFunction();
+
+  res.send("should never reach here");
 });
 
 router.get("/metrics", (_req, res) => {

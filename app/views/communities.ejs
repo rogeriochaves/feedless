@@ -1,0 +1,13 @@
+<%- include('_header') %>
+
+<h1>Communities</h1>
+
+<div style="padding-top: 20px">
+  <% communities.map(community => { %>
+    <a href="/communities/<%= community %>" class="link-block" style="display: inline-block">
+      #<%= community %>
+    </a>
+  <% }) %>
+</div>
+
+<%- include('_footer') %>

@@ -1,12 +1,17 @@
 <div style="padding-top: 15px;">
   <% posts.map(post => { %>
+    <% if (!post.content.text) return %>
     <div class="post">
       <div>
-        <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" />
+        <a href="<%= profileUrl(post.author) %>">
+          <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" />
+        </a>
       </div>
       <div class="post-content">
         <div class="content-header">
-          <%= post.authorProfile.name %>
+          <a href="<%= profileUrl(post.author) %>" class="no-link-style">
+            <%= post.authorProfile.name %>
+          </a>
         </div>
         <div class="content-body">
           <% let text = post.content.text.slice(0, 140) %>
