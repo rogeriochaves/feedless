@@ -214,6 +214,16 @@ router.post("/signup", async (req, res) => {
   key.private = "[removed]";
   debug("Generated key", key);
 
+  await ssbServer.identities.publishAs({
+    id: profileId,
+    private: false,
+    content: {
+      type: "about",
+      about: profileId,
+      name: name,
+      ...(pictureLink ? { image: pictureLink } : {}),
+    },
+  });
   debug("Published about", { about: profileId, name, image: pictureLink });
 
   await queries.autofollow(ssbServer, profileId);

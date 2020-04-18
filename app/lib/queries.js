@@ -312,8 +312,6 @@ const progress = (ssbServer, callback) => {
 };
 
 const autofollow = async (ssbServer, id) => {
-  console.log("ssbServer.id", ssbServer.id);
-
   const isFollowing = await ssbServer.friends.isFollowing({
     source: ssbServer.id,
     dest: id,
