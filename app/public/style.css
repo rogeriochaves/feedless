@@ -223,7 +223,6 @@ h2 {
 }
 
 .overlay {
-  display: none;
   position: fixed;
   z-index: 1;
   background: rgba(0, 0, 0, 0.4);
@@ -234,7 +233,6 @@ h2 {
 }
 
 .modal {
-  display: none;
   position: fixed;
   z-index: 2;
   background: #fff;

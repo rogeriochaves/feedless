@@ -45,8 +45,8 @@
             👻 Secret Message
           </button>
 
-          <div class="overlay"></div>
-          <div class="modal">
+          <div class="overlay" hidden></div>
+          <div class="modal" hidden>
             <div class="modal-header">Write a secret message to <%= profile.name %></div>
             <div class="modal-body">
               <textarea name="message" class="compose-post js-secret-message-input" style="margin: 0"></textarea>
@@ -54,7 +54,7 @@
             <div class="modal-footer">
               this message will disapear right after being read
               <button class="modal-confirm js-secret-publish">Publish</button>
-              <div style="display: none" class="js-sending-message"></div>
+              <div hidden class="js-sending-message"></div>
             </div>
           </div>
 

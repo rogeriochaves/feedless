@@ -116,7 +116,8 @@ const getSecretMessages = async (ssbServer, profile) => {
       (msg) =>
         msg.value.content.type == "post" &&
         (msg.value.content.root == profile.id ||
-          msg.value.content.recps.includes(profile.id))
+          (msg.value.content.recps &&
+            msg.value.content.recps.includes(profile.id)))
     ),
     paramap(mapProfiles(ssbServer))
   );

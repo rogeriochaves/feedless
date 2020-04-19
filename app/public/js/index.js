@@ -1,3 +1,7 @@
+/**
+ * Modal
+ */
+
 let escCallback = () => {};
 document.onkeydown = (e) => {
   const isEsc = e.key === "Escape" || e.key === "Esc";
@@ -7,63 +11,121 @@ document.onkeydown = (e) => {
 const openModalFor = (elem, onConfirm, afterClose = null) => {
   const overlay = elem.parentElement.querySelector(".overlay");
   const modal = elem.parentElement.querySelector(".modal");
-  const confirmButton = elem.parentElement.querySelector(".modal-confirm");
+  const confirmButtons = elem.parentElement.querySelectorAll(".modal-confirm");
 
-  overlay.style.display = "block";
-  modal.style.display = "block";
+  overlay.hidden = false;
+  modal.hidden = false;
 
   const onClose = () => {
-    overlay.style.display = "none";
-    modal.style.display = "none";
+    overlay.hidden = true;
+    modal.hidden = true;
     if (afterClose) afterClose();
   };
 
   overlay.addEventListener("click", onClose);
-  confirmButton.addEventListener("click", onConfirm);
+  Array.from(confirmButtons).forEach((button) =>
+    button.addEventListener("click", onConfirm)
+  );
   escCallback = onClose;
 
   return { close: onClose };
 };
+
+/**
+ * Secret Messages Composer
+ */
 
 const composeButton = document.querySelector(".js-compose-secret-message");
 const publishButton = document.querySelector(".js-secret-publish");
 const sendingMessage = document.querySelector(".js-sending-message");
 const messageInput = document.querySelector(".js-secret-message-input");
 if (composeButton) {
+  const step1 = composeButton.parentElement.querySelector(".js-step-1");
+  const step2 = composeButton.parentElement.querySelector(".js-step-2");
+
+  const onNext = () => {
+    if (!step2 || step1.hidden) {
+      onPublish();
+      return;
+    }
+
+    step1.hidden = true;
+    step2.hidden = false;
+  };
+
+  const selectedRecipients = () =>
+    Array.from(document.querySelectorAll(".js-secret-recipients:checked"))
+      .map((x) => x.value)
+      .join(",");
+
+  const onPublish = () => {
+    if (messageInput.value.length == 0) return;
+
+    let url = composeButton.dataset.url;
+    let body = "message=" + encodeURIComponent(messageInput.value);
+
+    if (step2) {
+      debugger;
+      const recipients = selectedRecipients();
+      if (recipients.length == 0) return;
+
+      url = "/publish_secret";
+      body += "&recipients=" + encodeURIComponent(recipients);
+    }
+
+    publishButton.style.display = "none"; // hidden doesn't work on buttons
+    sendingMessage.innerHTML = "Loading...";
+    sendingMessage.hidden = false;
+
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+    })
+      .then(onSuccess)
+      .catch(onError);
+  };
+
+  const onSuccess = () => {
+    sendingMessage.innerHTML = "✅ Sent";
+
+    setTimeout(() => {
+      modal.close();
+      messageInput.value = "";
+      publishButton.style.display = "block";
+      sendingMessage.hidden = true;
+
+      if (step2) {
+        step1.hidden = false;
+        step2.hidden = true;
+      }
+    }, 1000);
+  };
+
+  const onError = () => {
+    sendingMessage.innerHTML = "Error";
+    setTimeout(() => {
+      publishButton.style.display = "block";
+      sendingMessage.hidden = true;
+    }, 1000);
+  };
+
+  let modal;
   composeButton.addEventListener("click", () => {
-    const onPublish = () => {
-      if (messageInput.value.length == 0) return;
-
-      publishButton.style.display = "none";
-      sendingMessage.innerHTML = "Loading...";
-      sendingMessage.style.display = "block";
-
-      fetch(composeButton.dataset.url, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "message=" + encodeURIComponent(messageInput.value),
-      })
-        .then(() => {
-          sendingMessage.innerHTML = "✅ Sent";
-
-          setTimeout(() => {
-            modal.close();
-            messageInput.value = "";
-            publishButton.style.display = "block";
-            sendingMessage.style.display = "none";
-          }, 1000);
-        })
-        .catch(() => {
-          sendingMessage.innerHTML = "Error";
-          setTimeout(() => {
-            publishButton.style.display = "block";
-            sendingMessage.style.display = "none";
-          }, 1000);
-        });
+    const afterClose = () => {
+      if (step2) {
+        step1.hidden = false;
+        step2.hidden = true;
+      }
     };
-    const modal = openModalFor(composeButton, onPublish);
+
+    modal = openModalFor(composeButton, onNext, afterClose);
   });
 }
+
+/**
+ * Secret Messages Reading
+ */
 
 const messages = document.querySelectorAll(".js-secret-message");
 messages.forEach((message) => {
@@ -72,7 +134,7 @@ messages.forEach((message) => {
       const parent = message.parentElement;
       parent.parentElement.removeChild(parent);
       if (document.querySelectorAll(".js-secret-message").length == 0) {
-        document.querySelector(".js-secret-messages").style.display = "none";
+        document.querySelector(".js-secret-messages").hidden = true;
       }
     };
 
@@ -85,6 +147,10 @@ messages.forEach((message) => {
     });
   });
 });
+
+/**
+ * Profile Pic Upload
+ */
 
 const profilePicUpload = document.querySelector(".js-profile-pic-upload");
 if (profilePicUpload) {
@@ -104,6 +170,10 @@ if (profilePicUpload) {
   profilePicUpload.addEventListener("change", previewImage);
   previewImage();
 }
+
+/**
+ * Syncing
+ */
 
 const jsSyncing = document.querySelector(".js-syncing");
 if (jsSyncing) {

@@ -3,11 +3,11 @@
 <div class="columns">
   <div class="secret-chat">
 
-    <% if (secretMessages.length == 0) { %>
-      <div class="column-side-padding">You don't have any secret messages yet</div>
-    <% } else { %>
-      <div class="js-secret-messages">
-        <h2 class="column-side-padding">Secret Messages</h2>
+    <div class="js-secret-messages">
+      <h2 class="column-side-padding">Secret Messages</h2>
+      <% if (secretMessages.length == 0) { %>
+        <div class="column-side-padding" style="margin: 25px 0 20px 0; font-size: 14px;">👻 You don't have any secret messages yet</div>
+      <% } else { %>
         <% secretMessages.reverse().map(message => { %>
           <div>
             <button class="secret-button js-secret-message" data-key="<%= message.key %>">
@@ -17,8 +17,8 @@
                 <small>👁 new message</small>
               </div>
             </button>
-            <div class="overlay"></div>
-            <div class="modal">
+            <div class="overlay" hidden></div>
+            <div class="modal" hidden>
               <a href="<%= profileUrl(message.value.authorProfile.id) %>" class="modal-header">
                 <img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" />
                 <div style="padding-left: 10px"><%= message.value.authorProfile.name %></div>
@@ -33,8 +33,44 @@
             </div>
           </div>
         <% }) %>
+      <% } %>
+      <div>
+        <button class="secret-button js-compose-secret-message" style="padding: 10px 14px; justify-content: center">
+          ✍️ Send a Secret
+        </button>
+        <div class="overlay" hidden></div>
+        <div class="modal" hidden>
+          <div class="js-step-1">
+            <div class="modal-header">Write a secret message</div>
+            <div class="modal-body">
+              <textarea name="message" class="compose-post js-secret-message-input" style="margin: 0"></textarea>
+            </div>
+            <div class="modal-footer">
+              you can choose the recipients in the next step
+              <button class="modal-confirm">Next</button>
+            </div>
+          </div>
+          <div class="js-step-2" hidden>
+            <div class="modal-header">Choose the recipients</div>
+            <div class="modal-body">
+              <% friends.friends.concat(friends.requestsSent).map(friend => { %>
+                <div>
+                  <label>
+                    <input type="checkbox" name="recps" class="js-secret-recipients" value="<%= friend.id %>">
+                    <%= friend.name %>
+                  </label>
+                </div>
+              <% }) %>
+            </div>
+            <div class="modal-footer">
+              this message will disapear right after being read
+              <button class="modal-confirm js-secret-publish">Publish</button>
+              <div hidden class="js-sending-message"></div>
+            </div>
+          </div>
+        </div>
       </div>
-    <% } %>
+    </div>
   </div>
 
   <div class="wall">

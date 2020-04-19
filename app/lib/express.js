@@ -346,6 +346,22 @@ router.post("/publish", async (req, res) => {
   res.redirect("/");
 });
 
+router.post("/publish_secret", async (req, res) => {
+  const recipients = req.body.recipients;
+
+  await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: true,
+    content: {
+      type: "post",
+      text: req.body.message,
+      recps: recipients.split(","),
+    },
+  });
+
+  res.redirect("/");
+});
+
 // TODO: tie reading with deleting
 router.post("/vanish", async (req, res) => {
   const key = req.body.key;
