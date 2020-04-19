@@ -1,61 +1,48 @@
-<%- include('_header') %>
+<%- include('_header', { main_class: "screen-center" }) %>
 
 <div class="columns">
-  <div class="about">
-    <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
-    <h1><%= profile.name %></h1>
+  <div class="vanishing-chat">
 
-    <%= profile.description %>
-
-    <h2 style="margin-top: 30px">Friends</h2>
-    <%- include('_friends', { friends: friends.friends }) %>
-
-    <h2 style="margin-top: 30px">Requests Sent</h2>
-    <%- include('_friends', { friends: friends.requestsSent }) %>
-  </div>
-
-  <div class="wall">
-    <% if (vanishingMessages.length > 0) { %>
+    <% if (vanishingMessages.length == 0) { %>
+      You don't have any vanishing messages yet
+    <% } else { %>
       <div class="js-vanishing-messages">
         <h2>Vanishing Messages</h2>
-        <div class="notifications">
-          <% vanishingMessages.reverse().map(message => { %>
-            <span>
-              <button class="notification-box js-vanishing-message" data-key="<%= message.key %>">
-                <div><img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" /></div>
-                <div><%= message.value.authorProfile.name %></div>
-              </button>
-              <div class="overlay"></div>
-              <div class="modal">
-                <a href="<%= profileUrl(message.value.authorProfile.id) %>" class="modal-header">
-                  <img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" style="padding-right: 10px" />
-                  <%= message.value.authorProfile.name %>
-                </a>
-                <div class="modal-body">
-                  <%= message.value.content.text %>
-                </div>
-                <div class="modal-footer">
-                  after you close this box the message will be gone forever
-                  <button class="modal-close">Close</button>
-                </div>
+        <% vanishingMessages.reverse().map(message => { %>
+          <div>
+            <button class="link-block js-vanishing-message" data-key="<%= message.key %>">
+              <img class="link-profile-pic" src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" />
+              <div><%= message.value.authorProfile.name %></div>
+            </button>
+            <div class="overlay"></div>
+            <div class="modal">
+              <a href="<%= profileUrl(message.value.authorProfile.id) %>" class="modal-header">
+                <img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" style="padding-right: 10px" />
+                <%= message.value.authorProfile.name %>
+              </a>
+              <div class="modal-body">
+                <%= message.value.content.text %>
               </div>
-            </span>
-          <% }) %>
-        </div>
-      </div>
-    <% } %>
-
-    <% if (friends.requestsReceived.length) { %>
-      <h2>Friend Requests</h2>
-      <div class="notifications">
-        <% friends.requestsReceived.map(friend => { %>
-          <a href="<%= profileUrl(friend.id) %>" class="notification-box">
-            <div><img src="<%= profileImageUrl(friend) %>" class="post-profile-pic" /></div>
-            <div><%= friend.name %></div>
-          </a>
+              <div class="modal-footer">
+                after you close this box the message will be gone forever
+                <button class="modal-close">Close</button>
+              </div>
+            </div>
+          </div>
         <% }) %>
       </div>
     <% } %>
+  </div>
+
+  <div class="wall">
+    <div class="columns">
+      <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
+      <div style="padding-left: 20px">
+        <h1><%= profile.name %></h1>
+
+        <%= profile.description %>
+      </div>
+    </div>
 
     <form action="/publish" method="POST" style="padding-top: 20px;">
       <textarea name="message" class="compose-post"></textarea>
@@ -74,6 +61,19 @@
         </div>
       </div>
     <% } %>
+  </div>
+
+  <div class="friends-communities">
+    <% if (friends.requestsReceived.length) { %>
+      <h2>Friend Requests</h2>
+      <%- include('_friends', { friends: friends.requestsReceived }) %>
+    <% } %>
+
+    <h2 style="margin-top: 30px">Friends</h2>
+    <%- include('_friends', { friends: friends.friends }) %>
+
+    <h2 style="margin-top: 30px">Requests Sent</h2>
+    <%- include('_friends', { friends: friends.requestsSent }) %>
   </div>
 </div>
 

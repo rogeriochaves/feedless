@@ -19,8 +19,10 @@
       <%- include('_friends', { friends: community.members }) %>
     </div>
     <div class="wall">
-      <h2>Posts</h2>
-      <%- include('_posts', { posts: community.posts }) %>
+      <h2>Topics</h2>
+      <% community.posts.map(post => { %>
+        <p><%= post.content.text.substr(0, 70) %>. Replies <%= post.replies.length %></p>
+      <% }) %>
     </div>
   </div>
 </div>

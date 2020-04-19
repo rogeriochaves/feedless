@@ -8,7 +8,7 @@
   </head>
   <body <%- typeof body_class == "undefined" ? "" : `class="${body_class}"` %>>
     <% if (context.profile && typeof hideHeader == "undefined") { %>
-      <header>
+      <header class="screen-center">
         <div class="logo">
           <a href="/">Social</a>
         </div>
@@ -23,22 +23,22 @@
             <a href="/debug">Debug</a>
           <% } %>
           <a href="https://github.com/rogeriochaves/social/issues" target="_blank">Feedback</a>
+          <a href="/logout">
+            Logout
+          </a>
         </nav>
         <div class="right-items"></div>
           <% if (context.syncing) { %>
             <div class="columns js-syncing" style="align-items: center; padding-right: 30px;">
-              <img src="/images/syncing.gif" width="24" style="margin-right: 10px; filter: invert();">
-              <span>Syncing</span>
+              <img src="/images/syncing.gif" width="24" style="margin-right: 10px; margin-top: -5px">
+              <span>syncing</span>
             </div>
           <% } %>
           <form action="/search" method="GET" style="margin-right: 10px">
             <div class="search-icon">🔎</div>
             <input type="search" class="input-search" name="query" placeholder="Search for people...">
           </form>
-          <a href="/logout" style="margin-right: 10px">
-            Logout
-          </a>
         </div>
       </header>
     <% } %>
-    <main>
+    <main class="<%= typeof main_class == "undefined" ? "screen-center white-page" : main_class %>">

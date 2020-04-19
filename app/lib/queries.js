@@ -403,21 +403,40 @@ const getCommunityPosts = async (ssbServer, name) => {
               content: {
                 type: "post",
                 channel: name,
-                reply: { $not: true },
-                root: { $not: true },
               },
             },
           },
         },
       ],
-      limit: 100,
+      limit: 1000,
     }),
     paramap(mapProfiles(ssbServer))
   );
+  let communityPostsByKey = {};
+  let replies = [];
+
+  let rootKey = (post) => {
+    let replyKey =
+      post.value.content.reply && Object.keys(post.value.content.reply)[0];
+    return replyKey || post.value.content.root;
+  };
+
+  for (let post of communityPosts) {
+    if (rootKey(post)) {
+      replies.push(post);
+    } else {
+      post.value.replies = [];
+      communityPostsByKey[post.key] = post;
+    }
+  }
+  for (let reply of replies) {
+    let root = communityPostsByKey[rootKey(reply)];
+    if (root) root.value.replies.push(reply);
+  }
 
   debugCommunityPosts("Done");
 
-  return mapValues(communityPosts);
+  return mapValues(Object.values(communityPostsByKey));
 };
 
 setInterval(() => {

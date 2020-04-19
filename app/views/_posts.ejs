@@ -13,7 +13,7 @@
             <%= post.authorProfile.name %>
           </a>
         </div>
-        <div class="content-body">
+        <div>
           <% let text = post.content.text.slice(0, 140) %>
           <% if (post.content.text.length > 140) text += "..." %>
           <% text.split("\n").map((line, index) => { %>

@@ -1,47 +1,46 @@
 <%- include('_header') %>
 
 <div class="columns">
-  <div class="about">
-    <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
-    <h1><%= profile.name %></h1>
+  <div class="wall">
+    <div class="columns">
+      <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
+      <div style="padding-left: 20px">
+        <h1><%= profile.name %></h1>
 
-    <%= profile.description %>
+        <%= profile.description %>
 
-    <div style="margin-top: 20px">
-      <% if (friendshipStatus == "no_relation") { %>
-        <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
-          <input type="submit" value="Add as friend" />
-        </form>
-      <% } else if (friendshipStatus == "friends") { %>
-        ✅ Friends
-        <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline; margin-left: 15px" method="POST">
-          <input type="submit" class="button-secondary" value="unfriend" />
-        </form>
-      <% } else if (friendshipStatus == "request_sent") { %>
-        <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline" method="POST">
-          <button class="button-secondary undo-request">Request sent</button>
-        </form>
-      <% } else if (friendshipStatus == "request_received") { %>
-        <p><%= profile.name %> sent you a friendship request</p>
-        <form action="<%= profileUrl(profile.id, "/add_friend") %>" style="display:inline" method="POST">
-          <input type="submit" value="Accept" />
-        </form>
-        <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline" method="POST">
-          <input type="submit" class="button-secondary" value="Reject" />
-        </form>
-      <% } else if (friendshipStatus == "request_rejected") { %>
-        <p>You rejected <%= profile.name %> friendship request</p>
-        <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
-          <input type="submit" value="Add as friend" />
-        </form>
-      <% } %>
+        <div style="margin-top: 20px">
+          <% if (friendshipStatus == "no_relation") { %>
+            <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
+              <input type="submit" value="Add as friend" />
+            </form>
+          <% } else if (friendshipStatus == "friends") { %>
+            ✅ Friends
+            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline; margin-left: 15px" method="POST">
+              <input type="submit" class="button-secondary" value="unfriend" />
+            </form>
+          <% } else if (friendshipStatus == "request_sent") { %>
+            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline" method="POST">
+              <button class="button-secondary undo-request">Request sent</button>
+            </form>
+          <% } else if (friendshipStatus == "request_received") { %>
+            <p><%= profile.name %> sent you a friendship request</p>
+            <form action="<%= profileUrl(profile.id, "/add_friend") %>" style="display:inline" method="POST">
+              <input type="submit" value="Accept" />
+            </form>
+            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline" method="POST">
+              <input type="submit" class="button-secondary" value="Reject" />
+            </form>
+          <% } else if (friendshipStatus == "request_rejected") { %>
+            <p>You rejected <%= profile.name %> friendship request</p>
+            <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
+              <input type="submit" value="Add as friend" />
+            </form>
+          <% } %>
+        </div>
+      </div>
     </div>
 
-    <h2 style="margin-top: 30px">Friends</h2>
-    <%- include('_friends', { friends: friends.friends }) %>
-  </div>
-
-  <div class="wall">
     <h2>Leave <%= profile.name %> a message</h2>
     <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
       <div>
@@ -65,6 +64,11 @@
 
     <h2 style="margin: 0"><%= profile.name %>'s Wall</h2>
     <%- include('_posts', { posts }) %>
+  </div>
+
+  <div class="friends-communities">
+    <h2 style="margin-top: 30px">Friends</h2>
+    <%- include('_friends', { friends: friends.friends }) %>
   </div>
 </div>
 
