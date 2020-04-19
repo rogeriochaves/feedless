@@ -39,10 +39,12 @@
   <div class="friends-communities">
     <% if (friends.requestsReceived.length) { %>
       <h2>Friend Requests</h2>
-      <%- include('_friends', { friends: friends.requestsReceived }) %>
+      <div style="margin-bottom: 30px">
+        <%- include('_friends', { friends: friends.requestsReceived }) %>
+      </div>
     <% } %>
 
-    <h2 style="margin-top: 30px">Friends</h2>
+    <h2>Friends</h2>
     <%- include('_friends', { friends: friends.friends }) %>
 
     <h2 style="margin-top: 30px">Requests Sent</h2>
