@@ -17,7 +17,7 @@
 
         <% if (friendshipStatus == "request_received") { %>
           <p><%= profile.name %> sent you a friendship request</p>
-        <% } else { %>
+        <% } else if (friendshipStatus == "request_rejected") { %>
           <p>You rejected <%= profile.name %> friendship request</p>
         <% } %>
 
