@@ -4,27 +4,79 @@ document.onkeydown = (e) => {
   if (isEsc) escCallback();
 };
 
+const openModalFor = (elem, onConfirm, afterClose = null) => {
+  const overlay = elem.parentElement.querySelector(".overlay");
+  const modal = elem.parentElement.querySelector(".modal");
+  const confirmButton = elem.parentElement.querySelector(".modal-confirm");
+
+  overlay.style.display = "block";
+  modal.style.display = "block";
+
+  const onClose = () => {
+    overlay.style.display = "none";
+    modal.style.display = "none";
+    if (afterClose) afterClose();
+  };
+
+  overlay.addEventListener("click", onClose);
+  confirmButton.addEventListener("click", onConfirm);
+  escCallback = onClose;
+
+  return { close: onClose };
+};
+
+const composeButton = document.querySelector(".js-compose-vanishing-message");
+const publishButton = document.querySelector(".js-secret-publish");
+const sendingMessage = document.querySelector(".js-sending-message");
+const messageInput = document.querySelector(".js-secret-message-input");
+if (composeButton) {
+  composeButton.addEventListener("click", () => {
+    const onPublish = () => {
+      if (messageInput.value.length == 0) return;
+
+      publishButton.style.display = "none";
+      sendingMessage.innerHTML = "Loading...";
+      sendingMessage.style.display = "block";
+
+      fetch(composeButton.dataset.url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "message=" + encodeURIComponent(messageInput.value),
+      })
+        .then(() => {
+          sendingMessage.innerHTML = "✅ Sent";
+
+          setTimeout(() => {
+            modal.close();
+            messageInput.value = "";
+            publishButton.style.display = "block";
+            sendingMessage.style.display = "none";
+          }, 1000);
+        })
+        .catch(() => {
+          sendingMessage.innerHTML = "Error";
+          setTimeout(() => {
+            publishButton.style.display = "block";
+            sendingMessage.style.display = "none";
+          }, 1000);
+        });
+    };
+    const modal = openModalFor(composeButton, onPublish);
+  });
+}
+
 const messages = document.querySelectorAll(".js-vanishing-message");
 messages.forEach((message) => {
   message.addEventListener("click", () => {
-    const overlay = message.parentElement.querySelector(".overlay");
-    const modal = message.parentElement.querySelector(".modal");
-    const closeButton = message.parentElement.querySelector(".modal-close");
-
-    overlay.style.display = "block";
-    modal.style.display = "block";
-
-    const onClose = () => {
-      const parent = modal.parentElement;
+    const afterClose = () => {
+      const parent = message.parentElement;
       parent.parentElement.removeChild(parent);
       if (document.querySelectorAll(".js-vanishing-message").length == 0) {
         document.querySelector(".js-vanishing-messages").style.display = "none";
       }
     };
 
-    overlay.addEventListener("click", onClose);
-    closeButton.addEventListener("click", onClose);
-    escCallback = onClose;
+    const modal = openModalFor(message, () => modal.close(), afterClose);
 
     fetch("/vanish", {
       method: "POST",
@@ -51,19 +103,6 @@ if (profilePicUpload) {
 
   profilePicUpload.addEventListener("change", previewImage);
   previewImage();
-}
-
-const jsPublicOption = document.querySelector(".js-public-option");
-const jsVanishingOption = document.querySelector(".js-vanishing-option");
-const jsVanishingMessage = document.querySelector(".js-vanishing-message");
-if (jsVanishingOption) {
-  const onVisibilityChange = () => {
-    const vanishing = jsVanishingOption.checked;
-    jsVanishingMessage.style.display = vanishing ? "block" : "none";
-  };
-  jsPublicOption.addEventListener("change", onVisibilityChange);
-  jsVanishingOption.addEventListener("change", onVisibilityChange);
-  onVisibilityChange();
 }
 
 const jsSyncing = document.querySelector(".js-syncing");

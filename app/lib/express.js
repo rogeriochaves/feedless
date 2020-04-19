@@ -364,30 +364,33 @@ router.post("/vanish", async (req, res) => {
 
 router.post("/profile/:id(*)/publish", async (req, res) => {
   const id = req.params.id;
-  const visibility = req.body.visibility;
 
-  if (visibility == "vanishing") {
-    await ssbServer.identities.publishAs({
-      id: req.context.profile.id,
-      private: true,
-      content: {
-        type: "post",
-        text: req.body.message,
-        root: id,
-        recps: [id],
-      },
-    });
-  } else {
-    await ssbServer.identities.publishAs({
-      id: req.context.profile.id,
-      private: false,
-      content: {
-        type: "post",
-        text: req.body.message,
-        root: id,
-      },
-    });
-  }
+  await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "post",
+      text: req.body.message,
+      root: id,
+    },
+  });
+
+  res.redirect(profileUrl(id));
+});
+
+router.post("/profile/:id(*)/publish_vanishing", async (req, res) => {
+  const id = req.params.id;
+
+  await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: true,
+    content: {
+      type: "post",
+      text: req.body.message,
+      root: id,
+      recps: [id],
+    },
+  });
 
   res.redirect(profileUrl(id));
 });

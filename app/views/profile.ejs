@@ -5,31 +5,34 @@
     <div class="columns">
       <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
       <div style="padding-left: 20px">
-        <h1><%= profile.name %></h1>
-
+        <div class="columns" style="align-items: center;">
+          <h1><%= profile.name %></h1>
+          <% if (friendshipStatus == "friends") { %>
+            <div style="margin-left: 14px">✅ Friends</div>
+          <% } %>
+        </div>
         <%= profile.description %>
 
-        <div style="margin-top: 20px">
+        <div class="columns profile-actions" style="margin-top: 20px">
           <% if (friendshipStatus == "no_relation") { %>
             <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
-              <input type="submit" value="Add as friend" />
+              <input type="submit" class="button-blue" value="Add as friend" />
             </form>
           <% } else if (friendshipStatus == "friends") { %>
-            ✅ Friends
-            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline; margin-left: 15px" method="POST">
-              <input type="submit" class="button-secondary" value="unfriend" />
+            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" method="POST">
+              <input type="submit" value="Undo Friendship" />
             </form>
           <% } else if (friendshipStatus == "request_sent") { %>
-            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline" method="POST">
+            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" method="POST">
               <button class="button-secondary undo-request">Request sent</button>
             </form>
           <% } else if (friendshipStatus == "request_received") { %>
             <p><%= profile.name %> sent you a friendship request</p>
-            <form action="<%= profileUrl(profile.id, "/add_friend") %>" style="display:inline" method="POST">
-              <input type="submit" value="Accept" />
+            <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
+              <input type="submit" class="button-blue" value="Accept" />
             </form>
-            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" style="display:inline" method="POST">
-              <input type="submit" class="button-secondary" value="Reject" />
+            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" method="POST">
+              <input type="submit" value="Reject" />
             </form>
           <% } else if (friendshipStatus == "request_rejected") { %>
             <p>You rejected <%= profile.name %> friendship request</p>
@@ -37,25 +40,29 @@
               <input type="submit" value="Add as friend" />
             </form>
           <% } %>
+
+          <button class="button-yellow js-compose-vanishing-message" data-url="<%= profileUrl(profile.id, "/publish_vanishing") %>">
+            👻 Secret Message
+          </button>
+
+          <div class="overlay"></div>
+          <div class="modal">
+            <div class="modal-header">Write a secret message to <%= profile.name %></div>
+            <div class="modal-body">
+              <textarea name="message" class="compose-post js-secret-message-input" style="margin: 0"></textarea>
+            </div>
+            <div class="modal-footer">
+              this message will disapear right after being read
+              <button class="modal-confirm js-secret-publish">Publish</button>
+              <div style="display: none" class="js-sending-message"></div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
 
-    <h2>Leave <%= profile.name %> a message</h2>
-    <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
-      <div>
-        <label>
-          <input type="radio" name="visibility" value="public" checked="checked" class="js-public-option">
-          Public
-        </label>
-        <label>
-          <input type="radio" name="visibility" value="vanishing" class="js-vanishing-option">
-          Vanishing
-        </label>
-      </div>
-      <div style="display: none; padding-top: 20px; font-size: 13px; color: #666" class="js-vanishing-message">
-        Vanishing messages are private and disapear right after being read
-      </div>
+    <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST" style="padding-top: 20px;">
       <textarea name="message" class="compose-post"></textarea>
       <div class="reverse-columns" style="margin-top: 10px">
         <input type="submit" value="Publish" />

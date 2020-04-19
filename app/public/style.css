@@ -17,14 +17,20 @@ button,
 a.button,
 input[type="submit"] {
   font-size: 14px;
-  background: #08d;
-  color: #fff;
+  background: #e7e7e7;
+  border: 1px solid #5f5f5f;
+  color: #555;
   border-radius: 3px;
-  padding: 8px 10px;
-  border: none;
+  padding: 6px 10px;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
+  height: 33px;
+}
+button:hover,
+a.button:hover,
+input[type="submit"]:hover {
+  background: #ccc;
 }
 button.button-big,
 a.button.button-big,
@@ -32,17 +38,24 @@ input[type="submit"].button-big {
   padding: 16px 20px;
   font-size: 18px;
 }
-button.button-secondary,
-a.button.button-secondary,
-input[type="submit"].button-secondary {
-  background: #ddd;
-  color: #5f5f5f;
+button.button-blue,
+a.button.button-blue,
+input[type="submit"].button-blue {
+  background: #7fe7e7;
+  color: #044;
 }
-button.button-secondary:hover,
-a.button.button-secondary:hover,
-input[type="submit"].button-secondary:hover {
-  background: #959eab;
-  color: #fff;
+button.button-blue:hover,
+a.button.button-blue:hover,
+input[type="submit"].button-blue:hover {
+  background: #6bc4c4;
+}
+button.button-yellow {
+  background: #fcd204;
+  color: #540;
+  margin-left: 5px;
+}
+button.button-yellow:hover {
+  background: #ddb904;
 }
 
 input[type="text"],
@@ -65,6 +78,7 @@ nav {
   background: #fff;
   border-radius: 5px;
   padding: 0 5px;
+  font-size: 14px;
 }
 header a {
   text-decoration: none;
@@ -76,6 +90,7 @@ header a:hover {
 }
 header .logo a:hover {
   background: none;
+  text-decoration: none;
 }
 .logo {
   font-weight: bold;
@@ -105,6 +120,11 @@ header .logo a:hover {
 }
 
 .screen-center {
+  margin: 0 auto;
+  max-width: 792px;
+}
+
+.home-page .screen-center {
   margin: 0 auto;
   max-width: 992px;
 }
@@ -146,8 +166,9 @@ h2 {
 }
 
 .post-profile-pic {
-  width: 64px;
+  width: 48px;
   max-height: 200px;
+  border: 1px solid #044;
 }
 
 .post-content {
@@ -155,6 +176,7 @@ h2 {
 }
 
 .wall {
+  max-width: 592px;
   padding: 14px;
   flex-grow: 1;
   background: #fff;
@@ -192,6 +214,12 @@ h2 {
 
 .profile-pic {
   width: 128px;
+  flex-shrink: 0;
+  border: 1px solid #044;
+}
+
+.profile-actions form {
+  display: inline-block;
 }
 
 .overlay {
@@ -229,6 +257,7 @@ h2 {
 
 .modal-body {
   padding: 10px;
+  color: #000;
 }
 
 .modal-footer {
@@ -306,6 +335,8 @@ h2 {
   padding: 5px 14px;
   background: none;
   color: #000;
+  height: auto;
+  border: none;
 }
 
 .vanishing-button:hover {

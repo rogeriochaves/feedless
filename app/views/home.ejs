@@ -1,10 +1,10 @@
-<%- include('_header', { main_class: "screen-center" }) %>
+<%- include('_header', { main_class: "screen-center", body_class: "home-page" }) %>
 
 <div class="columns">
   <div class="vanishing-chat">
 
     <% if (vanishingMessages.length == 0) { %>
-      You don't have any vanishing messages yet
+      <div class="column-side-padding">You don't have any vanishing messages yet</div>
     <% } else { %>
       <div class="js-vanishing-messages">
         <h2 class="column-side-padding">Vanishing Messages</h2>
@@ -20,15 +20,15 @@
             <div class="overlay"></div>
             <div class="modal">
               <a href="<%= profileUrl(message.value.authorProfile.id) %>" class="modal-header">
-                <img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" style="padding-right: 10px" />
-                <%= message.value.authorProfile.name %>
+                <img src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" />
+                <div style="padding-left: 10px"><%= message.value.authorProfile.name %></div>
               </a>
               <div class="modal-body">
                 <%= message.value.content.text %>
               </div>
               <div class="modal-footer">
                 after you close this box the message will be gone forever
-                <button class="modal-close">Close</button>
+                <button class="modal-confirm">Close</button>
               </div>
             </div>
           </div>
