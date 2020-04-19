@@ -7,12 +7,15 @@
       You don't have any vanishing messages yet
     <% } else { %>
       <div class="js-vanishing-messages">
-        <h2>Vanishing Messages</h2>
+        <h2 class="column-side-padding">Vanishing Messages</h2>
         <% vanishingMessages.reverse().map(message => { %>
           <div>
-            <button class="link-block js-vanishing-message" data-key="<%= message.key %>">
+            <button class="vanishing-button js-vanishing-message" data-key="<%= message.key %>">
               <img class="link-profile-pic" src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" />
-              <div><%= message.value.authorProfile.name %></div>
+              <div style="flex-grow: 1;">
+                <%= message.value.authorProfile.name %> <br />
+                <small>👁 new message</small>
+              </div>
             </button>
             <div class="overlay"></div>
             <div class="modal">

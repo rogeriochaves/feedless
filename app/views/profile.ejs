@@ -1,4 +1,4 @@
-<%- include('_header') %>
+<%- include('_header', { main_class: "screen-center" }) %>
 
 <div class="columns">
   <div class="wall">
@@ -67,7 +67,7 @@
   </div>
 
   <div class="friends-communities">
-    <h2 style="margin-top: 30px">Friends</h2>
+    <h2>Friends</h2>
     <%- include('_friends', { friends: friends.friends }) %>
   </div>
 </div>

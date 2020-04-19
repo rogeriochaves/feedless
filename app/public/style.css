@@ -154,11 +154,6 @@ h2 {
   padding-left: 10px;
 }
 
-.content-header {
-  font-weight: bold;
-  padding-bottom: 5px;
-}
-
 .wall {
   padding: 14px;
   flex-grow: 1;
@@ -167,11 +162,11 @@ h2 {
 
 .friends-communities {
   min-width: 200px;
+  max-width: 200px;
   background: #fbb;
   color: #600;
   padding: 14px;
   border-radius: 0 5px 5px 0;
-  flex-grow: 1;
 }
 
 .friends-communities .link-profile-pic {
@@ -179,11 +174,16 @@ h2 {
 }
 
 .vanishing-chat {
+  min-width: 200px;
   max-width: 200px;
   background: #fe7;
   color: #650;
-  padding: 14px;
+  padding: 14px 0;
   border-radius: 5px 0 0 5px;
+}
+
+.column-side-padding {
+  padding: 0 14px;
 }
 
 .vanishing-chat .link-profile-pic {
@@ -285,7 +285,6 @@ h2 {
   margin-bottom: 5px;
   text-decoration: none;
   color: #000;
-  background: none;
   padding: 0;
 }
 
@@ -297,6 +296,25 @@ h2 {
   width: 32px;
   max-height: 100px;
   margin-right: 5px;
+}
+
+.vanishing-button {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  padding: 5px 14px;
+  background: none;
+  color: #000;
+}
+
+.vanishing-button:hover {
+  text-decoration: none;
+  background: #ed6;
+}
+
+.vanishing-button .link-profile-pic {
+  width: 48px;
 }
 
 .compose-post {
