@@ -102,7 +102,7 @@ const getPosts = async (ssbServer, profile) => {
   return mapValues(posts);
 };
 
-const getVanishingMessages = async (ssbServer, profile) => {
+const getSecretMessages = async (ssbServer, profile) => {
   debugMessages("Fetching");
   const messagesPromise = promisePull(
     // @ts-ignore
@@ -451,7 +451,7 @@ module.exports = {
   getFriends,
   getAllEntries,
   getProfile,
-  getVanishingMessages,
+  getSecretMessages,
   profileCache,
   getFriendshipStatus,
   getCommunities,

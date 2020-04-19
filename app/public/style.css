@@ -195,7 +195,7 @@ h2 {
   border: 1px solid #600;
 }
 
-.vanishing-chat {
+.secret-chat {
   min-width: 200px;
   max-width: 200px;
   background: #fe7;
@@ -208,7 +208,7 @@ h2 {
   padding: 0 14px;
 }
 
-.vanishing-chat .link-profile-pic {
+.secret-chat .link-profile-pic {
   border: 1px solid #650;
 }
 
@@ -327,7 +327,7 @@ h2 {
   margin-right: 5px;
 }
 
-.vanishing-button {
+.secret-button {
   width: 100%;
   text-align: left;
   display: flex;
@@ -339,12 +339,12 @@ h2 {
   border: none;
 }
 
-.vanishing-button:hover {
+.secret-button:hover {
   text-decoration: none;
   background: #ed6;
 }
 
-.vanishing-button .link-profile-pic {
+.secret-button .link-profile-pic {
   width: 48px;
 }
 

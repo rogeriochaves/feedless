@@ -140,15 +140,15 @@ router.get("/", async (req, res) => {
     return res.render("index");
   }
 
-  const [posts, friends, vanishingMessages] = await Promise.all([
+  const [posts, friends, secretMessages] = await Promise.all([
     queries.getPosts(ssbServer, req.context.profile),
     queries.getFriends(ssbServer, req.context.profile),
-    queries.getVanishingMessages(ssbServer, req.context.profile),
+    queries.getSecretMessages(ssbServer, req.context.profile),
   ]);
   res.render("home", {
     posts,
     friends,
-    vanishingMessages,
+    secretMessages,
     profile: req.context.profile,
   });
 });
@@ -378,7 +378,7 @@ router.post("/profile/:id(*)/publish", async (req, res) => {
   res.redirect(profileUrl(id));
 });
 
-router.post("/profile/:id(*)/publish_vanishing", async (req, res) => {
+router.post("/profile/:id(*)/publish_secret", async (req, res) => {
   const id = req.params.id;
 
   await ssbServer.identities.publishAs({

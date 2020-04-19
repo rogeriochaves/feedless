@@ -25,7 +25,7 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
   return { close: onClose };
 };
 
-const composeButton = document.querySelector(".js-compose-vanishing-message");
+const composeButton = document.querySelector(".js-compose-secret-message");
 const publishButton = document.querySelector(".js-secret-publish");
 const sendingMessage = document.querySelector(".js-sending-message");
 const messageInput = document.querySelector(".js-secret-message-input");
@@ -65,14 +65,14 @@ if (composeButton) {
   });
 }
 
-const messages = document.querySelectorAll(".js-vanishing-message");
+const messages = document.querySelectorAll(".js-secret-message");
 messages.forEach((message) => {
   message.addEventListener("click", () => {
     const afterClose = () => {
       const parent = message.parentElement;
       parent.parentElement.removeChild(parent);
-      if (document.querySelectorAll(".js-vanishing-message").length == 0) {
-        document.querySelector(".js-vanishing-messages").style.display = "none";
+      if (document.querySelectorAll(".js-secret-message").length == 0) {
+        document.querySelector(".js-secret-messages").style.display = "none";
       }
     };
 

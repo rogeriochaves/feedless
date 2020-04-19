@@ -1,16 +1,16 @@
 <%- include('_header', { main_class: "screen-center", body_class: "home-page" }) %>
 
 <div class="columns">
-  <div class="vanishing-chat">
+  <div class="secret-chat">
 
-    <% if (vanishingMessages.length == 0) { %>
-      <div class="column-side-padding">You don't have any vanishing messages yet</div>
+    <% if (secretMessages.length == 0) { %>
+      <div class="column-side-padding">You don't have any secret messages yet</div>
     <% } else { %>
-      <div class="js-vanishing-messages">
-        <h2 class="column-side-padding">Vanishing Messages</h2>
-        <% vanishingMessages.reverse().map(message => { %>
+      <div class="js-secret-messages">
+        <h2 class="column-side-padding">Secret Messages</h2>
+        <% secretMessages.reverse().map(message => { %>
           <div>
-            <button class="vanishing-button js-vanishing-message" data-key="<%= message.key %>">
+            <button class="secret-button js-secret-message" data-key="<%= message.key %>">
               <img class="link-profile-pic" src="<%= profileImageUrl(message.value.authorProfile) %>" class="post-profile-pic" />
               <div style="flex-grow: 1;">
                 <%= message.value.authorProfile.name %> <br />
