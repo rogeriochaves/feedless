@@ -52,7 +52,6 @@ input[type="submit"].button-blue:hover {
 button.button-yellow {
   background: #fcd204;
   color: #540;
-  margin-left: 5px;
 }
 button.button-yellow:hover {
   background: #ddb904;

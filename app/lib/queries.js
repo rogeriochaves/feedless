@@ -115,11 +115,9 @@ const getSecretMessages = async (ssbServer, profile) => {
     pull.filter(
       (msg) =>
         msg.value.content.type == "post" &&
-        (msg.value.content.root == profile.id ||
-          (msg.value.content.recps &&
-            msg.value.content.recps.includes(profile.id)))
-    ),
-    paramap(mapProfiles(ssbServer))
+        msg.value.content.recps &&
+        msg.value.content.recps.includes(profile.id)
+    )
   );
 
   const deletedPromise = promisePull(
@@ -149,10 +147,23 @@ const getSecretMessages = async (ssbServer, profile) => {
 
   const messagesByAuthor = {};
   for (const message of messages) {
-    const author = message.author;
+    if (message.value.author == profile.id) {
+      for (const recp of message.value.content.recps) {
+        if (recp == profile.id) continue;
+        if (!messagesByAuthor[recp]) {
+          messagesByAuthor[recp] = {
+            author: recp,
+            messages: [],
+          };
+        }
+      }
+      continue;
+    }
+
+    const author = message.value.author;
     if (!messagesByAuthor[author]) {
       messagesByAuthor[author] = {
-        authorProfile: message.value.authorProfile,
+        author: message.value.author,
         messages: [],
       };
     }
@@ -160,8 +171,21 @@ const getSecretMessages = async (ssbServer, profile) => {
       messagesByAuthor[author].messages.push(message);
   }
 
+  const profilesList = await Promise.all(
+    Object.keys(messagesByAuthor).map((id) => getProfile(ssbServer, id))
+  );
+  const profilesHash = profilesList.reduce((hash, profile) => {
+    hash[profile.id] = profile;
+    return hash;
+  }, {});
+
+  const chatList = Object.values(messagesByAuthor).map((m) => {
+    m.authorProfile = profilesHash[m.author];
+    return m;
+  });
+
   debugMessages("Done");
-  return Object.values(messagesByAuthor);
+  return chatList;
 };
 
 const searchPeople = async (ssbServer, search) => {

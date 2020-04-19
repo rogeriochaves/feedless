@@ -355,7 +355,7 @@ router.post("/publish_secret", async (req, res) => {
     content: {
       type: "post",
       text: req.body.message,
-      recps: recipients.split(","),
+      recps: [req.context.profile.id].concat(recipients.split(",")),
     },
   });
 
@@ -405,8 +405,7 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
     content: {
       type: "post",
       text: req.body.message,
-      root: id,
-      recps: [id],
+      recps: [req.context.profile.id, id],
     },
   });
 
