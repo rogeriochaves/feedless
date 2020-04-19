@@ -1,9 +1,11 @@
 <%- include('_header', { main_class: "screen-center" }) %>
 
 <div class="columns">
-  <div class="wall">
+  <div class="wall" style="border-radius: 5px 0 0 5px">
     <div class="columns">
-      <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
+      <div>
+        <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
+      </div>
       <div style="padding-left: 20px">
         <div class="columns" style="align-items: center;">
           <h1><%= profile.name %></h1>
@@ -14,7 +16,9 @@
         <div style="margin-bottom: 20px;"><%= profile.description %></div>
 
         <% if (friendshipStatus == "request_received") { %>
-        <p><%= profile.name %> sent you a friendship request</p>
+          <p><%= profile.name %> sent you a friendship request</p>
+        <% } else { %>
+          <p>You rejected <%= profile.name %> friendship request</p>
         <% } %>
 
         <div class="columns profile-actions">
@@ -38,7 +42,6 @@
               <input type="submit" value="Reject" />
             </form>
           <% } else if (friendshipStatus == "request_rejected") { %>
-            <p>You rejected <%= profile.name %> friendship request</p>
             <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
               <input type="submit" value="Add as friend" />
             </form>
@@ -60,7 +63,15 @@
     </form>
 
     <h2 style="margin: 0"><%= profile.name %>'s Wall</h2>
-    <%- include('_posts', { posts }) %>
+    <% if (posts.length == 0) { %>
+      <div style="padding-top: 15px">
+        <div class="post">
+          No posts yet
+        </div>
+      </div>
+    <% } else { %>
+      <%- include('_posts', { posts }) %>
+    <% } %>
   </div>
 
   <div class="friends-communities">

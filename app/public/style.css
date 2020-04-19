@@ -213,7 +213,6 @@ h2 {
 
 .profile-pic {
   width: 128px;
-  flex-shrink: 0;
   border: 1px solid #044;
 }
 
