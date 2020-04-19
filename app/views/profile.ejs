@@ -44,20 +44,7 @@
           <button class="button-yellow js-compose-secret-message" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
             👻 Secret Message
           </button>
-
-          <div class="overlay" hidden></div>
-          <div class="modal" hidden>
-            <div class="modal-header">Write a secret message to <%= profile.name %></div>
-            <div class="modal-body">
-              <textarea name="message" class="compose-post js-secret-message-input" style="margin: 0"></textarea>
-            </div>
-            <div class="modal-footer">
-              this message will disapear right after being read
-              <button class="modal-confirm js-secret-publish">Publish</button>
-              <div hidden class="js-sending-message"></div>
-            </div>
-          </div>
-
+          <%- include('secrets/_compose_single') %>
         </div>
       </div>
     </div>

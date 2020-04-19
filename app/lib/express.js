@@ -364,16 +364,18 @@ router.post("/publish_secret", async (req, res) => {
 
 // TODO: tie reading with deleting
 router.post("/vanish", async (req, res) => {
-  const key = req.body.key;
+  const keys = req.body.keys.split(",");
 
-  await ssbServer.identities.publishAs({
-    id: req.context.profile.id,
-    private: false,
-    content: {
-      type: "delete",
-      dest: key,
-    },
-  });
+  for (const key of keys) {
+    await ssbServer.identities.publishAs({
+      id: req.context.profile.id,
+      private: false,
+      content: {
+        type: "delete",
+        dest: key,
+      },
+    });
+  }
 
   res.send("ok");
 });

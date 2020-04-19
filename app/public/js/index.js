@@ -12,6 +12,7 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
   const overlay = elem.parentElement.querySelector(".overlay");
   const modal = elem.parentElement.querySelector(".modal");
   const confirmButtons = elem.parentElement.querySelectorAll(".modal-confirm");
+  const steps = elem.parentElement.querySelectorAll(".js-step");
 
   overlay.hidden = false;
   modal.hidden = false;
@@ -19,12 +20,36 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
   const onClose = () => {
     overlay.hidden = true;
     modal.hidden = true;
+    steps.forEach((step) => {
+      step.hidden = true;
+    });
+    if (steps[0]) steps[0].hidden = false;
     if (afterClose) afterClose();
+  };
+
+  const nextOrConfirm = () => {
+    if (steps.length == 0) {
+      onConfirm();
+    } else {
+      let currentStep;
+      steps.forEach((step, index) => {
+        if (currentStep == index) {
+          step.hidden = false;
+        } else if (!step.hidden) {
+          currentStep = index;
+          currentStep++;
+          if (currentStep < steps.length) step.hidden = true;
+        }
+      });
+      if (currentStep == steps.length) {
+        onConfirm();
+      }
+    }
   };
 
   overlay.addEventListener("click", onClose);
   Array.from(confirmButtons).forEach((button) =>
-    button.addEventListener("click", onConfirm)
+    button.addEventListener("click", nextOrConfirm)
   );
   escCallback = onClose;
 
@@ -35,26 +60,17 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
  * Secret Messages Composer
  */
 
-const composeButton = document.querySelector(".js-compose-secret-message");
-const publishButton = document.querySelector(".js-secret-publish");
-const sendingMessage = document.querySelector(".js-sending-message");
-const messageInput = document.querySelector(".js-secret-message-input");
-if (composeButton) {
-  const step1 = composeButton.parentElement.querySelector(".js-step-1");
-  const step2 = composeButton.parentElement.querySelector(".js-step-2");
+const composeButtons = document.querySelectorAll(".js-compose-secret-message");
+composeButtons.forEach((composeButton) => {
+  const parent = composeButton.parentElement;
+  const publishButton = parent.querySelector(".js-secret-publish");
+  const sendingMessage = parent.querySelector(".js-sending-message");
+  const messageInput = parent.querySelector(".js-secret-message-input");
 
-  const onNext = () => {
-    if (!step2 || step1.hidden) {
-      onPublish();
-      return;
-    }
-
-    step1.hidden = true;
-    step2.hidden = false;
-  };
+  messageInput.value = ""; // Clearing because of browser default behavior of keeping the value on refresh
 
   const selectedRecipients = () =>
-    Array.from(document.querySelectorAll(".js-secret-recipients:checked"))
+    Array.from(parent.querySelectorAll(".js-secret-recipients:checked"))
       .map((x) => x.value)
       .join(",");
 
@@ -64,8 +80,7 @@ if (composeButton) {
     let url = composeButton.dataset.url;
     let body = "message=" + encodeURIComponent(messageInput.value);
 
-    if (step2) {
-      debugger;
+    if (parent.querySelector(".js-secret-recipients")) {
       const recipients = selectedRecipients();
       if (recipients.length == 0) return;
 
@@ -94,11 +109,6 @@ if (composeButton) {
       messageInput.value = "";
       publishButton.style.display = "block";
       sendingMessage.hidden = true;
-
-      if (step2) {
-        step1.hidden = false;
-        step2.hidden = true;
-      }
     }, 1000);
   };
 
@@ -112,16 +122,9 @@ if (composeButton) {
 
   let modal;
   composeButton.addEventListener("click", () => {
-    const afterClose = () => {
-      if (step2) {
-        step1.hidden = false;
-        step2.hidden = true;
-      }
-    };
-
-    modal = openModalFor(composeButton, onNext, afterClose);
+    modal = openModalFor(composeButton, onPublish);
   });
-}
+});
 
 /**
  * Secret Messages Reading
@@ -132,10 +135,11 @@ messages.forEach((message) => {
   message.addEventListener("click", () => {
     const afterClose = () => {
       const parent = message.parentElement;
+      const composeMessage = parent.parentElement.querySelector(
+        ".js-compose-secret-message"
+      );
+      composeMessage.style.display = "flex";
       parent.parentElement.removeChild(parent);
-      if (document.querySelectorAll(".js-secret-message").length == 0) {
-        document.querySelector(".js-secret-messages").hidden = true;
-      }
     };
 
     const modal = openModalFor(message, () => modal.close(), afterClose);
@@ -143,7 +147,7 @@ messages.forEach((message) => {
     fetch("/vanish", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: "key=" + encodeURIComponent(message.dataset.key),
+      body: "keys=" + encodeURIComponent(message.dataset.keys),
     });
   });
 });

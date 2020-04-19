@@ -144,9 +144,24 @@ const getSecretMessages = async (ssbServer, profile) => {
     messagesPromise,
     deletedPromise,
   ]);
+
   const deletedIds = deleted.map((x) => x.value.content.dest);
+
+  const messagesByAuthor = {};
+  for (const message of messages) {
+    const author = message.author;
+    if (!messagesByAuthor[author]) {
+      messagesByAuthor[author] = {
+        authorProfile: message.value.authorProfile,
+        messages: [],
+      };
+    }
+    if (!deletedIds.includes(message.key))
+      messagesByAuthor[author].messages.push(message);
+  }
+
   debugMessages("Done");
-  return messages.filter((m) => !deletedIds.includes(m.key));
+  return Object.values(messagesByAuthor);
 };
 
 const searchPeople = async (ssbServer, search) => {
