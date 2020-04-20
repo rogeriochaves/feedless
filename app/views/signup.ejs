@@ -1,7 +1,7 @@
 <%- include('_header') %>
 
 <div style="max-width: 800px; margin: 0 auto">
-  <h1 style="padding-top: 50px">Create account</h1>
+  <h1>Create account</h1>
 
   <form method="POST" action="/signup" enctype="multipart/form-data">
     <div style="padding-top: 30px">
@@ -22,7 +22,7 @@
       </label>
     </div>
     <p>
-      <input class="button-big" type="submit" value="Sign up" />
+      <input class="button-big button-blue" type="submit" value="Sign up" />
     </p>
     <% if (mode == "server") { %>
       <p>or</p>

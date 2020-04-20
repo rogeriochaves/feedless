@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/style.css">
   </head>
   <body <%- typeof body_class == "undefined" ? "" : `class="${body_class}"` %>>
-    <% if (context.profile && typeof hideHeader == "undefined") { %>
-      <header class="screen-center">
+    <header class="screen-center">
+      <% if (context.profile && typeof hideHeader == "undefined") { %>
         <div class="logo">
           <a href="/">Social</a>
         </div>
@@ -39,6 +39,6 @@
             <input type="search" class="input-search" name="query" placeholder="Search for people...">
           </form>
         </div>
-      </header>
-    <% } %>
+      <% } %>
+    </header>
     <main class="<%= typeof main_class == "undefined" ? "screen-center white-page" : main_class %>">

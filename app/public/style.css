@@ -37,6 +37,7 @@ a.button.button-big,
 input[type="submit"].button-big {
   padding: 16px 20px;
   font-size: 18px;
+  height: auto;
 }
 button.button-blue,
 a.button.button-blue,
@@ -181,6 +182,14 @@ h2 {
   background: #fff;
 }
 
+.entrance {
+  background: #fbb;
+}
+
+.entrance header {
+  display: none;
+}
+
 .friends-communities {
   min-width: 200px;
   max-width: 200px;
@@ -264,29 +273,6 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.entrance {
-  background: url("/images/bg.jpg") center center #000;
-  background-size: cover;
-}
-
-.entrance main {
-  margin: 0;
-  background: rgba(0, 0, 0, 0.7);
-  width: 100vw;
-  min-height: 100vh;
-  max-width: none;
-}
-
-.entrance-content {
-  color: #fff;
-  margin: 0 auto;
-  max-width: 800px;
-}
-
-.entrance h1 {
-  font-size: 60px;
 }
 
 .profile-pic-placeholder {

@@ -1,15 +1,19 @@
-<%- include('_header', { body_class: "entrance" }) %>
+<%- include('_header', { body_class: "entrance", main_class: "" }) %>
 
-<div class="entrance-content">
-  <h1 style="padding-top: 50px">Welcome to Social</h1>
-  <h2 style="padding: 20px 0">The non-addictive social network</h2>
+<div style="background: #8debf5; padding: 50px">
+  <div class="screen-center">
+    <h1 style="font-size: 60px; font-family: 'Lucida Grande', sans-serif">Welcome to Social</h1>
+    <h2 style="padding: 20px 0">The non-addictive social network</h2>
 
-  <div style="padding-top: 20px">
-    <a href="/signup" class="button button-big">Create account</a>
-    <a href="/login" class="button button-big button-secondary" style="margin-left: 10px">Login</a>
+    <div style="padding-top: 20px">
+      <a href="/signup" class="button button-big button-blue">Create account</a>
+      <a href="/login" class="button button-big" style="margin-left: 10px">Login</a>
+    </div>
   </div>
+</div>
 
-  <div style="padding-top: 100px">
+<div style="background: #fbb; padding: 50px 0; color: #600">
+  <div class="screen-center">
     <p>
       Social combines the best original ideas of popular social networks but without the bad parts
     </p>
@@ -23,9 +27,9 @@
     </ul>
 
     <p>
-      Because Social is not a business, so we don't need to make people
+      Because Social is not a business, we don't need to make people
       addicted just to sell more ads and please shareholders. Social is built on top of
-      <a href="https://scuttlebutt.nz/" target="_blank" style="color: #FFF">SSB</a>,
+      <a href="https://scuttlebutt.nz/" target="_blank" style="color: #600">SSB</a>,
       a decentralized social network protocol, which means the community sustains it, not a corporation.
     </p>
   </div>
