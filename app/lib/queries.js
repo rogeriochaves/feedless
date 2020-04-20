@@ -191,6 +191,17 @@ const getSecretMessages = async (ssbServer, profile) => {
 const searchPeople = async (ssbServer, search) => {
   debugPeople("Fetching");
 
+  // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+  const normalizedSearch = search
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  const safelyEscapedSearch = normalizedSearch.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
+  const loosenSpacesSearch = safelyEscapedSearch.replace(" ", ".*");
+  const searchRegex = new RegExp(`.*${loosenSpacesSearch}.*`, "i");
+
   const people = await promisePull(
     ssbServer.query.read({
       reverse: true,
@@ -208,12 +219,12 @@ const searchPeople = async (ssbServer, search) => {
       ],
     }),
     pull.filter((msg) => {
-      return (
-        msg.value.content &&
-        msg.value.author == msg.value.content.about &&
-        msg.value.content.name.includes(search)
-      );
-    })
+      const normalizedName = msg.value.content.name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+      return msg.value.content && searchRegex.exec(normalizedName);
+    }),
+    paramap(mapProfiles(ssbServer))
   );
 
   debugPeople("Done");

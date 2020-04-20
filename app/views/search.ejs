@@ -1,15 +1,16 @@
 <%- include('_header') %>
 
-<h2>Results for "<%= query %>"</h2>
+<% if (query.length < 3) { %>
+  <h2>You need to search for 3 or more characters</h2>
+<% } else { %>
+  <h2>Results for "<%= query %>"</h2>
 
-<ul>
   <% people.map(person => { %>
-    <li>
-      <a href="<%= profileUrl(person.author) %>">
-        <%= person.content.name %> (<%= person.author.slice(0, 8) %>)
+      <a class="link-block" href="<%= profileUrl(person.author) %>">
+        <img class="link-profile-pic" src="<%= profileImageUrl(person.authorProfile) %>" />
+        <div><%= person.content.name %></div>
       </a>
-    </li>
   <% }) %>
-</ul>
+<% } %>
 
 <%- include('_footer') %>
