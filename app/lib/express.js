@@ -24,6 +24,7 @@ const Sentry = require("@sentry/node");
 const metrics = require("./metrics");
 const sgMail = require("@sendgrid/mail");
 const ejs = require("ejs");
+const cookieEncrypter = require("cookie-encrypter");
 
 let ssbServer;
 let mode = process.env.MODE || "client";
@@ -75,8 +76,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use(cookieParser());
 app.use(fileUpload());
+const cookieSecret =
+  process.env.COOKIES_SECRET || "set_cookie_secret_you_are_unsafe"; // has to be 32-bits
+const cookieOptions = {
+  httpOnly: true,
+  signed: true,
+  expires: new Date(253402300000000), // Friday, 31 Dec 9999 23:59:59 GMT, nice date from stackoverflow
+  sameSite: true,
+};
+app.use(cookieParser(cookieSecret));
+app.use(cookieEncrypter(cookieSecret));
 app.use(async (req, res, next) => {
   if (!ssbServer) {
     setTimeout(() => {
@@ -93,7 +103,7 @@ app.use(async (req, res, next) => {
   res.locals.context = req.context;
   try {
     const identities = await ssbServer.identities.list();
-    const key = req.cookies["ssb_key"];
+    const key = req.signedCookies["ssb_key"];
     if (!key) return next();
 
     const parsedKey = JSON.parse(key);
@@ -165,7 +175,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const decodedKey = reconstructKeys(submittedKey);
-    res.cookie("ssb_key", JSON.stringify(decodedKey));
+    res.cookie("ssb_key", JSON.stringify(decodedKey), cookieOptions);
 
     decodedKey.private = "[removed]";
     debug("Login with key", decodedKey);
@@ -210,7 +220,7 @@ router.post("/signup", async (req, res) => {
 
   debug("Created new user with id", profileId);
 
-  res.cookie("ssb_key", JSON.stringify(key));
+  res.cookie("ssb_key", JSON.stringify(key), cookieOptions);
   key.private = "[removed]";
   debug("Generated key", key);
 
@@ -234,7 +244,7 @@ router.post("/signup", async (req, res) => {
 router.get("/keys", (req, res) => {
   res.render("keys", {
     useEmail: process.env.SENDGRID_API_KEY,
-    key: req.cookies["ssb_key"],
+    key: req.signedCookies["ssb_key"],
   });
 });
 
@@ -244,7 +254,7 @@ router.post("/keys/email", async (req, res) => {
 
   let html = await ejs.renderFile("views/email_sign_in.ejs", {
     origin,
-    ssb_key: req.cookies["ssb_key"],
+    ssb_key: req.signedCookies["ssb_key"],
   });
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -260,7 +270,7 @@ router.post("/keys/email", async (req, res) => {
 });
 
 router.get("/keys/copy", (req, res) => {
-  res.render("keys_copy", { key: req.cookies["ssb_key"] });
+  res.render("keys_copy", { key: req.signedCookies["ssb_key"] });
 });
 
 router.get("/keys/download", async (req, res) => {
