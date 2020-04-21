@@ -23,6 +23,7 @@
     "ejs": "^3.0.2",
     "electron-packager": "^14.2.1",
     "express": "^4.17.1",
+    "express-ejs-layouts": "^2.5.0",
     "express-fileupload": "^1.1.7-alpha.3",
     "mime-types": "^2.1.26",
     "prom-client": "^12.0.0",

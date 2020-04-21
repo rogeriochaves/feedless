@@ -1,42 +1,12 @@
-<%- include('../_header', { main_class: "screen-center" }) %>
-<style>
-  main {
-    max-width: none;
-    margin: 0 auto;
-  }
-</style>
-
-<div style="background: #9b5f5f; color: #FFF; padding: 50px; border-radius: 5px 5px 0 0">
-  <div style="max-width: 1200px; margin: 0 auto">
-    <h1 style="font-size: 60px">#<%= community.name %></h1>
-  </div>
+<div class="columns" style="justify-content: space-between; align-items: baseline; padding-bottom: 5px">
+  <h2>Topics</h2>
+  <a class="button" href="/communities/<%= community.name %>/new">New Topic</a>
 </div>
-
-<div style="max-width: 1200px; margin: 0 auto; border-radius: 0 0 5px 5px">
-  <div class="columns">
-    <div class="friends-communities" style="border-radius: 0">
-      <h2>Members</h2>
-      <%- include('../_friends', { friends: community.members }) %>
+<% community.posts.map(post => { %>
+  <a href="/communities/<%= community.name %>/<%= post.key.replace("%", "") %>" class="columns community-topic-link">
+    <div class="community-topic-name">
+      <%= topicTitle(post.value) %>
     </div>
-    <div class="wall">
-      <div class="columns" style="justify-content: space-between; align-items: baseline; padding-bottom: 5px">
-        <h2>Topics</h2>
-        <a class="button" href="/communities/<%= community.name %>/new">New Topic</a>
-      </div>
-      <% community.posts.map(post => { %>
-        <a href="/communities/<%= community.name %>/<%= post.key %>" class="columns community-topic-link">
-          <div class="community-topic-name">
-            <% if (post.value.content.text.length > 60) { %>
-              <%= post.value.content.text.substr(0, 60) %>...
-            <% } else { %>
-              <%= post.value.content.text %>
-            <% } %>
-          </div>
-          <div style="min-width: 110px; text-align: right;">💬 <%= post.value.replies.length %> replies</div>
-        </a>
-      <% }) %>
-    </div>
-  </div>
-</div>
-
-<%- include('../_footer') %>
+    <div style="min-width: 110px; text-align: right;">💬 <%= post.value.replies.length %> replies</div>
+  </a>
+<% }) %>

@@ -477,6 +477,69 @@ const getCommunityMembers = async (ssbServer, name) => {
   return communityMembers.map((x) => x.value.authorProfile);
 };
 
+const getPostWithReplies = async (ssbServer, channel, key) => {
+  debugCommunityPosts("Fetching");
+
+  const postWithReplies = await promisePull(
+    // @ts-ignore
+    cat([
+      ssbServer.query.read({
+        reverse: false,
+        limit: 1,
+        query: [
+          {
+            $filter: {
+              key: key,
+              value: {
+                content: {
+                  type: "post",
+                  channel: channel,
+                },
+              },
+            },
+          },
+        ],
+      }),
+      ssbServer.query.read({
+        reverse: false,
+        limit: 50,
+        query: [
+          {
+            $filter: {
+              value: {
+                content: {
+                  root: key,
+                  channel: channel,
+                },
+              },
+            },
+          },
+        ],
+      }),
+      ssbServer.query.read({
+        reverse: false,
+        limit: 50,
+        query: [
+          {
+            $filter: {
+              value: {
+                content: {
+                  reply: { $prefix: [key] },
+                  channel: channel,
+                },
+              },
+            },
+          },
+        ],
+      }),
+    ]),
+    paramap(mapProfiles(ssbServer))
+  );
+
+  debugCommunityPosts("Done");
+  return mapValues(postWithReplies);
+};
+
 const getCommunityPosts = async (ssbServer, name) => {
   debugCommunityPosts("Fetching");
 
@@ -544,6 +607,7 @@ module.exports = {
   getCommunities,
   getCommunityMembers,
   getCommunityPosts,
+  getPostWithReplies,
   progress,
   autofollow,
 };

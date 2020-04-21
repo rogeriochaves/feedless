@@ -1,0 +1,27 @@
+<%- include('../_header', { main_class: "screen-center" }) %>
+<style>
+  main {
+    max-width: none;
+    margin: 0 auto;
+  }
+</style>
+
+<div style="background: #9b5f5f; color: #FFF; padding: 50px; border-radius: 5px 5px 0 0">
+  <div style="max-width: 1200px; margin: 0 auto">
+    <h1 style="font-size: 60px">#<%= community.name %></h1>
+  </div>
+</div>
+
+<div style="max-width: 1200px; margin: 0 auto; border-radius: 0 0 5px 5px">
+  <div class="columns">
+    <div class="friends-communities" style="border-radius: 0">
+      <h2>Members</h2>
+      <%- include('../_friends', { friends: community.members }) %>
+    </div>
+    <div class="wall">
+      <%- body %>
+    </div>
+  </div>
+</div>
+
+<%- include('../_footer') %>

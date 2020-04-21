@@ -25,6 +25,7 @@ const metrics = require("./metrics");
 const sgMail = require("@sendgrid/mail");
 const ejs = require("ejs");
 const cookieEncrypter = require("cookie-encrypter");
+const expressLayouts = require("express-ejs-layouts");
 
 let ssbServer;
 let mode = process.env.MODE || "client";
@@ -87,6 +88,8 @@ const cookieOptions = {
 };
 app.use(cookieParser(cookieSecret));
 app.use(cookieEncrypter(cookieSecret));
+app.use(expressLayouts);
+app.set("layout", false);
 app.use(async (req, res, next) => {
   if (!ssbServer) {
     setTimeout(() => {
@@ -139,6 +142,13 @@ app.use((_req, res, next) => {
       return res.locals.imageUrl(profile.image);
     }
     return "/images/no-avatar.png";
+  };
+  res.locals.topicTitle = (post) => {
+    const title = post.content.text;
+    if (title.length > 60) {
+      return title.substr(0, 60) + "...";
+    }
+    return title;
   };
   next();
 });
@@ -497,7 +507,29 @@ router.get("/communities/:name", async (req, res) => {
     queries.getCommunityPosts(ssbServer, name),
   ]);
 
-  res.render("communities/show", { community: { name, members, posts } });
+  res.render("communities/show", {
+    community: { name, members, posts },
+    layout: "communities/_layout",
+  });
+});
+
+router.get("/communities/:name/:key(*)", async (req, res) => {
+  const name = req.params.name;
+  const key = "%" + req.params.key;
+
+  if (!req.context.profile) {
+    return res.render("index");
+  }
+  const [members, posts] = await Promise.all([
+    queries.getCommunityMembers(ssbServer, name),
+    queries.getPostWithReplies(ssbServer, name, key),
+  ]);
+
+  res.render("communities/topic", {
+    posts,
+    community: { name, members },
+    layout: "communities/_layout",
+  });
 });
 
 router.get("/search", async (req, res) => {
