@@ -6,9 +6,13 @@
   }
 </style>
 
-<div style="background: #9b5f5f; color: #FFF; padding: 50px; border-radius: 5px 5px 0 0">
+<div style="background: #9b5f5f; padding: 50px; border-radius: 5px 5px 0 0">
   <div style="max-width: 1200px; margin: 0 auto">
-    <h1 style="font-size: 60px">#<%= community.name %></h1>
+    <h1 style="font-size: 60px">
+      <a href="/communities/<%= community.name %>" style="color: #FFF; text-decoration: none;">
+        #<%= community.name %>
+      </a>
+    </h1>
   </div>
 </div>
 

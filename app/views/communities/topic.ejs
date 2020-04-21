@@ -1,2 +1,16 @@
-<h1><%= topicTitle(posts[0]) %></h1>
-<%- include("../_posts", { posts, dont_cut: true }) %>
+<% if (posts.length > 0) { %>
+  <h1><%= topicTitle(posts[0].value) %></h1>
+  <%- include("../_posts", { posts: posts.map(x => x.value), dont_cut: true }) %>
+
+  <form action="/communities/<%= community.name %>/<%= posts[0].key.replace("%", "") %>/publish" method="POST" style="padding-top: 20px; border-top: 1px solid #ddd;">
+    <label>
+      Reply:
+      <textarea name="reply" class="compose-post" style="margin: 10px 0 0 0; height: 80px"></textarea>
+    </label>
+    <div class="reverse-columns" style="margin-top: 10px">
+      <input type="submit" value="Publish" />
+    </div>
+  </form>
+<% } else { %>
+  <h1>404 topic not found</h1>
+<% } %>

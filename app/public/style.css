@@ -66,6 +66,7 @@ textarea {
   width: 100%;
   font-size: 15px;
   margin-top: 8px;
+  border: 1px solid #bbb;
 }
 
 header {
@@ -180,6 +181,7 @@ h2 {
   padding: 14px;
   flex-grow: 1;
   background: #fff;
+  min-height: 300px;
 }
 
 .entrance {

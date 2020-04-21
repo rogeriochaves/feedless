@@ -2,7 +2,7 @@
   <h2>Topics</h2>
   <a class="button" href="/communities/<%= community.name %>/new">New Topic</a>
 </div>
-<% community.posts.map(post => { %>
+<% posts.map(post => { %>
   <a href="/communities/<%= community.name %>/<%= post.key.replace("%", "") %>" class="columns community-topic-link">
     <div class="community-topic-name">
       <%= topicTitle(post.value) %>

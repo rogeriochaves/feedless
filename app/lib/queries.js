@@ -537,7 +537,7 @@ const getPostWithReplies = async (ssbServer, channel, key) => {
   );
 
   debugCommunityPosts("Done");
-  return mapValues(postWithReplies);
+  return postWithReplies;
 };
 
 const getCommunityPosts = async (ssbServer, name) => {

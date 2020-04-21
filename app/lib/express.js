@@ -144,7 +144,7 @@ app.use((_req, res, next) => {
     return "/images/no-avatar.png";
   };
   res.locals.topicTitle = (post) => {
-    const title = post.content.text;
+    const title = post.content.title || post.content.text;
     if (title.length > 60) {
       return title.substr(0, 60) + "...";
     }
@@ -497,20 +497,80 @@ router.get("/communities", async (req, res) => {
   res.render("communities/list", { communities });
 });
 
+const communityData = (req) => {
+  const name = req.params.name;
+  return queries.getCommunityMembers(ssbServer, name).then((members) => ({
+    name,
+    members,
+  }));
+};
+
 router.get("/communities/:name", async (req, res) => {
   const name = req.params.name;
   if (!req.context.profile) {
     return res.render("index");
   }
-  const [members, posts] = await Promise.all([
-    queries.getCommunityMembers(ssbServer, name),
+  const [community, posts] = await Promise.all([
+    communityData(req),
     queries.getCommunityPosts(ssbServer, name),
   ]);
 
-  res.render("communities/show", {
-    community: { name, members, posts },
+  res.render("communities/community", {
+    community,
+    posts,
     layout: "communities/_layout",
   });
+});
+
+router.get("/communities/:name/new", async (req, res) => {
+  const community = await communityData(req);
+
+  res.render("communities/new_topic", {
+    community,
+    layout: "communities/_layout",
+  });
+});
+
+router.post("/communities/:name/new", async (req, res) => {
+  const name = req.params.name;
+  const title = req.body.title;
+  const post = req.body.post;
+
+  const topic = await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "post",
+      title: title,
+      text: post,
+      channel: name,
+    },
+  });
+
+  res.redirect(`/communities/${name}/${topic.key.replace("%", "")}`);
+});
+
+router.post("/communities/:name/:key(*)/publish", async (req, res) => {
+  const name = req.params.name;
+  const key = req.params.key;
+  const reply = req.body.reply;
+
+  if (!req.context.profile) {
+    return res.render("index");
+  }
+
+  await ssbServer.identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "post",
+      text: reply,
+      channel: name,
+      root: "%" + key,
+    },
+  });
+
+  res.redirect(`/communities/${name}/${key}`);
 });
 
 router.get("/communities/:name/:key(*)", async (req, res) => {
@@ -520,14 +580,14 @@ router.get("/communities/:name/:key(*)", async (req, res) => {
   if (!req.context.profile) {
     return res.render("index");
   }
-  const [members, posts] = await Promise.all([
-    queries.getCommunityMembers(ssbServer, name),
+  const [community, posts] = await Promise.all([
+    communityData(req),
     queries.getPostWithReplies(ssbServer, name, key),
   ]);
 
   res.render("communities/topic", {
     posts,
-    community: { name, members },
+    community,
     layout: "communities/_layout",
   });
 });
