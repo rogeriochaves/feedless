@@ -188,7 +188,7 @@ const getSecretMessages = async (ssbServer, profile) => {
   return chatList;
 };
 
-const searchPeople = async (ssbServer, search) => {
+const search = async (ssbServer, search) => {
   debugPeople("Fetching");
 
   // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
@@ -219,16 +219,47 @@ const searchPeople = async (ssbServer, search) => {
       ],
     }),
     pull.filter((msg) => {
+      if (!msg.value.content) return;
+
       const normalizedName = msg.value.content.name
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
-      return msg.value.content && searchRegex.exec(normalizedName);
+      return searchRegex.exec(normalizedName);
     }),
     paramap(mapProfiles(ssbServer))
   );
 
+  const communitiesPosts = await promisePull(
+    ssbServer.query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              private: { $not: true },
+              content: {
+                type: "post",
+                channel: { $truthy: true },
+              },
+            },
+          },
+        },
+      ],
+      limit: 3000,
+    })
+  );
+
+  const communities = Array.from(
+    new Set(communitiesPosts.map((p) => p.value.content.channel))
+  ).filter((name) => {
+    const normalizedName = name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+    return searchRegex.exec(normalizedName);
+  });
+
   debugPeople("Done");
-  return Object.values(mapValues(people));
+  return { people: Object.values(mapValues(people)), communities };
 };
 
 const getFriends = async (ssbServer, profile) => {
@@ -498,7 +529,7 @@ setInterval(() => {
 module.exports = {
   mapProfiles,
   getPosts,
-  searchPeople,
+  search,
   getFriends,
   getAllEntries,
   getProfile,

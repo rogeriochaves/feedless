@@ -5,10 +5,26 @@
 <% } else { %>
   <h2>Results for "<%= query %>"</h2>
 
+  <h3>People</h3>
+
+  <% if (people.length == 0) { %>
+    <p>No results found</p>
+  <% } %>
   <% people.map(person => { %>
       <a class="link-block" href="<%= profileUrl(person.author) %>">
         <img class="link-profile-pic" src="<%= profileImageUrl(person.authorProfile) %>" />
         <div><%= person.content.name %></div>
+      </a>
+  <% }) %>
+
+  <h3 style="padding-top: 20px">Communities</h3>
+
+  <% if (communities.length == 0) { %>
+    <p>No results found</p>
+  <% } %>
+  <% communities.map(community => { %>
+      <a href="/communities/<%= community %>" class="link-block" style="display: inline-block">
+        #<%= community %>
       </a>
   <% }) %>
 <% } %>

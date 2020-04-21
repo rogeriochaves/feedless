@@ -507,13 +507,17 @@ router.get("/search", async (req, res) => {
 
   const query = req.query.query;
 
-  let people = [];
+  let results = {
+    people: [],
+    communities: [],
+  };
   if (query.length >= 3) {
-    people = await queries.searchPeople(ssbServer, query);
-    metrics.searchResults.observe(people.length);
+    results = await queries.search(ssbServer, query);
+    metrics.searchResultsPeople.observe(results.people.length);
+    metrics.searchResultsCommunities.observe(results.communities.length);
   }
 
-  res.render("search", { people, query });
+  res.render("search", { ...results, query });
 });
 
 router.get("/blob/*", (req, res) => {

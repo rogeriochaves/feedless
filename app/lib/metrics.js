@@ -33,8 +33,12 @@ module.exports = {
     name: "social_ssb_progress_total",
     help: "Tracks ssb syncing progress total",
   }),
-  searchResults: new Summary({
-    name: "social_search_results",
-    help: "Amount of results returned from search",
+  searchResultsPeople: new Summary({
+    name: "social_search_results_people",
+    help: "Amount of people results returned from search",
+  }),
+  searchResultsCommunities: new Summary({
+    name: "social_search_results_communities",
+    help: "Amount of communities results returned from search",
   }),
 };
