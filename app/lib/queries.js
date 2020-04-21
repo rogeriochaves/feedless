@@ -4,7 +4,7 @@ const debugPosts = require("debug")("queries:posts"),
   debugMessages = require("debug")("queries:messages"),
   debugFriends = require("debug")("queries:friends"),
   debugFriendshipStatus = require("debug")("queries:friendship_status"),
-  debugPeople = require("debug")("queries:people"),
+  debugSearch = require("debug")("queries:search"),
   debugProfile = require("debug")("queries:profile"),
   debugCommunities = require("debug")("queries:communities"),
   debugCommunityMembers = require("debug")("queries:communityMembers"),
@@ -189,7 +189,7 @@ const getSecretMessages = async (ssbServer, profile) => {
 };
 
 const search = async (ssbServer, search) => {
-  debugPeople("Fetching");
+  debugSearch("Fetching");
 
   // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
   const normalizedSearch = search
@@ -202,7 +202,7 @@ const search = async (ssbServer, search) => {
   const loosenSpacesSearch = safelyEscapedSearch.replace(" ", ".*");
   const searchRegex = new RegExp(`.*${loosenSpacesSearch}.*`, "i");
 
-  const people = await promisePull(
+  const peoplePromise = promisePull(
     ssbServer.query.read({
       reverse: true,
       query: [
@@ -229,7 +229,7 @@ const search = async (ssbServer, search) => {
     paramap(mapProfiles(ssbServer))
   );
 
-  const communitiesPosts = await promisePull(
+  const communitiesPostsPromise = promisePull(
     ssbServer.query.read({
       reverse: true,
       query: [
@@ -249,6 +249,11 @@ const search = async (ssbServer, search) => {
     })
   );
 
+  const [people, communitiesPosts] = await Promise.all([
+    peoplePromise,
+    communitiesPostsPromise,
+  ]);
+
   const communities = Array.from(
     new Set(communitiesPosts.map((p) => p.value.content.channel))
   ).filter((name) => {
@@ -258,7 +263,7 @@ const search = async (ssbServer, search) => {
     return searchRegex.exec(normalizedName);
   });
 
-  debugPeople("Done");
+  debugSearch("Done");
   return { people: Object.values(mapValues(people)), communities };
 };
 
@@ -518,7 +523,7 @@ const getCommunityPosts = async (ssbServer, name) => {
 
   debugCommunityPosts("Done");
 
-  return mapValues(Object.values(communityPostsByKey));
+  return Object.values(communityPostsByKey);
 };
 
 setInterval(() => {

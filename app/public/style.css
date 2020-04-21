@@ -352,3 +352,14 @@ h2 {
   border-radius: 3px;
   padding: 10px;
 }
+
+.community-topic-link {
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 1px solid #ccc;
+  text-decoration: none;
+}
+
+.community-topic-link:hover .community-topic-name {
+  text-decoration: underline;
+}

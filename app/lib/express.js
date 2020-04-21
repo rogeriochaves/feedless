@@ -484,7 +484,7 @@ router.get("/communities", async (req, res) => {
   }
   const communities = await queries.getCommunities(ssbServer);
 
-  res.render("communities", { communities });
+  res.render("communities/list", { communities });
 });
 
 router.get("/communities/:name", async (req, res) => {
@@ -497,7 +497,7 @@ router.get("/communities/:name", async (req, res) => {
     queries.getCommunityPosts(ssbServer, name),
   ]);
 
-  res.render("community", { community: { name, members, posts } });
+  res.render("communities/show", { community: { name, members, posts } });
 });
 
 router.get("/search", async (req, res) => {
