@@ -68,17 +68,24 @@ nav a.selected {
   flex-direction: column;
 }
 
-.modal-body {
+.modal-body-center {
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.modal-center-message {
+  margin-top: -60px;
+  line-height: 1.4em;
+  text-align: center;
   font-size: 30px;
 }
 
 .modal-footer {
   border-bottom: 1px solid #ddd;
-  background: #000;
+  background: #333;
+  color: #fff;
 }
 
 .secret-chat {

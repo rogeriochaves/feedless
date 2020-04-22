@@ -19,6 +19,7 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
   const modal = elem.parentElement.querySelector(".modal");
   const confirmButtons = elem.parentElement.querySelectorAll(".modal-confirm");
   const steps = elem.parentElement.querySelectorAll(".js-step");
+  const closeButton = elem.parentElement.querySelector(".js-modal-close");
 
   overlay.hidden = false;
   modal.hidden = false;
@@ -53,13 +54,83 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
     }
   };
 
-  overlay.addEventListener("click", onClose);
+  if (closeButton) closeButton.addEventListener("click", onClose);
   Array.from(confirmButtons).forEach((button) =>
     button.addEventListener("click", nextOrConfirm)
   );
 
   return { close: onClose };
 };
+
+/**
+ * Secret Messages Composer
+ */
+
+const composeButtons = document.querySelectorAll(".js-compose-secret-message");
+composeButtons.forEach((composeButton) => {
+  const parent = composeButton.parentElement;
+  const publishButton = parent.querySelector(".js-secret-publish");
+  const sendingMessage = parent.querySelector(".js-sending-message");
+  const messageInput = parent.querySelector(".js-secret-message-input");
+
+  messageInput.value = ""; // Clearing because of browser default behavior of keeping the value on refresh
+
+  const selectedRecipients = () =>
+    Array.from(parent.querySelectorAll(".js-secret-recipients:checked"))
+      .map((x) => x.value)
+      .join(",");
+
+  const onPublish = () => {
+    if (messageInput.value.length == 0) return;
+
+    let url = composeButton.dataset.url;
+    let body = "message=" + encodeURIComponent(messageInput.value);
+
+    if (parent.querySelector(".js-secret-recipients")) {
+      const recipients = selectedRecipients();
+      if (recipients.length == 0) return;
+
+      url = "/publish_secret";
+      body += "&recipients=" + encodeURIComponent(recipients);
+    }
+
+    publishButton.style.display = "none"; // hidden doesn't work on buttons
+    sendingMessage.innerHTML = "Loading...";
+    sendingMessage.hidden = false;
+
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+    })
+      .then(onSuccess)
+      .catch(onError);
+  };
+
+  const onSuccess = () => {
+    sendingMessage.innerHTML = "✅ Sent";
+
+    setTimeout(() => {
+      modal.close();
+      messageInput.value = "";
+      publishButton.style.display = "block";
+      sendingMessage.hidden = true;
+    }, 1000);
+  };
+
+  const onError = () => {
+    sendingMessage.innerHTML = "Error";
+    setTimeout(() => {
+      publishButton.style.display = "block";
+      sendingMessage.hidden = true;
+    }, 1000);
+  };
+
+  let modal;
+  composeButton.addEventListener("click", () => {
+    modal = openModalFor(composeButton, onPublish);
+  });
+});
 
 /**
  * Secret Messages Reading

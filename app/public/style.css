@@ -277,6 +277,14 @@ h2 {
   justify-content: space-between;
 }
 
+.modal-footer a {
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  margin-top: 2px;
+  padding: 0 8px;
+}
+
 .profile-pic-placeholder {
   min-width: 100px;
   width: 100px;
