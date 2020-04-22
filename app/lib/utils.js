@@ -7,7 +7,16 @@ const metrics = require("./metrics");
 module.exports.asyncRouter = (app) => {
   const debug = require("debug")("router");
 
-  let wrapper = (method, path, fn) => async (req, res, next) => {
+  let wrapper = (method, path, opts, fn) => async (req, res, next) => {
+    if (typeof opts == "function") fn = opts;
+    if (!opts.public && !req.context.profile) {
+      if (method == "POST") {
+        res.status(401);
+        return res.send("You are not logged in");
+      }
+      return res.redirect("/");
+    }
+
     try {
       debug(`${method} ${path}`);
       metrics.router.inc({ method, path });
@@ -17,12 +26,12 @@ module.exports.asyncRouter = (app) => {
     }
   };
   return {
-    get: (path, fn) => {
-      app.get(path, wrapper("GET", path, fn));
+    get: (path, fn, opts) => {
+      app.get(path, wrapper("GET", path, fn, opts));
     },
-    post: (path, fn) => {
+    post: (path, fn, opts) => {
       debug(`POST ${path}`);
-      app.post(path, wrapper("POST", path, fn));
+      app.post(path, wrapper("POST", path, fn, opts));
     },
   };
 };

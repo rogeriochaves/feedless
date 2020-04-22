@@ -155,7 +155,7 @@ app.use((_req, res, next) => {
 
 const router = asyncRouter(app);
 
-router.get("/", async (req, res) => {
+router.get("/", { public: true }, async (req, res) => {
   if (!req.context.profile) {
     return res.render("index");
   }
@@ -173,11 +173,11 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/login", (_req, res) => {
+router.get("/login", { public: true }, (_req, res) => {
   res.render("login", { mode });
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", { public: true }, async (req, res) => {
   const submittedKey =
     req.files && req.files.ssb_key
       ? req.files.ssb_key.data.toString()
@@ -199,7 +199,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/download", (_req, res) => {
+router.get("/download", { public: true }, (_req, res) => {
   res.render("download");
 });
 
@@ -208,7 +208,7 @@ router.get("/logout", async (_req, res) => {
   res.redirect("/");
 });
 
-router.get("/signup", (req, res) => {
+router.get("/signup", { public: true }, (req, res) => {
   if (req.context.profile) {
     return res.redirect("/");
   }
@@ -216,7 +216,7 @@ router.get("/signup", (req, res) => {
   res.render("signup", { mode });
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", { public: true }, async (req, res) => {
   const name = req.body.name;
   const picture = req.files && req.files.pic;
 
@@ -294,10 +294,6 @@ router.get("/keys/download", async (req, res) => {
 });
 
 router.get("/profile/:id(*)", async (req, res) => {
-  if (!req.context.profile) {
-    return res.render("index");
-  }
-
   const id = req.params.id;
 
   if (id == req.context.profile.id) {
@@ -448,10 +444,6 @@ router.post("/pubs/add", async (req, res) => {
 });
 
 router.get("/about", (req, res) => {
-  if (!req.context.profile) {
-    return res.render("index");
-  }
-
   res.render("about");
 });
 
@@ -489,9 +481,6 @@ router.post("/about", async (req, res) => {
 });
 
 router.get("/communities", async (req, res) => {
-  if (!req.context.profile) {
-    return res.render("index");
-  }
   const communities = await queries.getCommunities(ssbServer);
 
   res.render("communities/list", { communities });
@@ -507,9 +496,7 @@ const communityData = (req) => {
 
 router.get("/communities/:name", async (req, res) => {
   const name = req.params.name;
-  if (!req.context.profile) {
-    return res.render("index");
-  }
+
   const [community, posts] = await Promise.all([
     communityData(req),
     queries.getCommunityPosts(ssbServer, name),
@@ -555,10 +542,6 @@ router.post("/communities/:name/:key(*)/publish", async (req, res) => {
   const key = req.params.key;
   const reply = req.body.reply;
 
-  if (!req.context.profile) {
-    return res.render("index");
-  }
-
   await ssbServer.identities.publishAs({
     id: req.context.profile.id,
     private: false,
@@ -577,9 +560,6 @@ router.get("/communities/:name/:key(*)", async (req, res) => {
   const name = req.params.name;
   const key = "%" + req.params.key;
 
-  if (!req.context.profile) {
-    return res.render("index");
-  }
   const [community, posts] = await Promise.all([
     communityData(req),
     queries.getPostWithReplies(ssbServer, name, key),
@@ -593,10 +573,6 @@ router.get("/communities/:name/:key(*)", async (req, res) => {
 });
 
 router.get("/search", async (req, res) => {
-  if (!req.context.profile) {
-    return res.render("index");
-  }
-
   const query = req.query.query;
 
   let results = {
@@ -612,7 +588,7 @@ router.get("/search", async (req, res) => {
   res.render("search", { ...results, query });
 });
 
-router.get("/blob/*", (req, res) => {
+router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssbServer)(req, res);
 });
 
