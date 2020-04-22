@@ -14,6 +14,7 @@ const {
   uploadPicture,
   identityFilename,
   ssbFolder,
+  isPhone,
 } = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
@@ -26,7 +27,6 @@ const sgMail = require("@sendgrid/mail");
 const ejs = require("ejs");
 const cookieEncrypter = require("cookie-encrypter");
 const expressLayouts = require("express-ejs-layouts");
-const isMobile = require("ismobilejs").default;
 
 let ssbServer;
 let mode = process.env.MODE || "client";
@@ -85,7 +85,7 @@ const cookieOptions = {
   httpOnly: true,
   signed: true,
   expires: new Date(253402300000000), // Friday, 31 Dec 9999 23:59:59 GMT, nice date from stackoverflow
-  sameSite: true,
+  sameSite: "Lax",
 };
 app.use(cookieParser(cookieSecret));
 app.use(cookieEncrypter(cookieSecret));
@@ -160,7 +160,7 @@ router.get("/", { public: true }, async (req, res) => {
   if (!req.context.profile) {
     return res.render("index");
   }
-  if (isMobile(req.headers["user-agent"]).phone) {
+  if (isPhone(req)) {
     return res.redirect("/mobile");
   }
 
@@ -178,15 +178,28 @@ router.get("/", { public: true }, async (req, res) => {
 });
 
 router.get("/mobile", async (req, res) => {
-  // TODO
-  // if (!isMobile(req.headers["user-agent"]).phone) {
-  //   return res.redirect("/");
-  // }
+  if (!isPhone(req)) {
+    return res.redirect("/");
+  }
 
   const posts = await queries.getPosts(ssbServer, req.context.profile);
 
   res.render("mobile/home", {
     posts,
+    profile: req.context.profile,
+    layout: "mobile/_layout",
+  });
+});
+
+router.get("/mobile/secrets", async (req, res) => {
+  if (!isPhone(req)) {
+    return res.redirect("/");
+  }
+
+  const secretMessages = await queries.getSecretMessages(ssbServer, req.context.profile);
+
+  res.render("mobile/secrets", {
+    secretMessages,
     profile: req.context.profile,
     layout: "mobile/_layout",
   });

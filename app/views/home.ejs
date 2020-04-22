@@ -27,15 +27,15 @@
     </form>
 
     <h2 style="margin: 0">Your Wall</h2>
-    <% if (posts.length > 0) { %>
-      <%- include('_posts', { posts }) %>
-    <% } else { %>
-      <div style="padding-top: 15px;">
+    <div style="padding: 15px;">
+      <% if (posts.length > 0) { %>
+        <%- include('_posts', { posts }) %>
+      <% } else { %>
         <div class="post">
           You have no posts yet, publish something!
         </div>
-      </div>
-    <% } %>
+      <% } %>
+    </div>
   </div>
 
   <div class="friends-communities">

@@ -3,6 +3,7 @@ const leftpad = require("left-pad"); // I don't believe I'm depending on this
 const pull = require("pull-stream");
 const split = require("split-buffer");
 const metrics = require("./metrics");
+const isMobile = require("ismobilejs").default;
 
 module.exports.asyncRouter = (app) => {
   const debug = require("debug")("router");
@@ -112,3 +113,7 @@ module.exports.promisePull = (...streams) =>
   });
 
 module.exports.mapValues = (x) => x.map((y) => y.value);
+
+module.exports.isPhone = (req) => {
+  return isMobile(req.headers["user-agent"]).phone;
+};

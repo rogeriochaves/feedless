@@ -1,6 +1,9 @@
 body {
   background: #fff;
   padding-bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 nav {
@@ -41,4 +44,56 @@ nav a.selected {
 
 .post {
   padding: 10px;
+}
+
+.modal {
+  top: 100%;
+  left: 0;
+  transform: none;
+  min-width: auto;
+  width: 100%;
+  height: 100%;
+  animation: slide 0.5s forwards;
+}
+
+@keyframes slide {
+  100% {
+    top: 0;
+  }
+}
+
+.modal-group {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.modal-footer {
+  border-bottom: 1px solid #ddd;
+  background: #000;
+}
+
+.secret-chat {
+  width: 100%;
+  max-width: none;
+  min-width: auto;
+  flex-grow: 1;
+  padding: 0;
+}
+
+.secret-button {
+  padding: 8px 14px;
+  font-size: 16px;
+}
+
+.secret-chat .link-profile-pic {
+  margin-right: 12px;
 }

@@ -14,23 +14,23 @@
       </div>
     </header>
     <nav>
-      <a href="/" class="<%= context.path == "/mobile" ? "selected" : "" %>">
+      <a href="/mobile" class="<%= context.path == "/mobile" ? "selected" : "" %>">
         <div class="nav-icon">🙂</div>
         Profile
       </a>
-      <a href="/secrets">
+      <a href="/mobile/secrets" class="<%= context.path == "/mobile/secrets" ? "selected" : "" %>">
         <div class="nav-icon">🤫</div>
         Secrets
       </a>
-      <a href="/friends">
+      <a href="/mobile/friends" class="<%= context.path == "/mobile/friends" ? "selected" : "" %>">
         <div class="nav-icon">👨‍👧‍👦</div>
         Friends
       </a>
-      <a href="/communities">
+      <a href="/mobile/communities" class="<%= context.path == "/mobile/communities" ? "selected" : "" %>">
         <div class="nav-icon">🌆</div>
         Communities
       </a>
-      <a href="/search">
+      <a href="/mobile/search" class="<%= context.path == "/mobile/search" ? "selected" : "" %>">
         <div class="nav-icon">💬</div>
         Search
       </a>
@@ -38,5 +38,7 @@
     </nav>
 
     <%- body %>
+
+    <script src="/js/mobile.js"></script>
   </body>
 </html>

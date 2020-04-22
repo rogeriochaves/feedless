@@ -63,15 +63,15 @@
     </form>
 
     <h2 style="margin: 0"><%= profile.name %>'s Wall</h2>
-    <% if (posts.length == 0) { %>
-      <div style="padding-top: 15px">
+    <div style="padding-top: 15px;">
+      <% if (posts.length == 0) { %>
         <div class="post">
           No posts yet
         </div>
-      </div>
-    <% } else { %>
-      <%- include('_posts', { posts }) %>
-    <% } %>
+      <% } else { %>
+        <%- include('_posts', { posts }) %>
+      <% } %>
+    </div>
   </div>
 
   <div class="friends-communities">

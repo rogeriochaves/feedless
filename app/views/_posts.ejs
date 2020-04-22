@@ -1,25 +1,23 @@
-<div style="padding-top: 15px;">
-  <% posts.map(post => { %>
-    <% if (!post.content.text) return %>
-    <div class="post">
-      <div>
-        <a href="<%= profileUrl(post.author) %>">
-          <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" />
-        </a>
-      </div>
-      <div class="post-content">
-        <a href="<%= profileUrl(post.author) %>" class="no-link-style">
-          <b><%= post.authorProfile.name %></b>
-        </a>
-        <% let text = post.content.text %>
-        <% if (typeof dont_cut == "undefined") { %>
-          <% text = post.content.text.slice(0, 140) %>
-          <% if (post.content.text.length > 140) text += "..." %>
-        <% } %>
-        <% text.split("\n").map((line, index) => { %>
-          <%- index > 0 ? "<br />" : "" %><%= line %>
-        <% }) %>
-      </div>
+<% posts.map(post => { %>
+  <% if (!post.content.text) return %>
+  <div class="post">
+    <div>
+      <a href="<%= profileUrl(post.author) %>">
+        <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" />
+      </a>
     </div>
-  <% }) %>
-</div>
+    <div class="post-content">
+      <a href="<%= profileUrl(post.author) %>" class="no-link-style">
+        <b><%= post.authorProfile.name %></b>
+      </a>
+      <% let text = post.content.text %>
+      <% if (typeof dont_cut == "undefined") { %>
+        <% text = post.content.text.slice(0, 140) %>
+        <% if (post.content.text.length > 140) text += "..." %>
+      <% } %>
+      <% text.split("\n").map((line, index) => { %>
+        <%- index > 0 ? "<br />" : "" %><%= line %>
+      <% }) %>
+    </div>
+  </div>
+<% }) %>
