@@ -17,6 +17,7 @@ module.exports.asyncRouter = (app) => {
       return res.redirect("/");
     }
 
+    req.context.path = path;
     try {
       debug(`${method} ${path}`);
       metrics.router.inc({ method, path });

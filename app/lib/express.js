@@ -26,6 +26,7 @@ const sgMail = require("@sendgrid/mail");
 const ejs = require("ejs");
 const cookieEncrypter = require("cookie-encrypter");
 const expressLayouts = require("express-ejs-layouts");
+const isMobile = require("ismobilejs").default;
 
 let ssbServer;
 let mode = process.env.MODE || "client";
@@ -159,6 +160,9 @@ router.get("/", { public: true }, async (req, res) => {
   if (!req.context.profile) {
     return res.render("index");
   }
+  if (isMobile(req.headers["user-agent"]).phone) {
+    return res.redirect("/mobile");
+  }
 
   const [posts, friends, secretMessages] = await Promise.all([
     queries.getPosts(ssbServer, req.context.profile),
@@ -170,6 +174,21 @@ router.get("/", { public: true }, async (req, res) => {
     friends,
     secretMessages,
     profile: req.context.profile,
+  });
+});
+
+router.get("/mobile", async (req, res) => {
+  // TODO
+  // if (!isMobile(req.headers["user-agent"]).phone) {
+  //   return res.redirect("/");
+  // }
+
+  const posts = await queries.getPosts(ssbServer, req.context.profile);
+
+  res.render("mobile/home", {
+    posts,
+    profile: req.context.profile,
+    layout: "mobile/_layout",
   });
 });
 

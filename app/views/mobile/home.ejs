@@ -1,0 +1,18 @@
+<div class="columns" style="align-items: center;">
+  <div><img class="profile-pic" src="<%= profileImageUrl(profile) %>" style="display:block" /></div>
+  <div style="padding-left: 20px">
+    <h1><%= profile.name %></h1>
+
+    <%= profile.description %>
+  </div>
+</div>
+
+<% if (posts.length > 0) { %>
+  <%- include('../_posts', { posts }) %>
+<% } else { %>
+  <div style="padding-top: 15px;">
+    <div class="post">
+      You have no posts yet, publish something!
+    </div>
+  </div>
+<% } %>

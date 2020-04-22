@@ -23,7 +23,7 @@ if (process.env.NODE_ENV != "production") {
         if (id.includes("metrics")) return;
         if (/[\/\\]lib[\/\\]/.test(id)) delete require.cache[id];
       });
-      if (server) server.close();
+      if (server && server.close) server.close();
       server = require("./lib/express");
     });
   });

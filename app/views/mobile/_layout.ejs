@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <title>Social</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/mobile_style.css">
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <a href="/">Social</a>
+      </div>
+    </header>
+    <nav>
+      <a href="/" class="<%= context.path == "/mobile" ? "selected" : "" %>">
+        <div class="nav-icon">🙂</div>
+        Profile
+      </a>
+      <a href="/secrets">
+        <div class="nav-icon">🤫</div>
+        Secrets
+      </a>
+      <a href="/friends">
+        <div class="nav-icon">👨‍👧‍👦</div>
+        Friends
+      </a>
+      <a href="/communities">
+        <div class="nav-icon">🌆</div>
+        Communities
+      </a>
+      <a href="/search">
+        <div class="nav-icon">💬</div>
+        Search
+      </a>
+    </a>
+    </nav>
+
+    <%- body %>
+  </body>
+</html>

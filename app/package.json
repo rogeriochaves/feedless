@@ -25,6 +25,7 @@
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
     "express-fileupload": "^1.1.7-alpha.3",
+    "ismobilejs": "^1.1.1",
     "mime-types": "^2.1.26",
     "prom-client": "^12.0.0",
     "pull-cat": "^1.1.11",
