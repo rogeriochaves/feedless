@@ -196,9 +196,13 @@ router.get("/mobile/secrets", async (req, res) => {
     return res.redirect("/");
   }
 
-  const secretMessages = await queries.getSecretMessages(ssbServer, req.context.profile);
+  const [friends, secretMessages] = await Promise.all([
+    queries.getFriends(ssbServer, req.context.profile),
+    queries.getSecretMessages(ssbServer, req.context.profile),
+  ]);
 
   res.render("mobile/secrets", {
+    friends,
     secretMessages,
     profile: req.context.profile,
     layout: "mobile/_layout",

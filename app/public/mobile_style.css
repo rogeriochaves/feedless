@@ -104,3 +104,21 @@ nav a.selected {
 .secret-chat .link-profile-pic {
   margin-right: 12px;
 }
+
+.new-secret-button {
+  position: fixed;
+  bottom: 95px;
+  width: 65px;
+  height: 65px;
+  right: 20px;
+  border-radius: 100%;
+  border: 0;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  background: #fb1;
+  border: 1px solid #9b6617;
+  color: #684510;
+}
+
+.new-secret-button:hover {
+  background: #fb1;
+}

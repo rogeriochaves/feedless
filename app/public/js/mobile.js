@@ -20,6 +20,7 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
   const confirmButtons = elem.parentElement.querySelectorAll(".modal-confirm");
   const steps = elem.parentElement.querySelectorAll(".js-step");
   const closeButton = elem.parentElement.querySelector(".js-modal-close");
+  const backButtons = elem.parentElement.querySelectorAll(".js-modal-back");
 
   overlay.hidden = false;
   modal.hidden = false;
@@ -54,9 +55,27 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
     }
   };
 
+  const previousStep = () => {
+    let currentStep;
+    Array.from(steps)
+      .reverse()
+      .forEach((step, index) => {
+        if (currentStep == index) {
+          step.style.display = "flex";
+        } else if (step.style.display != "none") {
+          currentStep = index;
+          currentStep++;
+          if (currentStep < steps.length) step.style.display = "none";
+        }
+      });
+  };
+
   if (closeButton) closeButton.addEventListener("click", onClose);
   Array.from(confirmButtons).forEach((button) =>
     button.addEventListener("click", nextOrConfirm)
+  );
+  Array.from(backButtons).forEach((button) =>
+    button.addEventListener("click", previousStep)
   );
 
   return { close: onClose };
