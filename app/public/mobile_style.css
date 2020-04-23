@@ -127,3 +127,21 @@ nav a.selected {
   min-width: auto;
   flex-grow: 1;
 }
+
+.tabs {
+  border-bottom: 1px solid #5f5f5f;
+}
+
+.tab-title {
+  border: 1px solid #5f5f5f;
+  background: #eee;
+  border-radius: 5px 5px 0 0;
+  margin-bottom: -1px;
+  height: 32px;
+}
+
+.tab-title.tab-selected {
+  background: #fff;
+  border-bottom: none;
+  height: 33px;
+}

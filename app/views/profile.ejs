@@ -22,33 +22,10 @@
         <% } %>
 
         <div class="columns profile-actions">
-          <% if (friendshipStatus == "no_relation") { %>
-            <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
-              <input type="submit" class="button-blue" value="Add as friend" />
-            </form>
-          <% } else if (friendshipStatus == "friends") { %>
-            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" method="POST">
-              <input type="submit" value="Undo Friendship" />
-            </form>
-          <% } else if (friendshipStatus == "request_sent") { %>
-            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" method="POST">
-              <button class="button-secondary undo-request">Request sent</button>
-            </form>
-          <% } else if (friendshipStatus == "request_received") { %>
-            <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
-              <input type="submit" class="button-blue" value="Accept" />
-            </form>
-            <form action="<%= profileUrl(profile.id, "/reject_friend") %>" method="POST" style="margin-left: 5px">
-              <input type="submit" value="Reject" />
-            </form>
-          <% } else if (friendshipStatus == "request_rejected") { %>
-            <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
-              <input type="submit" value="Add as friend" />
-            </form>
-          <% } %>
+          <%- include('_friendship_button') %>
 
           <button class="button-yellow js-compose-secret-message" style="margin-left: 5px" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
-            👻 Secret Message
+            🤫 Secret Message
           </button>
           <%- include('secrets/_compose_single') %>
         </div>
@@ -56,7 +33,7 @@
     </div>
 
     <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST" style="padding-top: 20px;">
-      <textarea name="message" class="compose-post"></textarea>
+      <textarea name="message" class="compose-post" placeholder="Write something to <%= profile.name %>..."></textarea>
       <div class="reverse-columns" style="margin-top: 10px">
         <input type="submit" value="Publish" />
       </div>

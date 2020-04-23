@@ -1,0 +1,51 @@
+<div class="columns">
+  <div><img class="profile-pic" src="<%= profileImageUrl(profile) %>" style="display:block" /></div>
+  <div style="padding-left: 10px">
+    <h1><%= profile.name %></h1>
+
+    <%= profile.description.substr(0, 70) %>
+
+    <% if (friendshipStatus == "request_received") { %>
+      <p><%= profile.name %> sent you a friendship request</p>
+    <% } else if (true || friendshipStatus == "request_rejected") { %>
+      <p>You rejected <%= profile.name %> friendship request</p>
+    <% } %>
+
+    <div class="columns profile-actions" style="margin-top: 10px;">
+      <%- include('../_friendship_button') %>
+
+      <button class="button-yellow js-compose-secret-message" style="margin-left: 5px" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
+        🤫 Secret
+      </button>
+      <%- include('secrets/_compose_single') %>
+    </div>
+  </div>
+</div>
+
+<div class="tabs" style="margin-top: 20px; padding: 0 10px;">
+  <button class="tab-title tab-selected">
+    Wall
+  </button>
+  <button class="tab-title">
+    Friends
+  </button>
+</div>
+<div class="tab-content">
+  <div class="tab-item">
+    <% if (posts.length > 0) { %>
+      <form action="/publish" method="POST" style="padding: 0px 8px 5px 8px;">
+        <textarea name="message" class="compose-post js-compose-post" placeholder="Write something to <%= profile.name %>..."></textarea>
+        <div class="reverse-columns">
+          <input type="submit" value="Publish" style="display: none; margin: 5px 0" class="js-publish-button" />
+        </div>
+      </form>
+      <%- include('../_posts', { posts }) %>
+    <% } else { %>
+      <div style="padding-top: 15px;">
+        <div class="post">
+          No posts yet
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>

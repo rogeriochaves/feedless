@@ -350,6 +350,10 @@ router.get("/profile/:id(*)", async (req, res) => {
     return res.redirect("/");
   }
 
+  if (isPhone(req)) {
+    return res.redirect(`/mobile/profile/${id}`);
+  }
+
   const [profile, posts, friends, friendshipStatus] = await Promise.all([
     queries.getProfile(ssbServer, id),
     queries.getPosts(ssbServer, { id }),
@@ -358,6 +362,33 @@ router.get("/profile/:id(*)", async (req, res) => {
   ]);
 
   res.render("profile", { profile, posts, friends, friendshipStatus });
+});
+
+router.get("/mobile/profile/:id(*)", async (req, res) => {
+  const id = req.params.id;
+
+  if (id == req.context.profile.id) {
+    return res.redirect("/");
+  }
+
+  if (!isPhone(req)) {
+    return res.redirect(`/profile/${id}`);
+  }
+
+  const [profile, posts, friends, friendshipStatus] = await Promise.all([
+    queries.getProfile(ssbServer, id),
+    queries.getPosts(ssbServer, { id }),
+    queries.getFriends(ssbServer, { id }),
+    queries.getFriendshipStatus(ssbServer, req.context.profile.id, id),
+  ]);
+
+  res.render("mobile/profile", {
+    profile,
+    posts,
+    friends,
+    friendshipStatus,
+    layout: "mobile/_layout",
+  });
 });
 
 router.post("/profile/:id(*)/add_friend", async (req, res) => {

@@ -1,0 +1,6 @@
+<% friends.map(friend => { %>
+  <a class="link-block" href="/mobile<%= profileUrl(friend.id) %>">
+    <img class="link-profile-pic" src="<%= profileImageUrl(friend) %>" />
+    <div><%= friend.name %></div>
+  </a>
+<% }) %>
