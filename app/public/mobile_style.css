@@ -89,7 +89,6 @@ nav a.selected {
 }
 
 .secret-chat {
-  width: 100%;
   max-width: none;
   min-width: auto;
   flex-grow: 1;
@@ -121,4 +120,10 @@ nav a.selected {
 
 .new-secret-button:hover {
   background: #fb1;
+}
+
+.friends-communities {
+  max-width: none;
+  min-width: auto;
+  flex-grow: 1;
 }

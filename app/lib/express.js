@@ -209,6 +209,20 @@ router.get("/mobile/secrets", async (req, res) => {
   });
 });
 
+router.get("/mobile/friends", async (req, res) => {
+  if (!isPhone(req)) {
+    return res.redirect("/");
+  }
+
+  const friends = await queries.getFriends(ssbServer, req.context.profile);
+
+  res.render("mobile/friends", {
+    friends,
+    profile: req.context.profile,
+    layout: "mobile/_layout",
+  });
+});
+
 router.get("/login", { public: true }, (_req, res) => {
   res.render("login", { mode });
 });
