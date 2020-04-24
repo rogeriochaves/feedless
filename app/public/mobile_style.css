@@ -138,6 +138,7 @@ nav a.selected {
   border-radius: 5px 5px 0 0;
   margin-bottom: -1px;
   height: 32px;
+  padding: 0 20px;
 }
 
 .tab-title.tab-selected {

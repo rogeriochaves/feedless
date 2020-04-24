@@ -7,7 +7,7 @@
 
     <% if (friendshipStatus == "request_received") { %>
       <p><%= profile.name %> sent you a friendship request</p>
-    <% } else if (true || friendshipStatus == "request_rejected") { %>
+    <% } else if (friendshipStatus == "request_rejected") { %>
       <p>You rejected <%= profile.name %> friendship request</p>
     <% } %>
 
@@ -23,15 +23,15 @@
 </div>
 
 <div class="tabs" style="margin-top: 20px; padding: 0 10px;">
-  <button class="tab-title tab-selected">
+  <button class="tab-title tab-selected js-tab-button">
     Wall
   </button>
-  <button class="tab-title">
+  <button class="tab-title js-tab-button">
     Friends
   </button>
 </div>
 <div class="tab-content">
-  <div class="tab-item">
+  <div class="tab-item js-tab-item">
     <% if (posts.length > 0) { %>
       <form action="/publish" method="POST" style="padding: 0px 8px 5px 8px;">
         <textarea name="message" class="compose-post js-compose-post" placeholder="Write something to <%= profile.name %>..."></textarea>
@@ -47,5 +47,8 @@
         </div>
       </div>
     <% } %>
+  </div>
+  <div class="tab-item js-tab-item" style="display: none; padding: 10px">
+    <%- include('_friends', { friends: friends.friends }) %>
   </div>
 </div>

@@ -176,3 +176,23 @@ messages.forEach((message) => {
     });
   });
 });
+
+/**
+ * Tabs
+ */
+
+const tabButtons = document.querySelectorAll(".js-tab-button");
+tabButtons.forEach((tab, index) => {
+  tab.addEventListener("click", () => {
+    const tabItems = document.querySelectorAll(".js-tab-item");
+    tabItems.forEach((item) => {
+      item.style.display = "none";
+    });
+    tabItems[index].style.display = "block";
+
+    tabButtons.forEach((tab) => {
+      tab.classList.remove("tab-selected");
+    });
+    tab.classList.add("tab-selected");
+  });
+});
