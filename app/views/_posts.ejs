@@ -10,14 +10,12 @@
       <a href="<%= profileUrl(post.author) %>" class="no-link-style">
         <b><%= post.authorProfile.name %></b>
       </a>
-      <% let text = post.content.text %>
+      <% let text = escapeMarkdown(post.content.text) %>
       <% if (typeof dont_cut == "undefined") { %>
-        <% text = post.content.text.slice(0, 140) %>
+        <% text = text.slice(0, 140) %>
         <% if (post.content.text.length > 140) text += "..." %>
       <% } %>
-      <% text.split("\n").map((line, index) => { %>
-        <%- index > 0 ? "<br />" : "" %><%= line %>
-      <% }) %>
+      <%- htmlify(text) %>
     </div>
   </div>
 <% }) %>

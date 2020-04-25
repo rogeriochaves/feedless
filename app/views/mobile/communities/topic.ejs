@@ -5,7 +5,7 @@
         ⬅ #<%= community.name %>
       </a>
     </h2>
-    <h1><%= topicTitle(posts[0].value) %></h1>
+    <h1><%- topicTitle(posts[0].value) %></h1>
   </div>
   <%- include("../../_posts", { posts: posts.map(x => x.value), dont_cut: true }) %>
 

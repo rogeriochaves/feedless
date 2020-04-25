@@ -21,7 +21,7 @@
     <% posts.map(post => { %>
       <a href="/communities/<%= community.name %>/<%= post.key.replace("%", "") %>" class="columns community-topic-link">
         <div class="community-topic-name">
-          <%= topicTitle(post.value) %>
+          <%- topicTitle(post.value) %>
         </div>
         <div class="community-topic-replies" style="text-align: right;">💬 <%= post.value.replies.length %> replies</div>
       </a>

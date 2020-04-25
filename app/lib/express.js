@@ -25,6 +25,7 @@ const ejs = require("ejs");
 const cookieEncrypter = require("cookie-encrypter");
 const expressLayouts = require("express-ejs-layouts");
 const mobileRoutes = require("./mobile-routes");
+const ejsUtils = require("ejs/lib/utils");
 
 let mode = process.env.MODE || "client";
 
@@ -110,12 +111,41 @@ app.use((_req, res, next) => {
     }
     return "/images/no-avatar.png";
   };
+
+  const BLOB_PATTERN = /(&.*?=\.sha\d+)/g;
   res.locals.topicTitle = (post) => {
-    const title = post.content.title || post.content.text;
+    const title = res.locals
+      .escapeMarkdown(post.content.title || post.content.text)
+      .replace(BLOB_PATTERN, "");
     if (title.length > 60) {
       return title.substr(0, 60) + "...";
     }
     return title;
+  };
+  res.locals.escapeMarkdown = (str) => {
+    let result = ejsUtils.escapeXML(str);
+    result = result.replace(/!\[.*?\]\((.*?)\)/g, `$1`); // Images
+    result = result.replace(/\[(@.*?)\]\(@.*?\)/g, `$1`); // Link to mention
+    result = result.replace(/\[.*?\]\((.*?)\)/g, `$1`); // Any Link
+    result = result.replace(/^#+ /g, "");
+    return result;
+  };
+  res.locals.htmlify = (str) => {
+    let result = str;
+    result = result.replace(
+      BLOB_PATTERN,
+      `<a target="_blank" href="/blob/$1">$1</a>`
+    );
+    result = result.replace(
+      /(https?:\/\/\S+)/g,
+      `<a target="_blank" href="$1">$1</a>`
+    );
+    result = result.replace(
+      /( ([a-z-_]+\.)?[a-z-_]+\.[a-z]+(\/\S+))/g,
+      ` <a target="_blank" href="http://$1">$1</a>`
+    );
+    result = result.replace(/\n/g, "<br />");
+    return result;
   };
   next();
 });

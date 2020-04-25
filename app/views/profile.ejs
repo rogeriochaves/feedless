@@ -13,7 +13,7 @@
             <div style="margin-left: 14px">✅ Friends</div>
           <% } %>
         </div>
-        <div style="margin-bottom: 20px;"><%= (profile.description || "").substr(0, 70) %></div>
+        <div style="margin-bottom: 20px;"><%- escapeMarkdown(profile.description || "").substr(0, 70) %></div>
 
         <% if (friendshipStatus == "request_received") { %>
           <p><%= profile.name %> sent you a friendship request</p>

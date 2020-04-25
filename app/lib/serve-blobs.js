@@ -40,7 +40,7 @@ const serveBlobs = (sbot) => {
     setTimeout(() => {
       debug("timeout for", hash);
       wrappedCb(null, false);
-    }, 1000);
+    }, 5000);
 
     sbot.blobs.has(hash, function (err, has) {
       if (err) return wrappedCb(err);
