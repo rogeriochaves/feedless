@@ -3,7 +3,7 @@
   <div style="padding-left: 10px">
     <h1><%= profile.name %></h1>
 
-    <%= profile.description.substr(0, 70) %>
+    <%= (profile.description || "").substr(0, 70) %>
 
     <% if (friendshipStatus == "request_received") { %>
       <p><%= profile.name %> sent you a friendship request</p>
