@@ -196,3 +196,8 @@ a.compose-new-button {
   margin-top: 8px;
   border: 1px solid #bbb;
 }
+
+.link-block {
+  padding: 5px 0;
+  margin: 0;
+}

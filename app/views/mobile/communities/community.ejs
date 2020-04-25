@@ -8,13 +8,26 @@
     <div style="font-size: 40px; color: #FFF">+</div>
   </a>
 </div>
-<div>
-  <% posts.map(post => { %>
-    <a href="/communities/<%= community.name %>/<%= post.key.replace("%", "") %>" class="columns community-topic-link">
-      <div class="community-topic-name">
-        <%= topicTitle(post.value) %>
-      </div>
-      <div class="community-topic-replies" style="text-align: right;">💬 <%= post.value.replies.length %> replies</div>
-    </a>
-  <% }) %>
+<div class="tabs" style="padding: 0 10px; background: #fbb">
+  <button class="tab-title tab-selected js-tab-button">
+    Wall
+  </button>
+  <button class="tab-title js-tab-button">
+    Members
+  </button>
+</div>
+<div class="tab-content">
+  <div class="tab-item js-tab-item">
+    <% posts.map(post => { %>
+      <a href="/communities/<%= community.name %>/<%= post.key.replace("%", "") %>" class="columns community-topic-link">
+        <div class="community-topic-name">
+          <%= topicTitle(post.value) %>
+        </div>
+        <div class="community-topic-replies" style="text-align: right;">💬 <%= post.value.replies.length %> replies</div>
+      </a>
+    <% }) %>
+  </div>
+  <div class="tab-item js-tab-item" style="display: none; padding: 10px">
+    <%- include('../_friends', { friends: community.members }) %>
+  </div>
 </div>
