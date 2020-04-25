@@ -180,3 +180,19 @@ a.compose-new-button {
 .community-topic-link {
   padding: 10px;
 }
+
+.search-icon {
+  margin: 22px 0 0 10px;
+  font-size: 24px;
+}
+
+.input-search {
+  width: 100%;
+  border-radius: none;
+  line-height: 32px;
+  padding: 6px 6px 6px 40px;
+  width: 100%;
+  font-size: 15px;
+  margin-top: 8px;
+  border: 1px solid #bbb;
+}

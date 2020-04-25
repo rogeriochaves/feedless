@@ -1,5 +1,5 @@
 const queries = require("./queries");
-const ssb = require("./ssb-client");
+const metrics = require("./metrics");
 
 module.exports.setupRoutes = (router) => {
   router.get(
@@ -125,6 +125,30 @@ module.exports.setupRoutes = (router) => {
       res.render("mobile/communities/topic", {
         posts,
         community: { name },
+        layout: "mobile/_layout",
+      });
+    }
+  );
+
+  router.get(
+    "/mobile/search",
+    { desktopVersion: "/search" },
+    async (req, res) => {
+      const query = req.query.query || "";
+
+      let results = {
+        people: [],
+        communities: [],
+      };
+      if (query.length >= 3) {
+        results = await queries.search(query);
+        metrics.searchResultsPeople.observe(results.people.length);
+        metrics.searchResultsCommunities.observe(results.communities.length);
+      }
+
+      res.render("mobile/search", {
+        ...results,
+        query,
         layout: "mobile/_layout",
       });
     }

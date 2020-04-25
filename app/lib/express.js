@@ -564,7 +564,7 @@ router.get(
   }
 );
 
-router.get("/search", async (req, res) => {
+router.get("/search", { mobileVersion: "/mobile/search" }, async (req, res) => {
   const query = req.query.query;
 
   let results = {

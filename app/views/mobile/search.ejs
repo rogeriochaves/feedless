@@ -1,0 +1,32 @@
+<div style="padding: 14px">
+  <form action="/mobile/search" method="GET" style="padding-bottom: 20px">
+    <div class="search-icon">🔎</div>
+    <input type="search" class="input-search" name="query" placeholder="Search for people..." value="<%= query %>">
+  </form>
+  <% if (query.length < 3) { %>
+    <h2>You need to search for 3 or more characters</h2>
+  <% } else { %>
+    <h3>People</h3>
+
+    <% if (people.length == 0) { %>
+      <p>No results found</p>
+    <% } %>
+    <% people.map(person => { %>
+        <a class="link-block" href="<%= profileUrl(person.author) %>">
+          <img class="link-profile-pic" src="<%= profileImageUrl(person.authorProfile) %>" />
+          <div><%= person.content.name %></div>
+        </a>
+    <% }) %>
+
+    <h3 style="padding-top: 20px">Communities</h3>
+
+    <% if (communities.length == 0) { %>
+      <p>No results found</p>
+    <% } %>
+    <% communities.map(community => { %>
+        <a href="/communities/<%= community %>" class="link-block" style="display: inline-block">
+          #<%= community %>
+        </a>
+    <% }) %>
+  <% } %>
+</div>

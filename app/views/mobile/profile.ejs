@@ -1,6 +1,6 @@
 <div class="columns">
   <div><img class="profile-pic" src="<%= profileImageUrl(profile) %>" style="display:block" /></div>
-  <div style="padding-left: 10px">
+  <div style="padding-left: 10px; max-width: calc(100% - 128px)">
     <h1><%= profile.name %></h1>
 
     <%= (profile.description || "").substr(0, 70) %>
