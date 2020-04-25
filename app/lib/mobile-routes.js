@@ -1,9 +1,5 @@
 const queries = require("./queries");
-
-let ssbServer;
-module.exports.setSsbServer = (server) => {
-  ssbServer = server;
-};
+const ssb = require("./ssb-client");
 
 module.exports.setupRoutes = (router) => {
   router.get(
@@ -14,7 +10,7 @@ module.exports.setupRoutes = (router) => {
         return res.render("index");
       }
 
-      const posts = await queries.getPosts(ssbServer, req.context.profile);
+      const posts = await queries.getPosts(req.context.profile);
 
       res.render("mobile/home", {
         posts,
@@ -26,8 +22,8 @@ module.exports.setupRoutes = (router) => {
 
   router.get("/mobile/secrets", { desktopVersion: "/" }, async (req, res) => {
     const [friends, secretMessages] = await Promise.all([
-      queries.getFriends(ssbServer, req.context.profile),
-      queries.getSecretMessages(ssbServer, req.context.profile),
+      queries.getFriends(req.context.profile),
+      queries.getSecretMessages(req.context.profile),
     ]);
 
     res.render("mobile/secrets", {
@@ -39,7 +35,7 @@ module.exports.setupRoutes = (router) => {
   });
 
   router.get("/mobile/friends", { desktopVersion: "/" }, async (req, res) => {
-    const friends = await queries.getFriends(ssbServer, req.context.profile);
+    const friends = await queries.getFriends(req.context.profile);
 
     res.render("mobile/friends", {
       friends,
@@ -59,10 +55,10 @@ module.exports.setupRoutes = (router) => {
       }
 
       const [profile, posts, friends, friendshipStatus] = await Promise.all([
-        queries.getProfile(ssbServer, id),
-        queries.getPosts(ssbServer, { id }),
-        queries.getFriends(ssbServer, { id }),
-        queries.getFriendshipStatus(ssbServer, req.context.profile.id, id),
+        queries.getProfile(id),
+        queries.getPosts({ id }),
+        queries.getFriends({ id }),
+        queries.getFriendshipStatus(req.context.profile.id, id),
       ]);
 
       res.render("mobile/profile", {
@@ -79,7 +75,7 @@ module.exports.setupRoutes = (router) => {
     "/mobile/communities",
     { desktopVersion: "/communities" },
     async (_req, res) => {
-      const communities = await queries.getCommunities(ssbServer);
+      const communities = await queries.getCommunities();
 
       res.render("mobile/communities/list", {
         communities,
@@ -94,7 +90,7 @@ module.exports.setupRoutes = (router) => {
     async (req, res) => {
       const name = req.params.name;
 
-      const posts = await queries.getCommunityPosts(ssbServer, name);
+      const posts = await queries.getCommunityPosts(name);
 
       res.render("mobile/communities/community", {
         community: { name },

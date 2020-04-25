@@ -11,10 +11,11 @@ const debugPosts = require("debug")("queries:posts"),
   debugCommunityPosts = require("debug")("queries:communityPosts");
 const paramap = require("pull-paramap");
 const { promisePull, mapValues } = require("./utils");
+const ssb = require("./ssb-client");
 
-const latestOwnerValue = (ssbServer, { key, dest }) => {
+const latestOwnerValue = ({ key, dest }) => {
   return promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       query: [
         {
@@ -39,25 +40,25 @@ const latestOwnerValue = (ssbServer, { key, dest }) => {
     if (entry) {
       return entry.value.content[key];
     }
-    return ssbServer.about.latestValue({ key, dest });
+    return ssb.client().about.latestValue({ key, dest });
   });
 };
 
-const mapProfiles = (ssbServer) => (data, callback) =>
-  getProfile(ssbServer, data.value.author)
+const mapProfiles = (data, callback) =>
+  getProfile(data.value.author)
     .then((author) => {
       data.value.authorProfile = author;
       callback(null, data);
     })
     .catch((err) => callback(err, null));
 
-const getPosts = async (ssbServer, profile) => {
+const getPosts = async (profile) => {
   debugPosts("Fetching");
 
   const posts = await promisePull(
     // @ts-ignore
     cat([
-      ssbServer.query.read({
+      ssb.client().query.read({
         reverse: true,
         query: [
           {
@@ -73,7 +74,7 @@ const getPosts = async (ssbServer, profile) => {
         ],
         limit: 100,
       }),
-      ssbServer.query.read({
+      ssb.client().query.read({
         reverse: true,
         query: [
           {
@@ -94,7 +95,7 @@ const getPosts = async (ssbServer, profile) => {
       }),
     ]),
     pull.filter((msg) => msg.value.content.type == "post"),
-    paramap(mapProfiles(ssbServer))
+    paramap(mapProfiles)
   );
 
   debugPosts("Done");
@@ -102,12 +103,12 @@ const getPosts = async (ssbServer, profile) => {
   return mapValues(posts);
 };
 
-const getSecretMessages = async (ssbServer, profile) => {
+const getSecretMessages = async (profile) => {
   debugMessages("Fetching");
   const messagesPromise = promisePull(
     // @ts-ignore
     cat([
-      ssbServer.private.read({
+      ssb.client().private.read({
         reverse: true,
         limit: 100,
       }),
@@ -121,7 +122,7 @@ const getSecretMessages = async (ssbServer, profile) => {
   );
 
   const deletedPromise = promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       query: [
         {
@@ -172,7 +173,7 @@ const getSecretMessages = async (ssbServer, profile) => {
   }
 
   const profilesList = await Promise.all(
-    Object.keys(messagesByAuthor).map((id) => getProfile(ssbServer, id))
+    Object.keys(messagesByAuthor).map((id) => getProfile(id))
   );
   const profilesHash = profilesList.reduce((hash, profile) => {
     hash[profile.id] = profile;
@@ -188,7 +189,7 @@ const getSecretMessages = async (ssbServer, profile) => {
   return chatList;
 };
 
-const search = async (ssbServer, search) => {
+const search = async (search) => {
   debugSearch("Fetching");
 
   // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
@@ -203,7 +204,7 @@ const search = async (ssbServer, search) => {
   const searchRegex = new RegExp(`.*${loosenSpacesSearch}.*`, "i");
 
   const peoplePromise = promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       query: [
         {
@@ -226,11 +227,11 @@ const search = async (ssbServer, search) => {
         .replace(/[\u0300-\u036f]/g, "");
       return searchRegex.exec(normalizedName);
     }),
-    paramap(mapProfiles(ssbServer))
+    paramap(mapProfiles)
   );
 
   const communitiesPostsPromise = promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       query: [
         {
@@ -267,10 +268,10 @@ const search = async (ssbServer, search) => {
   return { people: Object.values(mapValues(people)), communities };
 };
 
-const getFriends = async (ssbServer, profile) => {
+const getFriends = async (profile) => {
   debugFriends("Fetching");
 
-  let graph = await ssbServer.friends.getGraph();
+  let graph = await ssb.client().friends.getGraph();
 
   let connections = {};
   for (let key in graph) {
@@ -287,7 +288,7 @@ const getFriends = async (ssbServer, profile) => {
   }
 
   const profilesList = await Promise.all(
-    Object.keys(connections).map((id) => getProfile(ssbServer, id))
+    Object.keys(connections).map((id) => getProfile(id))
   );
   const profilesHash = profilesList.reduce((hash, profile) => {
     hash[profile.id] = profile;
@@ -307,11 +308,11 @@ const getFriends = async (ssbServer, profile) => {
   return result;
 };
 
-const getFriendshipStatus = async (ssbServer, source, dest) => {
+const getFriendshipStatus = async (source, dest) => {
   debugFriendshipStatus("Fetching");
 
   let requestRejectionsPromise = promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       query: [
         {
@@ -331,8 +332,8 @@ const getFriendshipStatus = async (ssbServer, source, dest) => {
   ).then(mapValues);
 
   const [isFollowing, isFollowingBack, requestRejections] = await Promise.all([
-    ssbServer.friends.isFollowing({ source: source, dest: dest }),
-    ssbServer.friends.isFollowing({ source: dest, dest: source }),
+    ssb.client().friends.isFollowing({ source: source, dest: dest }),
+    ssb.client().friends.isFollowing({ source: dest, dest: source }),
     requestRejectionsPromise.then((x) => x.map((y) => y.content.contact)),
   ]);
 
@@ -353,7 +354,7 @@ const getFriendshipStatus = async (ssbServer, source, dest) => {
   return status;
 };
 
-const getAllEntries = (ssbServer, query) => {
+const getAllEntries = (query) => {
   let queries = [];
   if (query.author) {
     queries.push({ $filter: { value: { author: query.author } } });
@@ -364,7 +365,7 @@ const getAllEntries = (ssbServer, query) => {
   const queryOpts = queries.length > 0 ? { query: queries } : {};
 
   return promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       limit: 1000,
       ...queryOpts,
@@ -373,10 +374,10 @@ const getAllEntries = (ssbServer, query) => {
 };
 
 let profileCache = {};
-const getProfile = async (ssbServer, id) => {
+const getProfile = async (id) => {
   if (profileCache[id]) return profileCache[id];
 
-  let getKey = (key) => latestOwnerValue(ssbServer, { key, dest: id });
+  let getKey = (key) => latestOwnerValue({ key, dest: id });
 
   let [name, image, description] = await Promise.all([
     getKey("name"),
@@ -392,23 +393,23 @@ const getProfile = async (ssbServer, id) => {
   return profile;
 };
 
-const progress = (ssbServer, callback) => {
+const progress = (callback) => {
   pull(
-    ssbServer.replicate.changes(),
+    ssb.client().replicate.changes(),
     pull.drain(callback, (err) => {
       console.error("Progress drain error", err);
     })
   );
 };
 
-const autofollow = async (ssbServer, id) => {
-  const isFollowing = await ssbServer.friends.isFollowing({
-    source: ssbServer.id,
+const autofollow = async (id) => {
+  const isFollowing = await ssb.client().friends.isFollowing({
+    source: ssb.client().id,
     dest: id,
   });
 
   if (!isFollowing) {
-    await ssbServer.publish({
+    await ssb.client().publish({
       type: "contact",
       contact: id,
       following: true,
@@ -417,11 +418,11 @@ const autofollow = async (ssbServer, id) => {
   }
 };
 
-const getCommunities = async (ssbServer) => {
+const getCommunities = async () => {
   debugCommunities("Fetching");
 
   const communitiesPosts = await promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       query: [
         {
@@ -449,11 +450,11 @@ const getCommunities = async (ssbServer) => {
   return communities;
 };
 
-const getCommunityMembers = async (ssbServer, name) => {
+const getCommunityMembers = async (name) => {
   debugCommunityMembers("Fetching");
 
   const communityMembers = await promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       query: [
         {
@@ -469,7 +470,7 @@ const getCommunityMembers = async (ssbServer, name) => {
       ],
       limit: 100,
     }),
-    paramap(mapProfiles(ssbServer))
+    paramap(mapProfiles)
   );
 
   debugCommunityMembers("Done");
@@ -477,13 +478,13 @@ const getCommunityMembers = async (ssbServer, name) => {
   return communityMembers.map((x) => x.value.authorProfile);
 };
 
-const getPostWithReplies = async (ssbServer, channel, key) => {
+const getPostWithReplies = async (channel, key) => {
   debugCommunityPosts("Fetching");
 
   const postWithReplies = await promisePull(
     // @ts-ignore
     cat([
-      ssbServer.query.read({
+      ssb.client().query.read({
         reverse: false,
         limit: 1,
         query: [
@@ -500,7 +501,7 @@ const getPostWithReplies = async (ssbServer, channel, key) => {
           },
         ],
       }),
-      ssbServer.query.read({
+      ssb.client().query.read({
         reverse: false,
         limit: 50,
         query: [
@@ -516,7 +517,7 @@ const getPostWithReplies = async (ssbServer, channel, key) => {
           },
         ],
       }),
-      ssbServer.query.read({
+      ssb.client().query.read({
         reverse: false,
         limit: 50,
         query: [
@@ -533,18 +534,18 @@ const getPostWithReplies = async (ssbServer, channel, key) => {
         ],
       }),
     ]),
-    paramap(mapProfiles(ssbServer))
+    paramap(mapProfiles)
   );
 
   debugCommunityPosts("Done");
   return postWithReplies;
 };
 
-const getCommunityPosts = async (ssbServer, name) => {
+const getCommunityPosts = async (name) => {
   debugCommunityPosts("Fetching");
 
   const communityPosts = await promisePull(
-    ssbServer.query.read({
+    ssb.client().query.read({
       reverse: true,
       query: [
         {
@@ -560,7 +561,7 @@ const getCommunityPosts = async (ssbServer, name) => {
       ],
       limit: 1000,
     }),
-    paramap(mapProfiles(ssbServer))
+    paramap(mapProfiles)
   );
   let communityPostsByKey = {};
   let replies = [];

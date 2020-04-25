@@ -1,10 +1,8 @@
+const ssb = require("./ssb-client");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 const bodyParser = require("body-parser");
-const Client = require("ssb-client");
-const ssbKeys = require("ssb-keys");
-const ssbConfig = require("./ssb-config");
 const {
   asyncRouter,
   writeKey,
@@ -28,41 +26,7 @@ const cookieEncrypter = require("cookie-encrypter");
 const expressLayouts = require("express-ejs-layouts");
 const mobileRoutes = require("./mobile-routes");
 
-let ssbServer;
 let mode = process.env.MODE || "client";
-
-let homeFolder =
-  process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-let ssbSecret = ssbKeys.loadOrCreateSync(
-  `${homeFolder}/.${process.env.CONFIG_FOLDER || "social"}/secret`
-);
-let syncing = false;
-
-Client(ssbSecret, ssbConfig, async (err, server) => {
-  if (err) throw err;
-
-  ssbServer = server;
-  mobileRoutes.setSsbServer(server);
-
-  queries.progress(
-    ssbServer,
-    ({ rate, feeds, incompleteFeeds, progress, total }) => {
-      if (incompleteFeeds > 0) {
-        if (!syncing) debug("syncing");
-        syncing = true;
-      } else {
-        syncing = false;
-      }
-
-      metrics.ssbProgressRate.set(rate);
-      metrics.ssbProgressFeeds.set(feeds);
-      metrics.ssbProgressIncompleteFeeds.set(incompleteFeeds);
-      metrics.ssbProgressProgress.set(progress);
-      metrics.ssbProgressTotal.set(total);
-    }
-  );
-  console.log("SSB Client ready");
-});
 
 let profileUrl = (id, path = "") => {
   return `/profile/${id}${path}`;
@@ -94,7 +58,7 @@ app.use(cookieEncrypter(cookieSecret));
 app.use(expressLayouts);
 app.set("layout", false);
 app.use(async (req, res, next) => {
-  if (!ssbServer) {
+  if (!ssb.client()) {
     setTimeout(() => {
       console.log("Waiting for SSB to load...");
 
@@ -104,25 +68,25 @@ app.use(async (req, res, next) => {
   }
 
   req.context = {
-    syncing: syncing,
+    syncing: ssb.isSyncing(),
   };
   res.locals.context = req.context;
   try {
-    const identities = await ssbServer.identities.list();
+    const identities = await ssb.client().identities.list();
     const key = req.signedCookies["ssb_key"];
     if (!key) return next();
 
     const parsedKey = JSON.parse(key);
     if (!identities.includes(parsedKey.id)) {
-      const filename = await nextIdentityFilename(ssbServer);
+      const filename = await nextIdentityFilename(ssb.client());
 
       writeKey(key, `/identities/${filename}`);
-      ssbServer.identities.refresh();
+      ssb.client().identities.refresh();
     }
-    req.context.profile = await queries.getProfile(ssbServer, parsedKey.id);
+    req.context.profile = await queries.getProfile(parsedKey.id);
 
     const isRootUser =
-      req.context.profile.id == ssbServer.id ||
+      req.context.profile.id == ssb.client().id ||
       process.env.NODE_ENV != "production";
 
     req.context.profile.debug = isRootUser;
@@ -168,9 +132,9 @@ router.get(
     }
 
     const [posts, friends, secretMessages] = await Promise.all([
-      queries.getPosts(ssbServer, req.context.profile),
-      queries.getFriends(ssbServer, req.context.profile),
-      queries.getSecretMessages(ssbServer, req.context.profile),
+      queries.getPosts(req.context.profile),
+      queries.getFriends(req.context.profile),
+      queries.getSecretMessages(req.context.profile),
     ]);
     res.render("home", {
       posts,
@@ -198,7 +162,7 @@ router.post("/login", { public: true }, async (req, res) => {
     decodedKey.private = "[removed]";
     debug("Login with key", decodedKey);
 
-    await queries.autofollow(ssbServer, decodedKey.id);
+    await queries.autofollow(decodedKey.id);
 
     res.redirect("/");
   } catch (e) {
@@ -228,10 +192,10 @@ router.post("/signup", { public: true }, async (req, res) => {
   const name = req.body.name;
   const picture = req.files && req.files.pic;
 
-  const pictureLink = picture && (await uploadPicture(ssbServer, picture));
+  const pictureLink = picture && (await uploadPicture(ssb.client(), picture));
 
-  const filename = await nextIdentityFilename(ssbServer);
-  const profileId = await ssbServer.identities.create();
+  const filename = await nextIdentityFilename(ssb.client());
+  const profileId = await ssb.client().identities.create();
   const key = readKey(`/identities/${filename}`);
   if (key.id != profileId)
     throw "profileId and key.id don't match, probably race condition, bailing out for safety";
@@ -242,7 +206,7 @@ router.post("/signup", { public: true }, async (req, res) => {
   key.private = "[removed]";
   debug("Generated key", key);
 
-  await ssbServer.identities.publishAs({
+  await ssb.client().identities.publishAs({
     id: profileId,
     private: false,
     content: {
@@ -254,7 +218,7 @@ router.post("/signup", { public: true }, async (req, res) => {
   });
   debug("Published about", { about: profileId, name, image: pictureLink });
 
-  await queries.autofollow(ssbServer, profileId);
+  await queries.autofollow(profileId);
 
   res.redirect("/keys");
 });
@@ -292,7 +256,7 @@ router.get("/keys/copy", (req, res) => {
 });
 
 router.get("/keys/download", async (req, res) => {
-  const identities = await ssbServer.identities.list();
+  const identities = await ssb.client().identities.list();
   const index = identities.indexOf(req.context.profile.id) - 1;
   const filename = identityFilename(index);
   const secretPath = `${ssbFolder()}/identities/${filename}`;
@@ -312,10 +276,10 @@ router.get(
     }
 
     const [profile, posts, friends, friendshipStatus] = await Promise.all([
-      queries.getProfile(ssbServer, id),
-      queries.getPosts(ssbServer, { id }),
-      queries.getFriends(ssbServer, { id }),
-      queries.getFriendshipStatus(ssbServer, req.context.profile.id, id),
+      queries.getProfile(id),
+      queries.getPosts({ id }),
+      queries.getFriends({ id }),
+      queries.getFriendshipStatus(req.context.profile.id, id),
     ]);
 
     res.render("profile", { profile, posts, friends, friendshipStatus });
@@ -328,7 +292,7 @@ router.post("/profile/:id(*)/add_friend", async (req, res) => {
     throw "cannot befriend yourself";
   }
 
-  await ssbServer.identities.publishAs({
+  await ssb.client().identities.publishAs({
     id: req.context.profile.id,
     private: false,
     content: {
@@ -347,7 +311,7 @@ router.post("/profile/:id(*)/reject_friend", async (req, res) => {
     throw "cannot reject yourself";
   }
 
-  await ssbServer.identities.publishAs({
+  await ssb.client().identities.publishAs({
     id: req.context.profile.id,
     private: false,
     content: {
@@ -361,7 +325,7 @@ router.post("/profile/:id(*)/reject_friend", async (req, res) => {
 });
 
 router.post("/publish", async (req, res) => {
-  await ssbServer.identities.publishAs({
+  await ssb.client().identities.publishAs({
     id: req.context.profile.id,
     private: false,
     content: {
@@ -377,7 +341,7 @@ router.post("/publish", async (req, res) => {
 router.post("/publish_secret", async (req, res) => {
   const recipients = req.body.recipients;
 
-  await ssbServer.identities.publishAs({
+  await ssb.client().identities.publishAs({
     id: req.context.profile.id,
     private: true,
     content: {
@@ -395,7 +359,7 @@ router.post("/vanish", async (req, res) => {
   const keys = req.body.keys.split(",");
 
   for (const key of keys) {
-    await ssbServer.identities.publishAs({
+    await ssb.client().identities.publishAs({
       id: req.context.profile.id,
       private: false,
       content: {
@@ -411,7 +375,7 @@ router.post("/vanish", async (req, res) => {
 router.post("/profile/:id(*)/publish", async (req, res) => {
   const id = req.params.id;
 
-  await ssbServer.identities.publishAs({
+  await ssb.client().identities.publishAs({
     id: req.context.profile.id,
     private: false,
     content: {
@@ -427,7 +391,7 @@ router.post("/profile/:id(*)/publish", async (req, res) => {
 router.post("/profile/:id(*)/publish_secret", async (req, res) => {
   const id = req.params.id;
 
-  await ssbServer.identities.publishAs({
+  await ssb.client().identities.publishAs({
     id: req.context.profile.id,
     private: true,
     content: {
@@ -441,8 +405,8 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
 });
 
 router.get("/pubs", async (_req, res) => {
-  const invite = await ssbServer.invite.create({ uses: 10 });
-  const peers = await ssbServer.gossip.peers();
+  const invite = await ssb.client().invite.create({ uses: 10 });
+  const peers = await ssb.client().gossip.peers();
 
   res.render("pubs", { invite, peers });
 });
@@ -450,7 +414,7 @@ router.get("/pubs", async (_req, res) => {
 router.post("/pubs/add", async (req, res) => {
   const inviteCode = req.body.invite_code;
 
-  await ssbServer.invite.accept(inviteCode);
+  await ssb.client().invite.accept(inviteCode);
 
   res.redirect("/");
 });
@@ -463,7 +427,7 @@ router.post("/about", async (req, res) => {
   const { name, description } = req.body;
   const picture = req.files && req.files.pic;
 
-  const pictureLink = picture && (await uploadPicture(ssbServer, picture));
+  const pictureLink = picture && (await uploadPicture(ssb.client(), picture));
 
   let update = {
     type: "about",
@@ -480,7 +444,7 @@ router.post("/about", async (req, res) => {
   }
 
   if (update.name || update.image || update.description) {
-    await ssbServer.identities.publishAs({
+    await ssb.client().identities.publishAs({
       id: req.context.profile.id,
       private: false,
       content: update,
@@ -496,7 +460,7 @@ router.get(
   "/communities",
   { mobileVersion: "/mobile/communities" },
   async (_req, res) => {
-    const communities = await queries.getCommunities(ssbServer);
+    const communities = await queries.getCommunities();
 
     res.render("communities/list", { communities });
   }
@@ -504,7 +468,7 @@ router.get(
 
 const communityData = (req) => {
   const name = req.params.name;
-  return queries.getCommunityMembers(ssbServer, name).then((members) => ({
+  return queries.getCommunityMembers(name).then((members) => ({
     name,
     members,
   }));
@@ -518,7 +482,7 @@ router.get(
 
     const [community, posts] = await Promise.all([
       communityData(req),
-      queries.getCommunityPosts(ssbServer, name),
+      queries.getCommunityPosts(name),
     ]);
 
     res.render("communities/community", {
@@ -543,7 +507,7 @@ router.post("/communities/:name/new", async (req, res) => {
   const title = req.body.title;
   const post = req.body.post;
 
-  const topic = await ssbServer.identities.publishAs({
+  const topic = await ssb.client().identities.publishAs({
     id: req.context.profile.id,
     private: false,
     content: {
@@ -562,7 +526,7 @@ router.post("/communities/:name/:key(*)/publish", async (req, res) => {
   const key = req.params.key;
   const reply = req.body.reply;
 
-  await ssbServer.identities.publishAs({
+  await ssb.client().identities.publishAs({
     id: req.context.profile.id,
     private: false,
     content: {
@@ -582,7 +546,7 @@ router.get("/communities/:name/:key(*)", async (req, res) => {
 
   const [community, posts] = await Promise.all([
     communityData(req),
-    queries.getPostWithReplies(ssbServer, name, key),
+    queries.getPostWithReplies(name, key),
   ]);
 
   res.render("communities/topic", {
@@ -600,7 +564,7 @@ router.get("/search", async (req, res) => {
     communities: [],
   };
   if (query.length >= 3) {
-    results = await queries.search(ssbServer, query);
+    results = await queries.search(query);
     metrics.searchResultsPeople.observe(results.people.length);
     metrics.searchResultsCommunities.observe(results.communities.length);
   }
@@ -609,7 +573,7 @@ router.get("/search", async (req, res) => {
 });
 
 router.get("/blob/*", { public: true }, (req, res) => {
-  serveBlobs(ssbServer)(req, res);
+  serveBlobs(ssb.client())(req, res);
 });
 
 router.get("/syncing", (req, res) => {
@@ -619,7 +583,7 @@ router.get("/syncing", (req, res) => {
 router.get("/debug", async (req, res) => {
   const query = req.query || {};
 
-  const entries = await queries.getAllEntries(ssbServer, query);
+  const entries = await queries.getAllEntries(query);
 
   res.render("debug", { entries, query });
 });

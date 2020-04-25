@@ -71,8 +71,8 @@ module.exports.identityFilename = (index) => {
   return "secret_" + leftpad(index, 2, "0") + ".butt";
 };
 
-module.exports.nextIdentityFilename = async (ssbServer) => {
-  const identities = await ssbServer.identities.list();
+module.exports.nextIdentityFilename = async (ssbClient) => {
+  const identities = await ssbClient.identities.list();
   return module.exports.identityFilename(identities.length - 1);
 };
 
@@ -98,14 +98,14 @@ module.exports.readKey = (path) => {
   return module.exports.reconstructKeys(keyfile);
 };
 
-module.exports.uploadPicture = async (ssbServer, picture) => {
+module.exports.uploadPicture = async (ssbClient, picture) => {
   const maxSize = 5 * 1024 * 1024; // 5 MB
   if (picture.size > maxSize) throw "Max size exceeded";
 
   return await new Promise((resolve, reject) =>
     pull(
       pull.values(split(picture.data, 64 * 1024)),
-      ssbServer.blobs.add((err, result) => {
+      ssbClient.blobs.add((err, result) => {
         if (err) return reject(err);
         return resolve(result);
       })
