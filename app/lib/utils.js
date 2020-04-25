@@ -5,6 +5,8 @@ const split = require("split-buffer");
 const metrics = require("./metrics");
 const isMobile = require("ismobilejs").default;
 
+const isPhone = (req) => isMobile(req.headers["user-agent"]).phone;
+
 module.exports.asyncRouter = (app) => {
   const debug = require("debug")("router");
 
@@ -16,6 +18,16 @@ module.exports.asyncRouter = (app) => {
         return res.send("You are not logged in");
       }
       return res.redirect("/");
+    }
+    if (
+      (opts.mobileVersion && isPhone(req)) ||
+      (opts.desktopVersion && !isPhone(req))
+    ) {
+      let url = opts.mobileVersion || opts.desktopVersion;
+      for (let key in req.params) {
+        url = url.replace(`:${key}`, req.params[key]);
+      }
+      return res.redirect(url);
     }
 
     req.context.path = path;
@@ -113,7 +125,3 @@ module.exports.promisePull = (...streams) =>
   });
 
 module.exports.mapValues = (x) => x.map((y) => y.value);
-
-module.exports.isPhone = (req) => {
-  return isMobile(req.headers["user-agent"]).phone;
-};

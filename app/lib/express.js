@@ -14,7 +14,6 @@ const {
   uploadPicture,
   identityFilename,
   ssbFolder,
-  isPhone,
 } = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
@@ -160,26 +159,27 @@ app.use((_req, res, next) => {
 const router = asyncRouter(app);
 mobileRoutes.setupRoutes(router);
 
-router.get("/", { public: true }, async (req, res) => {
-  if (!req.context.profile) {
-    return res.render("index");
-  }
-  if (isPhone(req)) {
-    return res.redirect("/mobile");
-  }
+router.get(
+  "/",
+  { public: true, mobileVersion: "/mobile" },
+  async (req, res) => {
+    if (!req.context.profile) {
+      return res.render("index");
+    }
 
-  const [posts, friends, secretMessages] = await Promise.all([
-    queries.getPosts(ssbServer, req.context.profile),
-    queries.getFriends(ssbServer, req.context.profile),
-    queries.getSecretMessages(ssbServer, req.context.profile),
-  ]);
-  res.render("home", {
-    posts,
-    friends,
-    secretMessages,
-    profile: req.context.profile,
-  });
-});
+    const [posts, friends, secretMessages] = await Promise.all([
+      queries.getPosts(ssbServer, req.context.profile),
+      queries.getFriends(ssbServer, req.context.profile),
+      queries.getSecretMessages(ssbServer, req.context.profile),
+    ]);
+    res.render("home", {
+      posts,
+      friends,
+      secretMessages,
+      profile: req.context.profile,
+    });
+  }
+);
 
 router.get("/login", { public: true }, (_req, res) => {
   res.render("login", { mode });
@@ -301,26 +301,26 @@ router.get("/keys/download", async (req, res) => {
   res.sendFile(secretPath);
 });
 
-router.get("/profile/:id(*)", async (req, res) => {
-  const id = req.params.id;
+router.get(
+  "/profile/:id(*)",
+  { mobileVersion: "/mobile/profile/:id" },
+  async (req, res) => {
+    const id = req.params.id;
 
-  if (id == req.context.profile.id) {
-    return res.redirect("/");
+    if (id == req.context.profile.id) {
+      return res.redirect("/");
+    }
+
+    const [profile, posts, friends, friendshipStatus] = await Promise.all([
+      queries.getProfile(ssbServer, id),
+      queries.getPosts(ssbServer, { id }),
+      queries.getFriends(ssbServer, { id }),
+      queries.getFriendshipStatus(ssbServer, req.context.profile.id, id),
+    ]);
+
+    res.render("profile", { profile, posts, friends, friendshipStatus });
   }
-
-  if (isPhone(req)) {
-    return res.redirect(`/mobile/profile/${id}`);
-  }
-
-  const [profile, posts, friends, friendshipStatus] = await Promise.all([
-    queries.getProfile(ssbServer, id),
-    queries.getPosts(ssbServer, { id }),
-    queries.getFriends(ssbServer, { id }),
-    queries.getFriendshipStatus(ssbServer, req.context.profile.id, id),
-  ]);
-
-  res.render("profile", { profile, posts, friends, friendshipStatus });
-});
+);
 
 router.post("/profile/:id(*)/add_friend", async (req, res) => {
   const id = req.params.id;
@@ -492,28 +492,15 @@ router.post("/about", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/communities", async (req, res) => {
-  if (isPhone(req)) {
-    return res.redirect(`/mobile/communities`);
+router.get(
+  "/communities",
+  { mobileVersion: "/mobile/communities" },
+  async (_req, res) => {
+    const communities = await queries.getCommunities(ssbServer);
+
+    res.render("communities/list", { communities });
   }
-
-  const communities = await queries.getCommunities(ssbServer);
-
-  res.render("communities/list", { communities });
-});
-
-router.get("/mobile/communities", async (req, res) => {
-  const communities = await queries.getCommunities(ssbServer);
-
-  if (!isPhone(req)) {
-    return res.redirect(`/communities`);
-  }
-
-  res.render("mobile/communities/list", {
-    communities,
-    layout: "mobile/_layout",
-  });
-});
+);
 
 const communityData = (req) => {
   const name = req.params.name;
@@ -523,24 +510,24 @@ const communityData = (req) => {
   }));
 };
 
-router.get("/communities/:name", async (req, res) => {
-  const name = req.params.name;
+router.get(
+  "/communities/:name",
+  { mobileVersion: "/mobile/communities/:name" },
+  async (req, res) => {
+    const name = req.params.name;
 
-  if (isPhone(req)) {
-    return res.redirect(`/mobile/communities/${name}`);
+    const [community, posts] = await Promise.all([
+      communityData(req),
+      queries.getCommunityPosts(ssbServer, name),
+    ]);
+
+    res.render("communities/community", {
+      community,
+      posts,
+      layout: "communities/_layout",
+    });
   }
-
-  const [community, posts] = await Promise.all([
-    communityData(req),
-    queries.getCommunityPosts(ssbServer, name),
-  ]);
-
-  res.render("communities/community", {
-    community,
-    posts,
-    layout: "communities/_layout",
-  });
-});
+);
 
 router.get("/communities/:name/new", async (req, res) => {
   const community = await communityData(req);
