@@ -1,0 +1,15 @@
+<div class="friends-communities">
+  <form action="/communities/<%= community.name %>/new" method="POST">
+    <label>
+      Title:
+      <input type="text" name="title" style="margin-bottom: 20px" maxlength="70" />
+    </label>
+    <label>
+      Post:
+      <textarea name="post" rows="5"></textarea>
+    </label>
+    <div class="reverse-columns" style="margin-top: 10px">
+      <input type="submit" value="Publish" />
+    </div>
+  </form>
+</div>

@@ -1,0 +1,25 @@
+<% if (posts.length > 0) { %>
+  <div class="friends-communities" style="flex-grow: 0;">
+    <h2>
+      <a href="/communities/<%= community.name %>" style="color: #600; text-decoration: none;">
+        ⮃&nbsp; #<%= community.name %>
+      </a>
+    </h2>
+    <h1><%= topicTitle(posts[0].value) %></h1>
+  </div>
+  <%- include("../../_posts", { posts: posts.map(x => x.value), dont_cut: true }) %>
+
+  <form action="/communities/<%= community.name %>/<%= posts[0].key.replace("%", "") %>/publish" method="POST" style="padding: 14px; border-top: 1px solid #ddd;">
+    <label>
+      Reply:
+      <textarea name="reply" class="compose-post" style="margin: 10px 0 0 0; height: 80px"></textarea>
+    </label>
+    <div class="reverse-columns" style="margin-top: 10px">
+      <input type="submit" value="Publish" />
+    </div>
+  </form>
+<% } else { %>
+  <div class="friends-communities">
+    <h1 style="padding: 14px">404 topic not found</h1>
+  </div>
+<% } %>

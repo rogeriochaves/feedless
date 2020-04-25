@@ -493,14 +493,18 @@ router.get(
   }
 );
 
-router.get("/communities/:name/new", async (req, res) => {
-  const community = await communityData(req);
+router.get(
+  "/communities/:name/new",
+  { mobileVersion: "/mobile/communities/:name/new" },
+  async (req, res) => {
+    const community = await communityData(req);
 
-  res.render("communities/new_topic", {
-    community,
-    layout: "communities/_layout",
-  });
-});
+    res.render("communities/new_topic", {
+      community,
+      layout: "communities/_layout",
+    });
+  }
+);
 
 router.post("/communities/:name/new", async (req, res) => {
   const name = req.params.name;
@@ -540,21 +544,25 @@ router.post("/communities/:name/:key(*)/publish", async (req, res) => {
   res.redirect(`/communities/${name}/${key}`);
 });
 
-router.get("/communities/:name/:key(*)", async (req, res) => {
-  const name = req.params.name;
-  const key = "%" + req.params.key;
+router.get(
+  "/communities/:name/:key(*)",
+  { mobileVersion: "/mobile/communities/:name/:key" },
+  async (req, res) => {
+    const name = req.params.name;
+    const key = "%" + req.params.key;
 
-  const [community, posts] = await Promise.all([
-    communityData(req),
-    queries.getPostWithReplies(name, key),
-  ]);
+    const [community, posts] = await Promise.all([
+      communityData(req),
+      queries.getPostWithReplies(name, key),
+    ]);
 
-  res.render("communities/topic", {
-    posts,
-    community,
-    layout: "communities/_layout",
-  });
-});
+    res.render("communities/topic", {
+      posts,
+      community,
+      layout: "communities/_layout",
+    });
+  }
+);
 
 router.get("/search", async (req, res) => {
   const query = req.query.query;

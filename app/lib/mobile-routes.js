@@ -99,4 +99,34 @@ module.exports.setupRoutes = (router) => {
       });
     }
   );
+
+  router.get(
+    "/mobile/communities/:name/new",
+    { desktopVersion: "/communities/:name/new" },
+    async (req, res) => {
+      const name = req.params.name;
+
+      res.render("mobile/communities/new_topic", {
+        community: { name },
+        layout: "mobile/_layout",
+      });
+    }
+  );
+
+  router.get(
+    "/mobile/communities/:name/:key(*)",
+    { desktopVersion: "/communities/:name/:key" },
+    async (req, res) => {
+      const name = req.params.name;
+      const key = "%" + req.params.key;
+
+      const posts = await queries.getPostWithReplies(name, key);
+
+      res.render("mobile/communities/topic", {
+        posts,
+        community: { name },
+        layout: "mobile/_layout",
+      });
+    }
+  );
 };
