@@ -1,0 +1,60 @@
+body {
+  background: #8debf5;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 40px 0;
+}
+header a {
+  text-decoration: none;
+  padding: 8px 8px 5px 8px;
+  color: #044;
+}
+header a:hover {
+  text-decoration: underline;
+}
+header .logo a:hover {
+  background: none;
+  text-decoration: none;
+}
+.logo {
+  font-weight: bold;
+  padding-right: 20px;
+  font-size: 30px;
+}
+
+nav {
+  display: flex;
+  background: #fff;
+  border-radius: 5px;
+  padding: 0 5px;
+  font-size: 14px;
+}
+
+.friends-communities {
+  min-width: 200px;
+  max-width: 200px;
+  background: #fbb;
+  color: #600;
+  padding: 14px;
+  border-radius: 0 5px 5px 0;
+}
+
+.friends-communities .link-profile-pic {
+  border: 1px solid #600;
+}
+
+.secret-chat {
+  min-width: 200px;
+  max-width: 200px;
+  background: #fe7;
+  color: #650;
+  padding: 14px 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.secret-chat .link-profile-pic {
+  border: 1px solid #650;
+}

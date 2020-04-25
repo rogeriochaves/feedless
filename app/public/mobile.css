@@ -1,5 +1,4 @@
 body {
-  background: #fff;
   padding-bottom: 70px;
   display: flex;
   flex-direction: column;
@@ -7,24 +6,31 @@ body {
 }
 
 nav {
+  display: flex;
+  background: #fff;
+  padding: 0 5px;
+  font-size: 14px;
   position: fixed;
   bottom: 0;
   justify-content: space-between;
   width: 100%;
-  border-radius: 0;
   padding: 0;
   border-top: 1px solid #aaa;
   border-bottom: 1px solid #aaa;
 }
 
 header {
+  display: flex;
   padding: 10px;
   background: #333;
 }
 
-.logo a {
-  font-size: 20px;
+.logo {
   color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding-right: 20px;
+  font-size: 20px;
 }
 
 nav a {
@@ -88,14 +94,17 @@ nav a.selected {
   color: #fff;
 }
 
-.secret-chat {
-  max-width: none;
-  min-width: auto;
+.yellow-background {
   flex-grow: 1;
-  padding: 0;
+  background: #fe7;
+  color: #650;
 }
 
-.secret-chat.no-secrets {
+.yellow-background .link-profile-pic {
+  border: 1px solid #650;
+}
+
+.yellow-background.no-secrets {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -103,13 +112,13 @@ nav a.selected {
   align-content: center;
 }
 
+.yellow-background .link-profile-pic {
+  margin-right: 12px;
+}
+
 .secret-button {
   padding: 8px 14px;
   font-size: 16px;
-}
-
-.secret-chat .link-profile-pic {
-  margin-right: 12px;
 }
 
 a.compose-new-button {
@@ -137,10 +146,16 @@ a.compose-new-button {
   background: #fb1;
 }
 
-.friends-communities {
-  max-width: none;
-  min-width: auto;
+.pink-background {
+  background: #fbb;
+  color: #600;
+  padding: 14px;
+  border-radius: 0 5px 5px 0;
   flex-grow: 1;
+}
+
+.pink-background .link-profile-pic {
+  border: 1px solid #600;
 }
 
 .tabs {
@@ -164,8 +179,4 @@ a.compose-new-button {
 
 .community-topic-link {
   padding: 10px;
-}
-
-.friends-communities {
-  border-radius: 0;
 }
