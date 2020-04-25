@@ -1,7 +1,7 @@
 const ssb = require("./ssb-client");
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 7624;
 const bodyParser = require("body-parser");
 const {
   asyncRouter,
@@ -44,7 +44,8 @@ if (SENTRY_DSN && process.env.NODE_ENV == "production") {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.set('views', `${__dirname}/../views`);
+app.use(express.static(`${__dirname}/../public`));
 app.use(fileUpload());
 const cookieSecret =
   process.env.COOKIES_SECRET || "set_cookie_secret_you_are_unsafe"; // has to be 32-bits
@@ -55,7 +56,9 @@ const cookieOptions = {
   sameSite: "Lax",
 };
 app.use(cookieParser(cookieSecret));
-app.use(cookieEncrypter(cookieSecret));
+if (mode != "client") {
+  app.use(cookieEncrypter(cookieSecret));
+}
 app.use(expressLayouts);
 app.set("layout", false);
 app.use(async (req, res, next) => {

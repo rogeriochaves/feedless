@@ -12,7 +12,7 @@ if (mode == "client") {
   }, 1000);
 }
 
-if (process.env.NODE_ENV != "production") {
+if (mode == "server" && process.env.NODE_ENV != "production") {
   const chokidar = require("chokidar");
   const watcher = chokidar.watch("./lib");
 
