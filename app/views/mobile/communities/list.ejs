@@ -1,0 +1,11 @@
+<div class="friends-communities">
+  <h1>Communities</h1>
+
+  <div style="padding-top: 20px">
+    <% communities.map(community => { %>
+      <a href="/mobile/communities/<%= community %>" class="link-block" style="display: inline-block">
+        #<%= community %>
+      </a>
+    <% }) %>
+  </div>
+</div>

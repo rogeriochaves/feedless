@@ -48,9 +48,15 @@
 
     <h2>Friends</h2>
     <%- include('_friends', { friends: friends.friends }) %>
+    <% if (friends.friends.length == 0) { %>
+      <p>You don't have any friends yet 🙁</p>
+      <p>Use the search or look in communities to find some</p>
+    <% } %>
 
-    <h2 style="margin-top: 30px">Requests Sent</h2>
-    <%- include('_friends', { friends: friends.requestsSent }) %>
+    <% if (friends.requestsSent.length > 0) { %>
+      <h2 style="margin-top: 30px">Requests Sent</h2>
+      <%- include('_friends', { friends: friends.requestsSent }) %>
+    <% } %>
   </div>
 </div>
 

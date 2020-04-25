@@ -373,3 +373,11 @@ h2 {
 .community-topic-link:hover .community-topic-name {
   text-decoration: underline;
 }
+
+.community-topic-name {
+  width: calc(100% - 110px);
+}
+
+.community-topic-replies {
+  width: 110px;
+}

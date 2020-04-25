@@ -1,0 +1,20 @@
+<div class="friends-communities" style="flex-grow: 0;">
+  <h1>
+    <a href="/communities/<%= community.name %>" style="color: #600; text-decoration: none;">
+      #<%= community.name %>
+    </a>
+  </h1>
+  <a href="/mobile/communities/<%= community.name %>/new" class="compose-new-button" style="background: #fbb">
+    <div style="font-size: 40px; color: #FFF">+</div>
+  </a>
+</div>
+<div>
+  <% posts.map(post => { %>
+    <a href="/communities/<%= community.name %>/<%= post.key.replace("%", "") %>" class="columns community-topic-link">
+      <div class="community-topic-name">
+        <%= topicTitle(post.value) %>
+      </div>
+      <div class="community-topic-replies" style="text-align: right;">💬 <%= post.value.replies.length %> replies</div>
+    </a>
+  <% }) %>
+</div>

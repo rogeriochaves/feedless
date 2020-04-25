@@ -562,9 +562,26 @@ router.post("/about", async (req, res) => {
 });
 
 router.get("/communities", async (req, res) => {
+  if (isPhone(req)) {
+    return res.redirect(`/mobile/communities`);
+  }
+
   const communities = await queries.getCommunities(ssbServer);
 
   res.render("communities/list", { communities });
+});
+
+router.get("/mobile/communities", async (req, res) => {
+  const communities = await queries.getCommunities(ssbServer);
+
+  if (!isPhone(req)) {
+    return res.redirect(`/communities`);
+  }
+
+  res.render("mobile/communities/list", {
+    communities,
+    layout: "mobile/_layout",
+  });
 });
 
 const communityData = (req) => {
@@ -578,6 +595,10 @@ const communityData = (req) => {
 router.get("/communities/:name", async (req, res) => {
   const name = req.params.name;
 
+  if (isPhone(req)) {
+    return res.redirect(`/mobile/communities/${name}`);
+  }
+
   const [community, posts] = await Promise.all([
     communityData(req),
     queries.getCommunityPosts(ssbServer, name),
@@ -587,6 +608,22 @@ router.get("/communities/:name", async (req, res) => {
     community,
     posts,
     layout: "communities/_layout",
+  });
+});
+
+router.get("/mobile/communities/:name", async (req, res) => {
+  const name = req.params.name;
+
+  if (!isPhone(req)) {
+    return res.redirect(`/communities/${name}`);
+  }
+
+  const posts = await queries.getCommunityPosts(ssbServer, name);
+
+  res.render("mobile/communities/community", {
+    community: { name },
+    posts,
+    layout: "mobile/_layout",
   });
 });
 

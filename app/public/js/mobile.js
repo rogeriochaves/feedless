@@ -105,7 +105,7 @@ composeButtons.forEach((composeButton) => {
     let url = composeButton.dataset.url;
     let body = "message=" + encodeURIComponent(messageInput.value);
 
-    if (parent.querySelector(".js-secret-recipients")) {
+    if (parent.querySelector(".js-recipients-list")) {
       const recipients = selectedRecipients();
       if (recipients.length == 0) return;
 

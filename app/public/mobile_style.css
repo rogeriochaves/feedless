@@ -95,6 +95,14 @@ nav a.selected {
   padding: 0;
 }
 
+.secret-chat.no-secrets {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
 .secret-button {
   padding: 8px 14px;
   font-size: 16px;
@@ -104,7 +112,14 @@ nav a.selected {
   margin-right: 12px;
 }
 
-.new-secret-button {
+a.compose-new-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.compose-new-button {
   position: fixed;
   bottom: 95px;
   width: 65px;
@@ -118,7 +133,7 @@ nav a.selected {
   color: #684510;
 }
 
-.new-secret-button:hover {
+.compose-new-button:hover {
   background: #fb1;
 }
 
@@ -145,4 +160,12 @@ nav a.selected {
   background: #fff;
   border-bottom: none;
   height: 33px;
+}
+
+.community-topic-link {
+  padding: 10px;
+}
+
+.friends-communities {
+  border-radius: 0;
 }
