@@ -27,6 +27,7 @@ const sgMail = require("@sendgrid/mail");
 const ejs = require("ejs");
 const cookieEncrypter = require("cookie-encrypter");
 const expressLayouts = require("express-ejs-layouts");
+const mobileRoutes = require("./mobile-routes");
 
 let ssbServer;
 let mode = process.env.MODE || "client";
@@ -42,6 +43,8 @@ Client(ssbSecret, ssbConfig, async (err, server) => {
   if (err) throw err;
 
   ssbServer = server;
+  mobileRoutes.setSsbServer(server);
+
   queries.progress(
     ssbServer,
     ({ rate, feeds, incompleteFeeds, progress, total }) => {
@@ -155,6 +158,7 @@ app.use((_req, res, next) => {
 });
 
 const router = asyncRouter(app);
+mobileRoutes.setupRoutes(router);
 
 router.get("/", { public: true }, async (req, res) => {
   if (!req.context.profile) {
@@ -174,52 +178,6 @@ router.get("/", { public: true }, async (req, res) => {
     friends,
     secretMessages,
     profile: req.context.profile,
-  });
-});
-
-router.get("/mobile", async (req, res) => {
-  if (!isPhone(req)) {
-    return res.redirect("/");
-  }
-
-  const posts = await queries.getPosts(ssbServer, req.context.profile);
-
-  res.render("mobile/home", {
-    posts,
-    profile: req.context.profile,
-    layout: "mobile/_layout",
-  });
-});
-
-router.get("/mobile/secrets", async (req, res) => {
-  if (!isPhone(req)) {
-    return res.redirect("/");
-  }
-
-  const [friends, secretMessages] = await Promise.all([
-    queries.getFriends(ssbServer, req.context.profile),
-    queries.getSecretMessages(ssbServer, req.context.profile),
-  ]);
-
-  res.render("mobile/secrets", {
-    friends,
-    secretMessages,
-    profile: req.context.profile,
-    layout: "mobile/_layout",
-  });
-});
-
-router.get("/mobile/friends", async (req, res) => {
-  if (!isPhone(req)) {
-    return res.redirect("/");
-  }
-
-  const friends = await queries.getFriends(ssbServer, req.context.profile);
-
-  res.render("mobile/friends", {
-    friends,
-    profile: req.context.profile,
-    layout: "mobile/_layout",
   });
 });
 
@@ -362,33 +320,6 @@ router.get("/profile/:id(*)", async (req, res) => {
   ]);
 
   res.render("profile", { profile, posts, friends, friendshipStatus });
-});
-
-router.get("/mobile/profile/:id(*)", async (req, res) => {
-  const id = req.params.id;
-
-  if (id == req.context.profile.id) {
-    return res.redirect("/");
-  }
-
-  if (!isPhone(req)) {
-    return res.redirect(`/profile/${id}`);
-  }
-
-  const [profile, posts, friends, friendshipStatus] = await Promise.all([
-    queries.getProfile(ssbServer, id),
-    queries.getPosts(ssbServer, { id }),
-    queries.getFriends(ssbServer, { id }),
-    queries.getFriendshipStatus(ssbServer, req.context.profile.id, id),
-  ]);
-
-  res.render("mobile/profile", {
-    profile,
-    posts,
-    friends,
-    friendshipStatus,
-    layout: "mobile/_layout",
-  });
 });
 
 router.post("/profile/:id(*)/add_friend", async (req, res) => {
@@ -608,22 +539,6 @@ router.get("/communities/:name", async (req, res) => {
     community,
     posts,
     layout: "communities/_layout",
-  });
-});
-
-router.get("/mobile/communities/:name", async (req, res) => {
-  const name = req.params.name;
-
-  if (!isPhone(req)) {
-    return res.redirect(`/communities/${name}`);
-  }
-
-  const posts = await queries.getCommunityPosts(ssbServer, name);
-
-  res.render("mobile/communities/community", {
-    community: { name },
-    posts,
-    layout: "mobile/_layout",
   });
 });
 
