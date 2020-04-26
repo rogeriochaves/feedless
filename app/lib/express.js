@@ -492,10 +492,13 @@ router.post("/about", async (req, res) => {
 router.get(
   "/communities",
   { mobileVersion: "/mobile/communities" },
-  async (_req, res) => {
-    const communities = await queries.getCommunities();
+  async (req, res) => {
+    const [communities, participating] = await Promise.all([
+      queries.getCommunities(),
+      queries.getProfileCommunities(req.context.profile.id),
+    ]);
 
-    res.render("communities/list", { communities });
+    res.render("communities/list", { communities, participating });
   }
 );
 

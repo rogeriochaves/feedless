@@ -9,7 +9,10 @@ const debugPosts = require("debug")("queries:posts"),
   debugCommunities = require("debug")("queries:communities"),
   debugCommunityMembers = require("debug")("queries:communityMembers"),
   debugCommunityPosts = require("debug")("queries:communityPosts"),
-  debugCommunityIsMember = require("debug")("queries:communityIsMember");
+  debugCommunityIsMember = require("debug")("queries:communityIsMember"),
+  debugCommunityProfileCommunities = require("debug")(
+    "queries:communityProfileCommunities"
+  );
 const paramap = require("pull-paramap");
 const { promisePull, mapValues } = require("./utils");
 const ssb = require("./ssb-client");
@@ -517,6 +520,42 @@ const getCommunityMembers = async (name) => {
   return memberProfiles;
 };
 
+const getProfileCommunities = async (id) => {
+  debugCommunityProfileCommunities("Fetching");
+  const subscriptions = await promisePull(
+    ssb.client().query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              author: id,
+              content: {
+                type: "channel",
+              },
+            },
+          },
+        },
+      ],
+    })
+  );
+  const dedupSubscriptions = {};
+  for (const subscription of subscriptions) {
+    const channel = subscription.value.content.channel;
+    if (dedupSubscriptions[channel]) continue;
+    dedupSubscriptions[channel] = subscription;
+  }
+  const onlyActiveSubscriptions = Object.values(dedupSubscriptions).filter(
+    (x) => x.value.content.subscribed
+  );
+  const channelNames = onlyActiveSubscriptions.map(
+    (x) => x.value.content.channel
+  );
+  debugCommunityProfileCommunities("Done");
+
+  return channelNames;
+};
+
 const getPostWithReplies = async (channel, key) => {
   debugCommunityPosts("Fetching");
 
@@ -651,4 +690,5 @@ module.exports = {
   progress,
   autofollow,
   isMember,
+  getProfileCommunities,
 };
