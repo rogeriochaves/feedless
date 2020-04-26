@@ -7,7 +7,7 @@ module.exports.setupRoutes = (router) => {
     { public: true, desktopVersion: "/" },
     async (req, res) => {
       if (!req.context.profile) {
-        return res.render("index");
+        return res.render("shared/index");
       }
 
       const posts = await queries.getPosts(req.context.profile);

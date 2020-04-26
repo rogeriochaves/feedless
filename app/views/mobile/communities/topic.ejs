@@ -7,7 +7,7 @@
     </h2>
     <h1><%- topicTitle(posts[0].value) %></h1>
   </div>
-  <%- include("../../_posts", { posts: posts.map(x => x.value), dont_cut: true }) %>
+  <%- include("../../shared/_posts", { posts: posts.map(x => x.value), dont_cut: true }) %>
 
   <form action="/communities/<%= community.name %>/<%= posts[0].key.replace("%", "") %>/publish" method="POST" style="padding: 14px; border-top: 1px solid #ddd;">
     <label>

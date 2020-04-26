@@ -12,6 +12,7 @@ const {
   uploadPicture,
   identityFilename,
   ssbFolder,
+  isPhone,
 } = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
@@ -161,7 +162,7 @@ router.get(
   { public: true, mobileVersion: "/mobile" },
   async (req, res) => {
     if (!req.context.profile) {
-      return res.render("index");
+      return res.render("shared/index");
     }
 
     const [posts, friends, secretMessages, communities] = await Promise.all([
@@ -170,7 +171,7 @@ router.get(
       queries.getSecretMessages(req.context.profile),
       queries.getProfileCommunities(req.context.profile.id),
     ]);
-    res.render("home", {
+    res.render("desktop/home", {
       posts,
       friends,
       secretMessages,
@@ -181,7 +182,7 @@ router.get(
 );
 
 router.get("/login", { public: true }, (_req, res) => {
-  res.render("login", { mode });
+  res.render("shared/login", { mode });
 });
 
 router.post("/login", { public: true }, async (req, res) => {
@@ -207,7 +208,7 @@ router.post("/login", { public: true }, async (req, res) => {
 });
 
 router.get("/download", { public: true }, (_req, res) => {
-  res.render("download");
+  res.render("shared/download");
 });
 
 router.get("/logout", async (_req, res) => {
@@ -220,7 +221,7 @@ router.get("/signup", { public: true }, (req, res) => {
     return res.redirect("/");
   }
 
-  res.render("signup", { mode });
+  res.render("shared/signup", { mode });
 });
 
 router.post("/signup", { public: true }, async (req, res) => {
@@ -259,7 +260,7 @@ router.post("/signup", { public: true }, async (req, res) => {
 });
 
 router.get("/keys", (req, res) => {
-  res.render("keys", {
+  res.render("shared/keys", {
     useEmail: process.env.SENDGRID_API_KEY,
     key: req.signedCookies["ssb_key"],
   });
@@ -269,7 +270,7 @@ router.post("/keys/email", async (req, res) => {
   const email = req.body.email;
   const origin = req.body.origin;
 
-  let html = await ejs.renderFile("views/email_sign_in.ejs", {
+  let html = await ejs.renderFile("views/shared/email_sign_in.ejs", {
     origin,
     ssb_key: req.signedCookies["ssb_key"],
   });
@@ -287,7 +288,7 @@ router.post("/keys/email", async (req, res) => {
 });
 
 router.get("/keys/copy", (req, res) => {
-  res.render("keys_copy", { key: req.signedCookies["ssb_key"] });
+  res.render("shared/keys_copy", { key: req.signedCookies["ssb_key"] });
 });
 
 router.get("/keys/download", async (req, res) => {
@@ -324,7 +325,7 @@ router.get(
       queries.getProfileCommunities(id),
     ]);
 
-    res.render("profile", {
+    res.render("desktop/profile", {
       profile,
       posts,
       friends,
@@ -456,7 +457,7 @@ router.get("/pubs", async (_req, res) => {
   const invite = await ssb.client().invite.create({ uses: 10 });
   const peers = await ssb.client().gossip.peers();
 
-  res.render("pubs", { invite, peers });
+  res.render("desktop/pubs", { invite, peers });
 });
 
 router.post("/pubs/add", async (req, res) => {
@@ -468,7 +469,7 @@ router.post("/pubs/add", async (req, res) => {
 });
 
 router.get("/about", { mobileVersion: "/mobile/about" }, (_req, res) => {
-  res.render("about");
+  res.render("desktop/about");
 });
 
 router.post("/about", async (req, res) => {
@@ -513,7 +514,7 @@ router.get(
       queries.getProfileCommunities(req.context.profile.id),
     ]);
 
-    res.render("communities/list", { communities, participating });
+    res.render("desktop/communities/list", { communities, participating });
   }
 );
 
@@ -540,10 +541,10 @@ router.get(
       queries.getCommunityPosts(name),
     ]);
 
-    res.render("communities/community", {
+    res.render("desktop/communities/community", {
       community,
       posts,
-      layout: "communities/_layout",
+      layout: "desktop/communities/_layout",
     });
   }
 );
@@ -554,9 +555,9 @@ router.get(
   async (req, res) => {
     const community = await communityData(req);
 
-    res.render("communities/new_topic", {
+    res.render("desktop/communities/new_topic", {
       community,
-      layout: "communities/_layout",
+      layout: "desktop/communities/_layout",
     });
   }
 );
@@ -643,10 +644,10 @@ router.get(
       queries.getPostWithReplies(name, key),
     ]);
 
-    res.render("communities/topic", {
+    res.render("desktop/communities/topic", {
       posts,
       community,
-      layout: "communities/_layout",
+      layout: "desktop/communities/_layout",
     });
   }
 );
@@ -664,7 +665,7 @@ router.get("/search", { mobileVersion: "/mobile/search" }, async (req, res) => {
     metrics.searchResultsCommunities.observe(results.communities.length);
   }
 
-  res.render("search", { ...results, query });
+  res.render("desktop/search", { ...results, query });
 });
 
 router.get("/blob/*", { public: true }, (req, res) => {
@@ -680,7 +681,7 @@ router.get("/debug", async (req, res) => {
 
   const entries = await queries.getAllEntries(query);
 
-  res.render("debug", { entries, query });
+  res.render("desktop/debug", { entries, query });
 });
 
 router.get("/debug-error", (_req, res) => {
@@ -700,9 +701,13 @@ if (SENTRY_DSN && process.env.NODE_ENV == "production") {
   app.use(Sentry.Handlers.errorHandler());
 }
 
-app.use((error, _req, res, _next) => {
+app.use((error, req, res, _next) => {
   res.statusCode = 500;
-  res.render("error", { error });
+  if (isPhone(req)) {
+    res.render("mobile/error", { error, layout: "mobile/_layout" });
+  } else {
+    res.render("desktop/error", { error });
+  }
 });
 
 const expressServer = app.listen(port, () =>

@@ -29,7 +29,7 @@
     <h2 style="margin: 0">Your Wall</h2>
     <div style="padding-top: 15px;">
       <% if (posts.length > 0) { %>
-        <%- include('_posts', { posts }) %>
+        <%- include('../shared/_posts', { posts }) %>
       <% } else { %>
         <div class="post">
           You have no posts yet, publish something!

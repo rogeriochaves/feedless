@@ -12,7 +12,7 @@
     <% } %>
 
     <div class="columns profile-actions" style="margin-top: 10px;">
-      <%- include('../_friendship_button') %>
+      <%- include('../shared/_friendship_button') %>
 
       <button class="button-yellow js-compose-secret-message" style="margin-left: 5px" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
         🤫 Secret
@@ -42,7 +42,7 @@
           <input type="submit" value="Publish" style="display: none; margin: 5px 0" class="js-publish-button" />
         </div>
       </form>
-      <%- include('../_posts', { posts }) %>
+      <%- include('../shared/_posts', { posts }) %>
     <% } else { %>
       <div style="padding-top: 15px;">
         <div class="post">

@@ -22,7 +22,7 @@
         <% } %>
 
         <div class="columns profile-actions">
-          <%- include('_friendship_button') %>
+          <%- include('../shared/_friendship_button') %>
 
           <button class="button-yellow js-compose-secret-message" style="margin-left: 5px" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
             🤫 Secret Message
@@ -46,7 +46,7 @@
           No posts yet
         </div>
       <% } else { %>
-        <%- include('_posts', { posts }) %>
+        <%- include('../shared/_posts', { posts }) %>
       <% } %>
     </div>
   </div>

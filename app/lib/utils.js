@@ -6,6 +6,7 @@ const metrics = require("./metrics");
 const isMobile = require("ismobilejs").default;
 
 const isPhone = (req) => isMobile(req.headers["user-agent"]).phone;
+module.exports.isPhone = isPhone;
 
 module.exports.asyncRouter = (app) => {
   const debug = require("debug")("router");
