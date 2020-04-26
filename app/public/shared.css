@@ -140,6 +140,7 @@ h2 {
   width: 48px;
   max-height: 200px;
   border: 1px solid #044;
+  min-height: 48px;
 }
 
 .post-content {
@@ -170,6 +171,7 @@ h2 {
 .profile-pic {
   width: 128px;
   border: 1px solid #044;
+  min-height: 128px;
 }
 
 .profile-actions form {
@@ -262,6 +264,7 @@ h2 {
   width: 32px;
   max-height: 100px;
   margin-right: 5px;
+  min-height: 32px;
 }
 
 .secret-button {
