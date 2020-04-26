@@ -691,6 +691,20 @@ router.get("/debug-error", (_req, res) => {
   res.send("should never reach here");
 });
 
+router.post("/frontend-error", (req, res) => {
+  const message = req.body.message;
+  const stacktrace = req.body.stacktrace;
+
+  if (SENTRY_DSN && process.env.NODE_ENV == "production") {
+    Sentry.captureEvent({
+      message,
+      stacktrace,
+    });
+  }
+
+  res.send("ok");
+});
+
 router.get("/metrics", { public: true }, (_req, res) => {
   res.set("Content-Type", metrics.register.contentType);
   res.end(metrics.register.metrics());
