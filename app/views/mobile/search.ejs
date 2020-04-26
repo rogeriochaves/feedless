@@ -1,11 +1,11 @@
 <div style="padding: 14px">
   <form action="/mobile/search" method="GET" style="padding-bottom: 20px">
     <div class="search-icon">🔎</div>
-    <input type="search" class="input-search" name="query" placeholder="Search" value="<%= query %>">
+    <input type="search" class="input-search" name="query" placeholder="Search" autofocus value="<%= query %>">
   </form>
-  <% if (query.length < 3) { %>
+  <% if (query.length > 0 && query.length < 3) { %>
     <h2>You need to search for 3 or more characters</h2>
-  <% } else { %>
+  <% } else if (query.length > 3) { %>
     <h3>People</h3>
 
     <% if (people.length == 0) { %>

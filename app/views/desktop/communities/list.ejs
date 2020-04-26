@@ -1,6 +1,9 @@
 <%- include('../_header') %>
 
-<h1 style="margin-bottom: 10px">My communities</h1>
+<div class="columns" style="justify-content: space-between;">
+  <h1 style="margin-bottom: 10px">My communities</h1>
+  <a href="/communities/new" class="button">New Community</a>
+</div>
 
 <% if (participating.length == 0) { %>
   <p>You haven't joined any communities yet, explore some below to join</p>

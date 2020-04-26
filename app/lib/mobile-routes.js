@@ -101,6 +101,14 @@ module.exports.setupRoutes = (router) => {
   );
 
   router.get(
+    "/mobile/communities/new",
+    { desktopVersion: "/communities/new" },
+    async (_req, res) => {
+      res.render("mobile/communities/new", { layout: "mobile/_layout" });
+    }
+  );
+
+  router.get(
     "/mobile/communities/:name",
     { desktopVersion: "/communities/:name" },
     async (req, res) => {

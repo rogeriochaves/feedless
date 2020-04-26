@@ -1,0 +1,28 @@
+<%- include('../_header') %>
+
+<h1 style="margin-bottom: 20px">Create a new community</h1>
+
+<form action="/communities/new" method="POST">
+  <label>
+    Name:
+    <div class="columns" style="align-items: center; margin: 8px 0 20px 0;">
+      <div style="padding-right: 10px">#</div>
+      <input type="text" name="name" maxlength="70" style="margin: 0" placeholder="my-community" />
+    </div>
+  </label>
+
+  <h1 style="margin: 40px 0 20px 0">First topic</h1>
+  <label>
+    Title:
+    <input type="text" name="title" style="margin-bottom: 20px" maxlength="70" />
+  </label>
+  <label>
+    Post:
+    <textarea name="post" rows="5"></textarea>
+  </label>
+  <div class="reverse-columns" style="margin-top: 10px">
+    <input type="submit" value="Publish" />
+  </div>
+</form>
+
+<%- include('../_footer') %>

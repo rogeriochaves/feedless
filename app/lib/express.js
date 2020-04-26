@@ -518,6 +518,48 @@ router.get(
   }
 );
 
+router.get(
+  "/communities/new",
+  { mobileVersion: "/mobile/communities/new" },
+  async (_req, res) => {
+    res.render("desktop/communities/new");
+  }
+);
+
+router.post("/communities/new", async (req, res) => {
+  const name = req.body.name;
+  if (!name.match(/^[a-z0-9-]+$/)) {
+    res.send("Invalid community name");
+    return;
+  }
+
+  const title = req.body.title;
+  const post = req.body.post;
+
+  await ssb.client().identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "post",
+      title: title,
+      text: post,
+      channel: name,
+    },
+  });
+
+  await ssb.client().identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "channel",
+      channel: name,
+      subscribed: true,
+    },
+  });
+
+  res.redirect(`/communities/${name}`);
+});
+
 const communityData = (req) => {
   const name = req.params.name;
   return Promise.all([
