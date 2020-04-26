@@ -327,3 +327,54 @@ h2 {
   width: 110px;
   text-align: right;
 }
+
+.index-welcome {
+  background: #8debf5;
+  padding: 50px;
+}
+
+.index-explanation {
+  background: #fbb;
+  padding: 50px 0;
+  color: #600;
+}
+
+.index-explanation ul {
+  padding-left: 15px;
+}
+
+.index-explanation li {
+  padding: 6px 0;
+}
+
+.index-more-details {
+  display: none;
+}
+
+@media (max-width: 576px) {
+  header {
+    /* For responsiveness on login and singup pages, because I was too lazy to do a mobile focused version for those */
+    padding: 10px 0 !important;
+  }
+  .index-welcome {
+    height: 98vh;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .index-explanation {
+    padding: 14px;
+  }
+  .index-more-details {
+    background: none;
+    border: none;
+    align-content: flex-end;
+  }
+  .index-more-details {
+    display: block;
+  }
+  .index-explanation {
+    height: 100vh;
+  }
+}

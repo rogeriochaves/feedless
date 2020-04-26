@@ -1,6 +1,6 @@
 <%- include('_header', { body_class: "entrance", main_class: "" }) %>
 
-<div style="background: #8debf5; padding: 50px">
+<div class="index-welcome">
   <div class="screen-center">
     <h1 style="font-size: 60px; font-family: 'Lucida Grande', sans-serif">Welcome to Social</h1>
     <h2 style="padding: 20px 0">The non-addictive social network</h2>
@@ -10,20 +10,23 @@
       <a href="/login" class="button button-big" style="margin-left: 10px">Login</a>
     </div>
   </div>
+  <button class="index-more-details">
+    What is the idea? ⬇
+  </button>
 </div>
 
-<div style="background: #fbb; padding: 50px 0; color: #600">
+<div class="index-explanation">
   <div class="screen-center">
     <p>
       Social combines the best original ideas of popular social networks without the bad parts
     </p>
 
     <ul>
-      <li>There is no feed to scroll forever, no cassino slot machine addiction</li>
-      <li>There are no likes nor any mindless interactions, if you like something, you tell the person, like a human</li>
       <li>You have your own wall, but you can only post with 140 characters, like original Twitter</li>
       <li>If you want to check on others you have to go to their profile, like original Facebook or Orkut</li>
       <li>You can send secret messages, like original Snapchat, but there are no stories</li>
+      <li>There is no feed to scroll forever, no cassino slot machine addiction</li>
+      <li>There are no likes nor any mindless interactions, if you like something, you tell the person, like a human</li>
     </ul>
 
     <p>
@@ -34,5 +37,20 @@
     </p>
   </div>
 </div>
+
+<script>
+  const scrollTo = document.querySelector(".index-welcome").clientHeight - 20;
+  const scrollDuration = 500;
+  const scrollStep = scrollTo / (scrollDuration / 15);
+  document.querySelector(".index-more-details").addEventListener("click", () => {
+    const scrollInterval = setInterval(() => {
+      if (window.scrollY < scrollTo) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  });
+</script>
 
 <%- include('_footer') %>
