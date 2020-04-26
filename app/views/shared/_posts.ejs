@@ -1,21 +1,21 @@
 <% posts.map(post => { %>
   <% if (!post.content.text) return %>
-  <div class="post">
-    <div>
-      <a href="<%= profileUrl(post.author) %>">
-        <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" />
-      </a>
+  <% let text = escapeMarkdown(post.content.text) %>
+  <% let limit = typeof dont_cut == "undefined" ? 140 : 10000 %>
+  <% let numPosts = Math.ceil(text.length / limit) %>
+  <% for (let i = numPosts; i > 0; i--) { %>
+    <div class="post">
+      <div>
+        <a href="<%= profileUrl(post.author) %>">
+          <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" />
+        </a>
+      </div>
+      <div class="post-content">
+        <a href="<%= profileUrl(post.author) %>" class="no-link-style">
+          <b><%= post.authorProfile.name %></b>
+        </a>
+        <%- htmlify(text.slice(limit * (i - 1), limit * i)) %>
+      </div>
     </div>
-    <div class="post-content">
-      <a href="<%= profileUrl(post.author) %>" class="no-link-style">
-        <b><%= post.authorProfile.name %></b>
-      </a>
-      <% let text = escapeMarkdown(post.content.text) %>
-      <% if (typeof dont_cut == "undefined") { %>
-        <% text = text.slice(0, 140) %>
-        <% if (post.content.text.length > 140) text += "..." %>
-      <% } %>
-      <%- htmlify(text) %>
-    </div>
-  </div>
+  <% } %>
 <% }) %>
