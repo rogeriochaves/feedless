@@ -145,7 +145,7 @@ app.use((_req, res, next) => {
       `<a target="_blank" href="$1">$1</a>`
     );
     result = result.replace(
-      /(\s|^)(([a-z-_])*\.\S{2,})/gm, // Domains without http
+      /(\s|^)(([a-z-_])*(\.[^\s.]{2,})+)/gm, // Domains without http
       `$1<a target="_blank" href="http://$2">$2</a>`
     );
     result = result.replace(/\n/g, "<br />");

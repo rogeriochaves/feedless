@@ -25,6 +25,7 @@ input[type="submit"] {
   text-decoration: none;
   display: inline-block;
   height: 33px;
+  -webkit-appearance: none;
 }
 button:hover,
 a.button:hover,
