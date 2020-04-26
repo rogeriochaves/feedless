@@ -131,22 +131,22 @@ app.use((_req, res, next) => {
     result = result.replace(/!\[.*?\]\((.*?)\)/g, `$1`); // Images
     result = result.replace(/\[(@.*?)\]\(@.*?\)/g, `$1`); // Link to mention
     result = result.replace(/\[.*?\]\((.*?)\)/g, `$1`); // Any Link
-    result = result.replace(/^#+ /g, "");
+    result = result.replace(/^#+ /gm, "");
     return result;
   };
   res.locals.htmlify = (str) => {
     let result = str;
     result = result.replace(
-      BLOB_PATTERN,
-      `<a target="_blank" href="/blob/$1">$1</a>`
+      /(\s|^)&amp;(\S*?=\.sha\d+)/g, // Blobs
+      `$1<a target="_blank" href="/blob/&$2">&$2</a>`
     );
     result = result.replace(
-      /(https?:\/\/\S+)/g,
+      /(https?:\/\/\S+)/g, // Urls with http in front
       `<a target="_blank" href="$1">$1</a>`
     );
     result = result.replace(
-      /( ([a-z-_]+\.)?[a-z-_]+\.[a-z]+(\/\S+))/g,
-      ` <a target="_blank" href="http://$1">$1</a>`
+      /(\s|^)(([a-z-_])*\.\S{2,})/gm, // Domains without http
+      `$1<a target="_blank" href="http://$2">$2</a>`
     );
     result = result.replace(/\n/g, "<br />");
     return result;
