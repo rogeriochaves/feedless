@@ -57,6 +57,16 @@
       <h2 style="margin-top: 30px">Requests Sent</h2>
       <%- include('_friends', { friends: friends.requestsSent }) %>
     <% } %>
+
+    <h2 style="margin-top: 30px">Communities</h2>
+    <% communities.map(community => { %>
+      <a href="/communities/<%= community %>" class="link-block">
+        #<%= community %>
+      </a>
+    <% }) %>
+    <% if (communities.length == 0) { %>
+      <p>You haven't joined any communities yet</p>
+    <% } %>
   </div>
 </div>
 

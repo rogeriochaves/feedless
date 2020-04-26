@@ -6,7 +6,7 @@
   <p>You haven't joined any communities yet, explore some below to join</p>
 <% } %>
 <% participating.map(community => { %>
-  <a href="/mobile/communities/<%= community %>" class="link-block">
+  <a href="/communities/<%= community %>" class="link-block">
     #<%= community %>
   </a>
 <% }) %>
@@ -14,7 +14,7 @@
 <h1 style="margin-top: 40px; margin-bottom: 10px">Explore</h1>
 
 <% communities.map(community => { %>
-  <a href="/mobile/communities/<%= community %>" class="link-block">
+  <a href="/communities/<%= community %>" class="link-block">
     #<%= community %>
   </a>
 <% }) %>

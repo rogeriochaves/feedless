@@ -164,15 +164,17 @@ router.get(
       return res.render("index");
     }
 
-    const [posts, friends, secretMessages] = await Promise.all([
+    const [posts, friends, secretMessages, communities] = await Promise.all([
       queries.getPosts(req.context.profile),
       queries.getFriends(req.context.profile),
       queries.getSecretMessages(req.context.profile),
+      queries.getProfileCommunities(req.context.profile.id),
     ]);
     res.render("home", {
       posts,
       friends,
       secretMessages,
+      communities,
       profile: req.context.profile,
     });
   }
