@@ -11,7 +11,9 @@ document.onkeydown = (e) => {
 const openModalFor = (elem, onConfirm, afterClose = null) => {
   const overlay = elem.parentElement.querySelector(".overlay");
   const modal = elem.parentElement.querySelector(".modal");
-  const confirmButtons = elem.parentElement.querySelectorAll(".modal-confirm");
+  const confirmButtons = elem.parentElement.querySelectorAll(
+    ".js-modal-confirm"
+  );
   const steps = elem.parentElement.querySelectorAll(".js-step");
 
   overlay.style.display = "block";
@@ -35,7 +37,7 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
       steps.forEach((step, index) => {
         if (currentStep == index) {
           step.style.display = "block";
-        } else if (step.style.display == "block") {
+        } else if (step.style.display != "none") {
           currentStep = index;
           currentStep++;
           if (currentStep < steps.length) step.style.display = "none";

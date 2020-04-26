@@ -17,7 +17,9 @@ if (composePost) {
 const openModalFor = (elem, onConfirm, afterClose = null) => {
   const overlay = elem.parentElement.querySelector(".overlay");
   const modal = elem.parentElement.querySelector(".modal");
-  const confirmButtons = elem.parentElement.querySelectorAll(".modal-confirm");
+  const confirmButtons = elem.parentElement.querySelectorAll(
+    ".js-modal-confirm"
+  );
   const steps = elem.parentElement.querySelectorAll(".js-step");
   const closeButton = elem.parentElement.querySelector(".js-modal-close");
   const backButtons = elem.parentElement.querySelectorAll(".js-modal-back");
