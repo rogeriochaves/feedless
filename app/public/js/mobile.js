@@ -196,3 +196,21 @@ tabButtons.forEach((tab, index) => {
     tab.classList.add("tab-selected");
   });
 });
+
+/**
+ * Top menu
+ */
+
+const openMenu = document.querySelector(".js-open-menu");
+if (openMenu) {
+  const topMenu = document.querySelector(".js-top-menu");
+  const overlay = document.querySelector(".js-top-menu-overlay");
+  openMenu.addEventListener("click", () => {
+    overlay.style.display = "block";
+    topMenu.style.display = "flex";
+  });
+  overlay.addEventListener("click", () => {
+    overlay.style.display = "none";
+    topMenu.style.display = "none";
+  });
+}

@@ -10,7 +10,20 @@
   <body>
     <header>
       <a class="logo" href="/">Social</a>
+      <button class="open-menu js-open-menu">
+        <div class="menu-dash"></div>
+        <div class="menu-dash"></div>
+        <div class="menu-dash"></div>
+      </button>
     </header>
+    <div class="overlay js-top-menu-overlay" style="background: none; display: none"></div>
+    <div class="top-menu js-top-menu" style="display: none;">
+      <a href="/mobile/about">Edit profile</a>
+      <a href="https://github.com/rogeriochaves/social/issues" target="_blank">Feedback</a>
+      <a href="/logout">
+        Logout
+      </a>
+    </div>
     <nav>
       <a href="/mobile" class="<%= context.path == "/mobile" ? "selected" : "" %>">
         <div class="nav-icon">🙂</div>

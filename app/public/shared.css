@@ -354,7 +354,7 @@ h2 {
 @media (max-width: 576px) {
   header {
     /* For responsiveness on login and singup pages, because I was too lazy to do a mobile focused version for those */
-    padding: 10px 0 !important;
+    padding: 10px !important;
   }
   .index-welcome {
     height: 98vh;

@@ -23,6 +23,7 @@ header {
   display: flex;
   padding: 10px;
   background: #333;
+  justify-content: space-between;
 }
 
 .logo {
@@ -200,4 +201,42 @@ a.compose-new-button {
 .link-block {
   padding: 5px 0;
   margin: 0;
+}
+
+.open-menu {
+  background: none;
+  border: none;
+  padding: 0;
+  height: auto;
+}
+
+.menu-dash {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  border-radius: 5px;
+  margin-top: 4px;
+}
+
+.menu-dash:first-child {
+  margin: 0;
+}
+
+.top-menu {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  margin-top: 20px;
+  width: 40vw;
+  right: 20px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.top-menu a {
+  display: block;
+  text-decoration: none;
+  padding: 14px;
+  border-bottom: 1px solid #ddd;
 }

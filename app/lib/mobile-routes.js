@@ -71,6 +71,10 @@ module.exports.setupRoutes = (router) => {
     }
   );
 
+  router.get("/mobile/about", { desktopVersion: "/about" }, (_req, res) => {
+    res.render("mobile/about", { layout: "mobile/_layout" });
+  });
+
   router.get(
     "/mobile/communities",
     { desktopVersion: "/communities" },

@@ -44,7 +44,7 @@ if (SENTRY_DSN && process.env.NODE_ENV == "production") {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-app.set('views', `${__dirname}/../views`);
+app.set("views", `${__dirname}/../views`);
 app.use(express.static(`${__dirname}/../public`));
 app.use(fileUpload());
 const cookieSecret =
@@ -452,7 +452,7 @@ router.post("/pubs/add", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/about", (req, res) => {
+router.get("/about", { mobileVersion: "/mobile/about" }, (_req, res) => {
   res.render("about");
 });
 
@@ -636,7 +636,7 @@ router.get("/debug-error", (_req, res) => {
   res.send("should never reach here");
 });
 
-router.get("/metrics", (_req, res) => {
+router.get("/metrics", { public: true }, (_req, res) => {
   res.set("Content-Type", metrics.register.contentType);
   res.end(metrics.register.metrics());
 });

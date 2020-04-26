@@ -1,0 +1,20 @@
+<div style="padding: 14px;">
+  <form action="about" method="POST" enctype="multipart/form-data">
+    <label>
+      Profile picture:
+      <div class="columns" style="margin-top: 20px; align-items: center;">
+        <div class="profile-pic-placeholder" style="margin-right: 15px; height: auto">
+          <img src="<%= profileImageUrl(context.profile) %>" class="js-profile-pic-placeholder">
+        </div>
+        <input type="file" name="pic" class="js-profile-pic-upload" />
+      </div>
+    </label>
+    <p>
+      Name: <input type="text" name="name" value="<%= context.profile.name %>">
+    </p>
+    <p>
+      Bio: <input type="text" name="description" value="<%= context.profile.description %>">
+    </p>
+    <input type="submit" value="Save">
+  </form>
+</div>
