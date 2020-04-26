@@ -14,16 +14,16 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
   const confirmButtons = elem.parentElement.querySelectorAll(".modal-confirm");
   const steps = elem.parentElement.querySelectorAll(".js-step");
 
-  overlay.hidden = false;
-  modal.hidden = false;
+  overlay.style.display = "block";
+  modal.style.display = "block";
 
   const onClose = () => {
-    overlay.hidden = true;
-    modal.hidden = true;
+    overlay.style.display = "none";
+    modal.style.display = "none";
     steps.forEach((step) => {
-      step.hidden = true;
+      step.style.display = "none";
     });
-    if (steps[0]) steps[0].hidden = false;
+    if (steps[0]) steps[0].style.display = "block";
     if (afterClose) afterClose();
   };
 
@@ -34,11 +34,11 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
       let currentStep;
       steps.forEach((step, index) => {
         if (currentStep == index) {
-          step.hidden = false;
-        } else if (!step.hidden) {
+          step.style.display = "block";
+        } else if (step.style.display == "block") {
           currentStep = index;
           currentStep++;
-          if (currentStep < steps.length) step.hidden = true;
+          if (currentStep < steps.length) step.style.display = "none";
         }
       });
       if (currentStep == steps.length) {
@@ -88,9 +88,9 @@ composeButtons.forEach((composeButton) => {
       body += "&recipients=" + encodeURIComponent(recipients);
     }
 
-    publishButton.style.display = "none"; // hidden doesn't work on buttons
+    publishButton.style.display = "none";
     sendingMessage.innerHTML = "Loading...";
-    sendingMessage.hidden = false;
+    sendingMessage.style.display = "block";
 
     fetch(url, {
       method: "POST",
@@ -108,7 +108,7 @@ composeButtons.forEach((composeButton) => {
       modal.close();
       messageInput.value = "";
       publishButton.style.display = "block";
-      sendingMessage.hidden = true;
+      sendingMessage.style.display = "none";
     }, 1000);
   };
 
@@ -116,7 +116,7 @@ composeButtons.forEach((composeButton) => {
     sendingMessage.innerHTML = "Error";
     setTimeout(() => {
       publishButton.style.display = "block";
-      sendingMessage.hidden = true;
+      sendingMessage.style.display = "none";
     }, 1000);
   };
 

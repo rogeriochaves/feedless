@@ -22,12 +22,12 @@ const openModalFor = (elem, onConfirm, afterClose = null) => {
   const closeButton = elem.parentElement.querySelector(".js-modal-close");
   const backButtons = elem.parentElement.querySelectorAll(".js-modal-back");
 
-  overlay.hidden = false;
-  modal.hidden = false;
+  overlay.style.display = "block";
+  modal.style.display = "block";
 
   const onClose = () => {
-    overlay.hidden = true;
-    modal.hidden = true;
+    overlay.style.display = "none";
+    modal.style.display = "none";
     steps.forEach((step) => {
       step.style.display = "none";
     });
@@ -113,9 +113,9 @@ composeButtons.forEach((composeButton) => {
       body += "&recipients=" + encodeURIComponent(recipients);
     }
 
-    publishButton.style.display = "none"; // hidden doesn't work on buttons
+    publishButton.style.display = "none";
     sendingMessage.innerHTML = "Loading...";
-    sendingMessage.hidden = false;
+    sendingMessage.style.display = "block";
 
     fetch(url, {
       method: "POST",
@@ -133,7 +133,7 @@ composeButtons.forEach((composeButton) => {
       modal.close();
       messageInput.value = "";
       publishButton.style.display = "block";
-      sendingMessage.hidden = true;
+      sendingMessage.style.display = "none";
     }, 1000);
   };
 
@@ -141,7 +141,7 @@ composeButtons.forEach((composeButton) => {
     sendingMessage.innerHTML = "Error";
     setTimeout(() => {
       publishButton.style.display = "block";
-      sendingMessage.hidden = true;
+      sendingMessage.style.display = "none";
     }, 1000);
   };
 

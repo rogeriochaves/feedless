@@ -209,6 +209,9 @@ a.compose-new-button {
   padding: 0;
   height: auto;
 }
+.open-menu:hover {
+  background: none;
+}
 
 .menu-dash {
   width: 25px;
