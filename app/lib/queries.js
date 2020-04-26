@@ -668,10 +668,12 @@ const getCommunityPosts = async (name) => {
   return Object.values(communityPostsByKey);
 };
 
-setInterval(() => {
-  debugProfile("Clearing profile cache");
-  profileCache = {};
-}, 5 * 60 * 1000);
+if (!global.clearProfileInterval) {
+  global.clearProfileInterval = setInterval(() => {
+    debugProfile("Clearing profile cache");
+    profileCache = {};
+  }, 5 * 60 * 1000);
+}
 
 module.exports = {
   mapProfiles,
