@@ -501,9 +501,13 @@ router.get(
 
 const communityData = (req) => {
   const name = req.params.name;
-  return queries.getCommunityMembers(name).then((members) => ({
+  return Promise.all([
+    queries.getCommunityMembers(name),
+    queries.isMember(req.context.profile.id, name),
+  ]).then(([members, isMember]) => ({
     name,
     members,
+    isMember,
   }));
 };
 
@@ -556,6 +560,38 @@ router.post("/communities/:name/new", async (req, res) => {
   });
 
   res.redirect(`/communities/${name}/${topic.key.replace("%", "")}`);
+});
+
+router.post("/communities/:name/join", async (req, res) => {
+  const name = req.params.name;
+
+  await ssb.client().identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "channel",
+      channel: name,
+      subscribed: true,
+    },
+  });
+
+  res.redirect(`/communities/${name}`);
+});
+
+router.post("/communities/:name/leave", async (req, res) => {
+  const name = req.params.name;
+
+  await ssb.client().identities.publishAs({
+    id: req.context.profile.id,
+    private: false,
+    content: {
+      type: "channel",
+      channel: name,
+      subscribed: false,
+    },
+  });
+
+  res.redirect(`/communities/${name}`);
 });
 
 router.post("/communities/:name/:key(*)/publish", async (req, res) => {

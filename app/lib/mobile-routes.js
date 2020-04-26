@@ -94,13 +94,14 @@ module.exports.setupRoutes = (router) => {
     async (req, res) => {
       const name = req.params.name;
 
-      const [posts, members] = await Promise.all([
+      const [posts, members, isMember] = await Promise.all([
         queries.getCommunityPosts(name),
         queries.getCommunityMembers(name),
+        queries.isMember(req.context.profile.id, name),
       ]);
 
       res.render("mobile/communities/community", {
-        community: { name, members },
+        community: { name, members, isMember },
         posts,
         layout: "mobile/_layout",
       });

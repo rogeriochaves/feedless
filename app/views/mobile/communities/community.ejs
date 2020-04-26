@@ -1,9 +1,12 @@
 <div class="pink-background" style="flex-grow: 0;">
-  <h1>
-    <a href="/communities/<%= community.name %>" style="color: #600; text-decoration: none;">
-      #<%= community.name %>
-    </a>
-  </h1>
+  <div style="display: flex; justify-content: space-between;">
+    <h1>
+      <a href="/communities/<%= community.name %>" style="color: #600; text-decoration: none;">
+        #<%= community.name %>
+      </a>
+    </h1>
+    <%- include('../../shared/_join_button') %>
+  </div>
   <a href="/mobile/communities/<%= community.name %>/new" class="compose-new-button" style="background: #fbb">
     <div style="font-size: 40px; color: #FFF">+</div>
   </a>
@@ -19,7 +22,7 @@
 <div class="tab-content">
   <div class="tab-item js-tab-item">
     <% posts.map(post => { %>
-      <a href="/communities/<%= community.name %>/<%= post.key.replace("%", "") %>" class="columns community-topic-link">
+      <a href="/mobile/communities/<%= community.name %>/<%= post.key.replace("%", "") %>" class="columns community-topic-link">
         <div class="community-topic-name">
           <%- topicTitle(post.value) %>
         </div>

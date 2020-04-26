@@ -6,8 +6,8 @@
   }
 </style>
 
-<div style="background: #9b5f5f; padding: 50px; border-radius: 5px 5px 0 0">
-  <div style="max-width: 1200px; margin: 0 auto">
+<div style="background: #9b5f5f; padding: 14px; border-radius: 5px 5px 0 0">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 36px;">
     <h1 style="font-size: 60px">
       <a href="/communities/<%= community.name %>" style="color: #FFF; text-decoration: none;">
         #<%= community.name %>
@@ -19,7 +19,12 @@
 <div style="max-width: 1200px; margin: 0 auto; border-radius: 0 0 5px 5px">
   <div class="columns">
     <div class="friends-communities" style="border-radius: 0">
-      <h2>Members</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2 style="margin: 0;">Members</h2>
+        <div>
+          <%- include('../shared/_join_button') %>
+        </div>
+      </div>
       <%- include('../_friends', { friends: community.members }) %>
     </div>
     <div class="wall">

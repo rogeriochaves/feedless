@@ -1,0 +1,9 @@
+<% if (community.isMember) { %>
+  <form action="/communities/<%= community.name %>/leave" method="POST">
+    <input type="submit" value="Leave" />
+  </form>
+<% } else { %>
+  <form action="/communities/<%= community.name %>/join" method="POST">
+    <input type="submit" value="Join" />
+  </form>
+<% } %>

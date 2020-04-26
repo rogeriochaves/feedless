@@ -8,7 +8,8 @@ const debugPosts = require("debug")("queries:posts"),
   debugProfile = require("debug")("queries:profile"),
   debugCommunities = require("debug")("queries:communities"),
   debugCommunityMembers = require("debug")("queries:communityMembers"),
-  debugCommunityPosts = require("debug")("queries:communityPosts");
+  debugCommunityPosts = require("debug")("queries:communityPosts"),
+  debugCommunityIsMember = require("debug")("queries:communityIsMember");
 const paramap = require("pull-paramap");
 const { promisePull, mapValues } = require("./utils");
 const ssb = require("./ssb-client");
@@ -450,6 +451,32 @@ const getCommunities = async () => {
   return communities;
 };
 
+const isMember = async (id, channel) => {
+  debugCommunityIsMember("Fetching");
+  const [lastSubscription] = await promisePull(
+    ssb.client().query.read({
+      reverse: true,
+      limit: 1,
+      query: [
+        {
+          $filter: {
+            value: {
+              author: id,
+              content: {
+                type: "channel",
+                channel: channel,
+              },
+            },
+          },
+        },
+      ],
+    })
+  );
+  debugCommunityIsMember("Done");
+
+  return lastSubscription && lastSubscription.value.content.subscribed;
+};
+
 const getCommunityMembers = async (name) => {
   debugCommunityMembers("Fetching");
 
@@ -472,10 +499,22 @@ const getCommunityMembers = async (name) => {
     }),
     paramap(mapProfiles)
   );
+  const dedupMembers = {};
+  for (const member of communityMembers) {
+    const author = member.value.author;
+    if (dedupMembers[author]) continue;
+    dedupMembers[author] = member;
+  }
+  const onlySubscribedMembers = Object.values(dedupMembers).filter(
+    (x) => x.value.content.subscribed
+  );
+  const memberProfiles = onlySubscribedMembers.map(
+    (x) => x.value.authorProfile
+  );
 
   debugCommunityMembers("Done");
 
-  return communityMembers.map((x) => x.value.authorProfile);
+  return memberProfiles;
 };
 
 const getPostWithReplies = async (channel, key) => {
@@ -611,4 +650,5 @@ module.exports = {
   getPostWithReplies,
   progress,
   autofollow,
+  isMember,
 };
