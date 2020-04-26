@@ -29,6 +29,9 @@
   <button class="tab-title js-tab-button">
     Friends
   </button>
+  <button class="tab-title js-tab-button">
+    Communities
+  </button>
 </div>
 <div class="tab-content">
   <div class="tab-item js-tab-item">
@@ -50,5 +53,18 @@
   </div>
   <div class="tab-item js-tab-item" style="display: none; padding: 10px">
     <%- include('_friends', { friends: friends.friends }) %>
+    <% if (friends.friends.length == 0) { %>
+      <p>No friends</p>
+    <% } %>
+  </div>
+  <div class="tab-item js-tab-item" style="display: none; padding: 10px">
+    <% communities.map(community => { %>
+      <a href="/communities/<%= community %>" class="link-block">
+        #<%= community %>
+      </a>
+    <% }) %>
+    <% if (communities.length == 0) { %>
+      <p>No communities</p>
+    <% } %>
   </div>
 </div>

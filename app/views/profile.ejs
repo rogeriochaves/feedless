@@ -54,6 +54,19 @@
   <div class="friends-communities">
     <h2>Friends</h2>
     <%- include('_friends', { friends: friends.friends }) %>
+    <% if (friends.friends.length == 0) { %>
+      <p>No friends</p>
+    <% } %>
+
+    <h2 style="margin-top: 30px">Communities</h2>
+    <% communities.map(community => { %>
+      <a href="/communities/<%= community %>" class="link-block">
+        #<%= community %>
+      </a>
+    <% }) %>
+    <% if (communities.length == 0) { %>
+      <p>No communities</p>
+    <% } %>
   </div>
 </div>
 

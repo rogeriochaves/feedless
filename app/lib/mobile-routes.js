@@ -54,11 +54,18 @@ module.exports.setupRoutes = (router) => {
         return res.redirect("/mobile");
       }
 
-      const [profile, posts, friends, friendshipStatus] = await Promise.all([
+      const [
+        profile,
+        posts,
+        friends,
+        friendshipStatus,
+        communities,
+      ] = await Promise.all([
         queries.getProfile(id),
         queries.getPosts({ id }),
         queries.getFriends({ id }),
         queries.getFriendshipStatus(req.context.profile.id, id),
+        queries.getProfileCommunities(id),
       ]);
 
       res.render("mobile/profile", {
@@ -66,6 +73,7 @@ module.exports.setupRoutes = (router) => {
         posts,
         friends,
         friendshipStatus,
+        communities,
         layout: "mobile/_layout",
       });
     }

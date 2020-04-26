@@ -310,14 +310,27 @@ router.get(
       return res.redirect("/");
     }
 
-    const [profile, posts, friends, friendshipStatus] = await Promise.all([
+    const [
+      profile,
+      posts,
+      friends,
+      friendshipStatus,
+      communities,
+    ] = await Promise.all([
       queries.getProfile(id),
       queries.getPosts({ id }),
       queries.getFriends({ id }),
       queries.getFriendshipStatus(req.context.profile.id, id),
+      queries.getProfileCommunities(id),
     ]);
 
-    res.render("profile", { profile, posts, friends, friendshipStatus });
+    res.render("profile", {
+      profile,
+      posts,
+      friends,
+      friendshipStatus,
+      communities,
+    });
   }
 );
 
