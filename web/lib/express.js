@@ -181,16 +181,7 @@ router.get(
   }
 );
 
-router.get("/login", { public: true }, (_req, res) => {
-  res.render("shared/login", { mode });
-});
-
-router.post("/login", { public: true }, async (req, res) => {
-  const submittedKey =
-    req.files && req.files.ssb_key
-      ? req.files.ssb_key.data.toString()
-      : req.body.ssb_key || req.body.x_ssb_key; // x_ssb_key is because hotmail for some reason appends the x_
-
+const doLogin = async (submittedKey, res) => {
   try {
     const decodedKey = reconstructKeys(submittedKey);
     res.cookie("ssb_key", JSON.stringify(decodedKey), cookieOptions);
@@ -205,6 +196,24 @@ router.post("/login", { public: true }, async (req, res) => {
     debug("Error on login", e);
     res.send("Invalid key");
   }
+};
+
+router.get("/login", { public: true }, async (req, res) => {
+  const login_key =
+    req.query.key && Buffer.from(req.query.key, "base64").toString("utf8");
+
+  if (login_key) {
+    await doLogin(JSON.parse(login_key), res);
+  } else {
+    res.render("shared/login", { mode });
+  }
+});
+
+router.post("/login", { public: true }, async (req, res) => {
+  const submittedKey =
+    req.files && req.files.ssb_key && req.files.ssb_key.data.toString();
+
+  await doLogin(submittedKey, res);
 });
 
 router.get("/download", { public: true }, (_req, res) => {
@@ -267,24 +276,38 @@ router.get("/keys", (req, res) => {
 });
 
 router.post("/keys/email", async (req, res) => {
+  /* According to https://security.stackexchange.com/questions/177643/is-emailing-sign-in-links-bad-practice
+   * having any keys in the email is not secure, but the alternative to just ask users to copy their key on
+   * sign up will not work because users tend to press Next > Next > Next > Done without reading, and it will
+   * lead to loss of account access.
+   * Solution is to put an email field which they fill without thinking and send them the key by email, asking
+   * on the email body to copy the key and delete it later.
+   */
   const email = req.body.email;
   const origin = req.body.origin;
+  const ssb_key = req.signedCookies["ssb_key"];
+  const login_key = Buffer.from(JSON.stringify(ssb_key)).toString("base64");
 
-  let html = await ejs.renderFile("views/shared/email_sign_in.ejs", {
-    origin,
-    ssb_key: req.signedCookies["ssb_key"],
-  });
+  if (process.env.NODE_ENV == "production") {
+    let html = await ejs.renderFile("views/shared/email_sign_in.ejs", {
+      origin,
+      ssb_key,
+      login_key,
+    });
 
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-  const msg = {
-    to: email,
-    from: "Feedless <rgrchvs@gmail.com>",
-    subject: `Login button for ${req.context.profile.name}`,
-    html,
-  };
-  await sgMail.send(msg);
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+      to: email,
+      from: "Feedless <rgrchvs@gmail.com>",
+      subject: `Login button for ${req.context.profile.name}`,
+      html,
+    };
+    await sgMail.send(msg);
 
-  res.redirect("/");
+    res.redirect("/");
+  } else {
+    res.render("shared/email_sign_in", { origin, ssb_key, login_key });
+  }
 });
 
 router.get("/keys/copy", (req, res) => {
