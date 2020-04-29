@@ -211,7 +211,9 @@ router.get("/login", { public: true }, async (req, res) => {
 
 router.post("/login", { public: true }, async (req, res) => {
   const submittedKey =
-    req.files && req.files.ssb_key && req.files.ssb_key.data.toString();
+    req.files && req.files.ssb_key
+      ? req.files.ssb_key.data.toString()
+      : req.body.ssb_key;
 
   await doLogin(submittedKey, res);
 });
