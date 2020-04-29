@@ -1,0 +1,18 @@
+{
+  "name": "feedless-ios",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "./tools/build-backend.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ora": "^4.0.4",
+    "bindings-noderify-nodejs-mobile": "10.3.0"
+  },
+  "devDependencies": {
+    "noderify": "4.3.0"
+  }
+}
