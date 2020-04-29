@@ -1,12 +1,12 @@
 version: "2"
 services:
-  social:
+  feedless:
     build: .
     restart: always
     network_mode: host
     env_file: .env
     volumes:
-      - social_ssb:/root/.social
+      - feedless_ssb:/root/.feedless
 
 volumes:
-  social_ssb:
+  feedless_ssb:

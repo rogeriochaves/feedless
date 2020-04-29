@@ -10,7 +10,7 @@ let ssbClient;
 let homeFolder =
   process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 let ssbSecret = ssbKeys.loadOrCreateSync(
-  `${homeFolder}/.${process.env.CONFIG_FOLDER || "social"}/secret`
+  `${homeFolder}/.${process.env.CONFIG_FOLDER || "feedless"}/secret`
 );
 let syncing = false;
 

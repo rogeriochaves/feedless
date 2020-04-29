@@ -1,6 +1,6 @@
 const configInject = require("ssb-config/inject");
 
-module.exports = configInject(process.env.CONFIG_FOLDER || "social", {
+module.exports = configInject(process.env.CONFIG_FOLDER || "feedless", {
   connections: {
     incoming: {
       net: [
