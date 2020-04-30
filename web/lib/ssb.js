@@ -29,7 +29,7 @@ Server.use(require("ssb-master"))
   .use(require("./monkeypatch/ssb-friends"))
   .use(require("ssb-query"))
   .use(require("ssb-device-address"))
-  .use(require("./monkeypatch/ssb-identities"))
+  .use(require("./plugins/memory-identities"))
   .use(require("ssb-peer-invites"))
   .use(require("ssb-blobs"))
   .use(require("ssb-private"));

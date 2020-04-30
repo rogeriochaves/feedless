@@ -5,13 +5,8 @@ const port = process.env.PORT || 7624;
 const bodyParser = require("body-parser");
 const {
   asyncRouter,
-  writeKey,
-  nextIdentityFilename,
   reconstructKeys,
-  readKey,
   uploadPicture,
-  identityFilename,
-  ssbFolder,
   isPhone,
 } = require("./utils");
 const queries = require("./queries");
@@ -77,18 +72,15 @@ app.use(async (req, res, next) => {
   };
   res.locals.context = req.context;
   try {
-    const identities = await ssb.client().identities.list();
     const key = req.signedCookies["ssb_key"];
     if (!key) return next();
 
     const parsedKey = JSON.parse(key);
-    if (!identities.includes(parsedKey.id)) {
-      const filename = await nextIdentityFilename(ssb.client());
+    if (!parsedKey.id) return next();
 
-      writeKey(key, `/identities/${filename}`);
-      ssb.client().identities.refresh();
-    }
+    ssb.client().identities.addUnboxer(parsedKey);
     req.context.profile = await queries.getProfile(parsedKey.id);
+    req.context.profile.key = parsedKey;
 
     const isRootUser =
       req.context.profile.id == ssb.client().id ||
@@ -199,11 +191,11 @@ const doLogin = async (submittedKey, res) => {
 };
 
 router.get("/login", { public: true }, async (req, res) => {
-  const login_key =
+  const loginKey =
     req.query.key && Buffer.from(req.query.key, "base64").toString("utf8");
 
-  if (login_key) {
-    await doLogin(JSON.parse(login_key), res);
+  if (loginKey) {
+    await doLogin(loginKey, res);
   } else {
     res.render("shared/login", { mode });
   }
@@ -241,31 +233,26 @@ router.post("/signup", { public: true }, async (req, res) => {
 
   const pictureLink = picture && (await uploadPicture(ssb.client(), picture));
 
-  const filename = await nextIdentityFilename(ssb.client());
-  const profileId = await ssb.client().identities.create();
-  const key = readKey(`/identities/${filename}`);
-  if (key.id != profileId)
-    throw "profileId and key.id don't match, probably race condition, bailing out for safety";
-
-  debug("Created new user with id", profileId);
-
+  const key = await ssb.client().identities.createNewKey();
   res.cookie("ssb_key", JSON.stringify(key), cookieOptions);
-  key.private = "[removed]";
-  debug("Generated key", key);
 
   await ssb.client().identities.publishAs({
-    id: profileId,
+    key,
     private: false,
     content: {
       type: "about",
-      about: profileId,
+      about: key.id,
       name: name,
       ...(pictureLink ? { image: pictureLink } : {}),
     },
   });
-  debug("Published about", { about: profileId, name, image: pictureLink });
 
-  await queries.autofollow(profileId);
+  const debugKey = { ...key, private: "[removed]" };
+  debug("Generated key", debugKey);
+
+  debug("Published about", { about: key.id, name, image: pictureLink });
+
+  await queries.autofollow(key.id);
 
   res.redirect("/keys");
 });
@@ -273,7 +260,7 @@ router.post("/signup", { public: true }, async (req, res) => {
 router.get("/keys", (req, res) => {
   res.render("shared/keys", {
     useEmail: process.env.SENDGRID_API_KEY,
-    key: req.signedCookies["ssb_key"],
+    key: req.context.profile.key,
   });
 });
 
@@ -287,8 +274,8 @@ router.post("/keys/email", async (req, res) => {
    */
   const email = req.body.email;
   const origin = req.body.origin;
-  const ssb_key = req.signedCookies["ssb_key"];
-  const login_key = Buffer.from(JSON.stringify(ssb_key)).toString("base64");
+  const ssb_key = JSON.stringify(req.context.profile.key);
+  const login_key = Buffer.from(ssb_key).toString("base64");
 
   if (process.env.NODE_ENV == "production") {
     let html = await ejs.renderFile("views/shared/email_sign_in.ejs", {
@@ -313,17 +300,33 @@ router.post("/keys/email", async (req, res) => {
 });
 
 router.get("/keys/copy", (req, res) => {
-  res.render("shared/keys_copy", { key: req.signedCookies["ssb_key"] });
+  res.render("shared/keys_copy", {
+    key: JSON.stringify(req.context.profile.key),
+  });
 });
 
 router.get("/keys/download", async (req, res) => {
-  const identities = await ssb.client().identities.list();
-  const index = identities.indexOf(req.context.profile.id) - 1;
-  const filename = identityFilename(index);
-  const secretPath = `${ssbFolder()}/identities/${filename}`;
+  const secretFile = `
+# WARNING: Never show this to anyone.
+# WARNING: Never edit it or use it on multiple devices at once.
+#
+# This is your SECRET, it gives you magical powers. With your secret you can
+# sign your messages so that your friends can verify that the messages came
+# from you. If anyone learns your secret, they can use it to impersonate you.
+#
+# If you use this secret on more than one device you will create a fork and
+# your friends will stop replicating your content.
+#
+${JSON.stringify(req.context.profile.key)}
+#
+# The only part of this file that's safe to share is your public name:
+#
+#   ${req.context.profile.id}
+`;
 
-  res.attachment("secret");
-  res.sendFile(secretPath);
+  res.contentType("text/plain");
+  res.header("Content-Disposition", "attachment; filename=secret");
+  res.send(secretFile);
 });
 
 router.get(
@@ -367,7 +370,7 @@ router.post("/profile/:id(*)/add_friend", async (req, res) => {
   }
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "contact",
@@ -386,7 +389,7 @@ router.post("/profile/:id(*)/reject_friend", async (req, res) => {
   }
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "contact",
@@ -400,7 +403,7 @@ router.post("/profile/:id(*)/reject_friend", async (req, res) => {
 
 router.post("/publish", async (req, res) => {
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "post",
@@ -416,7 +419,7 @@ router.post("/publish_secret", async (req, res) => {
   const recipients = req.body.recipients;
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: true,
     content: {
       type: "post",
@@ -434,7 +437,7 @@ router.post("/vanish", async (req, res) => {
 
   for (const key of keys) {
     await ssb.client().identities.publishAs({
-      id: req.context.profile.id,
+      key: req.context.profile.key,
       private: false,
       content: {
         type: "delete",
@@ -450,7 +453,7 @@ router.post("/profile/:id(*)/publish", async (req, res) => {
   const id = req.params.id;
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "post",
@@ -466,7 +469,7 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
   const id = req.params.id;
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: true,
     content: {
       type: "post",
@@ -519,7 +522,7 @@ router.post("/about", async (req, res) => {
 
   if (update.name || update.image || update.description) {
     await ssb.client().identities.publishAs({
-      id: req.context.profile.id,
+      key: req.context.profile.key,
       private: false,
       content: update,
     });
@@ -562,7 +565,7 @@ router.post("/communities/new", async (req, res) => {
   const post = req.body.post;
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "post",
@@ -573,7 +576,7 @@ router.post("/communities/new", async (req, res) => {
   });
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "channel",
@@ -635,7 +638,7 @@ router.post("/communities/:name/new", async (req, res) => {
   const post = req.body.post;
 
   const topic = await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "post",
@@ -652,7 +655,7 @@ router.post("/communities/:name/join", async (req, res) => {
   const name = req.params.name;
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "channel",
@@ -668,7 +671,7 @@ router.post("/communities/:name/leave", async (req, res) => {
   const name = req.params.name;
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "channel",
@@ -686,7 +689,7 @@ router.post("/communities/:name/:key(*)/publish", async (req, res) => {
   const reply = req.body.reply;
 
   await ssb.client().identities.publishAs({
-    id: req.context.profile.id,
+    key: req.context.profile.key,
     private: false,
     content: {
       type: "post",

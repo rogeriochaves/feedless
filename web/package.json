@@ -42,7 +42,6 @@
     "ssb-device-address": "^1.1.6",
     "ssb-friends": "^4.1.4",
     "ssb-gossip": "^1.1.1",
-    "ssb-identities": "^2.1.1",
     "ssb-invite": "^2.1.4",
     "ssb-keys": "^7.2.2",
     "ssb-master": "^1.0.3",

@@ -69,15 +69,6 @@ module.exports.writeKey = (key, path) => {
   fs.writeFileSync(secretPath, key, { mode: 0x100, flag: "wx" });
 };
 
-module.exports.identityFilename = (index) => {
-  return "secret_" + leftpad(index, 2, "0") + ".butt";
-};
-
-module.exports.nextIdentityFilename = async (ssbClient) => {
-  const identities = await ssbClient.identities.list();
-  return module.exports.identityFilename(identities.length - 1);
-};
-
 // From ssb-keys
 module.exports.reconstructKeys = (keyfile) => {
   var privateKey = keyfile
@@ -91,13 +82,6 @@ module.exports.reconstructKeys = (keyfile) => {
 
   if (!hasSigil(keys.id)) keys.id = "@" + keys.public;
   return keys;
-};
-
-module.exports.readKey = (path) => {
-  let secretPath = `${ssbFolder()}${path}`;
-
-  let keyfile = fs.readFileSync(secretPath, "utf8");
-  return module.exports.reconstructKeys(keyfile);
 };
 
 module.exports.uploadPicture = async (ssbClient, picture) => {
