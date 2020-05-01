@@ -6,8 +6,6 @@
   "scripts": {
     "start": "MODE=server SSB_PORT=8009 node index.js",
     "start:standalone": "electron .",
-    "start:user-2": "SSB_PORT=8010 PORT=3001 CONFIG_FOLDER=feedless-user2 electron .",
-    "start:user-3": "SSB_PORT=8011 PORT=3002 CONFIG_FOLDER=feedless-user3 electron .",
     "clear": "rm -rf ~/.feedless; rm -rf ~/.feedless-user2; rm -rf ~/.feedless-user3",
     "package:mac": "electron-packager . --platform=darwin --arch=x64 --out out/ --overwrite",
     "package:linux": "electron-packager . --platform=linux --arch=x64 --out out/ --overwrite"

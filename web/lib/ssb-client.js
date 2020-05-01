@@ -4,14 +4,11 @@ const ssbConfig = require("./ssb-config");
 const queries = require("./queries");
 const debug = require("debug")("express");
 const metrics = require("./metrics");
+const { ssbFolder } = require("./utils");
 
 let ssbClient;
 
-let homeFolder =
-  process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-let ssbSecret = ssbKeys.loadOrCreateSync(
-  `${homeFolder}/.${process.env.CONFIG_FOLDER || "feedless"}/secret`
-);
+let ssbSecret = ssbKeys.loadOrCreateSync(`${ssbFolder()}/secret`);
 let syncing = false;
 
 const connectClient = (ssbSecret) => {
