@@ -258,7 +258,11 @@ router.post("/signup", { public: true }, async (req, res) => {
 
   const key = await ssb.client().identities.createNewKey();
   if (mode == "standalone") {
-    fs.writeFileSync(`${ssbFolder()}/secret`, humanifyKey(key));
+    fs.unlinkSync(`${ssbFolder()}/secret`);
+    fs.writeFileSync(`${ssbFolder()}/secret`, humanifyKey(key), {
+      mode: 0x100,
+      flag: "wx",
+    });
     fs.unlinkSync(`${ssbFolder()}/logged-out`);
   } else {
     res.cookie("ssb_key", JSON.stringify(key), cookieOptions);
@@ -287,7 +291,7 @@ router.post("/signup", { public: true }, async (req, res) => {
 router.get("/keys", (req, res) => {
   res.render("shared/keys", {
     useEmail: process.env.SENDGRID_API_KEY,
-    key: req.context.profile.key,
+    key: JSON.stringify(req.context.profile.key),
   });
 });
 
