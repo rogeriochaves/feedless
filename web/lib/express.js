@@ -742,8 +742,8 @@ router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssb.client())(req, res);
 });
 
-router.get("/syncing", (req, res) => {
-  res.json({ syncing });
+router.get("/syncing", (_req, res) => {
+  res.json({ syncing: ssb.isSyncing() });
 });
 
 router.get("/debug", async (req, res) => {
