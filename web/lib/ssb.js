@@ -15,11 +15,10 @@ if (!secretExists && envKey) {
   }
 }
 
-const Server = require("ssb-server");
-const config = require("./ssb-config");
-
-// add plugins
-Server.use(require("ssb-master"))
+// Need to use secret-stack directly instead of ssb-server here otherwise is not compatible with patchwork .ssb folder
+const Server = require("secret-stack")()
+  .use(require("ssb-db"))
+  .use(require("ssb-master"))
   .use(require("ssb-gossip"))
   .use(require("ssb-replicate"))
   .use(require("ssb-backlinks"))
@@ -30,10 +29,10 @@ Server.use(require("ssb-master"))
   .use(require("ssb-query"))
   .use(require("ssb-device-address"))
   .use(require("./plugins/memory-identities"))
-  .use(require("ssb-peer-invites"))
   .use(require("ssb-blobs"))
   .use(require("ssb-private"));
 
+const config = require("./ssb-config");
 const server = Server(config);
 console.log("SSB server started at", config.port);
 

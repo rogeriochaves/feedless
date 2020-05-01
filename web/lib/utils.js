@@ -55,7 +55,7 @@ module.exports.asyncRouter = (app) => {
 const ssbFolder = () => {
   let homeFolder =
     process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-  return `${homeFolder}/.${process.env.CONFIG_FOLDER || "feedless"}`;
+  return `${homeFolder}/.${process.env.CONFIG_FOLDER || "ssb"}`;
 };
 module.exports.ssbFolder = ssbFolder;
 
