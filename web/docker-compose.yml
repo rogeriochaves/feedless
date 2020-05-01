@@ -6,7 +6,7 @@ services:
     network_mode: host
     env_file: .env
     volumes:
-      - feedless_ssb:/root/.feedless
+      - feedless_ssb:/root/.ssb
 
 volumes:
   feedless_ssb:
