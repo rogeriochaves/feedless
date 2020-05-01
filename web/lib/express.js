@@ -8,6 +8,7 @@ const {
   reconstructKeys,
   uploadPicture,
   isPhone,
+  ssbFolder,
 } = require("./utils");
 const queries = require("./queries");
 const serveBlobs = require("./serve-blobs");
@@ -22,10 +23,12 @@ const cookieEncrypter = require("cookie-encrypter");
 const expressLayouts = require("express-ejs-layouts");
 const mobileRoutes = require("./mobile-routes");
 const ejsUtils = require("ejs/lib/utils");
+const fs = require("fs");
+const ssbKeys = require("ssb-keys");
 
-let mode = process.env.MODE || "client";
+const mode = process.env.MODE || "standalone";
 
-let profileUrl = (id, path = "") => {
+const profileUrl = (id, path = "") => {
   return `/profile/${id}${path}`;
 };
 
@@ -43,16 +46,18 @@ app.set("view engine", "ejs");
 app.set("views", `${__dirname}/../views`);
 app.use(express.static(`${__dirname}/../public`));
 app.use(fileUpload());
-const cookieSecret =
-  process.env.COOKIES_SECRET || "set_cookie_secret_you_are_unsafe"; // has to be 32-bits
+
 const cookieOptions = {
   httpOnly: true,
   signed: true,
   expires: new Date(253402300000000), // Friday, 31 Dec 9999 23:59:59 GMT, nice date from stackoverflow
   sameSite: "Lax",
 };
-app.use(cookieParser(cookieSecret));
-if (mode != "client") {
+if (mode != "standalone") {
+  const cookieSecret =
+    process.env.COOKIES_SECRET || "set_cookie_secret_you_are_unsafe"; // has to be 32-bits
+
+  app.use(cookieParser(cookieSecret));
   app.use(cookieEncrypter(cookieSecret));
 }
 app.use(expressLayouts);
@@ -71,28 +76,32 @@ app.use(async (req, res, next) => {
     syncing: ssb.isSyncing(),
   };
   res.locals.context = req.context;
+
+  let key;
   try {
-    const key = req.signedCookies["ssb_key"];
-    if (!key) return next();
+    if (mode == "standalone") {
+      const isLoggedOut = fs.existsSync(`${ssbFolder()}/logged-out`);
 
-    const parsedKey = JSON.parse(key);
-    if (!parsedKey.id) return next();
+      key = !isLoggedOut && ssbKeys.loadSync(`${ssbFolder()}/secret`);
+    } else {
+      key = req.signedCookies["ssb_key"];
+      if (key) key = JSON.parse(key);
+    }
+  } catch (_) {}
+  if (!key || !key.id) return next();
 
-    ssb.client().identities.addUnboxer(parsedKey);
-    req.context.profile = await queries.getProfile(parsedKey.id);
-    req.context.profile.key = parsedKey;
+  ssb.client().identities.addUnboxer(key);
+  req.context.profile = (await queries.getProfile(key.id)) || {};
+  req.context.profile.key = key;
 
-    const isRootUser =
-      req.context.profile.id == ssb.client().id ||
-      process.env.NODE_ENV != "production";
+  const isRootUser =
+    req.context.profile.id == ssb.client().id ||
+    process.env.NODE_ENV != "production";
 
-    req.context.profile.debug = isRootUser;
-    req.context.profile.admin = isRootUser || mode == "client";
+  req.context.profile.debug = isRootUser;
+  req.context.profile.admin = isRootUser || mode == "standalone";
 
-    next();
-  } catch (e) {
-    next(e);
-  }
+  next();
 });
 app.use((_req, res, next) => {
   res.locals.profileUrl = profileUrl;
@@ -174,20 +183,30 @@ router.get(
 );
 
 const doLogin = async (submittedKey, res) => {
+  let decodedKey;
   try {
-    const decodedKey = reconstructKeys(submittedKey);
-    res.cookie("ssb_key", JSON.stringify(decodedKey), cookieOptions);
-
-    decodedKey.private = "[removed]";
-    debug("Login with key", decodedKey);
-
-    await queries.autofollow(decodedKey.id);
-
-    res.redirect("/");
+    decodedKey = reconstructKeys(submittedKey);
   } catch (e) {
     debug("Error on login", e);
-    res.send("Invalid key");
+    return res.send("Invalid key");
   }
+
+  if (mode == "standalone") {
+    fs.unlinkSync(`${ssbFolder()}/secret`);
+    fs.writeFileSync(`${ssbFolder()}/secret`, submittedKey, {
+      mode: 0x100,
+      flag: "wx",
+    });
+    fs.unlinkSync(`${ssbFolder()}/logged-out`);
+  } else {
+    res.cookie("ssb_key", JSON.stringify(decodedKey), cookieOptions);
+    await queries.autofollow(decodedKey.id);
+  }
+
+  decodedKey.private = "[removed]";
+  debug("Login with key", decodedKey);
+
+  res.redirect("/");
 };
 
 router.get("/login", { public: true }, async (req, res) => {
@@ -215,7 +234,11 @@ router.get("/download", { public: true }, (_req, res) => {
 });
 
 router.get("/logout", async (_req, res) => {
-  res.clearCookie("ssb_key");
+  if (mode == "standalone") {
+    fs.writeFileSync(`${ssbFolder()}/logged-out`, "");
+  } else {
+    res.clearCookie("ssb_key");
+  }
   res.redirect("/");
 });
 
@@ -234,7 +257,13 @@ router.post("/signup", { public: true }, async (req, res) => {
   const pictureLink = picture && (await uploadPicture(ssb.client(), picture));
 
   const key = await ssb.client().identities.createNewKey();
-  res.cookie("ssb_key", JSON.stringify(key), cookieOptions);
+  if (mode == "standalone") {
+    fs.writeFileSync(`${ssbFolder()}/secret`, humanifyKey(key));
+    fs.unlinkSync(`${ssbFolder()}/logged-out`);
+  } else {
+    res.cookie("ssb_key", JSON.stringify(key), cookieOptions);
+    await queries.autofollow(key.id);
+  }
 
   await ssb.client().identities.publishAs({
     key,
@@ -251,8 +280,6 @@ router.post("/signup", { public: true }, async (req, res) => {
   debug("Generated key", debugKey);
 
   debug("Published about", { about: key.id, name, image: pictureLink });
-
-  await queries.autofollow(key.id);
 
   res.redirect("/keys");
 });
@@ -305,24 +332,28 @@ router.get("/keys/copy", (req, res) => {
   });
 });
 
+const humanifyKey = (key) => {
+  return `
+  # WARNING: Never show this to anyone.
+  # WARNING: Never edit it or use it on multiple devices at once.
+  #
+  # This is your SECRET, it gives you magical powers. With your secret you can
+  # sign your messages so that your friends can verify that the messages came
+  # from you. If anyone learns your secret, they can use it to impersonate you.
+  #
+  # If you use this secret on more than one device you will create a fork and
+  # your friends will stop replicating your content.
+  #
+  ${JSON.stringify(key)}
+  #
+  # The only part of this file that's safe to share is your public name:
+  #
+  #   ${key.id}
+  `;
+};
+
 router.get("/keys/download", async (req, res) => {
-  const secretFile = `
-# WARNING: Never show this to anyone.
-# WARNING: Never edit it or use it on multiple devices at once.
-#
-# This is your SECRET, it gives you magical powers. With your secret you can
-# sign your messages so that your friends can verify that the messages came
-# from you. If anyone learns your secret, they can use it to impersonate you.
-#
-# If you use this secret on more than one device you will create a fork and
-# your friends will stop replicating your content.
-#
-${JSON.stringify(req.context.profile.key)}
-#
-# The only part of this file that's safe to share is your public name:
-#
-#   ${req.context.profile.id}
-`;
+  const secretFile = humanifyKey(req.context.profile.key);
 
   res.contentType("text/plain");
   res.header("Content-Disposition", "attachment; filename=secret");

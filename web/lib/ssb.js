@@ -2,14 +2,14 @@ const fs = require("fs");
 const path = require("path");
 const { writeKey, ssbFolder } = require("./utils");
 
-let envKey =
+const envKey =
   process.env.SSB_KEY &&
   Buffer.from(process.env.SSB_KEY, "base64").toString("utf8");
-if (envKey) {
-  try {
-    writeKey(envKey, "/secret");
-    console.log("Writing SSB_KEY from env");
-  } catch (_) {}
+const secretExists = fs.existsSync(`${ssbFolder()}/secret`);
+
+if (!secretExists && envKey) {
+  writeKey(envKey, "/secret");
+  console.log("Writing SSB_KEY from env");
   if (!fs.existsSync(`${ssbFolder()}/gossip.json`)) {
     fs.copyFileSync("gossip.json", `${ssbFolder()}/gossip.json`);
   }
@@ -44,3 +44,9 @@ fs.writeFileSync(
   path.join(config.path, "manifest.json"), // ~/.ssb/manifest.json
   JSON.stringify(manifest)
 );
+
+// SSB server automatically creates a secret key, but we want the user flow where they choose to create a key or use an existing one
+const mode = process.env.MODE || "standalone";
+if (mode == "standalone" && !secretExists) {
+  fs.writeFileSync(`${ssbFolder()}/logged-out`, "");
+}

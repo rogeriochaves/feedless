@@ -14,27 +14,32 @@ let ssbSecret = ssbKeys.loadOrCreateSync(
 );
 let syncing = false;
 
-Client(ssbSecret, ssbConfig, async (err, server) => {
-  if (err) throw err;
+const connectClient = (ssbSecret) => {
+  Client(ssbSecret, ssbConfig, async (err, server) => {
+    if (err) throw err;
 
-  ssbClient = server;
+    ssbClient = server;
 
-  queries.progress(({ rate, feeds, incompleteFeeds, progress, total }) => {
-    if (incompleteFeeds > 0) {
-      if (!syncing) debug("syncing");
-      syncing = true;
-    } else {
-      syncing = false;
-    }
+    queries.progress(({ rate, feeds, incompleteFeeds, progress, total }) => {
+      if (incompleteFeeds > 0) {
+        if (!syncing) debug("syncing");
+        syncing = true;
+      } else {
+        syncing = false;
+      }
 
-    metrics.ssbProgressRate.set(rate);
-    metrics.ssbProgressFeeds.set(feeds);
-    metrics.ssbProgressIncompleteFeeds.set(incompleteFeeds);
-    metrics.ssbProgressProgress.set(progress);
-    metrics.ssbProgressTotal.set(total);
+      metrics.ssbProgressRate.set(rate);
+      metrics.ssbProgressFeeds.set(feeds);
+      metrics.ssbProgressIncompleteFeeds.set(incompleteFeeds);
+      metrics.ssbProgressProgress.set(progress);
+      metrics.ssbProgressTotal.set(total);
+    });
+    console.log("SSB Client ready");
   });
-  console.log("SSB Client ready");
-});
+};
 
 module.exports.client = () => ssbClient;
 module.exports.isSyncing = () => syncing;
+module.exports.reconnectWith = connectClient;
+
+connectClient(ssbSecret);

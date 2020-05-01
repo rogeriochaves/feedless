@@ -1,4 +1,3 @@
-
 let server;
 require("./lib/ssb");
 
@@ -6,8 +5,8 @@ setTimeout(() => {
   server = require("./lib/express");
 }, 500);
 
-let mode = process.env.MODE || "client";
-if (mode == "client") {
+let mode = process.env.MODE || "standalone";
+if (mode == "standalone") {
   setTimeout(() => {
     require("./lib/electron");
   }, 1000);
