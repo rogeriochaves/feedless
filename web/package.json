@@ -1,5 +1,6 @@
 {
   "name": "feedless-app",
+  "productName": "Feedless",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,8 +8,8 @@
     "start": "MODE=server SSB_PORT=8009 node index.js",
     "start:standalone": "electron .",
     "clear": "rm -rf ~/.feedless; rm -rf ~/.feedless-user2; rm -rf ~/.feedless-user3",
-    "package:mac": "electron-packager . --platform=darwin --arch=x64 --out out/ --overwrite",
-    "package:linux": "electron-packager . --platform=linux --arch=x64 --out out/ --overwrite"
+    "package:mac": "electron-packager . --platform=darwin --arch=x64 --icon public/icons/smile.icns --out out/ --overwrite",
+    "package:linux": "electron-packager . --platform=linux --arch=x64 --icon public/icons/smile.png --out out/ --overwrite"
   },
   "author": "",
   "license": "ISC",
