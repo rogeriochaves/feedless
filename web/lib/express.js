@@ -517,10 +517,15 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
 });
 
 router.get("/pubs", async (_req, res) => {
-  const invite = await ssb.client().invite.create({ uses: 10 });
   const peers = await ssb.client().gossip.peers();
 
-  res.render("desktop/pubs", { invite, peers });
+  res.render("desktop/pubs", { peers });
+});
+
+router.get("/pub_invite", async (_req, res) => {
+  const invite = await ssb.client().invite.create({ uses: 1 });
+
+  res.json({ invite });
 });
 
 router.post("/pubs/add", async (req, res) => {

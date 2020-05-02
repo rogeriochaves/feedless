@@ -7,7 +7,7 @@ module.exports = configInject(process.env.CONFIG_FOLDER || "ssb", {
         {
           scope: "public",
           host: "0.0.0.0",
-          external: ["lvh.me"],
+          external: "pub.feedless.social",
           transform: "shs",
           port: process.env.SSB_PORT || 8008,
         },
