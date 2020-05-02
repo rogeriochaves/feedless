@@ -98,8 +98,7 @@ app.use(async (req, res, next) => {
     req.context.profile.id == ssb.client().id ||
     process.env.NODE_ENV != "production";
 
-  req.context.profile.debug = isRootUser;
-  req.context.profile.admin = isRootUser || mode == "standalone";
+  req.context.profile.admin = isRootUser;
 
   next();
 });
@@ -516,19 +515,25 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
   res.redirect(profileUrl(id));
 });
 
-router.get("/pubs", async (_req, res) => {
-  const peers = await ssb.client().gossip.peers();
-
-  res.render("desktop/pubs", { peers });
-});
-
 router.get("/pub_invite", { public: true }, async (_req, res) => {
   const invite = await ssb.client().invite.create({ uses: 1 });
 
   res.json({ invite });
 });
 
+router.get("/pubs", async (req, res) => {
+  if (!req.context.profile.admin) {
+    return res.redirect("/");
+  }
+  const peers = await ssb.client().gossip.peers();
+
+  res.render("desktop/pubs", { peers });
+});
+
 router.post("/pubs/add", async (req, res) => {
+  if (!req.context.profile.admin) {
+    return res.redirect("/");
+  }
   const inviteCode = req.body.invite_code;
 
   await ssb.client().invite.accept(inviteCode);
@@ -787,6 +792,9 @@ router.get("/syncing", (_req, res) => {
 });
 
 router.get("/debug", async (req, res) => {
+  if (!req.context.profile.admin) {
+    return res.redirect("/");
+  }
   const query = req.query || {};
 
   const entries = await queries.getAllEntries(query);
