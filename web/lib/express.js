@@ -318,7 +318,7 @@ router.post("/keys/email", async (req, res) => {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       to: email,
-      from: "Feedless <rgrchvs@gmail.com>",
+      from: "Feedless <feedless@protonmail.com>",
       subject: `Login button for ${req.context.profile.name}`,
       html,
     };
