@@ -522,7 +522,7 @@ router.get("/pubs", async (_req, res) => {
   res.render("desktop/pubs", { peers });
 });
 
-router.get("/pub_invite", async (_req, res) => {
+router.get("/pub_invite", { public: true }, async (_req, res) => {
   const invite = await ssb.client().invite.create({ uses: 1 });
 
   res.json({ invite });
