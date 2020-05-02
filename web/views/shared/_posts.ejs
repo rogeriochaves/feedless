@@ -1,9 +1,27 @@
-<% posts.map(post => { %>
-  <% if (!post.content.text) return %>
-  <% let text = escapeMarkdown(post.content.text) %>
-  <% let limit = typeof dont_cut == "undefined" ? 140 : 10000 %>
-  <% let numPosts = Math.ceil(text.length / limit) %>
-  <% for (let i = numPosts; i > 0; i--) { %>
+<% posts.map(post => {
+  if (!post.content.text) return;
+  let text = escapeMarkdown(post.content.text);
+  let limit = typeof dont_cut == "undefined" ? 140 : 10000;
+  let words = text.split(" ");
+
+  let splittedPosts = [];
+  let nextPost = "";
+  for (word of words) {
+    const postsCount = splittedPosts.length + 1;
+    const pageMarker = `${postsCount}/`;
+
+    if (nextPost.length + word.length + pageMarker.length + 1 < limit) {
+      nextPost += word + " ";
+    } else {
+      splittedPosts.push(nextPost + pageMarker);
+      nextPost = word + " ";
+    }
+  }
+  const postsCount = splittedPosts.length + 1;
+  const lastMarker = postsCount > 1 ? `${postsCount}/${postsCount}` : "";
+  splittedPosts.push(nextPost + lastMarker);
+
+  splittedPosts.reverse().map(text => { %>
     <div class="post">
       <div>
         <a href="<%= profileUrl(post.author) %>">
@@ -14,8 +32,8 @@
         <a href="<%= profileUrl(post.author) %>" class="no-link-style">
           <b><%= post.authorProfile.name %></b>
         </a>
-        <%- htmlify(text.slice(limit * (i - 1), limit * i)) %>
+        <%- htmlify(text.replace(/^\s+/, "")) %>
       </div>
     </div>
-  <% } %>
+  <% }) %>
 <% }) %>
