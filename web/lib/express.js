@@ -148,6 +148,10 @@ app.use((_req, res, next) => {
       /(\s|^)(([a-z-_])*(\.[^\s.]{2,})+)/gm, // Domains without http
       `$1<a target="_blank" href="http://$2">$2</a>`
     );
+    result = result.replace(
+      /(\s|^)#([a-z0-9-]+)/g, // Communities
+      `$1<a href="/communities/$2">#$2</a>`
+    );
     result = result.replace(/\n/g, "<br />");
     return result;
   };
