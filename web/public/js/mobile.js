@@ -5,8 +5,10 @@
 const composePost = document.querySelector(".js-compose-post");
 if (composePost) {
   const composeButton = document.querySelector(".js-publish-button");
+  const letterCounter = document.querySelector(".js-letter-count");
   composePost.addEventListener("focus", () => {
     composeButton.style.display = "block";
+    letterCounter.style.display = "block";
   });
 }
 

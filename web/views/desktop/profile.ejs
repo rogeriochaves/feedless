@@ -32,7 +32,8 @@
       </div>
     </div>
 
-    <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST" style="padding-top: 20px;">
+    <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
+      <div class="letter-count js-letter-count">140</div>
       <textarea name="message" class="compose-post" placeholder="Write something to <%= profile.name %>..."></textarea>
       <div class="reverse-columns" style="margin-top: 10px">
         <input type="submit" value="Publish" />

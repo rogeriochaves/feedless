@@ -38,7 +38,8 @@
     <% if (posts.length > 0) { %>
       <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST" style="padding: 0px 8px 5px 8px;">
         <textarea name="message" class="compose-post js-compose-post" placeholder="Write something to <%= profile.name %>..."></textarea>
-        <div class="reverse-columns">
+        <div class="columns" style="justify-content: space-between; align-items: center;">
+          <div class="letter-count js-letter-count" style="display: none">140</div>
           <input type="submit" value="Publish" style="display: none; margin: 5px 0" class="js-publish-button" />
         </div>
       </form>
