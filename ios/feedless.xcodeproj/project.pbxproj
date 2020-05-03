@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		900BE2972458AEEC00C77595 /* Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900BE2962458AEEC00C77595 /* Index.swift */; };
 		900BE29A2458B05800C77595 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900BE2992458B05800C77595 /* Login.swift */; };
-		900BE29E2458BBF600C77595 /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = 900BE29D2458BBF600C77595 /* index.js */; };
 		902D04752458AAA7007CFE56 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04742458AAA7007CFE56 /* AppDelegate.swift */; };
 		902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04762458AAA7007CFE56 /* SceneDelegate.swift */; };
 		902D04792458AAA7007CFE56 /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04782458AAA7007CFE56 /* Wall.swift */; };
@@ -18,6 +17,10 @@
 		902D04812458AAAA007CFE56 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902D047F2458AAAA007CFE56 /* LaunchScreen.storyboard */; };
 		902D048C2458AAAA007CFE56 /* feedlessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D048B2458AAAA007CFE56 /* feedlessTests.swift */; };
 		902D04972458AAAA007CFE56 /* feedlessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04962458AAAA007CFE56 /* feedlessUITests.swift */; };
+		90B81B90245ECB25005C5D31 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B81B8F245ECB25005C5D31 /* NodeMobile.framework */; };
+		90B81B91245ECB25005C5D31 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 90B81B8F245ECB25005C5D31 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
+		90B81B98245F1699005C5D31 /* backend in Resources */ = {isa = PBXBuildFile; fileRef = 90B81B97245F1698005C5D31 /* backend */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,10 +40,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		90B81B92245ECB25005C5D31 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				90B81B91245ECB25005C5D31 /* NodeMobile.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		900BE2962458AEEC00C77595 /* Index.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Index.swift; sourceTree = "<group>"; };
 		900BE2992458B05800C77595 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
-		900BE29D2458BBF600C77595 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = index.js; path = backend/index.js; sourceTree = SOURCE_ROOT; };
 		902D04712458AAA7007CFE56 /* feedless.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = feedless.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		902D04742458AAA7007CFE56 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		902D04762458AAA7007CFE56 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -55,6 +71,11 @@
 		902D04922458AAAA007CFE56 /* feedlessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = feedlessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		902D04962458AAAA007CFE56 /* feedlessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = feedlessUITests.swift; sourceTree = "<group>"; };
 		902D04982458AAAA007CFE56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		90B81B8F245ECB25005C5D31 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
+		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
+		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
+		90B81B95245ECC00005C5D31 /* NodeRunner.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeRunner.mm; sourceTree = "<group>"; };
+		90B81B97245F1698005C5D31 /* backend */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = backend; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90B81B90245ECB25005C5D31 /* NodeMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +121,7 @@
 				902D048A2458AAAA007CFE56 /* feedlessTests */,
 				902D04952458AAAA007CFE56 /* feedlessUITests */,
 				902D04722458AAA7007CFE56 /* Products */,
+				90B81B8E245ECB25005C5D31 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,7 +138,7 @@
 		902D04732458AAA7007CFE56 /* feedless */ = {
 			isa = PBXGroup;
 			children = (
-				900BE29D2458BBF600C77595 /* index.js */,
+				90B81B97245F1698005C5D31 /* backend */,
 				900BE2982458AF0C00C77595 /* screens */,
 				902D04742458AAA7007CFE56 /* AppDelegate.swift */,
 				902D04762458AAA7007CFE56 /* SceneDelegate.swift */,
@@ -123,6 +146,9 @@
 				902D047F2458AAAA007CFE56 /* LaunchScreen.storyboard */,
 				902D04822458AAAA007CFE56 /* Info.plist */,
 				902D047C2458AAAA007CFE56 /* Preview Content */,
+				90B81B93245ECBBB005C5D31 /* NodeRunner.h */,
+				90B81B95245ECC00005C5D31 /* NodeRunner.mm */,
+				90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */,
 			);
 			path = feedless;
 			sourceTree = "<group>";
@@ -153,6 +179,14 @@
 			path = feedlessUITests;
 			sourceTree = "<group>";
 		};
+		90B81B8E245ECB25005C5D31 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				90B81B8F245ECB25005C5D31 /* NodeMobile.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -163,6 +197,7 @@
 				902D046D2458AAA7007CFE56 /* Sources */,
 				902D046E2458AAA7007CFE56 /* Frameworks */,
 				902D046F2458AAA7007CFE56 /* Resources */,
+				90B81B92245ECB25005C5D31 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -221,6 +256,7 @@
 				TargetAttributes = {
 					902D04702458AAA7007CFE56 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 					902D04862458AAAA007CFE56 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -260,7 +296,7 @@
 				902D04812458AAAA007CFE56 /* LaunchScreen.storyboard in Resources */,
 				902D047E2458AAAA007CFE56 /* Preview Assets.xcassets in Resources */,
 				902D047B2458AAAA007CFE56 /* Assets.xcassets in Resources */,
-				900BE29E2458BBF600C77595 /* index.js in Resources */,
+				90B81B98245F1699005C5D31 /* backend in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				902D04752458AAA7007CFE56 /* AppDelegate.swift in Sources */,
+				90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */,
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
 				902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */,
 				900BE2972458AEEC00C77595 /* Index.swift in Sources */,
@@ -454,9 +491,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"feedless/Preview Content\"";
+				DEVELOPMENT_TEAM = 8FY84BDRUF;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libnode",
+				);
 				INFOPLIST_FILE = feedless/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -464,6 +507,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -473,9 +518,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"feedless/Preview Content\"";
+				DEVELOPMENT_TEAM = 8FY84BDRUF;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libnode",
+				);
 				INFOPLIST_FILE = feedless/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -483,6 +534,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

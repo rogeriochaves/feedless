@@ -10,8 +10,11 @@ import SwiftUI
 
 struct Login: View {
     var body: some View {
-        NavigationView {
-             Text("Login Page")
+        VStack {
+            Text("Login Page")
+            NavigationLink(destination: Wall()) {
+                Text("Submit")
+            }
             .navigationBarTitle(Text("Login"))
         }
     }

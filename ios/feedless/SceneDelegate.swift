@@ -21,40 +21,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
+        let jsFile = Bundle.main.path(forResource: "backend/index.js", ofType: nil)!
 
-        let context = JSContext()!
-        context.exceptionHandler = { context, exception in
-            print(exception!.toString())
+        DispatchQueue.global(qos: .background).async {
+            NodeRunner.startEngine(withArguments: ["node", jsFile])
         }
 
-        let require: @convention(block) (String) -> (JSValue?) = { path in
-            let expandedPath = NSString(string: path).expandingTildeInPath
-
-            // Return void or throw an error here.
-            guard FileManager.default.fileExists(atPath: expandedPath)
-                else { debugPrint("Require: filename \(expandedPath) does not exist")
-                       return nil }
-
-            guard let fileContent = try? String(contentsOfFile: expandedPath)
-                else { return nil }
-
-            return context.evaluateScript(fileContent)
-        }
-
-        context.setObject(require, forKeyedSubscript: "require" as NSString)
-
-        guard let url = Bundle.main.url(forResource: "index", withExtension: "js") else {
-            fatalError("missing resource index.js")
-        }
-
-        do {
-            context.evaluateScript(try String(contentsOf: url), withSourceURL: url)
-        } catch _ {
-            fatalError("could not evaluate index.js")
-        }
-
-        let main = context.objectForKeyedSubscript("main")
-        print("aaaaaaaaaaaaaaaaaaaa", main?.call(withArguments: []))
+//
+//        do {
+//            context.evaluateScript(try String(contentsOf: url), withSourceURL: url)
+//        } catch _ {
+//            fatalError("could not evaluate index.js")
+//        }
+//
+//        let main = context.objectForKeyedSubscript("main")
+//        print("aaaaaaaaaaaaaaaaaaaa", main?.call(withArguments: []))
 
         // Create the SwiftUI view that provides the window contents.
         let contentView = Index()
