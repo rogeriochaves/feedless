@@ -14,8 +14,8 @@
             filePath = "feedless/screens/Wall.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>

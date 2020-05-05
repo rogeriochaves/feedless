@@ -8,31 +8,15 @@
 
 import SwiftUI
 
-struct Post: Codable {
-    public var text: String
-}
-
-struct AuthorContent<T: Codable>: Codable {
-    public var author: String
-    public var content: T
-}
-
-struct Entry<T: Codable>: Codable {
-    public var key: String
-    public var value: T
-}
-
 class FetchPosts: ObservableObject {
-  // 1.
-  @Published var posts = [Entry<AuthorContent<Post>>]()
+    @Published var posts = [Entry<AuthorContent<Post>>]()
 
     init() {
         let url = URL(string: "http://127.0.0.1:3000/posts")!
-        // 2.
+
         URLSession.shared.dataTask(with: url) {(data, response, error) in
             do {
                 if let todoData = data {
-                    // 3.
                     let decodedData = try JSONDecoder().decode([Entry<AuthorContent<Post>>].self, from: todoData)
                     DispatchQueue.main.async {
                         self.posts = decodedData
@@ -55,7 +39,6 @@ struct Wall: View {
     var body: some View {
         TabView(selection: $selection){
             VStack {
-                // 2.
                 List(fetch.posts, id: \.key) { post in
                     VStack(alignment: .leading) {
                         Text(post.value.content.text)
@@ -64,7 +47,8 @@ struct Wall: View {
             }
                 .tabItem {
                     VStack {
-                        Text("🙂")
+                        Image(uiImage: "🙂".image()!).renderingMode(.original)
+                        Text("Profile")
                     }
                 }
                 .tag(0)
@@ -72,11 +56,12 @@ struct Wall: View {
                 .font(.title)
                 .tabItem {
                     VStack {
-                        Text("👨‍👧‍👦")
+                        Image(uiImage: "👨‍👧‍👦".image()!).renderingMode(.original)
+                        Text("Friends")
                     }
                 }
                 .tag(1)
-        }
+        }.accentColor(Color.purple)
     }
 }
 

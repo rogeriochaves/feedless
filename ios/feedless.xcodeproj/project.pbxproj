@@ -17,8 +17,10 @@
 		902D04812458AAAA007CFE56 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902D047F2458AAAA007CFE56 /* LaunchScreen.storyboard */; };
 		902D048C2458AAAA007CFE56 /* feedlessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D048B2458AAAA007CFE56 /* feedlessTests.swift */; };
 		902D04972458AAAA007CFE56 /* feedlessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04962458AAAA007CFE56 /* feedlessUITests.swift */; };
-		90B81B90245ECB25005C5D31 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B81B8F245ECB25005C5D31 /* NodeMobile.framework */; };
-		90B81B91245ECB25005C5D31 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 90B81B8F245ECB25005C5D31 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9053055B245F7C23006C054D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055A245F7C23006C054D /* Utils.swift */; };
+		9053055F245FE975006C054D /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055E245FE975006C054D /* Types.swift */; };
+		90A1A5312460D24600D00245 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90A1A52D2460D16500D00245 /* NodeMobile.framework */; };
+		90A1A5322460D24600D00245 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 90A1A52D2460D16500D00245 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
 		90B81B98245F1699005C5D31 /* backend in Resources */ = {isa = PBXBuildFile; fileRef = 90B81B97245F1698005C5D31 /* backend */; };
 /* End PBXBuildFile section */
@@ -41,13 +43,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		90B81B92245ECB25005C5D31 /* Embed Frameworks */ = {
+		90A1A5332460D24600D00245 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				90B81B91245ECB25005C5D31 /* NodeMobile.framework in Embed Frameworks */,
+				90A1A5322460D24600D00245 /* NodeMobile.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +73,9 @@
 		902D04922458AAAA007CFE56 /* feedlessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = feedlessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		902D04962458AAAA007CFE56 /* feedlessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = feedlessUITests.swift; sourceTree = "<group>"; };
 		902D04982458AAAA007CFE56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		90B81B8F245ECB25005C5D31 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
+		9053055A245F7C23006C054D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		9053055E245FE975006C054D /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		90A1A52D2460D16500D00245 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
 		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
 		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
 		90B81B95245ECC00005C5D31 /* NodeRunner.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeRunner.mm; sourceTree = "<group>"; };
@@ -83,7 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90B81B90245ECB25005C5D31 /* NodeMobile.framework in Frameworks */,
+				90A1A5312460D24600D00245 /* NodeMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +153,8 @@
 				90B81B93245ECBBB005C5D31 /* NodeRunner.h */,
 				90B81B95245ECC00005C5D31 /* NodeRunner.mm */,
 				90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */,
+				9053055A245F7C23006C054D /* Utils.swift */,
+				9053055E245FE975006C054D /* Types.swift */,
 			);
 			path = feedless;
 			sourceTree = "<group>";
@@ -182,7 +188,7 @@
 		90B81B8E245ECB25005C5D31 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				90B81B8F245ECB25005C5D31 /* NodeMobile.framework */,
+				90A1A52D2460D16500D00245 /* NodeMobile.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -197,7 +203,7 @@
 				902D046D2458AAA7007CFE56 /* Sources */,
 				902D046E2458AAA7007CFE56 /* Frameworks */,
 				902D046F2458AAA7007CFE56 /* Resources */,
-				90B81B92245ECB25005C5D31 /* Embed Frameworks */,
+				90A1A5332460D24600D00245 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -324,8 +330,10 @@
 				902D04752458AAA7007CFE56 /* AppDelegate.swift in Sources */,
 				90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */,
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
+				9053055B245F7C23006C054D /* Utils.swift in Sources */,
 				902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */,
 				900BE2972458AEEC00C77595 /* Index.swift in Sources */,
+				9053055F245FE975006C054D /* Types.swift in Sources */,
 				902D04792458AAA7007CFE56 /* Wall.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -495,6 +503,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"feedless/Preview Content\"";
 				DEVELOPMENT_TEAM = 8FY84BDRUF;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -522,6 +531,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"feedless/Preview Content\"";
 				DEVELOPMENT_TEAM = 8FY84BDRUF;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -535,6 +545,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

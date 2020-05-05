@@ -21,21 +21,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        let jsFile = Bundle.main.path(forResource: "backend/index.js", ofType: nil)!
+        let jsFile = Bundle.main.path(forResource: "backend/out/index.js", ofType: nil)!
+
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        print("documentsPath", documentsPath)
 
         DispatchQueue.global(qos: .background).async {
-            NodeRunner.startEngine(withArguments: ["node", jsFile])
+            NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath])
         }
-
-//
-//        do {
-//            context.evaluateScript(try String(contentsOf: url), withSourceURL: url)
-//        } catch _ {
-//            fatalError("could not evaluate index.js")
-//        }
-//
-//        let main = context.objectForKeyedSubscript("main")
-//        print("aaaaaaaaaaaaaaaaaaaa", main?.call(withArguments: []))
 
         // Create the SwiftUI view that provides the window contents.
         let contentView = Index()

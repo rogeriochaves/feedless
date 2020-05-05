@@ -1,5 +1,4 @@
 const fs = require("fs");
-const leftpad = require("left-pad"); // I don't believe I'm depending on this
 const pull = require("pull-stream");
 const split = require("split-buffer");
 const metrics = require("./metrics");

@@ -8,13 +8,60 @@
 
 import SwiftUI
 
-struct Index: View {
-    var body: some View {
-        NavigationView {
-            NavigationLink(destination: Login()) {
-                Text("Login")
+class Context: ObservableObject {
+    @Published var responding:Bool = false
+    @Published var loggedIn:Bool = false
+    @Published var profile:Profile? = nil
+
+    func fetch() {
+        let url = URL(string: "http://127.0.0.1:3000/user")!
+
+        URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if let todoData = data {
+                DispatchQueue.main.async {
+                    self.responding = true
+                    self.loggedIn = true
+                }
+
+                do {
+                    let decodedData = try JSONDecoder().decode(User.self, from: todoData)
+                    DispatchQueue.main.async {
+                        self.profile = decodedData.profile
+                        self.loggedIn = true
+                    }
+                } catch {
+                    print("Error loading user")
+                }
             }
-            .navigationBarTitle(Text("Index"))
+        }.resume()
+    }
+}
+
+struct Index: View {
+    @ObservedObject var context = Context()
+    @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        Group {
+            if (context.responding) {
+                if (context.loggedIn) {
+                    Wall()
+                } else {
+                    NavigationView {
+                        NavigationLink(destination: Login()) {
+                            Text("Login")
+                        }
+                        .navigationBarTitle(Text("Index"))
+                    }
+                }
+            } else {
+                Text("Waiting for server")
+            }
+        }
+        .onReceive(self.timer) { (_) in
+            if (!self.context.responding) {
+                self.context.fetch()
+            }
         }
     }
 }
