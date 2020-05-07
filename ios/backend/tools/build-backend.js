@@ -38,11 +38,11 @@ async function runAndReport(label, task) {
 (async function () {
   await runAndReport(
     "Remove unused files meant for Android or Electron",
-    exec("./tools/backend/remove-unused-files.sh")
+    exec("./tools/remove-unused-files.sh")
   );
 
   await runAndReport(
     "Bundle and minify backend JS into one file",
-    exec("./tools/backend/noderify-mobile.sh")
+    exec("./tools/noderify-mobile.sh")
   );
 })();

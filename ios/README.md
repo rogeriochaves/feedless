@@ -1,11 +1,15 @@
 In order to build this project you'll need installed
 
 XCode
-NodeJS
-Android NDK (because of some native bindings)
+NodeJS 10.13.0
+Npm 6.4.1
 
-To compile the js to be able to run from xcode, execute:
+*DON'T* install dependencies using `npm install`, instead, run this:
 
 ```
-npm run build:watch
+npm install --no-optional --ignore-scripts
 ```
+
+It will install dependencies without trying to install any native bindings for MacOS. Then, Xcode build process has some scripts to properly rebuild the native modules but using iOS target.
+
+So open XCode and hit "play"

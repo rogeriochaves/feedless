@@ -5,6 +5,9 @@ try {
   const SecretStack = require("secret-stack");
   const mkdirp = require("mkdirp");
   // const ssbKeys = require("ssb-keys");
+  // require("sodium-chloride");
+  // require("sodium-chloride-native-nodejs-mobile");
+  require("sodium-chloride-native-nodejs-mobile");
 
   console.log("ssbFolder", ssbFolder());
 
