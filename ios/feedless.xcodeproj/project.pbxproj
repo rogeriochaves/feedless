@@ -19,7 +19,6 @@
 		902D04972458AAAA007CFE56 /* feedlessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04962458AAAA007CFE56 /* feedlessUITests.swift */; };
 		9053055B245F7C23006C054D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055A245F7C23006C054D /* Utils.swift */; };
 		9053055F245FE975006C054D /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055E245FE975006C054D /* Types.swift */; };
-		905AA0B92463056100CEB583 /* backend in Resources */ = {isa = PBXBuildFile; fileRef = 905AA0B72463034600CEB583 /* backend */; };
 		907002132465A53400548946 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; };
 		907002142465A53400548946 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
@@ -205,9 +204,9 @@
 				902D046D2458AAA7007CFE56 /* Sources */,
 				90FE79A3246298C1004CC526 /* [JS] Build native modules */,
 				90FE79A424629903004CC526 /* [JS] Concat to single file (noderify) */,
+				907002152465F1A800548946 /* [JS] Copy backend to bundle */,
 				902D046F2458AAA7007CFE56 /* Resources */,
 				902D046E2458AAA7007CFE56 /* Frameworks */,
-				907002152465F1A800548946 /* [JS] Delete node_modules except native bindings */,
 				90A1A5332460D24600D00245 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -307,7 +306,6 @@
 				902D04812458AAAA007CFE56 /* LaunchScreen.storyboard in Resources */,
 				902D047E2458AAAA007CFE56 /* Preview Assets.xcassets in Resources */,
 				902D047B2458AAAA007CFE56 /* Assets.xcassets in Resources */,
-				905AA0B92463056100CEB583 /* backend in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,7 +326,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		907002152465F1A800548946 /* [JS] Delete node_modules except native bindings */ = {
+		907002152465F1A800548946 /* [JS] Copy backend to bundle */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -337,14 +335,14 @@
 			);
 			inputPaths = (
 			);
-			name = "[JS] Delete node_modules except native bindings";
+			name = "[JS] Copy backend to bundle";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "find $CODESIGNING_FOLDER_PATH/backend/node_modules \\\n  -type f \\\n   ! \\( \\\n    -name \"*.node\" \\\n    \\) \\\n  -print0 | xargs -0 rm -rf\n# We used to keep .so files too, but those are \n# counted as executables by App Store policies\n# -o -name \"*.so\" \\\n# -o -name \"*.a\" \\  \n# Delete symbolic links\nfind $CODESIGNING_FOLDER_PATH/backend/node_modules -depth -type l -delete\n# Delete empty directories\nfind $CODESIGNING_FOLDER_PATH/backend/node_modules -depth -type d -empty -delete\nfind $CODESIGNING_FOLDER_PATH/backend\n";
+			shellScript = "rsync -avq --delete --exclude \"node_modules*\" \"backend\" \"$CODESIGNING_FOLDER_PATH\" \nrsync -avq --delete --prune-empty-dirs --include=\"*/\" --include=\"*.node\" --exclude=\"*\" \"backend/node_modules\" \"$CODESIGNING_FOLDER_PATH/backend\"\n";
 		};
 		90FE79A3246298C1004CC526 /* [JS] Build native modules */ = {
 			isa = PBXShellScriptBuildPhase;

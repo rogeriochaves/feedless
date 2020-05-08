@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Logging those to help with debugging
-node -v
-npm -v
-echo "PLATFORM_NAME: $PLATFORM_NAME"
-echo "current path: $( pwd )"
-
 if [ "$PLATFORM_NAME" == "iphoneos" ]; then
   OTHER_PLATFORM="iphonesimulator"
 else
@@ -15,9 +9,9 @@ fi
 if grep "$PLATFORM_NAME" NATIVE_BUILD.txt; then
   echo "Native bindings already built, skipping"
   exit 0
-elif [ -d ../node_modules.$PLATFORM_NAME ]; then
-  mv node_modules ../node_modules.$OTHER_PLATFORM || 1
-  mv ../node_modules.$PLATFORM_NAME node_modules
+elif [ -d node_modules.$PLATFORM_NAME ]; then
+  mv node_modules node_modules.$OTHER_PLATFORM || 1
+  mv node_modules.$PLATFORM_NAME node_modules
   echo "$PLATFORM_NAME" > "NATIVE_BUILD.txt"
 
   npm install --no-optional --ignore-scripts
@@ -28,9 +22,15 @@ fi
 
 if [ -f NATIVE_BUILD.txt ]; then
   echo "Found exiting build but for $OTHER_PLATFORM, building again for $PLATFORM_NAME"
-  mv node_modules ../node_modules.$OTHER_PLATFORM
+  mv node_modules node_modules.$OTHER_PLATFORM
   rm NATIVE_BUILD.txt
 fi
+
+# Logging those to help with debugging
+node -v
+npm -v
+echo "PLATFORM_NAME: $PLATFORM_NAME"
+echo "current path: $( pwd )"
 
 npm install --no-optional --ignore-scripts
 
