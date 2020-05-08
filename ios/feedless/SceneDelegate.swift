@@ -24,10 +24,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let jsFile = Bundle.main.path(forResource: "backend/out/index.js", ofType: nil)!
 
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let bundlePath = Bundle.main.bundlePath
         print("documentsPath", documentsPath)
+        print("bundlePath", bundlePath)
 
         DispatchQueue.global(qos: .background).async {
-            NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath])
+            NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath])
         }
 
         // Create the SwiftUI view that provides the window contents.

@@ -1,8 +1,8 @@
 In order to build this project you'll need installed
 
-XCode
-NodeJS 10.13.0
-Npm 6.4.1
+xcode
+nodejs 10.13.0
+npm 6.4.1
 
 *DON'T* install dependencies using `npm install`, instead, run this:
 

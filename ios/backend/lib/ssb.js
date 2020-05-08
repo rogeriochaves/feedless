@@ -4,17 +4,20 @@ try {
   const { writeKey, ssbFolder } = require("./utils");
   const SecretStack = require("secret-stack");
   const mkdirp = require("mkdirp");
-  // const ssbKeys = require("ssb-keys");
+  const ssbKeys = require("ssb-keys");
+  const keys = ssbKeys.generate();
+  console.log("keys", keys);
+
   // require("sodium-chloride");
   // require("sodium-chloride-native-nodejs-mobile");
-  require("sodium-chloride-native-nodejs-mobile");
+  // require("sodium-native-nodejs-mobile");
 
-  console.log("ssbFolder", ssbFolder());
+  // console.log("ssbFolder", ssbFolder());
 
-  const folderExists = fs.existsSync(ssbFolder());
-  if (!folderExists) mkdirp.sync(ssbFolder());
+  // const folderExists = fs.existsSync(ssbFolder());
+  // if (!folderExists) mkdirp.sync(ssbFolder());
 
-  const keysPath = path.join(ssbFolder(), "/secret");
+  // const keysPath = path.join(ssbFolder(), "/secret");
 } catch (e) {
   console.log("error", e);
 }
