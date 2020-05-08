@@ -1,23 +1,44 @@
 #!/bin/bash
 
-if [ -f node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node ]; then
-  echo "Native bindings already built, skipping"
-  exit 0
-fi
-
-set -e
-
 # Logging those to help with debugging
 node -v
 npm -v
 echo "PLATFORM_NAME: $PLATFORM_NAME"
 echo "current path: $( pwd )"
 
+if [ "$PLATFORM_NAME" == "iphoneos" ]; then
+  OTHER_PLATFORM="iphonesimulator"
+else
+  OTHER_PLATFORM="iphoneos"
+fi
+
+if grep "$PLATFORM_NAME" NATIVE_BUILD.txt; then
+  echo "Native bindings already built, skipping"
+  exit 0
+elif [ -d ../node_modules.$PLATFORM_NAME ]; then
+  mv node_modules ../node_modules.$OTHER_PLATFORM || 1
+  mv ../node_modules.$PLATFORM_NAME node_modules
+  echo "$PLATFORM_NAME" > "NATIVE_BUILD.txt"
+
+  npm install --no-optional --ignore-scripts
+
+  echo "Found existing bindings, skipping"
+  exit 0
+fi
+
+if [ -f NATIVE_BUILD.txt ]; then
+  echo "Found exiting build but for $OTHER_PLATFORM, building again for $PLATFORM_NAME"
+  mv node_modules ../node_modules.$OTHER_PLATFORM
+  rm NATIVE_BUILD.txt
+fi
+
+npm install --no-optional --ignore-scripts
+
+set -e
+
 cd ../build-nodejs-modules
 npm install
 cd ../backend
-
-npm install --no-optional --ignore-scripts
 
 # Remove some files we know that won't be used at all
 rm -rf node_modules/sodium-native-nodejs-mobile/libsodium/android-toolchain*
@@ -33,13 +54,13 @@ export npm_config_node_engine="chakracore" # nodejs-mobile uses chakracore
 # Rebuild modules with right environment
 if [ "$PLATFORM_NAME" == "iphoneos" ]; then
   npm_config_arch="arm64" npm rebuild --build-from-source
-  mv node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node.folder
-  mv node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node.folder/sodium node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node
-  codesign -f -s "Apple Development: Rogerio Fernandes Junior" node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node
 else # iphonesimulator
+  cp node_modules/sodium-native-nodejs-mobile/libsodium/dist-build/ios.sh node_modules/sodium-native-nodejs-mobile/patches/ios.sh
   PLATFORM_NAME="iphoneos" npm_config_arch="x64" npm rebuild --build-from-source
 fi
 
-# We dont need libsodium source files anymore
-rm -rf node_modules/sodium-native-nodejs-mobile/libsodium
-rm -rf node_modules/sodium-native-nodejs-mobile/build/Release/obj.target
+mv node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node.folder
+mv node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node.folder/sodium node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node
+codesign -f -s "Apple Development: Rogerio Fernandes Junior" node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node
+
+echo "$PLATFORM_NAME" > "NATIVE_BUILD.txt"

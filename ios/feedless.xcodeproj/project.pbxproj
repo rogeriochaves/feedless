@@ -20,8 +20,8 @@
 		9053055B245F7C23006C054D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055A245F7C23006C054D /* Utils.swift */; };
 		9053055F245FE975006C054D /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055E245FE975006C054D /* Types.swift */; };
 		905AA0B92463056100CEB583 /* backend in Resources */ = {isa = PBXBuildFile; fileRef = 905AA0B72463034600CEB583 /* backend */; };
-		905AA0BC246329A100CEB583 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 905AA0BA2463299500CEB583 /* NodeMobile.framework */; };
-		905AA0BD246329A100CEB583 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 905AA0BA2463299500CEB583 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		907002132465A53400548946 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; };
+		907002142465A53400548946 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
 /* End PBXBuildFile section */
 
@@ -49,7 +49,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				905AA0BD246329A100CEB583 /* NodeMobile.framework in Embed Frameworks */,
+				907002142465A53400548946 /* NodeMobile.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,8 +76,8 @@
 		9053055A245F7C23006C054D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		9053055E245FE975006C054D /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		905AA0B72463034600CEB583 /* backend */ = {isa = PBXFileReference; lastKnownFileType = folder; path = backend; sourceTree = "<group>"; };
-		905AA0BA2463299500CEB583 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
 		905AA0BE2464663300CEB583 /* feedless.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = feedless.entitlements; sourceTree = "<group>"; };
+		907002122465A53400548946 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
 		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
 		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
 		90B81B95245ECC00005C5D31 /* NodeRunner.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeRunner.mm; sourceTree = "<group>"; };
@@ -88,7 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				905AA0BC246329A100CEB583 /* NodeMobile.framework in Frameworks */,
+				907002132465A53400548946 /* NodeMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,7 +190,7 @@
 		90B81B8E245ECB25005C5D31 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				905AA0BA2463299500CEB583 /* NodeMobile.framework */,
+				907002122465A53400548946 /* NodeMobile.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -203,10 +203,11 @@
 			buildConfigurationList = 902D049B2458AAAA007CFE56 /* Build configuration list for PBXNativeTarget "feedless" */;
 			buildPhases = (
 				902D046D2458AAA7007CFE56 /* Sources */,
-				90FE79A3246298C1004CC526 /* ShellScript */,
-				90FE79A424629903004CC526 /* ShellScript */,
+				90FE79A3246298C1004CC526 /* [JS] Build native modules */,
+				90FE79A424629903004CC526 /* [JS] Concat to single file (noderify) */,
 				902D046F2458AAA7007CFE56 /* Resources */,
 				902D046E2458AAA7007CFE56 /* Frameworks */,
+				907002152465F1A800548946 /* [JS] Delete node_modules except native bindings */,
 				90A1A5332460D24600D00245 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -327,7 +328,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		90FE79A3246298C1004CC526 /* ShellScript */ = {
+		907002152465F1A800548946 /* [JS] Delete node_modules except native bindings */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -336,6 +337,25 @@
 			);
 			inputPaths = (
 			);
+			name = "[JS] Delete node_modules except native bindings";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "find $CODESIGNING_FOLDER_PATH/backend/node_modules \\\n  -type f \\\n   ! \\( \\\n    -name \"*.node\" \\\n    \\) \\\n  -print0 | xargs -0 rm -rf\n# We used to keep .so files too, but those are \n# counted as executables by App Store policies\n# -o -name \"*.so\" \\\n# -o -name \"*.a\" \\  \n# Delete symbolic links\nfind $CODESIGNING_FOLDER_PATH/backend/node_modules -depth -type l -delete\n# Delete empty directories\nfind $CODESIGNING_FOLDER_PATH/backend/node_modules -depth -type d -empty -delete\nfind $CODESIGNING_FOLDER_PATH/backend\n";
+		};
+		90FE79A3246298C1004CC526 /* [JS] Build native modules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[JS] Build native modules";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -344,7 +364,7 @@
 			shellPath = /bin/sh;
 			shellScript = "cd backend\nnpm run install:ios \n";
 		};
-		90FE79A424629903004CC526 /* ShellScript */ = {
+		90FE79A424629903004CC526 /* [JS] Concat to single file (noderify) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -353,6 +373,7 @@
 			);
 			inputPaths = (
 			);
+			name = "[JS] Concat to single file (noderify)";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -547,8 +568,6 @@
 				DEVELOPMENT_ASSET_PATHS = "feedless/Preview\\ Content";
 				DEVELOPMENT_TEAM = 8FY84BDRUF;
 				ENABLE_BITCODE = NO;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/libnode",
@@ -559,19 +578,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -586,8 +598,6 @@
 				DEVELOPMENT_ASSET_PATHS = "feedless/Preview\\ Content";
 				DEVELOPMENT_TEAM = 8FY84BDRUF;
 				ENABLE_BITCODE = NO;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/libnode",
@@ -598,19 +608,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};

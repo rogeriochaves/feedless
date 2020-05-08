@@ -1,3 +1,4 @@
 out/
-node_modules/
 nodejs-assets/
+node_modules*
+NATIVE_BUILD.txt

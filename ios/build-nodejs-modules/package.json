@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "nodejs-mobile-gyp": "^0.3.1",
+    "nodejs-mobile-gyp": "0.3.1",
     "nodejs-mobile-react-native": "0.5.0"
   },
   "devDependencies": {},

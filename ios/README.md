@@ -4,12 +4,6 @@ xcode
 nodejs 10.13.0
 npm 6.4.1
 
-*DON'T* install dependencies using `npm install`, instead, run this:
+*DON'T* install dependencies using `npm install`, just open xcode and hit the "play" button
 
-```
-npm install --no-optional --ignore-scripts
-```
-
-It will install dependencies without trying to install any native bindings for MacOS. Then, Xcode build process has some scripts to properly rebuild the native modules but using iOS target.
-
-So open XCode and hit "play"
+You can understand the build process by clicking on the project on xcode > feedless target > build phases
