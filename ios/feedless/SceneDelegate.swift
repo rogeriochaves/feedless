@@ -26,7 +26,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let bundlePath = Bundle.main.bundlePath
         print("documentsPath", documentsPath)
-        print("bundlePath", bundlePath)
 
         DispatchQueue.global(qos: .background).async {
             NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath])

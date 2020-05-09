@@ -40,10 +40,6 @@ cd ../build-nodejs-modules
 npm install
 cd ../backend
 
-# Remove some files we know that won't be used at all
-rm -rf node_modules/sodium-native-nodejs-mobile/libsodium/android-toolchain*
-rm -rf node_modules/leveldown
-
 export npm_config_node_gyp="$( cd ../build-nodejs-modules/node_modules/nodejs-mobile-gyp/ && pwd )/bin/node-gyp.js"
 export npm_config_nodedir="$( cd ../build-nodejs-modules/node_modules/nodejs-mobile-react-native/ios/libnode/ && pwd )"
 export npm_config_platform="ios"

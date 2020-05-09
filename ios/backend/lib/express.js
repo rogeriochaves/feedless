@@ -1,41 +1,8 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
-const ssb = require("./ssb-client");
-const { asyncRouter, ssbFolder } = require("./utils");
+const asyncRouter = require("./asyncRouter");
 const queries = require("./queries");
-const ssbKeys = require("ssb-keys");
-const fs = require("fs");
-
-app.use(async (req, res, next) => {
-  if (!ssb.client()) {
-    setTimeout(() => {
-      console.log("Waiting for SSB to load...");
-
-      res.redirect("/");
-    }, 2000);
-    return;
-  }
-
-  req.context = {
-    syncing: ssb.isSyncing(),
-  };
-  res.locals.context = req.context;
-
-  let key;
-  try {
-    const isLoggedOut = fs.existsSync(`${ssbFolder()}/logged-out`);
-
-    key = !isLoggedOut && ssbKeys.loadSync(`${ssbFolder()}/secret`);
-  } catch (_) {}
-  if (!key || !key.id) return next();
-
-  // ssb.client().identities.addUnboxer(key);
-  // req.context.profile = (await queries.getProfile(key.id)) || {};
-  // req.context.profile.key = key;
-
-  next();
-});
 
 const posts = [
   {
@@ -98,7 +65,14 @@ const posts = [
   },
 ];
 
-app.get("/user", (req, res) => {
+const router = asyncRouter(app);
+
+router.get("/context", { skipStatusCheck: true, public: true }, (req, res) => {
+  console.log("sent status", req.context.status);
+  res.json({ status: req.context.status, loggedIn: !!req.context.key });
+});
+
+router.get("/user", { public: true }, (req, res) => {
   res.json({
     profile: {
       id: "@PvT5scAQqPNiVaoYUoz5Omdx3",
@@ -108,19 +82,19 @@ app.get("/user", (req, res) => {
   });
 });
 
-const router = asyncRouter(app);
-
-router.get("/posts", (req, res) => {
+router.get("/posts", { public: true }, (req, res) => {
   res.json(posts);
 });
 
-router.get("/debug", async (req, res) => {
+router.get("/debug", { public: true }, async (req, res) => {
   const query = req.query || {};
 
   const entries = await queries.getAllEntries(query);
   entries.map((x) => {
     x.value = JSON.stringify(x.value);
   });
+
+  console.log("sending debug");
 
   res.json({ entries, query });
 });

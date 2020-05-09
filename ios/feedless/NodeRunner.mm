@@ -45,7 +45,13 @@
     }
 
     //Start node, with argc and argv.
-    node_start(argument_count,argv);
+    @try {
+       node_start(argument_count,argv);
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception.reason);
+        [self startEngineWithArguments:arguments];
+    }
     free(args_buffer);
 }
 @end

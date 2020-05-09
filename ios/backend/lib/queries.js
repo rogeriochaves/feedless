@@ -445,7 +445,7 @@ const getCommunities = async () => {
           },
         },
       ],
-      limit: 1000,
+      limit: 100,
     })
   );
 

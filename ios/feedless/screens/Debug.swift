@@ -26,10 +26,10 @@ class FetchEntries: ObservableObject {
                         self.entries = decodedData.entries
                     }
                 } else {
-                    print("No data loading posts")
+                    print("No data loading debug")
                 }
             } catch {
-                print("Error loading posts")
+                print("Error loading debug entries")
             }
         }.resume()
     }

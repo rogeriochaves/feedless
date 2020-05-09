@@ -1,20 +1,14 @@
 const fs = require("fs");
 const path = require("path");
 const { ssbFolder } = require("./utils");
-const ssbKeys = require("ssb-keys");
-
-console.log("ssbFolder", ssbFolder());
 
 const folderExists = fs.existsSync(ssbFolder());
 if (!folderExists) fs.mkdirSync(ssbFolder());
 
-const keysPath = path.join(ssbFolder(), "/secret");
-const keys = ssbKeys.loadOrCreateSync(keysPath);
-
-console.log("keys", keys);
-
 // Need to use secret-stack directly instead of ssb-server here otherwise is not compatible with patchwork .ssb folder
-const Server = require("secret-stack")()
+const Server = require("secret-stack")({
+  appKey: "1KHLiKZvAvjbY1ziZEHMXawbCEIM6qwjCDm3VYRan/s=",
+})
   .use(require("ssb-db"))
   .use(require("ssb-master"))
   .use(require("ssb-gossip"))

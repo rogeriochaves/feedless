@@ -1,39 +1,10 @@
 const fs = require("fs");
 const pull = require("pull-stream");
 
-module.exports.asyncRouter = (app) => {
-  const debug = require("debug")("router");
-
-  let wrapper = (method, path, opts, fn) => async (req, res, next) => {
-    if (typeof opts == "function") fn = opts;
-    if (!opts.public && !req.context.profile) {
-      res.status(401);
-      return res.json({ error: "You are not logged in" });
-    }
-
-    req.context.path = path;
-    try {
-      debug(`${method} ${path}`);
-      await fn(req, res);
-    } catch (e) {
-      next(e);
-    }
-  };
-  return {
-    get: (path, fn, opts) => {
-      app.get(path, wrapper("GET", path, fn, opts));
-    },
-    post: (path, fn, opts) => {
-      debug(`POST ${path}`);
-      app.post(path, wrapper("POST", path, fn, opts));
-    },
-  };
-};
-
 const ssbFolder = () => {
   let homeFolder =
     process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-  return `${process.argv[2] || homeFolder + "/.ssb"}`;
+  return `${(process.argv[2] || homeFolder) + "/.ssb"}`;
 };
 module.exports.ssbFolder = ssbFolder;
 

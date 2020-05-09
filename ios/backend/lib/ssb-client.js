@@ -1,39 +1,51 @@
 const Client = require("ssb-client");
 const ssbKeys = require("ssb-keys");
-const ssbConfig = require("./ssb-config");
 const queries = require("./queries");
 const debug = require("debug")("express");
 const { ssbFolder } = require("./utils");
 const fetch = require("node-fetch").default;
 
 let ssbClient;
-let syncing = false;
+let status = "indexing";
 
 const ssbSecret = ssbKeys.loadOrCreateSync(`${ssbFolder()}/secret`);
 
 const connectClient = (ssbSecret) => {
-  Client(ssbSecret, ssbConfig, async (err, server) => {
-    if (err) {
-      console.log("err", err, "trying to reconnect in 1s");
-      setTimeout(connectClient, 1000);
-      return;
-    }
-    console.log("conncetion successfull!");
-
-    ssbClient = server;
-
-    queries.progress(({ incompleteFeeds }) => {
-      if (incompleteFeeds > 0) {
-        if (!syncing) debug("syncing");
-        syncing = true;
-      } else {
-        syncing = false;
+  Client(
+    ssbSecret,
+    {
+      host: "127.0.0.1",
+      port: process.env.SSB_PORT || 8008,
+      key: ssbSecret.id,
+      caps: {
+        shs: "1KHLiKZvAvjbY1ziZEHMXawbCEIM6qwjCDm3VYRan/s=",
+      },
+    },
+    (err, server) => {
+      if (err) {
+        console.log("err", err, "trying to reconnect in 1s");
+        setTimeout(() => connectClient(ssbSecret), 1000);
+        return;
       }
-    });
-    console.log("SSB Client ready");
+      console.log("conncetion successfull!");
 
-    addFirstPub();
-  });
+      ssbClient = server;
+
+      queries.progress((data) => {
+        const { incompleteFeeds } = data;
+        if (incompleteFeeds > 0) {
+          if (status != "syncing") debug("syncing");
+          status = "syncing";
+        } else {
+          if (status != "ready") debug("ready");
+          status = "ready";
+        }
+      });
+      console.log("SSB Client ready");
+
+      addFirstPub();
+    }
+  );
 };
 
 const addFirstPub = async () => {
@@ -51,7 +63,7 @@ const addFirstPub = async () => {
 };
 
 module.exports.client = () => ssbClient;
-module.exports.isSyncing = () => syncing;
+module.exports.getStatus = () => status;
 module.exports.reconnectWith = connectClient;
 
 connectClient(ssbSecret);

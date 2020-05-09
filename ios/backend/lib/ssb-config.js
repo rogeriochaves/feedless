@@ -6,15 +6,20 @@ const ssbKeys = require("ssb-keys");
 const keysPath = path.join(ssbFolder(), "/secret");
 const keys = ssbKeys.loadOrCreateSync(keysPath);
 
+var home = require("os-homedir");
+const p = path.join(home() || "browser", "." + "ssb");
+console.log("p", p);
+console.log("ssbFolder()", ssbFolder());
+
 module.exports = configInject("ssb", {
   path: ssbFolder(),
   keys,
-  // blobs: {
-  //   sympathy: 2,
-  // },
-  // blobsPurge: {
-  //   cpuMax: 30,
-  // },
+  blobs: {
+    sympathy: 2,
+  },
+  blobsPurge: {
+    cpuMax: 30,
+  },
   conn: {
     autostart: false,
   },
