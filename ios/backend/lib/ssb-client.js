@@ -9,16 +9,20 @@ const fetch = require("node-fetch").default;
 let ssbClient;
 let syncing = false;
 
-const mode = process.env.MODE || "standalone";
 const ssbSecret = ssbKeys.loadOrCreateSync(`${ssbFolder()}/secret`);
 
 const connectClient = (ssbSecret) => {
   Client(ssbSecret, ssbConfig, async (err, server) => {
-    if (err) throw err;
+    if (err) {
+      console.log("err", err, "trying to reconnect in 1s");
+      setTimeout(connectClient, 1000);
+      return;
+    }
+    console.log("conncetion successfull!");
 
     ssbClient = server;
 
-    queries.progress(({ rate, feeds, incompleteFeeds, progress, total }) => {
+    queries.progress(({ incompleteFeeds }) => {
       if (incompleteFeeds > 0) {
         if (!syncing) debug("syncing");
         syncing = true;
@@ -28,7 +32,7 @@ const connectClient = (ssbSecret) => {
     });
     console.log("SSB Client ready");
 
-    if (mode == "standalone") addFirstPub();
+    addFirstPub();
   });
 };
 

@@ -369,11 +369,15 @@ const getAllEntries = (query) => {
   const queryOpts = queries.length > 0 ? { query: queries } : {};
 
   return promisePull(
-    ssb.client().query.read({
-      reverse: true,
-      limit: 1000,
-      ...queryOpts,
-    })
+    ssb.client().query.read(
+      Object.assign(
+        {
+          reverse: true,
+          limit: 1000,
+        },
+        queryOpts
+      )
+    )
   );
 };
 

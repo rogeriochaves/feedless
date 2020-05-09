@@ -7,11 +7,8 @@ module.exports.asyncRouter = (app) => {
   let wrapper = (method, path, opts, fn) => async (req, res, next) => {
     if (typeof opts == "function") fn = opts;
     if (!opts.public && !req.context.profile) {
-      if (method == "POST") {
-        res.status(401);
-        return res.send("You are not logged in");
-      }
-      return res.redirect("/");
+      res.status(401);
+      return res.json({ error: "You are not logged in" });
     }
 
     req.context.path = path;

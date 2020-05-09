@@ -21,6 +21,7 @@
 		9053055F245FE975006C054D /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055E245FE975006C054D /* Types.swift */; };
 		907002132465A53400548946 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; };
 		907002142465A53400548946 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		907002172466B77D00548946 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907002162466B77D00548946 /* Debug.swift */; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
 /* End PBXBuildFile section */
 
@@ -77,6 +78,7 @@
 		905AA0B72463034600CEB583 /* backend */ = {isa = PBXFileReference; lastKnownFileType = folder; path = backend; sourceTree = "<group>"; };
 		905AA0BE2464663300CEB583 /* feedless.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = feedless.entitlements; sourceTree = "<group>"; };
 		907002122465A53400548946 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
+		907002162466B77D00548946 /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
 		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
 		90B81B95245ECC00005C5D31 /* NodeRunner.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeRunner.mm; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				900BE2962458AEEC00C77595 /* Index.swift */,
 				900BE2992458B05800C77595 /* Login.swift */,
 				902D04782458AAA7007CFE56 /* Wall.swift */,
+				907002162466B77D00548946 /* Debug.swift */,
 			);
 			path = screens;
 			sourceTree = "<group>";
@@ -328,7 +331,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		907002152465F1A800548946 /* [JS] Copy backend to bundle */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -342,7 +345,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rsync -avq --delete --exclude \"node_modules*\" \"backend\" \"$CODESIGNING_FOLDER_PATH\" \nrsync -avq --delete --prune-empty-dirs --include=\"*/\" --include=\"*.node\" --exclude=\"*\" \"backend/node_modules\" \"$CODESIGNING_FOLDER_PATH/backend\"\n";
+			shellScript = "./backend/tools/sync-backend.sh\n";
 		};
 		90FE79A3246298C1004CC526 /* [JS] Build native modules */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -391,6 +394,7 @@
 				90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */,
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
 				9053055B245F7C23006C054D /* Utils.swift in Sources */,
+				907002172466B77D00548946 /* Debug.swift in Sources */,
 				902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */,
 				900BE2972458AEEC00C77595 /* Index.swift in Sources */,
 				9053055F245FE975006C054D /* Types.swift in Sources */,

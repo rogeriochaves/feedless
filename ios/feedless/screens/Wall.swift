@@ -61,6 +61,14 @@ struct Wall: View {
                     }
                 }
                 .tag(1)
+            Debug()
+                .tabItem {
+                    VStack {
+                        Image(uiImage: "🛠".image()!).renderingMode(.original)
+                        Text("Debug")
+                    }
+                }
+                .tag(2)
         }.accentColor(Color.purple)
     }
 }

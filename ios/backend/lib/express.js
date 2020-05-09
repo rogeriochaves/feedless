@@ -1,6 +1,41 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
+const ssb = require("./ssb-client");
+const { asyncRouter, ssbFolder } = require("./utils");
+const queries = require("./queries");
+const ssbKeys = require("ssb-keys");
+const fs = require("fs");
+
+app.use(async (req, res, next) => {
+  if (!ssb.client()) {
+    setTimeout(() => {
+      console.log("Waiting for SSB to load...");
+
+      res.redirect("/");
+    }, 2000);
+    return;
+  }
+
+  req.context = {
+    syncing: ssb.isSyncing(),
+  };
+  res.locals.context = req.context;
+
+  let key;
+  try {
+    const isLoggedOut = fs.existsSync(`${ssbFolder()}/logged-out`);
+
+    key = !isLoggedOut && ssbKeys.loadSync(`${ssbFolder()}/secret`);
+  } catch (_) {}
+  if (!key || !key.id) return next();
+
+  // ssb.client().identities.addUnboxer(key);
+  // req.context.profile = (await queries.getProfile(key.id)) || {};
+  // req.context.profile.key = key;
+
+  next();
+});
 
 const posts = [
   {
@@ -73,8 +108,21 @@ app.get("/user", (req, res) => {
   });
 });
 
-app.get("/posts", (req, res) => {
+const router = asyncRouter(app);
+
+router.get("/posts", (req, res) => {
   res.json(posts);
+});
+
+router.get("/debug", async (req, res) => {
+  const query = req.query || {};
+
+  const entries = await queries.getAllEntries(query);
+  entries.map((x) => {
+    x.value = JSON.stringify(x.value);
+  });
+
+  res.json({ entries, query });
 });
 
 app.listen(port, () =>
