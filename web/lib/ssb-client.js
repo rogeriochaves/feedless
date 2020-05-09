@@ -15,7 +15,10 @@ const ssbSecret = ssbKeys.loadOrCreateSync(`${ssbFolder()}/secret`);
 
 const connectClient = (ssbSecret) => {
   Client(ssbSecret, ssbConfig, async (err, server) => {
-    if (err) throw err;
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
 
     ssbClient = server;
 
