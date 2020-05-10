@@ -555,10 +555,7 @@ router.post("/about", async (req, res) => {
 
   const pictureLink = picture && (await uploadPicture(ssb.client(), picture));
 
-  let update = {
-    type: "about",
-    about: req.context.profile.id,
-  };
+  let update = {};
   if (name && name != req.context.profile.name) {
     update.name = name;
   }
@@ -573,10 +570,15 @@ router.post("/about", async (req, res) => {
     await ssb.client().identities.publishAs({
       key: req.context.profile.key,
       private: false,
-      content: update,
+      content: {
+        type: "about",
+        about: req.context.profile.id,
+        ...update,
+      },
     });
 
-    delete queries.profileCache[req.context.profile.id];
+    let cached = queries.profileCache[req.context.profile.id];
+    Object.assign(cached, update);
   }
 
   res.redirect("/");
