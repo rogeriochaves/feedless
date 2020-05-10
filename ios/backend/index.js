@@ -13,6 +13,8 @@ process.on("uncaughtException", (err) => {
   });
 });
 
-require("./lib/ssb");
-
 require("./lib/express");
+
+setTimeout(() => {
+  require("./lib/ssb");
+}, 1000);

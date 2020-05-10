@@ -13,14 +13,14 @@ const Server = require("secret-stack")({
   .use(require("ssb-master"))
   .use(require("ssb-gossip"))
   .use(require("ssb-replicate"))
+  .use(require("./monkeypatch/ssb-friends"))
+  // FIXME: see issue https://github.com/ssbc/ssb-ebt/issues/33
+  .use(require("ssb-ebt-fork-staltz")) // needs: db, replicate, friends
   .use(require("ssb-backlinks"))
   .use(require("ssb-about"))
   .use(require("ssb-contacts"))
   .use(require("ssb-invite"))
-  .use(require("./monkeypatch/ssb-friends"))
   .use(require("ssb-query"))
-  .use(require("ssb-device-address"))
-  .use(require("./plugins/memory-identities"))
   .use(require("ssb-blobs"))
   .use(require("ssb-private"));
 

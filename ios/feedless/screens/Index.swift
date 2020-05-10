@@ -28,10 +28,7 @@ class FetchContext: ObservableObject {
     func fetch() {
         let url = URL(string: "http://127.0.0.1:3000/context")!
 
-        print("fetching context")
-
         URLSession.shared.dataTask(with: url) {(data, response, error) in
-            print("got context response")
             if let todoData = data {
                 do {
                     let decodedData = try JSONDecoder().decode(StatusReponse.self, from: todoData)

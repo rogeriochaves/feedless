@@ -46,7 +46,7 @@
 
     //Start node, with argc and argv.
     @try {
-       node_start(argument_count,argv);
+        node_start(argument_count,argv);
     }
     @catch (NSException *exception) {
         NSLog(@"%@", exception.reason);
