@@ -12,6 +12,7 @@ RUN npm install
 
 COPY package.json package-lock.json ./
 RUN npm install
+RUN npm run postinstall
 COPY . .
 
 ENV NODE_ENV=production
