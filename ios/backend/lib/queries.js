@@ -358,7 +358,7 @@ const getFriendshipStatus = async (source, dest) => {
   return status;
 };
 
-const getAllEntries = (query) => {
+const getAllEntries = (query, limit = 10) => {
   let queries = [];
   if (query.author) {
     queries.push({ $filter: { value: { author: query.author } } });
@@ -373,7 +373,7 @@ const getAllEntries = (query) => {
       Object.assign(
         {
           reverse: true,
-          limit: 1000,
+          limit,
         },
         queryOpts
       )

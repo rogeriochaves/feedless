@@ -41,7 +41,12 @@ const connectClient = (ssbSecret) => {
           status = "ready";
         }
       });
+
       console.log("SSB Client ready");
+
+      queries.getAllEntries(1).then(() => {
+        status = "ready";
+      });
 
       addFirstPub();
     }

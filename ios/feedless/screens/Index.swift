@@ -75,8 +75,14 @@ struct Index: View {
                 if (context.status != .ready) {
                     Text(statusToString(status: context.status))
                 }
-                if (false && context.loggedIn) {
-                    Wall()
+                if (true || context.loggedIn) {
+                    if (context.status == .syncing || context.status == .ready) {
+                        Wall()
+                    } else {
+                        NavigationView {
+                            Text("Loading...")
+                        }
+                    }
                 } else {
                     NavigationView {
                         NavigationLink(destination: Login()) {

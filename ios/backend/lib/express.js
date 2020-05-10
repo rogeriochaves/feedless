@@ -86,18 +86,22 @@ router.get("/posts", { public: true }, (req, res) => {
   res.json(posts);
 });
 
-router.get("/debug", { public: true }, async (req, res) => {
-  const query = req.query || {};
+router.get(
+  "/debug",
+  { skipStatusCheck: true, public: true },
+  async (req, res) => {
+    const query = req.query || {};
 
-  const entries = await queries.getAllEntries(query);
-  entries.map((x) => {
-    x.value = JSON.stringify(x.value);
-  });
+    const entries = await queries.getAllEntries(query);
+    entries.map((x) => {
+      x.value = JSON.stringify(x.value);
+    });
 
-  console.log("sending debug");
+    console.log("sending debug");
 
-  res.json({ entries, query });
-});
+    res.json({ entries, query });
+  }
+);
 
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
