@@ -9,6 +9,7 @@ const fetch = require("node-fetch").default;
 
 let ssbClient;
 let syncing = false;
+let indexing = true;
 
 const mode = process.env.MODE || "standalone";
 const ssbSecret = ssbKeys.loadOrCreateSync(`${ssbFolder()}/secret`);
@@ -24,6 +25,7 @@ const connectClient = (ssbSecret) => {
 
     ssbClient = server;
 
+    checkIndexing();
     queries.progress(({ rate, feeds, incompleteFeeds, progress, total }) => {
       if (incompleteFeeds > 0) {
         if (!syncing) debug("syncing");
@@ -58,8 +60,31 @@ const addFirstPub = async () => {
   }
 };
 
-module.exports.client = () => ssbClient;
-module.exports.isSyncing = () => syncing;
-module.exports.reconnectWith = connectClient;
+const checkIndexing = async () => {
+  if (!ssbClient) return;
+
+  const { indexes } = await ssbClient.progress();
+  const { start, current, target } = indexes;
+
+  metrics.ssbIndexingStart.set(start);
+  metrics.ssbIndexingCurrent.set(current);
+  metrics.ssbIndexingTarget.set(target);
+
+  if (current < target) {
+    if (!indexing) debug("indexing");
+    indexing = true;
+  } else {
+    indexing = false;
+  }
+};
+
+if (!global.checkIndexingInterval) {
+  global.checkIndexingInterval = setInterval(checkIndexing, 1000);
+}
 
 connectClient(ssbSecret);
+
+module.exports.client = () => ssbClient;
+module.exports.getStatus = () =>
+  indexing ? "indexing" : syncing ? "syncing" : "ready";
+module.exports.reconnectWith = connectClient;

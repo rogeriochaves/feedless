@@ -30,7 +30,8 @@ const Server = require("secret-stack")()
   .use(require("ssb-device-address"))
   .use(require("./plugins/memory-identities"))
   .use(require("ssb-blobs"))
-  .use(require("ssb-private"));
+  .use(require("ssb-private"))
+  .use(require("./plugins/channels"));
 
 const config = require("./ssb-config");
 const server = Server(config);

@@ -67,13 +67,13 @@ app.use(async (req, res, next) => {
     setTimeout(() => {
       console.log("Waiting for SSB to load...");
 
-      res.redirect("/");
+      res.redirect(req.originalUrl);
     }, 500);
     return;
   }
 
   req.context = {
-    syncing: ssb.isSyncing(),
+    status: ssb.getStatus(),
   };
   res.locals.context = req.context;
 
@@ -793,8 +793,8 @@ router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssb.client())(req, res);
 });
 
-router.get("/syncing", (_req, res) => {
-  res.json({ syncing: ssb.isSyncing() });
+router.get("/syncing", (req, res) => {
+  res.json({ status: req.context.status });
 });
 
 router.get("/debug", async (req, res) => {

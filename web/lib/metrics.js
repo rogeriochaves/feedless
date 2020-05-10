@@ -33,6 +33,18 @@ module.exports = {
     name: "feedless_ssb_progress_total",
     help: "Tracks ssb syncing progress total",
   }),
+  ssbIndexingStart: new Gauge({
+    name: "feedless_ssb_indexing_start",
+    help: "Tracks ssb indexing progress start",
+  }),
+  ssbIndexingCurrent: new Gauge({
+    name: "feedless_ssb_indexing_current",
+    help: "Tracks ssb indexing progress current",
+  }),
+  ssbIndexingTarget: new Gauge({
+    name: "feedless_ssb_indexing_target",
+    help: "Tracks ssb indexing progress target",
+  }),
   searchResultsPeople: new Summary({
     name: "feedless_search_results_people",
     help: "Amount of people results returned from search",

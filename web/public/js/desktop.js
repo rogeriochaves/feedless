@@ -188,7 +188,7 @@ if (jsSyncing) {
     fetch("/syncing")
       .then((result) => result.json())
       .then((result) => {
-        if (!result.syncing) {
+        if (result.status == "ready") {
           clearInterval(checkSyncInterval);
           jsSyncing.parentElement.removeChild(jsSyncing);
         }

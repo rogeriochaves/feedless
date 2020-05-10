@@ -28,10 +28,10 @@
           </a>
         </nav>
         <div class="right-items"></div>
-          <% if (context.syncing) { %>
+          <% if (context.status != "ready") { %>
             <div class="columns js-syncing" style="align-items: center; padding-right: 30px;">
               <img src="/images/syncing.gif" width="24" style="margin-right: 10px; margin-top: -5px">
-              <span>syncing</span>
+              <span><%= context.status %></span>
             </div>
           <% } %>
           <form action="/search" method="GET" style="margin-right: 10px">

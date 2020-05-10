@@ -483,37 +483,8 @@ const isMember = async (id, channel) => {
 const getCommunityMembers = async (name) => {
   debugCommunityMembers("Fetching");
 
-  const communityMembers = await promisePull(
-    ssb.client().query.read({
-      reverse: true,
-      query: [
-        {
-          $filter: {
-            value: {
-              content: {
-                type: "channel",
-                channel: name,
-              },
-            },
-          },
-        },
-      ],
-      limit: 100,
-    }),
-    paramap(mapProfiles)
-  );
-  const dedupMembers = {};
-  for (const member of communityMembers) {
-    const author = member.value.author;
-    if (dedupMembers[author]) continue;
-    dedupMembers[author] = member;
-  }
-  const onlySubscribedMembers = Object.values(dedupMembers).filter(
-    (x) => x.value.content.subscribed
-  );
-  const memberProfiles = onlySubscribedMembers.map(
-    (x) => x.value.authorProfile
-  );
+  const members = await ssb.client().channels.members(name);
+  const memberProfiles = await Promise.all(members.map(getProfile));
 
   debugCommunityMembers("Done");
 
