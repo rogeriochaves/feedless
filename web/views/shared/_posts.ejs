@@ -2,24 +2,28 @@
   if (!post.content.text) return;
   let text = escapeMarkdown(post.content.text);
   let limit = typeof dont_cut == "undefined" ? 140 : 10000;
-  let words = text.split(" ");
 
   let splittedPosts = [];
-  let nextPost = "";
-  for (word of words) {
-    const postsCount = splittedPosts.length + 1;
-    const pageMarker = `${postsCount}/`;
+  if (text.length <= limit) {
+    splittedPosts = [text];
+  } else {
+    let words = text.split(" ");
+    let nextPost = "";
+    for (word of words) {
+      const postsCount = splittedPosts.length + 1;
+      const pageMarker = `${postsCount}/`;
 
-    if (nextPost.length + word.length + pageMarker.length + 1 < limit) {
-      nextPost += word + " ";
-    } else {
-      splittedPosts.push(nextPost + pageMarker);
-      nextPost = word + " ";
+      if (nextPost.length + word.length + pageMarker.length + 1 < limit) {
+        nextPost += word + " ";
+      } else {
+        splittedPosts.push(nextPost + pageMarker);
+        nextPost = word + " ";
+      }
     }
+    const postsCount = splittedPosts.length + 1;
+    const lastMarker = postsCount > 1 ? `${postsCount}/${postsCount}` : "";
+    splittedPosts.push(nextPost + lastMarker);
   }
-  const postsCount = splittedPosts.length + 1;
-  const lastMarker = postsCount > 1 ? `${postsCount}/${postsCount}` : "";
-  splittedPosts.push(nextPost + lastMarker);
 
   splittedPosts.reverse().map(text => { %>
     <div class="post">
