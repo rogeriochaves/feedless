@@ -9,7 +9,8 @@
     "start:standalone": "electron .",
     "clear": "rm -rf ~/.feedless; rm -rf ~/.feedless-user2; rm -rf ~/.feedless-user3",
     "package:mac": "electron-packager . --platform=darwin --arch=x64 --icon public/icons/smile.icns --out out/ --overwrite",
-    "package:linux": "electron-packager . --platform=linux --arch=x64 --icon public/icons/smile.png --out out/ --overwrite"
+    "package:linux": "electron-packager . --platform=linux --arch=x64 --icon public/icons/smile.png --out out/ --overwrite",
+    "postinstall": "sed -i -e 's/console/\\/\\/console/g' node_modules/compare-at-paths/index.js; sed -i -e 's/console/\\/\\/console/g' node_modules/map-filter-reduce/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,7 +26,6 @@
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
     "express-fileupload": "^1.1.7-alpha.3",
-    "flumeview-reduce": "^1.3.16",
     "ismobilejs": "^1.1.1",
     "left-pad": "^1.3.0",
     "mime-types": "^2.1.26",

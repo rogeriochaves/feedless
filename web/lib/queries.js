@@ -482,9 +482,38 @@ const isMember = async (id, channel) => {
 
 const getCommunityMembers = async (name) => {
   debugCommunityMembers("Fetching");
-
-  const members = await ssb.client().channels.members(name);
-  const memberProfiles = await Promise.all(members.map(getProfile));
+  const communityMembers = await promisePull(
+    ssb.client().query.read({
+      reverse: true,
+      query: [
+        {
+          $filter: {
+            value: {
+              content: {
+                type: "channel",
+                channel: name,
+              },
+            },
+          },
+        },
+        forceChannelIndex,
+      ],
+      limit: 50,
+    }),
+    paramap(mapProfiles)
+  );
+  const dedupMembers = {};
+  for (const member of communityMembers) {
+    const author = member.value.author;
+    if (dedupMembers[author]) continue;
+    dedupMembers[author] = member;
+  }
+  const onlySubscribedMembers = Object.values(dedupMembers).filter(
+    (x) => x.value.content.subscribed
+  );
+  const memberProfiles = onlySubscribedMembers.map(
+    (x) => x.value.authorProfile
+  );
 
   debugCommunityMembers("Done");
 
@@ -548,6 +577,7 @@ const getPostWithReplies = async (channel, key) => {
               },
             },
           },
+          forceChannelIndex,
         ],
       }),
       ssb.client().query.read({
@@ -564,6 +594,7 @@ const getPostWithReplies = async (channel, key) => {
               },
             },
           },
+          forceChannelIndex,
         ],
       }),
       ssb.client().query.read({
@@ -580,6 +611,7 @@ const getPostWithReplies = async (channel, key) => {
               },
             },
           },
+          forceChannelIndex,
         ],
       }),
     ]),
@@ -588,6 +620,10 @@ const getPostWithReplies = async (channel, key) => {
 
   debugCommunityPosts("Done");
   return postWithReplies;
+};
+
+const forceChannelIndex = {
+  $sort: [["value", "content", "channel"], ["timestamp"]],
 };
 
 const getCommunityPosts = async (name) => {
@@ -607,6 +643,7 @@ const getCommunityPosts = async (name) => {
             },
           },
         },
+        forceChannelIndex,
       ],
       limit: 1000,
     }),
