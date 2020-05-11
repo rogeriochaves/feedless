@@ -28,3 +28,17 @@ if (mode == "server" && process.env.NODE_ENV != "production") {
     });
   });
 }
+
+process.on("unhandledRejection", (reason, _promise) => {
+  console.error("unhandledRejection", reason);
+  setTimeout(() => {
+    process.exit(1);
+  });
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("uncaughtException", err);
+  setTimeout(() => {
+    process.exit(1);
+  });
+});
