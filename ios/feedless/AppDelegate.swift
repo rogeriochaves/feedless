@@ -11,10 +11,23 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    @objc
+    func startNode() {
+        let jsFile = Bundle.main.path(forResource: "backend/out/index.js", ofType: nil)!
 
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let bundlePath = Bundle.main.bundlePath
+        print("documentsPath", documentsPath)
+        NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath])
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+
+        let nodejsThread = Thread(target:self, selector:#selector(startNode), object:nil)
+        nodejsThread.stackSize = 4*1024*1024;
+        nodejsThread.start()
+
         return true
     }
 

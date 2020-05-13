@@ -3,6 +3,13 @@ const app = express();
 const port = process.env.PORT || 3000;
 const asyncRouter = require("./asyncRouter");
 const queries = require("./queries");
+const { getIndexingState } = require("./ssb-client");
+const { reconstructKeys, ssbFolder } = require("./utils");
+const fs = require("fs");
+const debug = require("debug")("express");
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json());
 
 const posts = [
   {
@@ -69,7 +76,14 @@ const router = asyncRouter(app);
 
 router.get("/context", { skipStatusCheck: true, public: true }, (req, res) => {
   console.log("sent status", req.context.status);
-  res.json({ status: req.context.status, loggedIn: !!req.context.key });
+
+  const { current, target } = getIndexingState();
+
+  res.json({
+    status: req.context.status,
+    indexingCurrent: current,
+    indexingTarget: target,
+  });
 });
 
 router.get("/user", { public: true }, (req, res) => {

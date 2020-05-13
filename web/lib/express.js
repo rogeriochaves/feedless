@@ -15,7 +15,6 @@ const serveBlobs = require("./serve-blobs");
 const cookieParser = require("cookie-parser");
 const debug = require("debug")("express");
 const fileUpload = require("express-fileupload");
-const Sentry = require("@sentry/node");
 const metrics = require("./metrics");
 const sgMail = require("@sendgrid/mail");
 const ejs = require("ejs");
@@ -25,6 +24,7 @@ const mobileRoutes = require("./mobile-routes");
 const ejsUtils = require("ejs/lib/utils");
 const fs = require("fs");
 const ssbKeys = require("ssb-keys");
+const { sentry } = require("./errors");
 
 const mode = process.env.MODE || "standalone";
 
@@ -32,13 +32,9 @@ const profileUrl = (id, path = "") => {
   return `/profile/${id}${path}`;
 };
 
-const SENTRY_DSN = process.env.SENTRY_DSN;
-if (SENTRY_DSN && process.env.NODE_ENV == "production") {
-  Sentry.init({
-    dsn: SENTRY_DSN,
-  });
+if (sentry) {
   // Sentry request handler must be the first middleware on the app
-  app.use(Sentry.Handlers.requestHandler());
+  app.use(sentry.Handlers.requestHandler());
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -819,8 +815,8 @@ router.post("/frontend-error", (req, res) => {
   const message = req.body.message;
   const stacktrace = req.body.stacktrace;
 
-  if (SENTRY_DSN && process.env.NODE_ENV == "production") {
-    Sentry.captureEvent({
+  if (sentry) {
+    sentry.captureEvent({
       message,
       stacktrace,
     });
@@ -834,9 +830,9 @@ router.get("/metrics", { public: true }, (_req, res) => {
   res.end(metrics.register.metrics());
 });
 
-if (SENTRY_DSN && process.env.NODE_ENV == "production") {
+if (sentry) {
   // The error handler must be before any other error middleware and after all controllers
-  app.use(Sentry.Handlers.errorHandler());
+  app.use(sentry.Handlers.errorHandler());
 }
 
 app.use((error, req, res, _next) => {

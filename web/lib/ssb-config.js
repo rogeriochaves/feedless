@@ -1,6 +1,12 @@
 const configInject = require("ssb-config/inject");
 
 module.exports = configInject(process.env.CONFIG_FOLDER || "ssb", {
+  onError: (err) => {
+    // After a while server gets stuck and start throwing errors, but those are
+    // usually swallowed, so we just rethrow it to allow process to die and be restarted
+    // https://github.com/rogeriochaves/feedless/issues/14
+    throw err;
+  },
   connections: {
     incoming: {
       net: [

@@ -26,3 +26,24 @@ extension String {
         return image ?? UIImage()
     }
 }
+
+class Utils {
+    static func ssbFolder() -> String {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        return documentsPath + "/.ssb";
+    }
+    
+    static func ssbKey() -> SSBKey? {
+        if (FileManager.default.fileExists(atPath: ssbFolder() + "/logged-out")) {
+            return nil;
+        }
+        let decoder = JSONDecoder()
+        guard
+            let data = try? Data(contentsOf: URL(fileURLWithPath: ssbFolder() + "/secret")),
+            let ssbKey = try? decoder.decode(SSBKey.self, from: data)
+        else {
+            return nil
+        }
+        return ssbKey
+    }
+}

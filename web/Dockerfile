@@ -12,9 +12,10 @@ RUN npm install
 
 COPY package.json package-lock.json ./
 RUN npm install
+COPY apply-patches.sh .
 RUN npm run postinstall
+
 COPY . .
 
 ENV NODE_ENV=production
-
 CMD npm run start

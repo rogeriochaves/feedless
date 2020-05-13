@@ -29,3 +29,17 @@ struct Profile: Codable {
 struct User : Codable {
     public var profile: Profile?
 }
+
+struct SSBKey : Decodable {
+    enum CodingKeys: String, CodingKey {
+        case curve
+        case publicKey = "public"
+        case privateKey = "private"
+        case id
+    }
+
+    var curve : String
+    var publicKey : String
+    var privateKey : String
+    var id : String
+}

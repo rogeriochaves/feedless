@@ -10,7 +10,7 @@
     "clear": "rm -rf ~/.feedless; rm -rf ~/.feedless-user2; rm -rf ~/.feedless-user3",
     "package:mac": "electron-packager . --platform=darwin --arch=x64 --icon public/icons/smile.icns --out out/ --overwrite",
     "package:linux": "electron-packager . --platform=linux --arch=x64 --icon public/icons/smile.png --out out/ --overwrite",
-    "postinstall": "sed -i -e 's/console/\\/\\/console/g' node_modules/compare-at-paths/index.js; sed -i -e 's/console/\\/\\/console/g' node_modules/map-filter-reduce/index.js"
+    "postinstall": "./apply-patches.sh"
   },
   "author": "",
   "license": "ISC",

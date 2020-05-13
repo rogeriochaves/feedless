@@ -21,18 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        let jsFile = Bundle.main.path(forResource: "backend/out/index.js", ofType: nil)!
-
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        let bundlePath = Bundle.main.bundlePath
-        print("documentsPath", documentsPath)
-
-        DispatchQueue.global(qos: .background).async {
-            NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath])
-        }
-
         // Create the SwiftUI view that provides the window contents.
-        let contentView = Index()
+        let contentView = Index()   .environmentObject(Context(ssbKey: nil, status: .initializing))
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
