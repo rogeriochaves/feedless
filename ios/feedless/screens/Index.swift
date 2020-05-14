@@ -44,6 +44,14 @@ class Context: ObservableObject {
         self.ssbKey = ssbKey
     }
 
+    func logout() {
+        FileManager.default.createFile(
+            atPath: Utils.ssbFolder() + "/loggedOut",
+            contents: "".data(using: .utf8)
+        )
+        self.ssbKey = nil
+    }
+
     func fetch() {
         let url = URL(string: "http://127.0.0.1:3000/context")!
 

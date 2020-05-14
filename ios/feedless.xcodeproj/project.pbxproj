@@ -19,6 +19,7 @@
 		902D04972458AAAA007CFE56 /* feedlessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04962458AAAA007CFE56 /* feedlessUITests.swift */; };
 		9053055B245F7C23006C054D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055A245F7C23006C054D /* Utils.swift */; };
 		9053055F245FE975006C054D /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055E245FE975006C054D /* Types.swift */; };
+		9061FA9E246DA40500AA988A /* NavigationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9061FA9D246DA40500AA988A /* NavigationMenu.swift */; };
 		907002132465A53400548946 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; };
 		907002142465A53400548946 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		907002172466B77D00548946 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907002162466B77D00548946 /* Debug.swift */; };
@@ -77,6 +78,7 @@
 		9053055E245FE975006C054D /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		905AA0B72463034600CEB583 /* backend */ = {isa = PBXFileReference; lastKnownFileType = folder; path = backend; sourceTree = "<group>"; };
 		905AA0BE2464663300CEB583 /* feedless.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = feedless.entitlements; sourceTree = "<group>"; };
+		9061FA9D246DA40500AA988A /* NavigationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationMenu.swift; sourceTree = "<group>"; };
 		907002122465A53400548946 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
 		907002162466B77D00548946 /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 		902D04732458AAA7007CFE56 /* feedless */ = {
 			isa = PBXGroup;
 			children = (
+				9061FA9C246DA3EC00AA988A /* components */,
 				905AA0BE2464663300CEB583 /* feedless.entitlements */,
 				900BE2982458AF0C00C77595 /* screens */,
 				902D04742458AAA7007CFE56 /* AppDelegate.swift */,
@@ -187,6 +190,14 @@
 				902D04982458AAAA007CFE56 /* Info.plist */,
 			);
 			path = feedlessUITests;
+			sourceTree = "<group>";
+		};
+		9061FA9C246DA3EC00AA988A /* components */ = {
+			isa = PBXGroup;
+			children = (
+				9061FA9D246DA40500AA988A /* NavigationMenu.swift */,
+			);
+			path = components;
 			sourceTree = "<group>";
 		};
 		90B81B8E245ECB25005C5D31 /* Frameworks */ = {
@@ -331,7 +342,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		907002152465F1A800548946 /* [JS] Copy backend to bundle */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -343,13 +354,13 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "./backend/tools/sync-backend.sh\n";
 		};
 		90FE79A3246298C1004CC526 /* [JS] Build native modules */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -361,13 +372,13 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "cd backend\nnpm run install:ios \n";
 		};
 		90FE79A424629903004CC526 /* [JS] Concat to single file (noderify) */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -379,7 +390,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "cd backend\nnpm run build\n";
 		};
@@ -398,6 +409,7 @@
 				902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */,
 				900BE2972458AEEC00C77595 /* Index.swift in Sources */,
 				9053055F245FE975006C054D /* Types.swift in Sources */,
+				9061FA9E246DA40500AA988A /* NavigationMenu.swift in Sources */,
 				902D04792458AAA7007CFE56 /* Wall.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

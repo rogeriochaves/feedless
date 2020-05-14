@@ -32,44 +32,55 @@ class FetchPosts: ObservableObject {
 }
 
 struct Wall: View {
+    @EnvironmentObject var context : Context
     @State private var selection = 0
 
     @ObservedObject var fetch = FetchPosts()
 
+    let actionSheet1 = ActionSheet(title: Text("Title"), message: Text("Message"), buttons: [.default(Text("OK")) {print("You did something")}, .cancel()])
+
     var body: some View {
         TabView(selection: $selection){
-            VStack {
+            NavigationMenu {
                 List(fetch.posts, id: \.key) { post in
                     VStack(alignment: .leading) {
                         Text(post.value.content.text)
                     }
                 }
+                .navigationBarTitle(Text("Profile"))
             }
-                .tabItem {
-                    VStack {
-                        Image(uiImage: "🙂".image()!).renderingMode(.original)
-                        Text("Profile")
-                    }
+            .tabItem {
+                VStack {
+                    Image(uiImage: "🙂".image()!).renderingMode(.original)
+                    Text("Profile")
                 }
-                .tag(0)
-            Text("Second View")
+            }
+            .tag(0)
+            NavigationMenu {
+                Text("Second View")
+                .navigationBarTitle(Text("Friends"))
+            }
                 .font(.title)
                 .tabItem {
                     VStack {
                         Image(uiImage: "👨‍👧‍👦".image()!).renderingMode(.original)
                         Text("Friends")
                     }
-                }
-                .tag(1)
-            Debug()
+            }
+            .tag(1)
+            NavigationMenu {
+                Debug()
+                .navigationBarTitle(Text("Debug"))
+            }
                 .tabItem {
                     VStack {
                         Image(uiImage: "🛠".image()!).renderingMode(.original)
                         Text("Debug")
                     }
-                }
-                .tag(2)
-        }.accentColor(Color.purple)
+            }
+            .tag(2)
+        }
+        .accentColor(Color.purple)
     }
 }
 
