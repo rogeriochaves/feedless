@@ -43,3 +43,9 @@ struct SSBKey : Decodable {
     var privateKey : String
     var id : String
 }
+
+enum ServerData<T> {
+    case loading
+    case success(T)
+    case error(String)
+}

@@ -30,8 +30,7 @@ const posts = [
         },
         channel: null,
         recps: null,
-        text:
-          "This is very cool. I sometimes get mantis pods to eat pests in the garden or on our fruit trees. \n\nIt's good that you noticed that they hatched - supposedly they'll start eating each other if you leave them unattended for too long. Then I think the last one standing is the boss you have to fight to level up.\n\nIt's always so weird and cool to see them so small and in such huge numbers.",
+        text: `It's ${Date()}. This is very cool. I sometimes get mantis pods to eat pests in the garden or on our fruit trees. \n\nIt's good that you noticed that they hatched - supposedly they'll start eating each other if you leave them unattended for too long. Then I think the last one standing is the boss you have to fight to level up.\n\nIt's always so weird and cool to see them so small and in such huge numbers.`,
         mentions: [],
       },
       signature:
@@ -96,7 +95,10 @@ router.get("/user", { public: true }, (req, res) => {
   });
 });
 
-router.get("/posts", { public: true }, (req, res) => {
+const ONE_WEEK = 60 * 60 * 24 * 7;
+
+router.get("/posts", { public: true }, (_req, res) => {
+  res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
   res.json(posts);
 });
 

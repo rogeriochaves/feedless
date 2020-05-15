@@ -11,7 +11,7 @@
 		900BE29A2458B05800C77595 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900BE2992458B05800C77595 /* Login.swift */; };
 		902D04752458AAA7007CFE56 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04742458AAA7007CFE56 /* AppDelegate.swift */; };
 		902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04762458AAA7007CFE56 /* SceneDelegate.swift */; };
-		902D04792458AAA7007CFE56 /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04782458AAA7007CFE56 /* Wall.swift */; };
+		902D04792458AAA7007CFE56 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902D04782458AAA7007CFE56 /* MainScreen.swift */; };
 		902D047B2458AAAA007CFE56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 902D047A2458AAAA007CFE56 /* Assets.xcassets */; };
 		902D047E2458AAAA007CFE56 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 902D047D2458AAAA007CFE56 /* Preview Assets.xcassets */; };
 		902D04812458AAAA007CFE56 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902D047F2458AAAA007CFE56 /* LaunchScreen.storyboard */; };
@@ -20,10 +20,14 @@
 		9053055B245F7C23006C054D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055A245F7C23006C054D /* Utils.swift */; };
 		9053055F245FE975006C054D /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9053055E245FE975006C054D /* Types.swift */; };
 		9061FA9E246DA40500AA988A /* NavigationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9061FA9D246DA40500AA988A /* NavigationMenu.swift */; };
+		9061FAA0246E713C00AA988A /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9061FA9F246E713C00AA988A /* ProfileScreen.swift */; };
 		907002132465A53400548946 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; };
 		907002142465A53400548946 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		907002172466B77D00548946 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907002162466B77D00548946 /* Debug.swift */; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
+		90CDBA66246F5923008EA9BE /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA65246F5923008EA9BE /* Context.swift */; };
+		90CDBA68246F5971008EA9BE /* Posts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA67246F5971008EA9BE /* Posts.swift */; };
+		90CDBA6C246F5B77008EA9BE /* Entries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA6B246F5B77008EA9BE /* Entries.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +67,7 @@
 		902D04712458AAA7007CFE56 /* feedless.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = feedless.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		902D04742458AAA7007CFE56 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		902D04762458AAA7007CFE56 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		902D04782458AAA7007CFE56 /* Wall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
+		902D04782458AAA7007CFE56 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
 		902D047A2458AAAA007CFE56 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		902D047D2458AAAA007CFE56 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		902D04802458AAAA007CFE56 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -79,11 +83,15 @@
 		905AA0B72463034600CEB583 /* backend */ = {isa = PBXFileReference; lastKnownFileType = folder; path = backend; sourceTree = "<group>"; };
 		905AA0BE2464663300CEB583 /* feedless.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = feedless.entitlements; sourceTree = "<group>"; };
 		9061FA9D246DA40500AA988A /* NavigationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationMenu.swift; sourceTree = "<group>"; };
+		9061FA9F246E713C00AA988A /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		907002122465A53400548946 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
 		907002162466B77D00548946 /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
 		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
 		90B81B95245ECC00005C5D31 /* NodeRunner.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeRunner.mm; sourceTree = "<group>"; };
+		90CDBA65246F5923008EA9BE /* Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
+		90CDBA67246F5971008EA9BE /* Posts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Posts.swift; sourceTree = "<group>"; };
+		90CDBA6B246F5B77008EA9BE /* Entries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entries.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,8 +125,9 @@
 			children = (
 				900BE2962458AEEC00C77595 /* Index.swift */,
 				900BE2992458B05800C77595 /* Login.swift */,
-				902D04782458AAA7007CFE56 /* Wall.swift */,
+				902D04782458AAA7007CFE56 /* MainScreen.swift */,
 				907002162466B77D00548946 /* Debug.swift */,
+				9061FA9F246E713C00AA988A /* ProfileScreen.swift */,
 			);
 			path = screens;
 			sourceTree = "<group>";
@@ -148,6 +157,7 @@
 		902D04732458AAA7007CFE56 /* feedless */ = {
 			isa = PBXGroup;
 			children = (
+				90CDBA64246F58FC008EA9BE /* observables */,
 				9061FA9C246DA3EC00AA988A /* components */,
 				905AA0BE2464663300CEB583 /* feedless.entitlements */,
 				900BE2982458AF0C00C77595 /* screens */,
@@ -206,6 +216,16 @@
 				907002122465A53400548946 /* NodeMobile.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		90CDBA64246F58FC008EA9BE /* observables */ = {
+			isa = PBXGroup;
+			children = (
+				90CDBA65246F5923008EA9BE /* Context.swift */,
+				90CDBA67246F5971008EA9BE /* Posts.swift */,
+				90CDBA6B246F5B77008EA9BE /* Entries.swift */,
+			);
+			path = observables;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,7 +362,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		907002152465F1A800548946 /* [JS] Copy backend to bundle */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -354,13 +374,13 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "./backend/tools/sync-backend.sh\n";
 		};
 		90FE79A3246298C1004CC526 /* [JS] Build native modules */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -372,13 +392,13 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd backend\nnpm run install:ios \n";
 		};
 		90FE79A424629903004CC526 /* [JS] Concat to single file (noderify) */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -390,7 +410,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd backend\nnpm run build\n";
 		};
@@ -406,11 +426,15 @@
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
 				9053055B245F7C23006C054D /* Utils.swift in Sources */,
 				907002172466B77D00548946 /* Debug.swift in Sources */,
+				90CDBA68246F5971008EA9BE /* Posts.swift in Sources */,
 				902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */,
 				900BE2972458AEEC00C77595 /* Index.swift in Sources */,
 				9053055F245FE975006C054D /* Types.swift in Sources */,
+				9061FAA0246E713C00AA988A /* ProfileScreen.swift in Sources */,
+				90CDBA66246F5923008EA9BE /* Context.swift in Sources */,
+				90CDBA6C246F5B77008EA9BE /* Entries.swift in Sources */,
 				9061FA9E246DA40500AA988A /* NavigationMenu.swift in Sources */,
-				902D04792458AAA7007CFE56 /* Wall.swift in Sources */,
+				902D04792458AAA7007CFE56 /* MainScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

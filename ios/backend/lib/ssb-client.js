@@ -93,6 +93,6 @@ connectClient(ssbSecret);
 
 module.exports.client = () => ssbClient;
 module.exports.getStatus = () =>
-  indexing ? "indexing" : syncing ? "syncing" : "ready";
+  syncing ? "syncing" : indexing ? "indexing" : "ready";
 module.exports.getIndexingState = () => indexingState;
 module.exports.reconnectWith = connectClient;
