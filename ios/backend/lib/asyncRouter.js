@@ -1,6 +1,7 @@
 const ssb = require("./ssb-client");
 const ssbKeys = require("ssb-keys");
 const fs = require("fs");
+const { ssbFolder } = require("./utils");
 
 module.exports = (app) => {
   const debug = require("debug")("router");
@@ -11,11 +12,6 @@ module.exports = (app) => {
     if (typeof opts == "function") fn = opts;
 
     const status = ssb.getStatus();
-    if (status == "indexing" && !opts.skipStatusCheck) {
-      res.status(503);
-      return res.json({ error: "DB is indexing, wait for it to finish first" });
-    }
-
     req.context = { status, path };
     res.locals.context = req.context;
 
@@ -23,10 +19,12 @@ module.exports = (app) => {
     try {
       const isLoggedOut = fs.existsSync(`${ssbFolder()}/logged-out`);
       key = !isLoggedOut && ssbKeys.loadSync(`${ssbFolder()}/secret`);
-    } catch (_) {}
+    } catch (e) {
+      debug("error loading keys", e);
+    }
     req.context.key = key;
 
-    if (!opts.public && !req.context.profile) {
+    if (!opts.public && !req.context.key) {
       res.status(401);
       console.log("sending", { error: "You are not logged in" });
       return res.json({ error: "You are not logged in" });

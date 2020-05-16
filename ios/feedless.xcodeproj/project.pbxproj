@@ -26,9 +26,14 @@
 		907002172466B77D00548946 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907002162466B77D00548946 /* Debug.swift */; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
 		90CDBA66246F5923008EA9BE /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA65246F5923008EA9BE /* Context.swift */; };
-		90CDBA68246F5971008EA9BE /* Posts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA67246F5971008EA9BE /* Posts.swift */; };
+		90CDBA68246F5971008EA9BE /* Profiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA67246F5971008EA9BE /* Profiles.swift */; };
 		90CDBA6C246F5B77008EA9BE /* Entries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA6B246F5B77008EA9BE /* Entries.swift */; };
 		90CDBA6E246F5F2C008EA9BE /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */; };
+		90CDBA7124700D88008EA9BE /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA7024700D88008EA9BE /* Styles.swift */; };
+		90CDBA7324701882008EA9BE /* Samples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA7224701882008EA9BE /* Samples.swift */; };
+		90CDBA752470245F008EA9BE /* PostsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA742470245F008EA9BE /* PostsList.swift */; };
+		90CDBA77247026A5008EA9BE /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA76247026A5008EA9BE /* AsyncImage.swift */; };
+		90CDBA792470613D008EA9BE /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA782470613D008EA9BE /* ImageLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,10 +95,15 @@
 		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
 		90B81B95245ECC00005C5D31 /* NodeRunner.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeRunner.mm; sourceTree = "<group>"; };
 		90CDBA65246F5923008EA9BE /* Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
-		90CDBA67246F5971008EA9BE /* Posts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Posts.swift; sourceTree = "<group>"; };
+		90CDBA67246F5971008EA9BE /* Profiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profiles.swift; sourceTree = "<group>"; };
 		90CDBA6B246F5B77008EA9BE /* Entries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entries.swift; sourceTree = "<group>"; };
 		90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		90CDBA6F246F6525008EA9BE /* feedless.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = feedless.entitlements; sourceTree = "<group>"; };
+		90CDBA7024700D88008EA9BE /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
+		90CDBA7224701882008EA9BE /* Samples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Samples.swift; sourceTree = "<group>"; };
+		90CDBA742470245F008EA9BE /* PostsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsList.swift; sourceTree = "<group>"; };
+		90CDBA76247026A5008EA9BE /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		90CDBA782470613D008EA9BE /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,7 +169,7 @@
 		902D04732458AAA7007CFE56 /* feedless */ = {
 			isa = PBXGroup;
 			children = (
-				90CDBA64246F58FC008EA9BE /* observables */,
+				90CDBA64246F58FC008EA9BE /* state */,
 				9061FA9C246DA3EC00AA988A /* components */,
 				900BE2982458AF0C00C77595 /* screens */,
 				902D04742458AAA7007CFE56 /* AppDelegate.swift */,
@@ -175,6 +185,8 @@
 				9053055A245F7C23006C054D /* Utils.swift */,
 				9053055E245FE975006C054D /* Types.swift */,
 				90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */,
+				90CDBA7024700D88008EA9BE /* Styles.swift */,
+				90CDBA7224701882008EA9BE /* Samples.swift */,
 			);
 			path = feedless;
 			sourceTree = "<group>";
@@ -209,6 +221,8 @@
 			isa = PBXGroup;
 			children = (
 				9061FA9D246DA40500AA988A /* NavigationMenu.swift */,
+				90CDBA742470245F008EA9BE /* PostsList.swift */,
+				90CDBA76247026A5008EA9BE /* AsyncImage.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -221,14 +235,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		90CDBA64246F58FC008EA9BE /* observables */ = {
+		90CDBA64246F58FC008EA9BE /* state */ = {
 			isa = PBXGroup;
 			children = (
 				90CDBA65246F5923008EA9BE /* Context.swift */,
-				90CDBA67246F5971008EA9BE /* Posts.swift */,
+				90CDBA67246F5971008EA9BE /* Profiles.swift */,
 				90CDBA6B246F5B77008EA9BE /* Entries.swift */,
+				90CDBA782470613D008EA9BE /* ImageLoader.swift */,
 			);
-			path = observables;
+			path = state;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,9 +254,7 @@
 			buildConfigurationList = 902D049B2458AAAA007CFE56 /* Build configuration list for PBXNativeTarget "feedless" */;
 			buildPhases = (
 				902D046D2458AAA7007CFE56 /* Sources */,
-				90FE79A3246298C1004CC526 /* [JS] Build native modules */,
-				90FE79A424629903004CC526 /* [JS] Concat to single file (noderify) */,
-				907002152465F1A800548946 /* [JS] Copy backend to bundle */,
+				90FE79A3246298C1004CC526 /* [JS] Build native modules, concat script and copy backend to bundle */,
 				902D046F2458AAA7007CFE56 /* Resources */,
 				902D046E2458AAA7007CFE56 /* Frameworks */,
 				90A1A5332460D24600D00245 /* Embed Frameworks */,
@@ -363,7 +376,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		907002152465F1A800548946 /* [JS] Copy backend to bundle */ = {
+		90FE79A3246298C1004CC526 /* [JS] Build native modules, concat script and copy backend to bundle */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
 			files = (
@@ -372,50 +385,14 @@
 			);
 			inputPaths = (
 			);
-			name = "[JS] Copy backend to bundle";
+			name = "[JS] Build native modules, concat script and copy backend to bundle";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./backend/tools/sync-backend.sh\n";
-		};
-		90FE79A3246298C1004CC526 /* [JS] Build native modules */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[JS] Build native modules";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd backend\nnpm run install:ios \n";
-		};
-		90FE79A424629903004CC526 /* [JS] Concat to single file (noderify) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[JS] Concat to single file (noderify)";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd backend\nnpm run build\n";
+			shellScript = "cd backend\nnpm run install:ios\nnpm run build\n\ncd ..\n./backend/tools/sync-backend.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -426,16 +403,21 @@
 			files = (
 				902D04752458AAA7007CFE56 /* AppDelegate.swift in Sources */,
 				90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */,
+				90CDBA792470613D008EA9BE /* ImageLoader.swift in Sources */,
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
+				90CDBA7324701882008EA9BE /* Samples.swift in Sources */,
 				9053055B245F7C23006C054D /* Utils.swift in Sources */,
 				907002172466B77D00548946 /* Debug.swift in Sources */,
 				90CDBA6E246F5F2C008EA9BE /* DataLoader.swift in Sources */,
-				90CDBA68246F5971008EA9BE /* Posts.swift in Sources */,
+				90CDBA752470245F008EA9BE /* PostsList.swift in Sources */,
+				90CDBA68246F5971008EA9BE /* Profiles.swift in Sources */,
 				902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */,
 				900BE2972458AEEC00C77595 /* Index.swift in Sources */,
 				9053055F245FE975006C054D /* Types.swift in Sources */,
 				9061FAA0246E713C00AA988A /* ProfileScreen.swift in Sources */,
+				90CDBA7124700D88008EA9BE /* Styles.swift in Sources */,
 				90CDBA66246F5923008EA9BE /* Context.swift in Sources */,
+				90CDBA77247026A5008EA9BE /* AsyncImage.swift in Sources */,
 				90CDBA6C246F5B77008EA9BE /* Entries.swift in Sources */,
 				9061FA9E246DA40500AA988A /* NavigationMenu.swift in Sources */,
 				902D04792458AAA7007CFE56 /* MainScreen.swift in Sources */,

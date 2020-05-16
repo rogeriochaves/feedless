@@ -15,16 +15,18 @@ process.on("unhandledRejection", (reason, _promise) => {
     Sentry.captureException(new Error(reason.toString()));
   }
   setTimeout(() => {
+    console.log("Harakiri because of unhandledRejection");
     process.exit(1);
   }, 1000);
 });
 
 process.on("uncaughtException", (err) => {
-  console.error("uncaughtException", err);
+  console.error("uncaughtException", err.message);
   if (sentry) {
     Sentry.captureException(err);
   }
   setTimeout(() => {
+    console.log("Harakiri because of uncaughtException");
     process.exit(1);
   }, 1000);
 });

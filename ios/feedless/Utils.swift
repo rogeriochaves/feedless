@@ -27,7 +27,18 @@ extension String {
     }
 }
 
+extension UIColor {
+    func image(_ size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { rendererContext in
+            self.setFill()
+            rendererContext.fill(CGRect(origin: .zero, size: size))
+        }
+    }
+}
+
 class Utils {
+    static let emptyImage = UIColor.white.image(CGSize(width: 64, height: 64));
+
     static func ssbFolder() -> String {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         return documentsPath + "/.ssb";
@@ -45,5 +56,9 @@ class Utils {
             return nil
         }
         return ssbKey
+    }
+
+    static func blobUrl(blob: String) -> String {
+        return "http://127.0.0.1:3000/blob/\(blob)";
     }
 }

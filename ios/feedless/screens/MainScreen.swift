@@ -21,33 +21,34 @@ struct MainScreen: View {
             }
             .frame(maxWidth: .infinity)
             .background(Color.white)
-            .foregroundColor(selection == index ? Color(red: 0.4, green: 0.4, blue: 0.4) : Color(red: 0.8, green: 0.8, blue: 0.8))
+            .foregroundColor(selection == index ? Styles.darkGray : Styles.gray)
         }
     }
+
+    let profileScreen: some View = ProfileScreen()
+    let friendsScreen: some View = Text("Second View").navigationBarTitle(Text("Friends"))
+    let debugScreen: some View = Debug().navigationBarTitle(Text("Debug"))
 
     var body: some View {
         VStack {
             if (selection == 0) {
                 NavigationMenu {
-                    ProfileScreen()
-                    .navigationBarTitle(Text("Profile"))
+                    profileScreen
                 }
             } else if (selection == 1) {
                 NavigationMenu {
-                    Text("Second View")
-                    .navigationBarTitle(Text("Friends"))
+                    friendsScreen
                 }
             } else if (selection == 2) {
                 NavigationMenu {
-                    Debug()
-                    .navigationBarTitle(Text("Debug"))
+                    debugScreen
                 }
             }
 
             Rectangle()
-                .frame(height: 1.0, alignment: .bottom)
+                .frame(height: 1.0, alignment: .top)
                 .background(Color.clear)
-                .foregroundColor(Color(red: 0.6, green: 0.6, blue: 0.6))
+                .foregroundColor(Styles.gray)
             HStack {
                 menuButton(index: 0, emoji: "🙂", text: "Profile")
                 menuButton(index: 1, emoji: "👨‍👧‍👦", text: "Friends")
@@ -60,5 +61,7 @@ struct MainScreen: View {
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
         MainScreen()
+            .environmentObject(Samples.context())
+            .environmentObject(Samples.profiles())
     }
 }

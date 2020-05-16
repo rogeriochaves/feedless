@@ -24,7 +24,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
         let contentView = Index()
             .environmentObject(Context(ssbKey: nil, status: .initializing))
-            .environmentObject(Posts())
+            .environmentObject(Profiles())
+            .environmentObject(ImageLoader())
             .environmentObject(Entries())
 
         // Use a UIHostingController as window root view controller.

@@ -44,7 +44,7 @@ const latestOwnerValue = ({ key, dest }) => {
     if (entry) {
       return entry.value.content[key];
     }
-    return ssb.client().about.latestValue({ key, dest });
+    return null;
   });
 };
 
@@ -104,7 +104,7 @@ const getPosts = async (profile) => {
 
   debugPosts("Done");
 
-  return mapValues(posts);
+  return posts;
 };
 
 const getSecretMessages = async (profile) => {
@@ -394,6 +394,10 @@ const getProfile = async (id) => {
   ]).catch((err) => {
     console.error("Could not retrieve profile for", id, err);
   });
+
+  if (image && typeof image == "object") {
+    image = image.link;
+  }
 
   let profile = { id, name, image, description };
   profileCache[id] = profile;

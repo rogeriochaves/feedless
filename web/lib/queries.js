@@ -44,7 +44,7 @@ const latestOwnerValue = ({ key, dest }) => {
     if (entry) {
       return entry.value.content[key];
     }
-    return ssb.client().about.latestValue({ key, dest });
+    return null;
   });
 };
 

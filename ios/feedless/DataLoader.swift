@@ -8,6 +8,8 @@
 
 import Foundation
 
+var fetchingScheduled : Set<String> = Set()
+
 func dataLoad<T: Decodable>(path: String, type: T.Type, context: Context, completionHandler: @escaping (ServerData<T>) -> Void) {
     let url = URL(string: "http://127.0.0.1:3000\(path)")!
 
@@ -51,9 +53,14 @@ func dataLoad<T: Decodable>(path: String, type: T.Type, context: Context, comple
         }
 
         if context.status == .initializing || context.status == .indexing || context.indexing.current < context.indexing.target {
-            print("\(path): Server still indexing, postponing fetch");
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                dataLoad(path: path, type: type, context: context, completionHandler: completionHandler)
+            if (!fetchingScheduled.contains(path)) {
+                fetchingScheduled.insert(path)
+
+                print("\(path): Server still indexing, postponing fetch");
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                    fetchingScheduled.remove(path)
+                    dataLoad(path: path, type: type, context: context, completionHandler: completionHandler)
+                }
             }
         } else {
             print("\(path): Going to server");

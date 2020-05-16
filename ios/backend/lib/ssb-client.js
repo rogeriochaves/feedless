@@ -74,9 +74,9 @@ const checkIndexing = async () => {
   if (!ssbClient) return;
 
   const { indexes } = await ssbClient.progress();
-  const { current, target } = indexes;
+  const { start, current, target } = indexes;
 
-  indexingState = indexes;
+  indexingState = { current: current - start, target: target - start };
 
   if (current < target) {
     if (!indexing) debug("indexing");

@@ -23,23 +23,47 @@ func statusToString(status: SSBStatus) -> String {
 
 struct Index: View {
     @EnvironmentObject var context : Context
+    @EnvironmentObject var profiles : Profiles
     @State var timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+
+    func progressBar() -> some View {
+        let width = CGFloat(self.context.indexing.current) / CGFloat(self.context.indexing.target) * 100;
+
+        return ZStack(alignment: .leading) {
+            Capsule()
+                .foregroundColor(Styles.lightGray)
+                .frame(width: 100, height: 10)
+
+            Capsule()
+                .frame(width: width, height: 10)
+                .foregroundColor(Styles.primaryBlue)
+                .animation(.easeIn)
+        }
+    }
+
+    let mainScreen = MainScreen()
+    let login = Login()
 
     var body: some View {
         Group {
             VStack {
                 if (context.status != .ready) {
-                    Text(statusToString(status: context.status))
-                    if (context.status == .indexing && context.indexing.target > 0) {
-                        Text(String(context.indexing.current) + "/" + String(context.indexing.target))
+                    HStack {
+                        Text(statusToString(status: context.status))
+                        if ((context.status == .indexing || context.status == .syncing) && context.indexing.target > 0) {
+                            progressBar()
+                        }
                     }
                 }
                 if (context.ssbKey != nil) {
-                    MainScreen()
+                    mainScreen
+                        .onAppear(perform: {
+                            self.profiles.load(context: self.context, id: self.context.ssbKey!.id)
+                        })
                 } else {
                     NavigationView {
-                        Login()
-                        .navigationBarTitle(Text("Login"))
+                        login
+                            .navigationBarTitle(Text("Login"))
                     }
                 }
             }
@@ -53,23 +77,21 @@ struct Index: View {
 }
 
 struct Index_Previews: PreviewProvider {
+    static func indexingContext () -> Context {
+        let context = Context(ssbKey: nil, status: .indexing)
+        context.indexing = IndexingState(current: 30, target: 100)
+        return context
+    }
+
     static var previews: some View {
         Group {
             Index()
-                .environmentObject(Context(ssbKey: nil, status: .initializing))
+                .environmentObject(indexingContext())
 
             Index()
-                .environmentObject(
-                    Context(
-                        ssbKey: SSBKey(
-                            curve: "foo",
-                            publicKey: "bar",
-                            privateKey: "baz",
-                            id: "qux"
-                        ),
-                        status: .ready
-                    )
-            )
+                .environmentObject(Samples.context())
+                .environmentObject(Samples.profiles())
+                .environmentObject(ImageLoader())
         }
     }
 }

@@ -6,12 +6,20 @@
 //  Copyright © 2020 Rogerio Chaves. All rights reserved.
 //
 
+typealias Posts = [Entry<AuthorProfileContent<Post>>]
+
 struct Post: Codable {
     public var text: String
 }
 
 struct AuthorContent<T: Codable>: Codable {
     public var author: String
+    public var content: T
+}
+
+struct AuthorProfileContent<T: Codable>: Codable {
+    public var author: String
+    public var authorProfile: Profile
     public var content: T
 }
 
@@ -22,12 +30,9 @@ struct Entry<T: Codable>: Codable {
 
 struct Profile: Codable {
     public var id: String
-    public var name: String
-    public var image: String
-}
-
-struct User : Codable {
-    public var profile: Profile?
+    public var name: String?
+    public var image: String?
+    public var description: String?
 }
 
 struct SSBKey : Decodable {

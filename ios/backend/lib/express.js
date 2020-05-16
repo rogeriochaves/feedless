@@ -3,35 +3,23 @@ const app = express();
 const port = process.env.PORT || 3000;
 const asyncRouter = require("./asyncRouter");
 const queries = require("./queries");
-const { getIndexingState } = require("./ssb-client");
-const { reconstructKeys, ssbFolder } = require("./utils");
-const fs = require("fs");
-const debug = require("debug")("express");
+const ssb = require("./ssb-client");
 const bodyParser = require("body-parser");
+const serveBlobs = require("./serve-blobs");
 
 app.use(bodyParser.json());
 
 const router = asyncRouter(app);
 
-router.get("/context", { skipStatusCheck: true, public: true }, (req, res) => {
+router.get("/context", { public: true }, (req, res) => {
   console.log("sent status", req.context.status);
 
-  const { current, target } = getIndexingState();
+  const { current, target } = ssb.getIndexingState();
 
   res.json({
     status: req.context.status,
     indexingCurrent: current,
     indexingTarget: target,
-  });
-});
-
-router.get("/user", { public: true }, (req, res) => {
-  res.json({
-    profile: {
-      id: "@PvT5scAQqPNiVaoYUoz5Omdx3",
-      name: "Jose",
-      image: "http://pudim.com.br/pudim.jpg",
-    },
   });
 });
 
@@ -102,22 +90,39 @@ router.get("/posts", { public: true }, (_req, res) => {
   res.json(posts);
 });
 
-router.get(
-  "/debug",
-  { skipStatusCheck: true, public: true },
-  async (req, res) => {
-    const query = req.query || {};
+router.get("/debug", { public: true }, async (req, res) => {
+  const query = req.query || {};
 
-    const entries = await queries.getAllEntries(query);
-    entries.map((x) => {
-      x.value = JSON.stringify(x.value);
-    });
+  const entries = await queries.getAllEntries(query);
+  entries.map((x) => {
+    x.value = JSON.stringify(x.value);
+  });
 
-    console.log("sending debug");
+  res.json({ entries, query });
+});
 
-    res.json({ entries, query });
-  }
-);
+router.get("/profile/:id(*)", {}, async (req, res) => {
+  const id = req.params.id;
+
+  const [profile, posts, friends] = await Promise.all([
+    queries.getProfile(id),
+    queries.getPosts({ id }),
+    queries.getFriends({ id }),
+  ]);
+
+  res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
+  res.json({
+    profile,
+    posts,
+    friends,
+  });
+});
+
+const ONE_YEAR = 60 * 60 * 24 * 365;
+router.get("/blob/*", { public: true }, (req, res) => {
+  res.set("Cache-Control", `public, max-age=${ONE_YEAR}`);
+  serveBlobs(ssb.client())(req, res);
+});
 
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)

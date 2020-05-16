@@ -44,7 +44,7 @@ class Context: ObservableObject {
 
     func logout() {
         FileManager.default.createFile(
-            atPath: Utils.ssbFolder() + "/loggedOut",
+            atPath: Utils.ssbFolder() + "/logged-out",
             contents: "".data(using: .utf8)
         )
         self.ssbKey = nil

@@ -54,7 +54,7 @@ struct Login: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .padding()
                     .cornerRadius(40)
-                    .background(Color(red: 0.5, green: 0.9, blue: 0.9))
+                    .background(Styles.primaryBlue)
                     .foregroundColor(Color(.black))
             }
         }
@@ -64,6 +64,7 @@ struct Login: View {
 struct Login_Previews: PreviewProvider {
     static var previews: some View {
         Login()
+            .environmentObject(Samples.context())
     }
 }
 

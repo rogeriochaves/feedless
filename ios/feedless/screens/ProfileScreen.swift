@@ -10,40 +10,40 @@ import SwiftUI
 
 struct ProfileScreen : View {
     @EnvironmentObject var context : Context
-    @EnvironmentObject var posts : Posts
+    @EnvironmentObject var profiles : Profiles
+    @EnvironmentObject var imageLoader : ImageLoader
     @State private var selection = 0
 
-    func viewDidLoad() {
-        print("Loading posts")
-        posts.load(context: context)
-    }
-
     func postsList() -> some View {
-        switch posts.posts {
-        case .loading:
-            return AnyView(Text("Loading..."))
-        case let .success(posts):
-            return AnyView(List(posts, id: \.key) { post in
-                VStack(alignment: .leading) {
-                    Text(post.value.content.text)
-                }
-            })
-        case let .error(message):
-            return AnyView(Text(message))
+        if let ssbKey = context.ssbKey, let profile = profiles.profiles[ssbKey.id] {
+            switch profile {
+            case .loading:
+                return AnyView(Text("Loading...")
+                    .navigationBarTitle(Text("Profile")))
+            case let .success(profile):
+                return AnyView(PostsList(profile.posts)
+                    .environmentObject(imageLoader)
+                    .navigationBarTitle(Text(profile.profile.name ?? "Profile")))
+            case let .error(message):
+                return AnyView(Text(message)
+                    .navigationBarTitle(Text("Profile")))
+            }
+        } else {
+            return AnyView(Text("Loading...")
+                .navigationBarTitle(Text("Profile")))
         }
     }
 
     var body: some View {
         postsList()
-        .onAppear() {
-            self.posts.load(context: self.context)
-        }
     }
 }
 
 struct Profile_Previews: PreviewProvider {
     static var previews: some View {
         ProfileScreen()
-        .environmentObject(Posts())
+            .environmentObject(Samples.context())
+            .environmentObject(Samples.profiles())
+            .environmentObject(ImageLoader())
     }
 }
