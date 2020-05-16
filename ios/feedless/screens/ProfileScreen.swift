@@ -14,28 +14,50 @@ struct ProfileScreen : View {
     @EnvironmentObject var imageLoader : ImageLoader
     @State private var selection = 0
 
-    func postsList() -> some View {
+    func profileView(_ profile: FullProfile) -> some View {
+        VStack(alignment: .leading) {
+            HStack(spacing: 20) {
+                AsyncImage(url: Utils.avatarUrl(profile: profile.profile), imageLoader: self.imageLoader)
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 128, height: 128)
+                .border(Styles.darkGray)
+
+                VStack {
+                    Text(profile.profile.name ?? "unknown")
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text(profile.profile.description ?? "")
+                }
+            }
+            PostsList(profile.posts)
+        }
+    }
+
+    func profileResult() -> some View {
         if let ssbKey = context.ssbKey, let profile = profiles.profiles[ssbKey.id] {
             switch profile {
             case .loading:
                 return AnyView(Text("Loading...")
-                    .navigationBarTitle(Text("Profile")))
+                    .navigationBarTitle("Profile"))
             case let .success(profile):
-                return AnyView(PostsList(profile.posts)
-                    .environmentObject(imageLoader)
-                    .navigationBarTitle(Text(profile.profile.name ?? "Profile")))
+                return AnyView(profileView(profile)
+                    .navigationBarTitle(Text(profile.profile.name ?? "Profile"), displayMode: .inline)
+                )
             case let .error(message):
                 return AnyView(Text(message)
-                    .navigationBarTitle(Text("Profile")))
+                    .navigationBarTitle("Profile"))
             }
         } else {
             return AnyView(Text("Loading...")
-                .navigationBarTitle(Text("Profile")))
+                .navigationBarTitle("Profile"))
         }
     }
 
     var body: some View {
-        postsList()
+        NavigationMenu {
+            profileResult()
+        }
     }
 }
 

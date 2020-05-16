@@ -16,21 +16,24 @@ struct PostsList : View {
         self.posts = posts
     }
 
-    func avatarUrl(profile: Profile) -> String? {
-        if let image = profile.image {
-            return Utils.blobUrl(blob: image)
-        }
-        return nil
+    func postItem(_ post: Entry<AuthorProfileContent<Post>>) -> some View {
+        HStack (alignment: .top) {
+            AsyncImage(url: Utils.avatarUrl(profile: post.value.authorProfile), imageLoader: self.imageLoader)
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 48, height: 48)
+                .border(Styles.darkGray)
+            Group {
+                Text(post.value.authorProfile.name ?? "unknown")
+                .bold()
+                +
+                Text(" " + post.value.content.text)
+            }
+        }.padding(.vertical, 10)
     }
 
     var body: some View {
         List(posts, id: \.key) { post in
-            HStack {
-                AsyncImage(url: self.avatarUrl(profile: post.value.authorProfile), imageLoader: self.imageLoader)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 64, height: 64)
-                Text(post.value.content.text)
-            }
+            self.postItem(post)
         }
     }
 }

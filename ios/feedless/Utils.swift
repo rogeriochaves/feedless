@@ -61,4 +61,11 @@ class Utils {
     static func blobUrl(blob: String) -> String {
         return "http://127.0.0.1:3000/blob/\(blob)";
     }
+
+    static func avatarUrl(profile: Profile) -> String? {
+        if let image = profile.image {
+            return Utils.blobUrl(blob: image)
+        }
+        return nil
+    }
 }

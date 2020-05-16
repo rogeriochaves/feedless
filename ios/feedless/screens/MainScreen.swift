@@ -26,15 +26,13 @@ struct MainScreen: View {
     }
 
     let profileScreen: some View = ProfileScreen()
-    let friendsScreen: some View = Text("Second View").navigationBarTitle(Text("Friends"))
+    let friendsScreen: some View = FriendsScreen()
     let debugScreen: some View = Debug().navigationBarTitle(Text("Debug"))
 
     var body: some View {
         VStack {
             if (selection == 0) {
-                NavigationMenu {
-                    profileScreen
-                }
+                profileScreen
             } else if (selection == 1) {
                 NavigationMenu {
                     friendsScreen

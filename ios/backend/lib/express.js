@@ -118,9 +118,7 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
   });
 });
 
-const ONE_YEAR = 60 * 60 * 24 * 365;
 router.get("/blob/*", { public: true }, (req, res) => {
-  res.set("Cache-Control", `public, max-age=${ONE_YEAR}`);
   serveBlobs(ssb.client())(req, res);
 });
 

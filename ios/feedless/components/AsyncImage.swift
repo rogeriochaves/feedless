@@ -26,7 +26,8 @@ struct AsyncImage: View {
             return AnyView(Image(uiImage: image)
                 .resizable())
         } else {
-            return AnyView(Image(uiImage: Utils.emptyImage))
+            return AnyView(Image("no-avatar")
+                .resizable())
         }
     }
 }
