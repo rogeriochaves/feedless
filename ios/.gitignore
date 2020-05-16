@@ -3,3 +3,5 @@ nodejs-assets/
 node_modules*
 NATIVE_BUILD.txt
 *.xcuserstate
+xcuserdata/
+NodeMobile.debug.framework
