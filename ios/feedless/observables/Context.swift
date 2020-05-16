@@ -33,7 +33,7 @@ class Context: ObservableObject {
     init(ssbKey: SSBKey?, status: SSBStatus) {
         self.status = status
         self.ssbKey = ssbKey
-        DispatchQueue.main.async {
+        if ssbKey == nil {
             self.ssbKey = Utils.ssbKey()
         }
     }

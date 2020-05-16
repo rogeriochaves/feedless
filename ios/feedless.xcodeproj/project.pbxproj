@@ -28,6 +28,7 @@
 		90CDBA66246F5923008EA9BE /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA65246F5923008EA9BE /* Context.swift */; };
 		90CDBA68246F5971008EA9BE /* Posts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA67246F5971008EA9BE /* Posts.swift */; };
 		90CDBA6C246F5B77008EA9BE /* Entries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA6B246F5B77008EA9BE /* Entries.swift */; };
+		90CDBA6E246F5F2C008EA9BE /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +82,6 @@
 		9053055A245F7C23006C054D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		9053055E245FE975006C054D /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		905AA0B72463034600CEB583 /* backend */ = {isa = PBXFileReference; lastKnownFileType = folder; path = backend; sourceTree = "<group>"; };
-		905AA0BE2464663300CEB583 /* feedless.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = feedless.entitlements; sourceTree = "<group>"; };
 		9061FA9D246DA40500AA988A /* NavigationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationMenu.swift; sourceTree = "<group>"; };
 		9061FA9F246E713C00AA988A /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		907002122465A53400548946 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
@@ -92,6 +92,8 @@
 		90CDBA65246F5923008EA9BE /* Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
 		90CDBA67246F5971008EA9BE /* Posts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Posts.swift; sourceTree = "<group>"; };
 		90CDBA6B246F5B77008EA9BE /* Entries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entries.swift; sourceTree = "<group>"; };
+		90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
+		90CDBA6F246F6525008EA9BE /* feedless.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = feedless.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,19 +161,20 @@
 			children = (
 				90CDBA64246F58FC008EA9BE /* observables */,
 				9061FA9C246DA3EC00AA988A /* components */,
-				905AA0BE2464663300CEB583 /* feedless.entitlements */,
 				900BE2982458AF0C00C77595 /* screens */,
 				902D04742458AAA7007CFE56 /* AppDelegate.swift */,
 				902D04762458AAA7007CFE56 /* SceneDelegate.swift */,
 				902D047A2458AAAA007CFE56 /* Assets.xcassets */,
 				902D047F2458AAAA007CFE56 /* LaunchScreen.storyboard */,
 				902D04822458AAAA007CFE56 /* Info.plist */,
+				90CDBA6F246F6525008EA9BE /* feedless.entitlements */,
 				902D047C2458AAAA007CFE56 /* Preview Content */,
 				90B81B93245ECBBB005C5D31 /* NodeRunner.h */,
 				90B81B95245ECC00005C5D31 /* NodeRunner.mm */,
 				90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */,
 				9053055A245F7C23006C054D /* Utils.swift */,
 				9053055E245FE975006C054D /* Types.swift */,
+				90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */,
 			);
 			path = feedless;
 			sourceTree = "<group>";
@@ -426,6 +429,7 @@
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
 				9053055B245F7C23006C054D /* Utils.swift in Sources */,
 				907002172466B77D00548946 /* Debug.swift in Sources */,
+				90CDBA6E246F5F2C008EA9BE /* DataLoader.swift in Sources */,
 				90CDBA68246F5971008EA9BE /* Posts.swift in Sources */,
 				902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */,
 				900BE2972458AEEC00C77595 /* Index.swift in Sources */,

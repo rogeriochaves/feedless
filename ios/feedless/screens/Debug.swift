@@ -9,19 +9,29 @@
 import SwiftUI
 
 struct Debug: View {
+    @EnvironmentObject var context : Context
     @EnvironmentObject var entries : Entries
     @State private var selection = 0
 
-    var body: some View {
-        TabView(selection: $selection){
-            VStack {
-                List(entries.entries, id: \.key) { post in
-                    Text(post.value)
+    func entriesList() -> some View {
+        switch entries.entries {
+        case .loading:
+            return AnyView(Text("Loading..."))
+        case let .success(debug):
+            return AnyView(List(debug.entries, id: \.key) { entry in
+                VStack(alignment: .leading) {
+                    Text(entry.value)
                 }
-            }
-        }.accentColor(Color.purple)
+            })
+        case let .error(message):
+            return AnyView(Text(message))
+        }
+    }
+
+    var body: some View {
+        entriesList()
         .onAppear() {
-            self.entries.load()
+            self.entries.load(context: self.context)
         }
     }
 }

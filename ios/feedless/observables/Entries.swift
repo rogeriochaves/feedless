@@ -11,24 +11,13 @@ struct DebugEntries : Codable {
 }
 
 class Entries: ObservableObject {
-    @Published var entries = [Entry<String>]()
+    @Published var entries : ServerData<DebugEntries> = .loading
 
-    func load() {
-        let url = URL(string: "http://127.0.0.1:3000/debug")!
-
-        URLSession.shared.dataTask(with: url) {(data, response, error) in
-            do {
-                if let todoData = data {
-                    let decodedData = try JSONDecoder().decode(DebugEntries.self, from: todoData)
-                    DispatchQueue.main.async {
-                        self.entries = decodedData.entries
-                    }
-                } else {
-                    print("No data loading debug")
-                }
-            } catch {
-                print("Error loading debug entries")
+    func load(context: Context) {
+        dataLoad(path: "/debug", type: DebugEntries.self, context: context) {(result) in
+            DispatchQueue.main.async {
+                self.entries = result
             }
-        }.resume()
+        }
     }
 }
