@@ -25,14 +25,16 @@ struct MainScreen: View {
         }
     }
 
-    let profileScreen: some View = ProfileScreen()
+    let profileScreen: some View = ProfileScreen(id: nil)
     let friendsScreen: some View = FriendsScreen()
     let debugScreen: some View = Debug().navigationBarTitle(Text("Debug"))
 
     var body: some View {
         VStack {
             if (selection == 0) {
-                profileScreen
+                NavigationMenu {
+                    profileScreen
+                }
             } else if (selection == 1) {
                 NavigationMenu {
                     friendsScreen
@@ -61,5 +63,6 @@ struct MainScreen_Previews: PreviewProvider {
         MainScreen()
             .environmentObject(Samples.context())
             .environmentObject(Samples.profiles())
+            .environmentObject(ImageLoader())
     }
 }

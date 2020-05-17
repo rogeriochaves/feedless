@@ -381,7 +381,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		90FE79A3246298C1004CC526 /* [JS] Build native modules, concat script and copy backend to bundle */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -393,7 +393,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd backend\nnpm run install:ios\nnpm run build\n\ncd ..\n./backend/tools/sync-backend.sh\n";
 		};

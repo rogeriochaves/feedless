@@ -10,8 +10,8 @@ import SwiftUI
 
 class ImageLoader: ObservableObject {
     @Published var images : [String: UIImage] = [:]
-    @Published var attempts : [String: Int] = [:]
-    @Published var scheduled : [String: Bool] = [:]
+    var attempts : [String: Int] = [:]
+    var scheduled : [String: Bool] = [:]
 
     func load(url: String) {
         if self.scheduled[url] ?? false {

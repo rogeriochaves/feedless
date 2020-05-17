@@ -18,12 +18,14 @@ struct FriendsScreen : View {
         return Section {
             Text(title).font(.headline)
             ForEach(friends, id: \.id) { friend in
-                HStack {
-                    AsyncImage(url: Utils.avatarUrl(profile: friend), imageLoader: self.imageLoader)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 32, height: 32)
-                        .border(Styles.darkGray)
-                    Text(friend.name ?? "unknown")
+                NavigationLink(destination: ProfileScreen(id: friend.id)) {
+                    HStack {
+                        AsyncImage(url: Utils.avatarUrl(profile: friend), imageLoader: self.imageLoader)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 32, height: 32)
+                            .border(Styles.darkGray)
+                        Text(friend.name ?? "unknown")
+                    }
                 }
             }
         }
@@ -58,7 +60,7 @@ struct FriendsScreen : View {
 
     var body: some View {
         friendsLists()
-        .navigationBarTitle(Text("Friends"))
+            .navigationBarTitle(Text("Friends"))
     }
 }
 

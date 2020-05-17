@@ -17,7 +17,7 @@ struct PostsList : View {
     }
 
     func postItem(_ post: Entry<AuthorProfileContent<Post>>) -> some View {
-        HStack (alignment: .top) {
+        HStack(alignment: .top) {
             AsyncImage(url: Utils.avatarUrl(profile: post.value.authorProfile), imageLoader: self.imageLoader)
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 48, height: 48)
@@ -28,12 +28,19 @@ struct PostsList : View {
                 +
                 Text(" " + post.value.content.text)
             }
-        }.padding(.vertical, 10)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
     }
 
     var body: some View {
-        List(posts, id: \.key) { post in
-            self.postItem(post)
+        VStack {
+            ForEach(posts, id: \.key) { post in
+                VStack (alignment: .leading) {
+                    self.postItem(post)
+                    Divider()
+                }
+            }
         }
     }
 }

@@ -289,6 +289,7 @@ const getFriends = async (profile) => {
       if (!graph[profile.id] || graph[profile.id][key] === undefined)
         connections[key] = "requestsReceived";
     }
+    if (connections.length > 30) break;
   }
 
   const profilesList = await Promise.all(
