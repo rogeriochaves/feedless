@@ -72,7 +72,7 @@
 /* Begin PBXFileReference section */
 		900BE2962458AEEC00C77595 /* Index.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Index.swift; sourceTree = "<group>"; };
 		900BE2992458B05800C77595 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
-		902D04712458AAA7007CFE56 /* feedless.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = feedless.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		902D04712458AAA7007CFE56 /* Feedless.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Feedless.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		902D04742458AAA7007CFE56 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		902D04762458AAA7007CFE56 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		902D04782458AAA7007CFE56 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
@@ -164,7 +164,7 @@
 		902D04722458AAA7007CFE56 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				902D04712458AAA7007CFE56 /* feedless.app */,
+				902D04712458AAA7007CFE56 /* Feedless.app */,
 				902D04872458AAAA007CFE56 /* feedlessTests.xctest */,
 				902D04922458AAAA007CFE56 /* feedlessUITests.xctest */,
 			);
@@ -271,7 +271,7 @@
 			);
 			name = feedless;
 			productName = feedless;
-			productReference = 902D04712458AAA7007CFE56 /* feedless.app */;
+			productReference = 902D04712458AAA7007CFE56 /* Feedless.app */;
 			productType = "com.apple.product-type.application";
 		};
 		902D04862458AAAA007CFE56 /* feedlessTests */ = {
@@ -611,7 +611,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Feedless;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -641,7 +641,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Feedless;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
