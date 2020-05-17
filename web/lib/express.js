@@ -151,6 +151,33 @@ app.use((_req, res, next) => {
     result = result.replace(/\n/g, "<br />");
     return result;
   };
+  res.locals.splittedPosts = (post, limit) => {
+    let text = res.locals.escapeMarkdown(post.content.text);
+
+    if (text.length <= limit) {
+      return [text];
+    }
+
+    let splittedPosts = [];
+    let words = text.split(" ");
+    let nextPost = "";
+    for (let word of words) {
+      const postsCount = splittedPosts.length + 1;
+      const pageMarker = `${postsCount}/`;
+
+      if (nextPost.length + word.length + pageMarker.length + 1 < limit) {
+        nextPost += word + " ";
+      } else {
+        splittedPosts.push(nextPost + pageMarker);
+        nextPost = word + " ";
+      }
+    }
+    const postsCount = splittedPosts.length + 1;
+    const lastMarker = postsCount > 1 ? `${postsCount}/${postsCount}` : "";
+    splittedPosts.push(nextPost + lastMarker);
+
+    return splittedPosts;
+  };
   next();
 });
 

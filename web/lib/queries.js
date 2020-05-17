@@ -104,7 +104,7 @@ const getPosts = async (profile) => {
 
   debugPosts("Done");
 
-  return mapValues(posts);
+  return posts;
 };
 
 const getSecretMessages = async (profile) => {
@@ -630,9 +630,6 @@ const getCommunityPosts = async (name, forReplies = false) => {
       const nestedRootKey = getRootKey(nestedReply);
       const nestedRoot = communityPostsByKey[nestedRootKey];
       if (nestedRoot) {
-        // if (!nestedReply.value.content.channel) {
-        //   nestedRoot.value.replies.push(nestedReply);
-        // }
         nestedRoot.value.replies.push(reply);
         nestedReply = null;
       } else {

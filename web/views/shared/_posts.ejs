@@ -1,40 +1,16 @@
-<% posts.map(post => {
-  if (!post.content.text) return;
-  let text = escapeMarkdown(post.content.text);
-  let limit = typeof dont_cut == "undefined" ? 140 : 10000;
+<% posts.sort((a, b) => typeof isTopic == "undefined" ? b.rts - a.rts : a.rts - b.rts).map(post => { %>
+  <% if (!post.value.content.text) return %>
 
-  let splittedPosts = [];
-  if (text.length <= limit) {
-    splittedPosts = [text];
-  } else {
-    let words = text.split(" ");
-    let nextPost = "";
-    for (word of words) {
-      const postsCount = splittedPosts.length + 1;
-      const pageMarker = `${postsCount}/`;
-
-      if (nextPost.length + word.length + pageMarker.length + 1 < limit) {
-        nextPost += word + " ";
-      } else {
-        splittedPosts.push(nextPost + pageMarker);
-        nextPost = word + " ";
-      }
-    }
-    const postsCount = splittedPosts.length + 1;
-    const lastMarker = postsCount > 1 ? `${postsCount}/${postsCount}` : "";
-    splittedPosts.push(nextPost + lastMarker);
-  }
-
-  splittedPosts.reverse().map(text => { %>
+  <% splittedPosts(post.value, typeof isTopic == "undefined" ? 140 : 10000).map(text => { %>
     <div class="post">
       <div>
-        <a href="<%= profileUrl(post.author) %>">
-          <img src="<%= profileImageUrl(post.authorProfile) %>" class="post-profile-pic" />
+        <a href="<%= profileUrl(post.value.author) %>">
+          <img src="<%= profileImageUrl(post.value.authorProfile) %>" class="post-profile-pic" />
         </a>
       </div>
       <div class="post-content">
-        <a href="<%= profileUrl(post.author) %>" class="no-link-style">
-          <b><%= post.authorProfile.name %></b>
+        <a href="<%= profileUrl(post.value.author) %>" class="no-link-style">
+          <b><%= post.value.authorProfile.name %></b>
         </a>
         <%- htmlify(text.replace(/^\s+/, "")) %>
       </div>
