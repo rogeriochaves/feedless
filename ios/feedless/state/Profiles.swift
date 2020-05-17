@@ -26,7 +26,14 @@ class Profiles: ObservableObject {
 
         dataLoad(path: "/profile/\(id)", type: FullProfile.self, context: context) {(result) in
             DispatchQueue.main.async {
-                self.profiles[id] = result
+                let currentValue = self.profiles[id]
+
+                switch (currentValue, result) {
+                case (.success(_), .error):
+                    break // Do not overwrite previous success with error
+                default:
+                    self.profiles[id] = result
+                }
             }
         }
     }

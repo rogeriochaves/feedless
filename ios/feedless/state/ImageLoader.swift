@@ -34,10 +34,10 @@ class ImageLoader: ObservableObject {
 
         print("Requests to load image \(url_)")
         session.dataTask(with: url_) {(data, response, error) in
-            self.scheduled[url] = false
             if let rawData = data, let image = UIImage(data: rawData) {
                 print("Image loaded \(url_)")
                 DispatchQueue.main.async {
+                    self.scheduled[url] = false
                     self.images[url] = image
                 }
             } else {

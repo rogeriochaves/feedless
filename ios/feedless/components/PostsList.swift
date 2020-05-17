@@ -33,20 +33,14 @@ struct PostsList : View {
         .padding(.vertical, 5)
     }
 
-    func smallPosts() -> [(String, PostEntry, String)] {
-        let mapped : [[(String, PostEntry, String)]] = self.posts.map { (post) in
-            let smallPosts = Utils.splitInSmallPosts(post.value.content.text)
-            return smallPosts.map({ (post.key + $0, post, $0) })
-        }
-        return Array(mapped.joined())
-    }
-
     var body: some View {
         VStack {
-            ForEach(smallPosts(), id: \.0) { (id, post, text) in
-                VStack (alignment: .leading) {
-                    self.postItem(post, text)
-                    Divider()
+            ForEach(posts, id: \.key) { post in
+                ForEach(Utils.splitInSmallPosts(post.value.content.text), id: \.self) { text in
+                    VStack (alignment: .leading) {
+                        self.postItem(post, text)
+                        Divider()
+                    }
                 }
             }
         }
