@@ -123,7 +123,7 @@ app.use((_req, res, next) => {
     return title;
   };
   res.locals.escapeMarkdown = (str) => {
-    let result = ejsUtils.escapeXML(str);
+    let result = str;
     result = result.replace(/!\[.*?\]\((.*?)\)/g, `$1`); // Images
     result = result.replace(/\[(@.*?)\]\(@.*?\)/g, `$1`); // Link to mention
     result = result.replace(/\[.*?\]\((.*?)\)/g, `$1`); // Any Link
@@ -131,7 +131,7 @@ app.use((_req, res, next) => {
     return result;
   };
   res.locals.htmlify = (str) => {
-    let result = str;
+    let result = ejsUtils.escapeXML(str);
     result = result.replace(
       /(\s|^)&amp;(\S*?=\.sha\d+)/g, // Blobs
       `$1<a target="_blank" href="/blob/&$2">&$2</a>`

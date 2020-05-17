@@ -641,7 +641,11 @@ const getCommunityPosts = async (name, forReplies = false) => {
   debugCommunityPosts("Done");
 
   if (forReplies) return communityPostsByKey;
-  return Object.values(communityPostsByKey);
+
+  let posts = Object.values(communityPostsByKey);
+  posts = posts.sort((a, b) => b.rts - a.rts);
+
+  return posts;
 };
 
 if (!global.clearProfileInterval) {
