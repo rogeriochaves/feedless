@@ -16,7 +16,7 @@ struct PostsList : View {
         self.posts = posts
     }
 
-    func postItem(_ post: Entry<AuthorProfileContent<Post>>) -> some View {
+    func postItem(_ post: Entry<AuthorProfileContent<Post>>, _ text: String) -> some View {
         HStack(alignment: .top) {
             AsyncImage(url: Utils.avatarUrl(profile: post.value.authorProfile), imageLoader: self.imageLoader)
                 .aspectRatio(contentMode: .fit)
@@ -26,18 +26,26 @@ struct PostsList : View {
                 Text(post.value.authorProfile.name ?? "unknown")
                 .bold()
                 +
-                Text(" " + post.value.content.text)
+                Text(" " + text)
             }
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
     }
 
+    func smallPosts() -> [(String, PostEntry, String)] {
+        let mapped : [[(String, PostEntry, String)]] = self.posts.map { (post) in
+            let smallPosts = Utils.splitInSmallPosts(post.value.content.text)
+            return smallPosts.map({ (post.key + $0, post, $0) })
+        }
+        return Array(mapped.joined())
+    }
+
     var body: some View {
         VStack {
-            ForEach(posts, id: \.key) { post in
+            ForEach(smallPosts(), id: \.0) { (id, post, text) in
                 VStack (alignment: .leading) {
-                    self.postItem(post)
+                    self.postItem(post, text)
                     Divider()
                 }
             }
@@ -47,7 +55,9 @@ struct PostsList : View {
 
 struct PostsList_Previews: PreviewProvider {
     static var previews: some View {
-        PostsList(Samples.posts())
-            .environmentObject(ImageLoader())
+        ScrollView {
+            PostsList(Samples.posts())
+                .environmentObject(ImageLoader())
+        }
     }
 }

@@ -40,7 +40,9 @@ struct ProfileScreen : View {
                             .font(.largeTitle)
                             .bold()
 
-                        Text(profile.profile.description ?? "")
+                        Text(
+                            profile.profile.description?.prefix(140).replacingOccurrences(of: "\n", with: "", options: .regularExpression) ?? ""
+                        )
                     }
                 }
                 Divider()

@@ -6,11 +6,13 @@
 //  Copyright © 2020 Rogerio Chaves. All rights reserved.
 //
 
-typealias Posts = [Entry<AuthorProfileContent<Post>>]
+typealias Posts = [PostEntry]
 
 struct Post: Codable {
     public var text: String
 }
+
+typealias PostEntry = Entry<AuthorProfileContent<Post>>
 
 struct AuthorContent<T: Codable>: Codable {
     public var author: String

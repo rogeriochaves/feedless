@@ -30,7 +30,7 @@ struct MainScreen: View {
     let debugScreen: some View = Debug().navigationBarTitle(Text("Debug"))
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if (selection == 0) {
                 NavigationMenu {
                     profileScreen
@@ -45,10 +45,8 @@ struct MainScreen: View {
                 }
             }
 
-            Rectangle()
-                .frame(height: 1.0, alignment: .top)
-                .background(Color.clear)
-                .foregroundColor(Styles.gray)
+            Divider()
+             .padding(.bottom, 10)
             HStack {
                 menuButton(index: 0, emoji: "🙂", text: "Profile")
                 menuButton(index: 1, emoji: "👨‍👧‍👦", text: "Friends")

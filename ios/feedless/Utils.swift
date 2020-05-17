@@ -68,4 +68,49 @@ class Utils {
         }
         return nil
     }
+
+    static func escapeMarkdown(_ str : String) -> String {
+        var result = str;
+
+        let imagesPattern = #"!\[.*?\]\((.*?)\)"#
+        result = result.replacingOccurrences(of: imagesPattern, with: "$1", options: .regularExpression);
+
+        let mentionPattern = #"\[(@.*?)\]\(@.*?\)"#
+        result = result.replacingOccurrences(of: mentionPattern, with: "$1", options: .regularExpression);
+
+        let linksPattern = #"\[.*?\]\((.*?)\)"#
+        result = result.replacingOccurrences(of: linksPattern, with: "$1", options: .regularExpression);
+
+        let headersPattern = #"(^|\n)#+ "#
+        result = result.replacingOccurrences(of: headersPattern, with: "", options: .regularExpression);
+        return result;
+    }
+
+    static func splitInSmallPosts(_ text : String) -> [String] {
+        let text = escapeMarkdown(text);
+        let limit = 140;
+
+        if (text.count <= limit) {
+            return [text]
+        }
+
+        var splittedPosts : [String] = [];
+        let words = text.split(separator: " ")
+        var nextPost = ""
+        for word in words {
+            let postsCount = splittedPosts.count + 1;
+            let pageMarker = "\(postsCount)/"
+
+            if (nextPost.count + word.count + pageMarker.count + 1 < limit) {
+              nextPost += word + " "
+            } else {
+              splittedPosts.append(nextPost + pageMarker)
+              nextPost = word + " "
+            }
+        }
+        let postsCount = splittedPosts.count + 1;
+        let lastMarker = postsCount > 1 ? "\(postsCount)/\(postsCount)" : ""
+        splittedPosts.append(nextPost + lastMarker)
+        return splittedPosts.reversed()
+    }
 }

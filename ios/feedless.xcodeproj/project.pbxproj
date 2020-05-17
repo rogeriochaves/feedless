@@ -35,6 +35,7 @@
 		90CDBA77247026A5008EA9BE /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA76247026A5008EA9BE /* AsyncImage.swift */; };
 		90CDBA792470613D008EA9BE /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA782470613D008EA9BE /* ImageLoader.swift */; };
 		90CDBA7B24708D87008EA9BE /* FriendsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA7A24708D87008EA9BE /* FriendsScreen.swift */; };
+		90CDBA7D247123D9008EA9BE /* sample.json in Resources */ = {isa = PBXBuildFile; fileRef = 90CDBA7C247123D9008EA9BE /* sample.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,7 @@
 		90CDBA76247026A5008EA9BE /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		90CDBA782470613D008EA9BE /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		90CDBA7A24708D87008EA9BE /* FriendsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsScreen.swift; sourceTree = "<group>"; };
+		90CDBA7C247123D9008EA9BE /* sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sample.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 				90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */,
 				90CDBA7024700D88008EA9BE /* Styles.swift */,
 				90CDBA7224701882008EA9BE /* Samples.swift */,
+				90CDBA7C247123D9008EA9BE /* sample.json */,
 			);
 			path = feedless;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				902D04812458AAAA007CFE56 /* LaunchScreen.storyboard in Resources */,
+				90CDBA7D247123D9008EA9BE /* sample.json in Resources */,
 				902D047E2458AAAA007CFE56 /* Preview Assets.xcassets in Resources */,
 				902D047B2458AAAA007CFE56 /* Assets.xcassets in Resources */,
 			);
@@ -381,7 +385,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		90FE79A3246298C1004CC526 /* [JS] Build native modules, concat script and copy backend to bundle */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -393,7 +397,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "cd backend\nnpm run install:ios\nnpm run build\n\ncd ..\n./backend/tools/sync-backend.sh\n";
 		};
