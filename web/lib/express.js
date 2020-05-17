@@ -176,7 +176,7 @@ app.use((_req, res, next) => {
     const lastMarker = postsCount > 1 ? `${postsCount}/${postsCount}` : "";
     splittedPosts.push(nextPost + lastMarker);
 
-    return splittedPosts;
+    return splittedPosts.reverse();
   };
   next();
 });
