@@ -600,8 +600,8 @@ router.post("/about", async (req, res) => {
       },
     });
 
-    let cached = queries.profileCache[req.context.profile.id];
-    Object.assign(cached, update);
+    let profile = await queries.getProfile(req.context.profile.id);
+    queries.profileCache[req.context.profile.id] = Object.assign(profile, update);
   }
 
   res.redirect("/");
