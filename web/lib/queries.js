@@ -112,9 +112,24 @@ const getSecretMessages = async (profile) => {
   const messagesPromise = promisePull(
     // @ts-ignore
     cat([
-      ssb.client().private.read({
+      ssb.client().query.read({
         reverse: true,
         limit: 100,
+        query: [
+          {
+            $filter: {
+              value: {
+                private: true,
+                content: {
+                  type: "post",
+                },
+              },
+              timestamp: {
+                $gte: Date.now() - 1000 * 60 * 60 * 24 * 15,
+              },
+            },
+          },
+        ],
       }),
     ]),
     pull.filter(

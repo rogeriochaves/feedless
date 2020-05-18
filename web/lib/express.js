@@ -601,7 +601,10 @@ router.post("/about", async (req, res) => {
     });
 
     let profile = await queries.getProfile(req.context.profile.id);
-    queries.profileCache[req.context.profile.id] = Object.assign(profile, update);
+    queries.profileCache[req.context.profile.id] = Object.assign(
+      profile,
+      update
+    );
   }
 
   res.redirect("/");
