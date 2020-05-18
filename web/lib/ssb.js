@@ -26,7 +26,7 @@ const Server = require("secret-stack")()
   .use(require("ssb-query"))
   .use(require("./plugins/memory-identities"))
   .use(require("ssb-blobs"))
-  .use(require("ssb-private"));
+  .use(require("./plugins/private-index"));
 
 const config = require("./ssb-config");
 const server = Server(config);
