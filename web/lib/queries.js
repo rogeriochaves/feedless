@@ -16,6 +16,7 @@ const debugPosts = require("debug")("queries:posts"),
 const paramap = require("pull-paramap");
 const { promisePull, mapValues } = require("./utils");
 const ssb = require("./ssb-client");
+const ssbkeys = require("ssb-keys");
 
 const latestOwnerValue = ({ key, dest }) => {
   return promisePull(
@@ -107,8 +108,47 @@ const getPosts = async (profile) => {
   return posts;
 };
 
+let decryptedMessages = {};
+const decryptMessages = (profile) => {
+  let messages = [];
+  decryptedMessages[profile.id] = messages;
+
+  let last7days = Date.now() - 1000 * 60 * 60 * 24 * 7;
+  pull(
+    ssb.client().createLogStream({
+      gte: last7days,
+      reverse: true,
+    }),
+    pull.drain((data) => {
+      if (data.value && typeof data.value.content == "string") {
+        const content = ssbkeys.unbox(data.value.content, profile.key);
+        if (content) {
+          debugMessages("Found a message!");
+          data.value.content = content;
+          messages.push(data);
+        }
+      }
+    })
+  );
+};
+
 const getSecretMessages = async (profile) => {
   debugMessages("Fetching");
+
+  let cachedDecryptedMessages = decryptedMessages[profile.id];
+  let decryptedOnTheFly = Promise.resolve(cachedDecryptedMessages);
+  if (!cachedDecryptedMessages) {
+    // Messages start getting decrypted on background, we wait 1s to get the first ones
+    // and return a quick answer already, but next refresh should get full messages
+    debugMessages("Decrypting messages on the fly");
+    decryptMessages(profile);
+    decryptedOnTheFly = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(decryptedMessages[profile.id]);
+      }, 1000);
+    });
+  }
+
   const messagesPromise = promisePull(
     // @ts-ignore
     cat([
@@ -155,15 +195,18 @@ const getSecretMessages = async (profile) => {
     })
   ).then(Object.values);
 
-  const [messages, deleted] = await Promise.all([
+  const [messages, onTheFlyMessages, deleted] = await Promise.all([
     messagesPromise,
+    decryptedOnTheFly,
     deletedPromise,
   ]);
+
+  debugMessages("Decrypted", onTheFlyMessages.length, "on the fly");
 
   const deletedIds = deleted.map((x) => x.value.content.dest);
 
   const messagesByAuthor = {};
-  for (const message of messages) {
+  for (const message of messages.concat(onTheFlyMessages)) {
     if (message.value.author == profile.id) {
       for (const recp of message.value.content.recps) {
         if (recp == profile.id) continue;
