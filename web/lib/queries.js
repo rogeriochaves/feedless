@@ -16,7 +16,6 @@ const debugPosts = require("debug")("queries:posts"),
 const paramap = require("pull-paramap");
 const { promisePull, mapValues } = require("./utils");
 const ssb = require("./ssb-client");
-const ssbkeys = require("ssb-keys");
 
 const latestOwnerValue = ({ key, dest }) => {
   return promisePull(
@@ -108,50 +107,8 @@ const getPosts = async (profile) => {
   return posts;
 };
 
-let decryptedEntries = {};
-const decryptMessages = (profile) => {
-  let entries = { posts: [], deletes: [] };
-  decryptedEntries[profile.id] = entries;
-
-  let last7days = Date.now() - 1000 * 60 * 60 * 24 * 7;
-  pull(
-    ssb.client().createLogStream({
-      gte: last7days,
-      reverse: true,
-    }),
-    pull.drain((data) => {
-      if (data.value && typeof data.value.content == "string") {
-        const content = ssbkeys.unbox(data.value.content, profile.key);
-        if (content) {
-          debugMessages("Found an entry!");
-          data.value.content = content;
-          if (content.type == "post") {
-            entries.posts.push(data);
-          } else if (content.type == "delete") {
-            entries.deletes.push(data);
-          }
-        }
-      }
-    })
-  );
-};
-
 const getSecretMessages = async (profile) => {
   debugMessages("Fetching");
-
-  let cachedDecryptedEntries = decryptedEntries[profile.id];
-  let decryptedOnTheFly = Promise.resolve(cachedDecryptedEntries);
-  if (!cachedDecryptedEntries) {
-    // Messages start getting decrypted on background, we wait 1s to get the first ones
-    // and return a quick answer already, but next refresh should get full messages
-    debugMessages("Decrypting messages on the fly");
-    decryptMessages(profile);
-    decryptedOnTheFly = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(decryptedEntries[profile.id]);
-      }, 1000);
-    });
-  }
 
   const messagesPromise = promisePull(
     // @ts-ignore
@@ -199,20 +156,28 @@ const getSecretMessages = async (profile) => {
     })
   ).then(Object.values);
 
-  const [messages, deleted, onTheFlyEntries] = await Promise.all([
+  const memoryEntriesPromise = ssb
+    .client()
+    .encryptedView.memoryDecryptedEntries(profile);
+
+  const [messages, deleted, memoryEntries] = await Promise.all([
     messagesPromise,
     deletedPromise,
-    decryptedOnTheFly,
+    memoryEntriesPromise,
   ]);
 
-  debugMessages("Decrypted", onTheFlyEntries.posts.length, " posts on the fly");
+  debugMessages(
+    "Decrypted",
+    (memoryEntries.post || []).length,
+    " posts on the fly"
+  );
 
   const deletedIds = deleted
-    .concat(onTheFlyEntries.deletes)
+    .concat(memoryEntries.delete || [])
     .map((x) => x.value.content.dest);
 
   const messagesByAuthor = {};
-  for (const message of messages.concat(onTheFlyEntries.posts)) {
+  for (const message of messages.concat(memoryEntries.post || [])) {
     if (message.value.author == profile.id) {
       for (const recp of message.value.content.recps) {
         if (recp == profile.id) continue;
