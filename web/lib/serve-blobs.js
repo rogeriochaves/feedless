@@ -23,6 +23,8 @@ const serveBlobs = (sbot) => {
       }
 
       // serve
+      const ONE_YEAR = 60 * 60 * 24 * 365;
+      res.setHeader("Cache-Control", `public, max-age=${ONE_YEAR}`);
       res.setHeader("Content-Security-Policy", BlobCSP());
 
       respondSource(res, sbot.blobs.get(hash), false);
