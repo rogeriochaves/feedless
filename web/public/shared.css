@@ -293,6 +293,7 @@ h2 {
 
 .secret-button .link-profile-pic {
   width: 48px;
+  min-height: 48px;
 }
 
 .compose-post {
