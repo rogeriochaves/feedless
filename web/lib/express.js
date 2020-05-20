@@ -497,6 +497,7 @@ router.post("/vanish", async (req, res) => {
   const keys = req.body.keys.split(",");
 
   for (const key of keys) {
+    debug("Vanishing message", key);
     await ssb.client().identities.publishAs({
       key: req.context.profile.key,
       private: false,
@@ -539,7 +540,7 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
     },
   });
 
-  res.redirect(profileUrl(id));
+  res.send("ok");
 });
 
 router.get("/pub_invite", { public: true }, async (_req, res) => {

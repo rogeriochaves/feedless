@@ -108,10 +108,10 @@ const getPosts = async (profile) => {
   return posts;
 };
 
-let decryptedMessages = {};
+let decryptedEntries = {};
 const decryptMessages = (profile) => {
-  let messages = [];
-  decryptedMessages[profile.id] = messages;
+  let entries = { posts: [], deletes: [] };
+  decryptedEntries[profile.id] = entries;
 
   let last7days = Date.now() - 1000 * 60 * 60 * 24 * 7;
   pull(
@@ -123,9 +123,13 @@ const decryptMessages = (profile) => {
       if (data.value && typeof data.value.content == "string") {
         const content = ssbkeys.unbox(data.value.content, profile.key);
         if (content) {
-          debugMessages("Found a message!");
+          debugMessages("Found an entry!");
           data.value.content = content;
-          messages.push(data);
+          if (content.type == "post") {
+            entries.posts.push(data);
+          } else if (content.type == "delete") {
+            entries.deletes.push(data);
+          }
         }
       }
     })
@@ -135,16 +139,16 @@ const decryptMessages = (profile) => {
 const getSecretMessages = async (profile) => {
   debugMessages("Fetching");
 
-  let cachedDecryptedMessages = decryptedMessages[profile.id];
-  let decryptedOnTheFly = Promise.resolve(cachedDecryptedMessages);
-  if (!cachedDecryptedMessages) {
+  let cachedDecryptedEntries = decryptedEntries[profile.id];
+  let decryptedOnTheFly = Promise.resolve(cachedDecryptedEntries);
+  if (!cachedDecryptedEntries) {
     // Messages start getting decrypted on background, we wait 1s to get the first ones
     // and return a quick answer already, but next refresh should get full messages
     debugMessages("Decrypting messages on the fly");
     decryptMessages(profile);
     decryptedOnTheFly = new Promise((resolve) => {
       setTimeout(() => {
-        resolve(decryptedMessages[profile.id]);
+        resolve(decryptedEntries[profile.id]);
       }, 1000);
     });
   }
@@ -195,18 +199,20 @@ const getSecretMessages = async (profile) => {
     })
   ).then(Object.values);
 
-  const [messages, onTheFlyMessages, deleted] = await Promise.all([
+  const [messages, deleted, onTheFlyEntries] = await Promise.all([
     messagesPromise,
-    decryptedOnTheFly,
     deletedPromise,
+    decryptedOnTheFly,
   ]);
 
-  debugMessages("Decrypted", onTheFlyMessages.length, "on the fly");
+  debugMessages("Decrypted", onTheFlyEntries.posts.length, " posts on the fly");
 
-  const deletedIds = deleted.map((x) => x.value.content.dest);
+  const deletedIds = deleted
+    .concat(onTheFlyEntries.deletes)
+    .map((x) => x.value.content.dest);
 
   const messagesByAuthor = {};
-  for (const message of messages.concat(onTheFlyMessages)) {
+  for (const message of messages.concat(onTheFlyEntries.posts)) {
     if (message.value.author == profile.id) {
       for (const recp of message.value.content.recps) {
         if (recp == profile.id) continue;
