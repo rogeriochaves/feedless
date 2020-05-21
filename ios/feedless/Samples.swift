@@ -33,9 +33,23 @@ class Samples {
     }
 
     static func fullProfile() -> FullProfile {
-        let path = Bundle.main.path(forResource: "sample", ofType: "json")!
+        let path = Bundle.main.path(forResource: "fullProfile", ofType: "json")!
         let data = try! Data(contentsOf: URL(fileURLWithPath: path))
 
         return try! JSONDecoder().decode(FullProfile.self, from: data)
+    }
+
+    static func secrets() -> Secrets {
+        let secrets = Secrets()
+        secrets.secrets = .success(secretChats())
+
+        return secrets
+    }
+
+    static func secretChats() -> [SecretChat] {
+        let path = Bundle.main.path(forResource: "secrets", ofType: "json")!
+        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+
+        return try! JSONDecoder().decode([SecretChat].self, from: data)
     }
 }

@@ -118,6 +118,14 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
   });
 });
 
+router.get("/secrets/:id(*)", async (req, res) => {
+  const secretMessages = await queries.getSecretMessages({
+    id: req.context.key.id,
+  });
+
+  res.json(secretMessages);
+});
+
 router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssb.client())(req, res);
 });

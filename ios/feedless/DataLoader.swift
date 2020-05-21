@@ -52,7 +52,7 @@ func dataLoad<T: Decodable>(path: String, type: T.Type, context: Context, comple
             print("\(path): Cache miss");
         }
 
-        if context.status == .initializing || context.status == .indexing || context.indexing.current < context.indexing.target {
+        if context.status == .initializing || context.status == .indexing || Double(context.indexing.current) < Double(context.indexing.target) * 0.95 {
             if (!fetchingScheduled.contains(path)) {
                 fetchingScheduled.insert(path)
 

@@ -27,6 +27,7 @@ struct MainScreen: View {
 
     let profileScreen: some View = ProfileScreen(id: nil)
     let friendsScreen: some View = FriendsScreen()
+    let secretsScreen: some View = SecretsScreen()
     let debugScreen: some View = Debug().navigationBarTitle(Text("Debug"))
 
     var body: some View {
@@ -37,9 +38,13 @@ struct MainScreen: View {
                 }
             } else if (selection == 1) {
                 NavigationMenu {
-                    friendsScreen
+                    secretsScreen
                 }
             } else if (selection == 2) {
+                NavigationMenu {
+                    friendsScreen
+                }
+            } else if (selection == 3) {
                 NavigationMenu {
                     debugScreen
                 }
@@ -49,8 +54,9 @@ struct MainScreen: View {
              .padding(.bottom, 10)
             HStack {
                 menuButton(index: 0, emoji: "🙂", text: "Profile")
-                menuButton(index: 1, emoji: "👨‍👧‍👦", text: "Friends")
-                menuButton(index: 2, emoji: "🛠", text: "Debug")
+                menuButton(index: 1, emoji: "🤫", text: "Secrets")
+                menuButton(index: 2, emoji: "👨‍👧‍👦", text: "Friends")
+                menuButton(index: 3, emoji: "🛠", text: "Debug")
             }
         }
     }

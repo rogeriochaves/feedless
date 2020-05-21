@@ -24,6 +24,7 @@ func statusToString(status: SSBStatus) -> String {
 struct Index: View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var profiles : Profiles
+    @EnvironmentObject var secrets : Secrets
     @State var timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
 
     func progressBar() -> some View {
@@ -59,6 +60,7 @@ struct Index: View {
                     mainScreen
                         .onAppear(perform: {
                             self.profiles.load(context: self.context, id: self.context.ssbKey!.id)
+                            self.secrets.load(context: self.context)
                         })
                 } else {
                     NavigationView {

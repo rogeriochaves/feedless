@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "902D04702458AAA7007CFE56"
-               BuildableName = "feedless.app"
+               BuildableName = "Feedless.app"
                BlueprintName = "feedless"
                ReferencedContainer = "container:feedless.xcodeproj">
             </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "902D04702458AAA7007CFE56"
-            BuildableName = "feedless.app"
+            BuildableName = "Feedless.app"
             BlueprintName = "feedless"
             ReferencedContainer = "container:feedless.xcodeproj">
          </BuildableReference>
@@ -94,7 +94,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "902D04702458AAA7007CFE56"
-            BuildableName = "feedless.app"
+            BuildableName = "Feedless.app"
             BlueprintName = "feedless"
             ReferencedContainer = "container:feedless.xcodeproj">
          </BuildableReference>
