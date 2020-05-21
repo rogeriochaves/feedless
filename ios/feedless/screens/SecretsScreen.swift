@@ -12,20 +12,44 @@ struct SecretsScreen : View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var secrets : Secrets
     @EnvironmentObject var imageLoader : ImageLoader
-    @State private var selection = 0
+    @State private var modal : SecretMessagesModal? = nil
+
+    private var isModalOpen: Binding<Bool> { Binding (
+        get: { self.modal != nil },
+        set: { _ in }
+    )}
+
+    func newMessagesText(_ chat: SecretChat) -> some View {
+        if chat.messages.count > 0 {
+            return Text(chat.messages.count == 1 ? "1 new message" : "\(chat.messages.count) new messages")
+                .font(.subheadline)
+        }
+        return Text("No new secrets").font(.subheadline)
+    }
 
     func secretChats(_ secrets : [SecretChat]) -> some View {
         return Section {
             ForEach(secrets, id: \.author) { chat in
-                //NavigationLink(destination: ProfileScreen(id: friend.id)) {
+                Button(action: {
+                    self.secrets.vanish(context: self.context, chat: chat)
+                    self.modal = SecretMessagesModal(
+                        messages: chat.messages,
+                        onClose: {
+                            self.modal = nil
+                        }
+                    )
+                }) {
                     HStack {
                         AsyncImage(url: Utils.avatarUrl(profile: chat.authorProfile), imageLoader: self.imageLoader)
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 32, height: 32)
+                            .frame(width: 48, height: 48)
                             .border(Styles.darkGray)
-                        Text(chat.authorProfile.name ?? "unknown")
+                        VStack(alignment: .leading) {
+                            Text(chat.authorProfile.name ?? "unknown")
+                            self.newMessagesText(chat)
+                        }
                     }
-                //}
+                }.foregroundColor(.primary)
             }
         }
     }
@@ -38,6 +62,9 @@ struct SecretsScreen : View {
             return AnyView(
                 Form {
                     secretChats(secrets)
+                        .sheet(isPresented: isModalOpen, content: {
+                            self.modal!
+                        })
                 }
             )
         case let .error(message):

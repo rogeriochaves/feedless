@@ -24,9 +24,11 @@ struct AsyncImage: View {
     var body: some View {
         if let url_ = url, let image = imageLoader.images[url_] {
             return AnyView(Image(uiImage: image)
+                .renderingMode(.original)
                 .resizable())
         } else {
             return AnyView(Image("no-avatar")
+                .renderingMode(.original)
                 .resizable())
         }
     }

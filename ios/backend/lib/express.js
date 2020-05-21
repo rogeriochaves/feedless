@@ -6,6 +6,7 @@ const queries = require("./queries");
 const ssb = require("./ssb-client");
 const bodyParser = require("body-parser");
 const serveBlobs = require("./serve-blobs");
+const debug = require("debug")("express");
 
 app.use(bodyParser.json());
 
@@ -124,6 +125,24 @@ router.get("/secrets/:id(*)", async (req, res) => {
   });
 
   res.json(secretMessages);
+});
+
+router.get("/vanish", async (req, res) => {
+  const keys = req.query.keys.replace(/ /g, "+").split(",");
+
+  for (const key of keys) {
+    debug("Vanishing message", key);
+    await ssb.client().identities.publishAs({
+      key: req.context.key,
+      private: false,
+      content: {
+        type: "delete",
+        dest: key,
+      },
+    });
+  }
+
+  res.json({ result: "ok" });
 });
 
 router.get("/blob/*", { public: true }, (req, res) => {
