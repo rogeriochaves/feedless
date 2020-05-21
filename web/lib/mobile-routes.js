@@ -6,17 +6,11 @@ module.exports.setupRoutes = (router) => {
     "/mobile",
     { public: true, desktopVersion: "/" },
     async (req, res) => {
-      if (!req.context.profile) {
+      if (req.context.profile) {
+        return res.redirect(`/mobile/profile/${req.context.profile.id}`);
+      } else {
         return res.render("shared/index");
       }
-
-      const posts = await queries.getPosts(req.context.profile);
-
-      res.render("mobile/home", {
-        posts,
-        profile: req.context.profile,
-        layout: "mobile/_layout",
-      });
     }
   );
 
@@ -51,31 +45,37 @@ module.exports.setupRoutes = (router) => {
       const id = req.params.id;
 
       if (id == req.context.profile.id) {
-        return res.redirect("/mobile");
+        const posts = await queries.getPosts(req.context.profile);
+
+        res.render("mobile/home", {
+          posts,
+          profile: req.context.profile,
+          layout: "mobile/_layout",
+        });
+      } else {
+        const [
+          profile,
+          posts,
+          friends,
+          friendshipStatus,
+          communities,
+        ] = await Promise.all([
+          queries.getProfile(id),
+          queries.getPosts({ id }),
+          queries.getFriends({ id }),
+          queries.getFriendshipStatus(req.context.profile.id, id),
+          queries.getProfileCommunities(id),
+        ]);
+
+        res.render("mobile/profile", {
+          profile,
+          posts,
+          friends,
+          friendshipStatus,
+          communities,
+          layout: "mobile/_layout",
+        });
       }
-
-      const [
-        profile,
-        posts,
-        friends,
-        friendshipStatus,
-        communities,
-      ] = await Promise.all([
-        queries.getProfile(id),
-        queries.getPosts({ id }),
-        queries.getFriends({ id }),
-        queries.getFriendshipStatus(req.context.profile.id, id),
-        queries.getProfileCommunities(id),
-      ]);
-
-      res.render("mobile/profile", {
-        profile,
-        posts,
-        friends,
-        friendshipStatus,
-        communities,
-        layout: "mobile/_layout",
-      });
     }
   );
 

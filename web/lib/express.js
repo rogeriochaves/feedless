@@ -188,23 +188,11 @@ router.get(
   "/",
   { public: true, mobileVersion: "/mobile" },
   async (req, res) => {
-    if (!req.context.profile) {
+    if (req.context.profile) {
+      return res.redirect(`/profile/${req.context.profile.id}`);
+    } else {
       return res.render("shared/index");
     }
-
-    const [posts, friends, secretMessages, communities] = await Promise.all([
-      queries.getPosts(req.context.profile),
-      queries.getFriends(req.context.profile),
-      queries.getSecretMessages(req.context.profile),
-      queries.getProfileCommunities(req.context.profile.id),
-    ]);
-    res.render("desktop/home", {
-      posts,
-      friends,
-      secretMessages,
-      communities,
-      profile: req.context.profile,
-    });
   }
 );
 
@@ -397,30 +385,43 @@ router.get(
     const id = req.params.id;
 
     if (id == req.context.profile.id) {
-      return res.redirect("/");
+      const [posts, friends, secretMessages, communities] = await Promise.all([
+        queries.getPosts(req.context.profile),
+        queries.getFriends(req.context.profile),
+        queries.getSecretMessages(req.context.profile),
+        queries.getProfileCommunities(req.context.profile.id),
+      ]);
+
+      res.render("desktop/home", {
+        posts,
+        friends,
+        secretMessages,
+        communities,
+        profile: req.context.profile,
+      });
+    } else {
+      const [
+        profile,
+        posts,
+        friends,
+        friendshipStatus,
+        communities,
+      ] = await Promise.all([
+        queries.getProfile(id),
+        queries.getPosts({ id }),
+        queries.getFriends({ id }),
+        queries.getFriendshipStatus(req.context.profile.id, id),
+        queries.getProfileCommunities(id),
+      ]);
+
+      res.render("desktop/profile", {
+        profile,
+        posts,
+        friends,
+        friendshipStatus,
+        communities,
+      });
     }
-
-    const [
-      profile,
-      posts,
-      friends,
-      friendshipStatus,
-      communities,
-    ] = await Promise.all([
-      queries.getProfile(id),
-      queries.getPosts({ id }),
-      queries.getFriends({ id }),
-      queries.getFriendshipStatus(req.context.profile.id, id),
-      queries.getProfileCommunities(id),
-    ]);
-
-    res.render("desktop/profile", {
-      profile,
-      posts,
-      friends,
-      friendshipStatus,
-      communities,
-    });
   }
 );
 
