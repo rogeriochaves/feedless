@@ -70,6 +70,7 @@ const getPosts = async (profile) => {
   const posts = await promisePull(
     // @ts-ignore
     cat([
+      // Posts from others in your wall
       ssb.client().feedlessIndex.read({
         reverse: true,
         query: [
@@ -85,6 +86,7 @@ const getPosts = async (profile) => {
         ],
         limit: 50,
       }),
+      // Deprecated way to see posts from others on your wall
       ssb.client().query.read({
         reverse: true,
         query: [
@@ -101,6 +103,7 @@ const getPosts = async (profile) => {
         ],
         limit: 50,
       }),
+      // Posts on your own wall
       ssb.client().query.read({
         reverse: true,
         query: [
@@ -113,6 +116,7 @@ const getPosts = async (profile) => {
                   type: "post",
                   root: { $not: true },
                   channel: { $not: true },
+                  wall: { $not: true },
                 },
               },
             },
