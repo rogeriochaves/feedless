@@ -24,7 +24,7 @@
 		907002132465A53400548946 /* NodeMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; };
 		907002142465A53400548946 /* NodeMobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 907002122465A53400548946 /* NodeMobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		907002172466B77D00548946 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907002162466B77D00548946 /* Debug.swift */; };
-		90B6A2DA2476B94F004B0BFF /* SecretMessagesModalModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B6A2D92476B94F004B0BFF /* SecretMessagesModalModal.swift */; };
+		90B6A2DA2476B94F004B0BFF /* SecretMessagesModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B6A2D92476B94F004B0BFF /* SecretMessagesModal.swift */; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
 		90CDBA66246F5923008EA9BE /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA65246F5923008EA9BE /* Context.swift */; };
 		90CDBA68246F5971008EA9BE /* Profiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA67246F5971008EA9BE /* Profiles.swift */; };
@@ -40,6 +40,7 @@
 		90CDBA7F247676B6008EA9BE /* SecretsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA7E247676B6008EA9BE /* SecretsScreen.swift */; };
 		90CDBA81247676F4008EA9BE /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA80247676F4008EA9BE /* Secrets.swift */; };
 		90CDBA842476815E008EA9BE /* secrets.json in Resources */ = {isa = PBXBuildFile; fileRef = 90CDBA832476815E008EA9BE /* secrets.json */; };
+		90DD38042477EF0500B236A3 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DD38032477EF0500B236A3 /* FocusableTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,7 +98,7 @@
 		9061FA9F246E713C00AA988A /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		907002122465A53400548946 /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = libnode/NodeMobile.framework; sourceTree = "<group>"; };
 		907002162466B77D00548946 /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
-		90B6A2D92476B94F004B0BFF /* SecretMessagesModalModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretMessagesModalModal.swift; sourceTree = "<group>"; };
+		90B6A2D92476B94F004B0BFF /* SecretMessagesModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretMessagesModal.swift; sourceTree = "<group>"; };
 		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
 		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
 		90B81B95245ECC00005C5D31 /* NodeRunner.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeRunner.mm; sourceTree = "<group>"; };
@@ -116,6 +117,7 @@
 		90CDBA7E247676B6008EA9BE /* SecretsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretsScreen.swift; sourceTree = "<group>"; };
 		90CDBA80247676F4008EA9BE /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		90CDBA832476815E008EA9BE /* secrets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = secrets.json; sourceTree = "<group>"; };
+		90DD38032477EF0500B236A3 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,7 +240,8 @@
 				9061FA9D246DA40500AA988A /* NavigationMenu.swift */,
 				90CDBA742470245F008EA9BE /* PostsList.swift */,
 				90CDBA76247026A5008EA9BE /* AsyncImage.swift */,
-				90B6A2D92476B94F004B0BFF /* SecretMessagesModalModal.swift */,
+				90B6A2D92476B94F004B0BFF /* SecretMessagesModal.swift */,
+				90DD38032477EF0500B236A3 /* FocusableTextField.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -434,10 +437,11 @@
 				90CDBA7B24708D87008EA9BE /* FriendsScreen.swift in Sources */,
 				90CDBA792470613D008EA9BE /* ImageLoader.swift in Sources */,
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
-				90B6A2DA2476B94F004B0BFF /* SecretMessagesModalModal.swift in Sources */,
+				90B6A2DA2476B94F004B0BFF /* SecretMessagesModal.swift in Sources */,
 				90CDBA7324701882008EA9BE /* Samples.swift in Sources */,
 				9053055B245F7C23006C054D /* Utils.swift in Sources */,
 				90CDBA7F247676B6008EA9BE /* SecretsScreen.swift in Sources */,
+				90DD38042477EF0500B236A3 /* FocusableTextField.swift in Sources */,
 				907002172466B77D00548946 /* Debug.swift in Sources */,
 				90CDBA6E246F5F2C008EA9BE /* DataLoader.swift in Sources */,
 				90CDBA752470245F008EA9BE /* PostsList.swift in Sources */,

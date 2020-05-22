@@ -127,8 +127,8 @@ router.get("/secrets/:id(*)", async (req, res) => {
   res.json(secretMessages);
 });
 
-router.get("/vanish", async (req, res) => {
-  const keys = req.query.keys.replace(/ /g, "+").split(",");
+router.post("/vanish", async (req, res) => {
+  const keys = req.body.keys;
 
   for (const key of keys) {
     debug("Vanishing message", key);
@@ -141,6 +141,22 @@ router.get("/vanish", async (req, res) => {
       },
     });
   }
+
+  res.json({ result: "ok" });
+});
+
+router.post("/profile/:id(*)/publish_secret", async (req, res) => {
+  const id = req.params.id;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: true,
+    content: {
+      type: "post",
+      text: req.body.message,
+      recps: [req.context.key.id, id],
+    },
+  });
 
   res.json({ result: "ok" });
 });

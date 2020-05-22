@@ -33,9 +33,12 @@ struct SecretsScreen : View {
                 Button(action: {
                     self.secrets.vanish(context: self.context, chat: chat)
                     self.modal = SecretMessagesModal(
-                        messages: chat.messages,
+                        chat: chat,
                         onClose: {
                             self.modal = nil
+                        },
+                        onSubmit: { message in
+                            self.secrets.publish(context: self.context, chat: chat, message: message)
                         }
                     )
                 }) {

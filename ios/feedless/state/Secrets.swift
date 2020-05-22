@@ -46,6 +46,11 @@ class Secrets: ObservableObject {
     }
 
     func vanish(context: Context, chat: SecretChat) {
+        let keys = chat.messages.map(\.key)
+        if keys.count == 0 {
+            return
+        }
+
         if let id = context.ssbKey?.id {
             let url = URL(string: "http://127.0.0.1:3000/secrets/\(id)")!
             let config = URLSessionConfiguration.default
@@ -53,19 +58,27 @@ class Secrets: ObservableObject {
             URLCache.shared.removeCachedResponse(for: session.dataTask(with: url))
         }
 
-        let keys = chat.messages.map(\.key)
         self.deletedKeys.append(contentsOf: keys)
         print("going to delete", keys)
         DispatchQueue.main.async {
             self.secrets = self.filterDeleted(secrets: self.secrets)
         }
 
-        if let keysParam = keys.joined(separator: ",").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            dataLoad(path: "/vanish?keys=\(keysParam)", type: PostResult.self, context: context) {(result) in
-                self.load(context: context)
-            }
-        } else {
-            print("Could not encode keys params", keys)
+        dataPost(path: "/vanish", parameters: [ "keys": keys ], type: PostResult.self, context: context) {(result) in
+            self.load(context: context)
+        }
+    }
+
+    func publish(context: Context, chat: SecretChat, message: String) {
+        if let id = context.ssbKey?.id {
+            let url = URL(string: "http://127.0.0.1:3000/secrets/\(id)")!
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            URLCache.shared.removeCachedResponse(for: session.dataTask(with: url))
+        }
+
+        dataPost(path: "/profile/\(chat.author)/publish_secret", parameters: [ "message": message ], type: PostResult.self, context: context) {(result) in
+            self.load(context: context)
         }
     }
 }
