@@ -59,7 +59,7 @@ const mapProfiles = (data, callback) =>
 const removeWallMention = (data, callback) => {
   const { wall, text } = data.value.content;
   if (wall && text) {
-    data.value.content.text = text.replace(/^\[.*?\]\(.*?\)/, "");
+    data.value.content.text = text.replace(/^\[.*?\]\(.*?\) /, "");
   }
   callback(null, data);
 };
