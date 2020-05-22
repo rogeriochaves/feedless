@@ -56,3 +56,7 @@ enum ServerData<T> {
     case success(T)
     case error(String)
 }
+
+struct PostResult : Codable {
+    public var result : String
+}

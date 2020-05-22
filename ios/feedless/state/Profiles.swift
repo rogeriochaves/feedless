@@ -22,7 +22,9 @@ class Profiles: ObservableObject {
     @Published var profiles : [String: ServerData<FullProfile>] = [:]
 
     func load(context: Context, id: String) {
-        self.profiles[id] = .loading
+        if self.profiles[id] == nil {
+            self.profiles[id] = .loading
+        }
 
         dataLoad(path: "/profile/\(id)", type: FullProfile.self, context: context) {(result) in
             DispatchQueue.main.async {
@@ -36,5 +38,36 @@ class Profiles: ObservableObject {
                 }
             }
         }
+    }
+
+    func publish(context: Context, id: String, message: String) {
+        if
+            let author = context.ssbKey?.id,
+            case .success(var profile) = self.profiles[id],
+            case .success(let authorProfile) = self.profiles[author]
+        {
+            let url = URL(string: "http://127.0.0.1:3000/profile/\(id)")!
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            URLCache.shared.removeCachedResponse(for: session.dataTask(with: url))
+
+            dataPost(path: "/profile/\(id)/publish", parameters: [ "message": message ], type: PostResult.self, context: context) {(result) in
+                self.load(context: context, id: id)
+            }
+
+            DispatchQueue.main.async {
+                let newPost : Entry<AuthorProfileContent<Post>> = Entry(
+                    key: "",
+                    value: AuthorProfileContent(
+                        author: author,
+                        authorProfile: authorProfile.profile,
+                        content: Post(text: message)
+                    )
+                )
+                profile.posts.insert(newPost, at: 0)
+                self.profiles[id] = .success(profile)
+            }
+        }
+
     }
 }

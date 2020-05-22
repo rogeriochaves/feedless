@@ -14,10 +14,6 @@ struct SecretChat : Codable {
     public var authorProfile: Profile
 }
 
-struct PostResult : Codable {
-    public var result : String
-}
-
 class Secrets: ObservableObject {
     @Published var secrets : ServerData<[SecretChat]> = .loading
     var deletedKeys : [String] = []

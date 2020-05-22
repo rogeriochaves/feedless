@@ -14,6 +14,8 @@ struct ProfileScreen : View {
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var imageLoader : ImageLoader
     @State private var selection = 0
+    @State private var post = ""
+    @State private var isPostFocused = false
 
     init(id : String?) {
         self.id = id
@@ -24,6 +26,53 @@ struct ProfileScreen : View {
             return self.id
         }
         return context.ssbKey?.id
+    }
+
+    func isLoggedUser() -> Bool {
+        return self.getId() == context.ssbKey?.id
+    }
+
+    func composer(_ profile: FullProfile) -> some View {
+        VStack {
+            MultilineTextField(
+                self.isLoggedUser() ?
+                    "Post something on your wall..." :
+                    "Write something to " + (profile.profile.name ?? "unknown"),
+                text: $post,
+                isResponder: $isPostFocused
+            )
+                .padding(5)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Styles.gray, lineWidth: 1)
+                )
+            if self.isPostFocused {
+                HStack {
+                    Text("\(140 - self.post.count)")
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(Styles.gray)
+                    Spacer()
+                    Button(action: {
+                        if (self.post.count > 140) {
+                            return
+                        }
+                        if let id = self.getId() {
+                            self.profiles.publish(context: self.context, id: id, message: self.post)
+                            self.post = ""
+                        }
+                    }) {
+                        Text("Publish")
+                    }
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 15)
+                        .background(Styles.primaryBlue)
+                        .foregroundColor(Color.black)
+                        .cornerRadius(10)
+                }
+            }
+        }
+        .padding(.horizontal, 10)
     }
 
     func profileView(_ profile: FullProfile) -> some View {
@@ -45,6 +94,8 @@ struct ProfileScreen : View {
                         )
                     }
                 }
+                Spacer()
+                self.composer(profile)
                 Divider()
                 PostsList(profile.posts)
             }

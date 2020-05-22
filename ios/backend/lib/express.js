@@ -145,6 +145,22 @@ router.post("/vanish", async (req, res) => {
   res.json({ result: "ok" });
 });
 
+router.post("/profile/:id(*)/publish", async (req, res) => {
+  const id = req.params.id;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "post",
+      text: req.body.message,
+      root: id,
+    },
+  });
+
+  res.json({ result: "ok" });
+});
+
 router.post("/profile/:id(*)/publish_secret", async (req, res) => {
   const id = req.params.id;
 
