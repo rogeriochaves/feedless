@@ -1,6 +1,6 @@
 var FlumeQuery = require("flumeview-query");
 
-exports.name = "privateIndex";
+exports.name = "feedlessIndex";
 exports.version = 1;
 exports.manifest = {
   read: "source",
@@ -8,8 +8,11 @@ exports.manifest = {
   help: "sync",
 };
 
-var INDEX_VERSION = 2;
-var indexes = [{ key: "pts", value: [["value", "private"], ["timestamp"]] }];
+var INDEX_VERSION = 1;
+var indexes = [
+  { key: "pts", value: [["value", "private"], ["timestamp"]] },
+  { key: "wts", value: [["value", "content", "wall"], ["timestamp"]] },
+];
 
 function mapRts(msg) {
   msg.rts = Math.min(msg.timestamp, msg.value.timestamp) || msg.timestamp;
@@ -18,7 +21,7 @@ function mapRts(msg) {
 
 exports.init = function (ssb, config) {
   var s = ssb._flumeUse(
-    "private-index",
+    "feedless-index",
     FlumeQuery(INDEX_VERSION, { indexes: indexes, map: mapRts })
   );
   var read = s.read;

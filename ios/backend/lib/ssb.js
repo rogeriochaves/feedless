@@ -18,7 +18,7 @@ const Server = require("secret-stack")({
   .use(require("ssb-ebt-fork-staltz")) // needs: db, replicate, friends
   .use(require("ssb-query"))
   .use(require("ssb-blobs"))
-  .use(require("./plugins/private-index"))
+  .use(require("./plugins/feedless-index"))
   // We don't really need multiple identities, we just use that for the publishAs function for private posts
   // without having to index with ssb-private
   .use(require("./plugins/memory-identities"));

@@ -49,6 +49,8 @@ exports.init = function (ssb) {
     pull(
       pull.values(values),
       pull.drain((data) => {
+        if (!data.value || typeof data.value.content != "string") return;
+
         const content = ssbkeys.unbox(data.value.content, profile.key);
         if (content) {
           debug("Found an entry!");

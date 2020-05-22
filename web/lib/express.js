@@ -470,7 +470,6 @@ router.post("/publish", async (req, res) => {
     content: {
       type: "post",
       text: req.body.message,
-      root: req.context.profile.id,
     },
   });
 
@@ -515,13 +514,16 @@ router.post("/vanish", async (req, res) => {
 router.post("/profile/:id(*)/publish", async (req, res) => {
   const id = req.params.id;
 
+  const profile = await queries.getProfile(id);
+  const text = `[@${profile.name}](${id}) ${req.body.message}`;
   await ssb.client().identities.publishAs({
     key: req.context.profile.key,
     private: false,
     content: {
       type: "post",
-      text: req.body.message,
-      root: id,
+      text: text,
+      wall: id,
+      mentions: [{link: id, name: profile.name}]
     },
   });
 
@@ -608,6 +610,16 @@ router.post("/about", async (req, res) => {
       update
     );
   }
+
+  await ssb.client().identities.publishAs({
+    key: req.context.profile.key,
+    private: false,
+    content: {
+      type: "about",
+      about: req.context.profile.id,
+      publicWebHosting: true,
+    },
+  });
 
   res.redirect("/");
 });

@@ -56,12 +56,35 @@ const mapProfiles = (data, callback) =>
     })
     .catch((err) => callback(err, null));
 
+const removeWallMention = (data, callback) => {
+  const { wall, text } = data.value.content;
+  if (wall && text) {
+    data.value.content.text = text.replace(/^\[.*?\]\(.*?\)/, "");
+  }
+  callback(null, data);
+};
+
 const getPosts = async (profile) => {
   debugPosts("Fetching");
 
   const posts = await promisePull(
     // @ts-ignore
     cat([
+      ssb.client().feedlessIndex.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                content: {
+                  wall: profile.id,
+                },
+              },
+            },
+          },
+        ],
+        limit: 50,
+      }),
       ssb.client().query.read({
         reverse: true,
         query: [
@@ -76,7 +99,7 @@ const getPosts = async (profile) => {
             },
           },
         ],
-        limit: 100,
+        limit: 50,
       }),
       ssb.client().query.read({
         reverse: true,
@@ -95,11 +118,12 @@ const getPosts = async (profile) => {
             },
           },
         ],
-        limit: 100,
+        limit: 50,
       }),
     ]),
     pull.filter((msg) => msg.value.content.type == "post"),
-    paramap(mapProfiles)
+    paramap(mapProfiles),
+    paramap(removeWallMention)
   );
 
   debugPosts("Done");
@@ -113,7 +137,7 @@ const getSecretMessages = async (profile) => {
   const messagesPromise = promisePull(
     // @ts-ignore
     cat([
-      ssb.client().privateIndex.read({
+      ssb.client().feedlessIndex.read({
         reverse: true,
         limit: 100,
         query: [
