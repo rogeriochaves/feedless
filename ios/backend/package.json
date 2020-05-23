@@ -6,7 +6,7 @@
   "scripts": {
     "start": "SSB_DIR=~/.ssb node index.js",
     "install:ios": "./tools/install-ios.sh",
-    "build": "./tools/noderify-mobile.sh",
+    "build": "./tools/apply-patches.sh && ./tools/noderify-mobile.sh",
     "build:watch": "watch ./tools/noderify-mobile.sh lib/"
   },
   "author": "",

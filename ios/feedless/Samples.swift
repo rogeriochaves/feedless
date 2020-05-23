@@ -52,4 +52,18 @@ class Samples {
 
         return try! JSONDecoder().decode([SecretChat].self, from: data)
     }
+
+    static func communities() -> Communities {
+        let communities = Communities()
+        communities.communities["ssb-clients"] = .success(communityDetails())
+
+        return communities
+    }
+
+    static func communityDetails() -> CommunityDetails {
+        let path = Bundle.main.path(forResource: "communityDetails", ofType: "json")!
+        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+
+        return try! JSONDecoder().decode(CommunityDetails.self, from: data)
+    }
 }

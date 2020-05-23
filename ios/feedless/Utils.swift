@@ -86,9 +86,8 @@ class Utils {
         return result;
     }
 
-    static func splitInSmallPosts(_ text : String) -> [String] {
+    static func splitInSmallPosts(_ text : String, limit : Int = 140) -> [String] {
         let text = escapeMarkdown(text);
-        let limit = 140;
 
         if (text.count <= limit) {
             return [text]
@@ -112,6 +111,20 @@ class Utils {
         let lastMarker = postsCount > 1 ? "\(postsCount)/\(postsCount)" : ""
         splittedPosts.append(nextPost + lastMarker)
         return splittedPosts.reversed()
+    }
+
+    static func topicTitle(_ topic: TopicEntry) -> String {
+        var title = escapeMarkdown(topic.value.content.title ?? topic.value.content.text)
+
+        let ssbRefPattern = #"((&|%).*?=\.sha\d+)"#
+        title = title.replacingOccurrences(of: ssbRefPattern, with: "", options: .regularExpression)
+
+        title = title.replacingOccurrences(of: #"\n"#, with: " ", options: .regularExpression)
+
+        if (title.count > 60) {
+          return title.prefix(60) + "...";
+        }
+        return title
     }
 }
 

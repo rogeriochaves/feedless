@@ -16,6 +16,7 @@ struct FullProfile : Codable {
     public var profile: Profile
     public var posts: Posts
     public var friends: Friendslists
+    public var communities: [String]
 }
 
 class Profiles: ObservableObject {

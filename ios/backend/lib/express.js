@@ -105,10 +105,11 @@ router.get("/debug", { public: true }, async (req, res) => {
 router.get("/profile/:id(*)", {}, async (req, res) => {
   const id = req.params.id;
 
-  const [profile, posts, friends] = await Promise.all([
+  const [profile, posts, friends, communities] = await Promise.all([
     queries.getProfile(id),
     queries.getPosts({ id }),
     queries.getFriends({ id }),
+    queries.getProfileCommunities(req.context.key.id),
   ]);
 
   res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
@@ -116,6 +117,7 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
     profile,
     posts,
     friends,
+    communities,
   });
 });
 
@@ -124,6 +126,7 @@ router.get("/secrets/:id(*)", async (req, res) => {
     id: req.context.key.id,
   });
 
+  res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
   res.json(secretMessages);
 });
 
@@ -190,6 +193,24 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
   });
 
   res.json({ result: "ok" });
+});
+
+router.get("/communities/:name", async (req, res) => {
+  const name = req.params.name;
+
+  const [topics, members, isMember] = await Promise.all([
+    queries.getCommunityPosts(name),
+    queries.getCommunityMembers(name),
+    queries.isMember(req.context.key.id, name),
+  ]);
+
+  res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
+  res.json({
+    name,
+    members,
+    isMember: !!isMember,
+    topics,
+  });
 });
 
 router.get("/blob/*", { public: true }, (req, res) => {

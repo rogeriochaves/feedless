@@ -26,8 +26,9 @@ struct MainScreen: View {
     }
 
     let profileScreen: some View = ProfileScreen(id: nil)
-    let friendsScreen: some View = FriendsScreen()
+    let friendsScreen: some View = CommunitiesList()
     let secretsScreen: some View = SecretsScreen()
+    let communitiesList: some View = CommunitiesList()
     let debugScreen: some View = Debug().navigationBarTitle(Text("Debug"))
 
     var body: some View {
@@ -46,6 +47,10 @@ struct MainScreen: View {
                 }
             } else if (selection == 3) {
                 NavigationMenu {
+                    communitiesList
+                }
+            } else if (selection == 4) {
+                NavigationMenu {
                     debugScreen
                 }
             }
@@ -56,7 +61,8 @@ struct MainScreen: View {
                 menuButton(index: 0, emoji: "🙂", text: "Profile")
                 menuButton(index: 1, emoji: "🤫", text: "Secrets")
                 menuButton(index: 2, emoji: "👨‍👧‍👦", text: "Friends")
-                menuButton(index: 3, emoji: "🛠", text: "Debug")
+                menuButton(index: 3, emoji: "🌆", text: "Communities")
+                menuButton(index: 4, emoji: "🛠", text: "Debug")
             }
         }
     }

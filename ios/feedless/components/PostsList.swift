@@ -11,9 +11,11 @@ import SwiftUI
 struct PostsList : View {
     @EnvironmentObject var imageLoader : ImageLoader
     private let posts:Posts
+    private let limit:Int
 
-    init(_ posts: Posts) {
+    init(_ posts: Posts, limit: Int = 140) {
         self.posts = posts
+        self.limit = limit
     }
 
     func postItem(_ post: Entry<AuthorProfileContent<Post>>, _ text: String) -> some View {
@@ -36,7 +38,7 @@ struct PostsList : View {
     var body: some View {
         VStack {
             ForEach(posts, id: \.key) { post in
-                ForEach(Utils.splitInSmallPosts(post.value.content.text), id: \.self) { text in
+                ForEach(Utils.splitInSmallPosts(post.value.content.text, limit: self.limit), id: \.self) { text in
                     VStack (alignment: .leading) {
                         self.postItem(post, text)
                         Divider()

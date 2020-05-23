@@ -28,6 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environmentObject(ImageLoader())
             .environmentObject(Entries())
             .environmentObject(Secrets())
+            .environmentObject(Communities())
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

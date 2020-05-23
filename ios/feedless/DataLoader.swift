@@ -75,7 +75,7 @@ private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ con
             print("\(identifier): Cache miss");
         }
 
-        if context.status == .initializing || context.status == .indexing || Double(context.indexing.current) < Double(context.indexing.target) * 0.95 {
+        if context.status == .initializing || context.status == .indexing || context.indexing.current < context.indexing.target {
             if (!fetchingScheduled.contains(identifier)) {
                 fetchingScheduled.insert(identifier)
 

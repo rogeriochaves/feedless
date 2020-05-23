@@ -547,7 +547,7 @@ const getCommunityMembers = async (name) => {
           },
         },
       ],
-      limit: 100,
+      limit: 50,
     }),
     paramap(mapProfiles)
   );
@@ -605,67 +605,8 @@ const getProfileCommunities = async (id) => {
   return channelNames;
 };
 
-const getPostWithReplies = async (channel, key) => {
-  debugCommunityPosts("Fetching");
-
-  const postWithReplies = await promisePull(
-    // @ts-ignore
-    cat([
-      ssb.client().query.read({
-        reverse: false,
-        limit: 1,
-        query: [
-          {
-            $filter: {
-              key: key,
-              value: {
-                content: {
-                  type: "post",
-                  channel: channel,
-                },
-              },
-            },
-          },
-        ],
-      }),
-      ssb.client().query.read({
-        reverse: false,
-        limit: 50,
-        query: [
-          {
-            $filter: {
-              value: {
-                content: {
-                  root: key,
-                  channel: channel,
-                },
-              },
-            },
-          },
-        ],
-      }),
-      ssb.client().query.read({
-        reverse: false,
-        limit: 50,
-        query: [
-          {
-            $filter: {
-              value: {
-                content: {
-                  reply: { $prefix: [key] },
-                  channel: channel,
-                },
-              },
-            },
-          },
-        ],
-      }),
-    ]),
-    paramap(mapProfiles)
-  );
-
-  debugCommunityPosts("Done");
-  return postWithReplies;
+const forceChannelIndex = {
+  $sort: [["value", "content", "channel"], ["timestamp"]],
 };
 
 const getCommunityPosts = async (name) => {
@@ -685,36 +626,56 @@ const getCommunityPosts = async (name) => {
             },
           },
         },
+        forceChannelIndex,
       ],
-      limit: 1000,
+      limit: 200,
     }),
     paramap(mapProfiles)
   );
   let communityPostsByKey = {};
-  let replies = [];
+  let repliesByKey = {};
 
-  let rootKey = (post) => {
-    let replyKey =
-      post.value.content.reply && Object.keys(post.value.content.reply)[0];
-    return replyKey || post.value.content.root;
+  let getRootKey = (post) => {
+    return (
+      post.value.content.root ||
+      (post.value.content.reply && Object.keys(post.value.content.reply)[0])
+    );
   };
 
   for (let post of communityPosts) {
-    if (rootKey(post)) {
-      replies.push(post);
+    if (getRootKey(post)) {
+      repliesByKey[post.key] = post;
     } else {
-      post.value.replies = [];
+      post.value.content.replies = [];
       communityPostsByKey[post.key] = post;
     }
   }
-  for (let reply of replies) {
-    let root = communityPostsByKey[rootKey(reply)];
-    if (root) root.value.replies.push(reply);
+  for (let reply of Object.values(repliesByKey)) {
+    const rootKey = getRootKey(reply);
+    const root = communityPostsByKey[rootKey];
+    if (root) {
+      root.value.content.replies.push(reply);
+    }
+
+    let nestedReply = repliesByKey[rootKey];
+    while (nestedReply) {
+      const nestedRootKey = getRootKey(nestedReply);
+      const nestedRoot = communityPostsByKey[nestedRootKey];
+      if (nestedRoot) {
+        nestedRoot.value.content.replies.push(reply);
+        nestedReply = null;
+      } else {
+        nestedReply = repliesByKey[nestedRootKey];
+      }
+    }
   }
 
   debugCommunityPosts("Done");
 
-  return Object.values(communityPostsByKey);
+  let posts = Object.values(communityPostsByKey);
+  posts = posts.sort((a, b) => b.rts - a.rts);
+
+  return posts;
 };
 
 if (!global.clearProfileInterval) {
@@ -737,7 +698,6 @@ module.exports = {
   getCommunities,
   getCommunityMembers,
   getCommunityPosts,
-  getPostWithReplies,
   progress,
   autofollow,
   isMember,
