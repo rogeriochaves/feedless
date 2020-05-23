@@ -26,7 +26,7 @@ struct MainScreen: View {
     }
 
     let profileScreen: some View = ProfileScreen(id: nil)
-    let friendsScreen: some View = CommunitiesList()
+    let friendsScreen: some View = FriendsScreen()
     let secretsScreen: some View = SecretsScreen()
     let communitiesList: some View = CommunitiesList()
     let debugScreen: some View = Debug().navigationBarTitle(Text("Debug"))
