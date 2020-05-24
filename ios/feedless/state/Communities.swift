@@ -44,4 +44,36 @@ class Communities: ObservableObject {
             }
         }
     }
+
+    func replyToTopic(context: Context, profiles: Profiles, name: String, topicKey: String, reply: String) {
+        let cleanTopicKey = topicKey.replacingOccurrences(of: "%", with: "")
+        if
+            let author = context.ssbKey?.id,
+            case .success(let authorProfile) = profiles.profiles[author],
+            case .success(var community) = self.communities[name],
+            let topicIndex = community.topics.firstIndex(where: { $0.key == topicKey })
+        {
+            let url = URL(string: "http://127.0.0.1:3000/communities/\(name)")!
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            URLCache.shared.removeCachedResponse(for: session.dataTask(with: url))
+
+            dataPost(path: "/communities/\(name)/\(cleanTopicKey)/publish", parameters: [ "reply": reply ], type: PostResult.self, context: context) {(result) in
+                self.load(context: context, name: name)
+            }
+
+            DispatchQueue.main.async {
+                let newPost : Entry<AuthorProfileContent<Post>> = Entry(
+                    key: "",
+                    value: AuthorProfileContent(
+                        author: author,
+                        authorProfile: authorProfile.profile,
+                        content: Post(text: reply)
+                    )
+                )
+                community.topics[topicIndex].value.content.replies.insert(newPost, at: 0)
+                self.communities[name] = .success(community)
+            }
+        }
+    }
 }

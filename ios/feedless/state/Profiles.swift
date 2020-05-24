@@ -69,6 +69,5 @@ class Profiles: ObservableObject {
                 self.profiles[id] = .success(profile)
             }
         }
-
     }
 }

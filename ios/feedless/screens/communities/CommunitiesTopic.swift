@@ -11,14 +11,15 @@ import SwiftUI
 struct CommunitiesTopic : View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var communities : Communities
+    @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var imageLoader : ImageLoader
     @State private var selection = 0
     private var name : String
     private var topicKey : String
 
     @ObservedObject private var keyboard = KeyboardResponder()
-    @State private var post = ""
-    @State private var isPostFocused = false
+    @State private var reply = ""
+    @State private var isReplyFocused = false
 
     func keyboardOffset() -> CGFloat {
         return [keyboard.currentHeight - 110, CGFloat(0)].max()! * -1
@@ -32,8 +33,8 @@ struct CommunitiesTopic : View {
     var composer : some View {
         VStack {
             MultilineTextField("Reply to this topic",
-                text: $post,
-                isResponder: $isPostFocused
+                text: $reply,
+                isResponder: $isReplyFocused
             )
                 .padding(5)
                 .overlay(
@@ -43,7 +44,7 @@ struct CommunitiesTopic : View {
             HStack {
                 Spacer()
                 PrimaryButton(text: "Publish", action: {
-                    // nothing
+                    self.communities.replyToTopic(context: self.context, profiles: self.profiles, name: self.name, topicKey: self.topicKey, reply: self.reply)
                 })
             }
         }
@@ -102,7 +103,9 @@ struct CommunitiesTopic : View {
     var body: some View {
         topicReplies()
             .onAppear() {
-                self.communities.load(context: self.context, name: self.name)
+                if self.communities.communities[self.name] == nil {
+                    self.communities.load(context: self.context, name: self.name)
+                }
             }
     }
 }

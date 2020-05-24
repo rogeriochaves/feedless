@@ -154,7 +154,7 @@ router.post("/profile/:id(*)/publish", async (req, res) => {
   if (id == req.context.key.id) {
     // posting to your own wall
     await ssb.client().identities.publishAs({
-      key: req.context.profile.key,
+      key: req.context.key,
       private: false,
       content: {
         type: "post",
@@ -211,6 +211,76 @@ router.get("/communities/:name", async (req, res) => {
     isMember: !!isMember,
     topics,
   });
+});
+
+router.post("/communities/:name/new", async (req, res) => {
+  const name = req.params.name;
+  const title = req.body.title;
+  const post = req.body.post;
+
+  const topic = await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "post",
+      title: title,
+      text: post,
+      channel: name,
+    },
+  });
+
+  res.json({ name, topicKey: topic.key });
+});
+
+router.post("/communities/:name/join", async (req, res) => {
+  const name = req.params.name;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "channel",
+      channel: name,
+      subscribed: true,
+    },
+  });
+
+  res.json({ result: "ok" });
+});
+
+router.post("/communities/:name/leave", async (req, res) => {
+  const name = req.params.name;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "channel",
+      channel: name,
+      subscribed: false,
+    },
+  });
+
+  res.json({ result: "ok" });
+});
+
+router.post("/communities/:name/:key(*)/publish", async (req, res) => {
+  const name = req.params.name;
+  const key = req.params.key;
+  const reply = req.body.reply;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "post",
+      text: reply,
+      channel: name,
+      root: "%" + key,
+    },
+  });
+
+  res.json({ result: "ok" });
 });
 
 router.get("/blob/*", { public: true }, (req, res) => {
