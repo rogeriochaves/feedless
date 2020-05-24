@@ -42,6 +42,7 @@ struct NavigationMenu<C: View> : View {
                     }
                 ))
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

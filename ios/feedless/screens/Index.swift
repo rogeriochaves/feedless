@@ -46,26 +46,25 @@ struct Index: View {
     let login = Login()
 
     var body: some View {
-        Group {
-            VStack {
-                if (context.status != .ready) {
-                    HStack {
-                        Text(statusToString(status: context.status))
-                        if ((context.status == .indexing || context.status == .syncing) && context.indexing.target > 0) {
-                            progressBar()
-                        }
-                    }
+        VStack {
+            if (context.ssbKey != nil) {
+                mainScreen
+                    .onAppear(perform: {
+                        self.profiles.load(context: self.context, id: self.context.ssbKey!.id)
+                        self.secrets.load(context: self.context)
+                    })
+            } else {
+                NavigationView {
+                    login
+                        .navigationBarTitle(Text("Login"))
                 }
-                if (context.ssbKey != nil) {
-                    mainScreen
-                        .onAppear(perform: {
-                            self.profiles.load(context: self.context, id: self.context.ssbKey!.id)
-                            self.secrets.load(context: self.context)
-                        })
-                } else {
-                    NavigationView {
-                        login
-                            .navigationBarTitle(Text("Login"))
+            }
+            if (context.status != .ready) {
+                Divider()
+                HStack {
+                    Text(statusToString(status: context.status))
+                    if ((context.status == .indexing || context.status == .syncing) && context.indexing.target > 0) {
+                        progressBar()
                     }
                 }
             }

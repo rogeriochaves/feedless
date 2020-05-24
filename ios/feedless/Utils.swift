@@ -128,6 +128,7 @@ class Utils {
     }
 }
 
+// From https://stackoverflow.com/a/58242249/996404
 final class KeyboardResponder: ObservableObject {
     private var notificationCenter: NotificationCenter
     @Published private(set) var currentHeight: CGFloat = 0

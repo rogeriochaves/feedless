@@ -18,6 +18,8 @@ struct MainScreen: View {
                 Image(uiImage: emoji.image()!)
                     .renderingMode(selection == index ? .original : .template)
                 Text(text)
+                    .font(.system(size: 13))
+                    .fixedSize(horizontal: true, vertical: false)
             }
             .frame(maxWidth: .infinity)
             .background(Color.white)
@@ -57,7 +59,7 @@ struct MainScreen: View {
 
             Divider()
              .padding(.bottom, 10)
-            HStack {
+            HStack(spacing: 0) {
                 menuButton(index: 0, emoji: "🙂", text: "Profile")
                 menuButton(index: 1, emoji: "🤫", text: "Secrets")
                 menuButton(index: 2, emoji: "👨‍👧‍👦", text: "Friends")

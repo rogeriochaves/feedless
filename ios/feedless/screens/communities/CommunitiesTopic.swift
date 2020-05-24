@@ -16,9 +16,38 @@ struct CommunitiesTopic : View {
     private var name : String
     private var topicKey : String
 
+    @ObservedObject private var keyboard = KeyboardResponder()
+    @State private var post = ""
+    @State private var isPostFocused = false
+
+    func keyboardOffset() -> CGFloat {
+        return [keyboard.currentHeight - 110, CGFloat(0)].max()! * -1
+    }
+
     init(name : String, topicKey : String) {
         self.name = name
         self.topicKey = topicKey
+    }
+
+    var composer : some View {
+        VStack {
+            MultilineTextField("Reply to this topic",
+                text: $post,
+                isResponder: $isPostFocused
+            )
+                .padding(5)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Styles.gray, lineWidth: 1)
+                )
+            HStack {
+                Spacer()
+                PrimaryButton(text: "Publish", action: {
+                    // nothing
+                })
+            }
+        }
+        .padding(.horizontal, 10)
     }
 
     func findTopic(_ community : CommunityDetails) -> TopicEntry? {
@@ -48,8 +77,14 @@ struct CommunitiesTopic : View {
                 if let topic = findTopic(community) {
                     return AnyView(
                         ScrollView {
-                            Divider()
-                            PostsList(topicWithReplies(topic), limit: 10_000)
+                            VStack {
+                                Divider()
+                                PostsList(topicWithReplies(topic), limit: 10_000)
+                                composer
+                                    .padding(.bottom, 10)
+                            }
+                            .offset(y: keyboardOffset())
+                            .animation(.easeOut(duration: 0.16))
                         }
                         .navigationBarTitle(Utils.topicTitle(topic))
                     )

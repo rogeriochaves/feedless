@@ -53,7 +53,7 @@ struct ProfileScreen : View {
                         .bold()
                         .foregroundColor(Styles.gray)
                     Spacer()
-                    Button(action: {
+                    PrimaryButton(text: "Publish", action: {
                         if (self.post.count > 140) {
                             return
                         }
@@ -61,14 +61,7 @@ struct ProfileScreen : View {
                             self.profiles.publish(context: self.context, id: id, message: self.post)
                             self.post = ""
                         }
-                    }) {
-                        Text("Publish")
-                    }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 15)
-                        .background(Styles.primaryBlue)
-                        .foregroundColor(Color.black)
-                        .cornerRadius(10)
+                    })
                 }
             }
         }

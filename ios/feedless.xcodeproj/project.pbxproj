@@ -30,6 +30,7 @@
 		907A595324791398007C0983 /* Communities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907A595224791398007C0983 /* Communities.swift */; };
 		907A595524791ABF007C0983 /* communityDetails.json in Resources */ = {isa = PBXBuildFile; fileRef = 907A595424791ABF007C0983 /* communityDetails.json */; };
 		907A59572479285B007C0983 /* CommunitiesTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907A59562479285B007C0983 /* CommunitiesTopic.swift */; };
+		907A5959247A5282007C0983 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907A5958247A5282007C0983 /* PrimaryButton.swift */; };
 		90B6A2DA2476B94F004B0BFF /* SecretMessagesModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B6A2D92476B94F004B0BFF /* SecretMessagesModal.swift */; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
 		90CDBA66246F5923008EA9BE /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA65246F5923008EA9BE /* Context.swift */; };
@@ -110,6 +111,7 @@
 		907A595224791398007C0983 /* Communities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Communities.swift; sourceTree = "<group>"; };
 		907A595424791ABF007C0983 /* communityDetails.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = communityDetails.json; sourceTree = "<group>"; };
 		907A59562479285B007C0983 /* CommunitiesTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesTopic.swift; sourceTree = "<group>"; };
+		907A5958247A5282007C0983 /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		90B6A2D92476B94F004B0BFF /* SecretMessagesModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretMessagesModal.swift; sourceTree = "<group>"; };
 		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
 		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				90B6A2D92476B94F004B0BFF /* SecretMessagesModal.swift */,
 				90DD38032477EF0500B236A3 /* FocusableTextField.swift */,
 				902B7235247829E1007F4990 /* MultilineTextField.swift */,
+				907A5958247A5282007C0983 /* PrimaryButton.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				90CDBA7B24708D87008EA9BE /* FriendsScreen.swift in Sources */,
 				90CDBA792470613D008EA9BE /* ImageLoader.swift in Sources */,
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
+				907A5959247A5282007C0983 /* PrimaryButton.swift in Sources */,
 				90B6A2DA2476B94F004B0BFF /* SecretMessagesModal.swift in Sources */,
 				90CDBA7324701882008EA9BE /* Samples.swift in Sources */,
 				9053055B245F7C23006C054D /* Utils.swift in Sources */,
