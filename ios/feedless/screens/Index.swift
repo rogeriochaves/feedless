@@ -46,7 +46,7 @@ struct Index: View {
     let login = Login()
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if (context.ssbKey != nil) {
                 mainScreen
                     .onAppear(perform: {
@@ -61,6 +61,7 @@ struct Index: View {
             }
             if (context.status != .ready) {
                 Divider()
+                .padding(.vertical, 10)
                 HStack {
                     Text(statusToString(status: context.status))
                     if ((context.status == .indexing || context.status == .syncing) && context.indexing.target > 0) {

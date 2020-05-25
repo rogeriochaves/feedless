@@ -15,6 +15,10 @@ struct SearchScreen : View {
     @State private var query = ""
     @State private var showCancelButton: Bool = false
 
+    init() {
+        UITableView.appearance().tableHeaderView = UIView()
+    }
+
     func peopleResults(_ results : [PeopleResult]) -> some View {
         return Section {
             Text("People").font(.headline)
@@ -53,30 +57,28 @@ struct SearchScreen : View {
         }
     }
 
-    func resultsLists() -> some View {
+    var resultsLists : some View {
         switch search.results {
         case .notAsked:
             return AnyView(
-                Form {
-                    EmptyView()
-                }
+                EmptyView()
             )
         case .loading:
             return AnyView(
-                Form {
+                Section {
                     Text("Loading...")
                 }
             )
         case let .success(results):
             return AnyView(
-                Form {
+                Group {
                     peopleResults(results.people)
                     communitiesResults(results.communities)
                 }
             )
         case let .error(message):
             return AnyView(
-                Form {
+                Section {
                     Text(message)
                 }
             )
@@ -115,24 +117,28 @@ struct SearchScreen : View {
                 .foregroundColor(Color(.systemBlue))
             }
         }
-        .padding(.horizontal)
-        .navigationBarHidden(showCancelButton)
     }
 
     var body: some View {
         VStack {
-            searchButton
-            resultsLists()
+            List {
+                searchButton
+                resultsLists
+            }
         }
         .navigationBarTitle(Text("Search"))
+        .navigationBarHidden(showCancelButton)
     }
 }
 
 struct SearchScreen_Previews: PreviewProvider {
     static var previews: some View {
-        SearchScreen()
-            .environmentObject(Samples.context())
-            .environmentObject(Samples.search())
-            .environmentObject(ImageLoader())
+        NavigationView {
+            SearchScreen()
+                .environmentObject(Samples.context())
+                .environmentObject(Samples.search())
+//                .environmentObject(Search())
+                .environmentObject(ImageLoader())
+        }
     }
 }

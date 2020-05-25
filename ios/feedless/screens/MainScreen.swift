@@ -32,7 +32,7 @@ struct MainScreen: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
+        Group {
             NavigationMenu {
                 router.currentRoute.1
             }
