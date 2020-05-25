@@ -66,4 +66,18 @@ class Samples {
 
         return try! JSONDecoder().decode(CommunityDetails.self, from: data)
     }
+
+    static func search() -> Search {
+        let search = Search()
+        search.results = .success(searchResults())
+
+        return search
+    }
+
+    static func searchResults() -> SearchResults {
+        let path = Bundle.main.path(forResource: "search", ofType: "json")!
+        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+
+        return try! JSONDecoder().decode(SearchResults.self, from: data)
+    }
 }

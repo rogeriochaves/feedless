@@ -52,6 +52,7 @@ struct SSBKey : Decodable {
 }
 
 enum ServerData<T> {
+    case notAsked
     case loading
     case success(T)
     case error(String)

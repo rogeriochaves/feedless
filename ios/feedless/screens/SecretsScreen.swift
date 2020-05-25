@@ -59,6 +59,8 @@ struct SecretsScreen : View {
 
     func secretsFetchingState() -> some View {
         switch secrets.secrets {
+        case .notAsked:
+            return AnyView(EmptyView())
         case .loading:
             return AnyView(Text("Loading..."))
         case let .success(secrets):

@@ -15,6 +15,8 @@ struct Debug: View {
 
     func entriesList() -> some View {
         switch entries.entries {
+        case .notAsked:
+            return AnyView(EmptyView())
         case .loading:
             return AnyView(Text("Loading..."))
         case let .success(debug):

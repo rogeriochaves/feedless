@@ -98,6 +98,8 @@ struct ProfileScreen : View {
     func profileResult() -> some View {
         if let id = self.getId(), let profile = profiles.profiles[id] {
             switch profile {
+            case .notAsked:
+                return AnyView(EmptyView())
             case .loading:
                 return AnyView(Text("Loading...")
                     .navigationBarTitle("Profile", displayMode: .inline))

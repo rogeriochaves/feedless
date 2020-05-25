@@ -45,6 +45,7 @@ struct CommunitiesTopic : View {
                 Spacer()
                 PrimaryButton(text: "Publish", action: {
                     self.communities.replyToTopic(context: self.context, profiles: self.profiles, name: self.name, topicKey: self.topicKey, reply: self.reply)
+                    self.reply = ""
                 })
             }
         }
@@ -72,6 +73,8 @@ struct CommunitiesTopic : View {
     func topicReplies() -> some View {
         if let community = communities.communities[self.name] {
             switch community {
+            case .notAsked:
+                return AnyView(EmptyView())
             case .loading:
                 return AnyView(Text("Loading..."))
             case let .success(community):

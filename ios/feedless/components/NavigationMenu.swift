@@ -12,6 +12,7 @@ struct NavigationMenu<C: View> : View {
     private let childView: C
 
     @EnvironmentObject var context : Context
+    @EnvironmentObject var router : Router
     @State private var menuOpen = false
 
     init(_ childView: () -> (C)) {
@@ -34,6 +35,10 @@ struct NavigationMenu<C: View> : View {
                                 .cancel { self.menuOpen = false },
                                 .default(Text("Edit Profile")),
                                 .default(Text("Feedback")),
+                                .default(Text("Debug")) {
+                                    self.router.changeRoute(to: self.router.debugScreen)
+                                    self.menuOpen = false
+                                },
                                 .destructive(Text("Logout")) {
                                     self.context.logout()
                                 }

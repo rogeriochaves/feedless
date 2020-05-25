@@ -153,3 +153,13 @@ final class KeyboardResponder: ObservableObject {
         currentHeight = 0
     }
 }
+
+// From https://stackoverflow.com/a/58473985/996404
+extension UIApplication {
+    func endEditing(_ force: Bool) {
+        self.windows
+            .filter{$0.isKeyWindow}
+            .first?
+            .endEditing(force)
+    }
+}

@@ -283,6 +283,20 @@ router.post("/communities/:name/:key(*)/publish", async (req, res) => {
   res.json({ result: "ok" });
 });
 
+router.get("/search", async (req, res) => {
+  const query = req.query.query;
+
+  let results = {
+    people: [],
+    communities: [],
+  };
+  if (query.length >= 3) {
+    results = await queries.search(query);
+  }
+
+  res.json(results);
+});
+
 router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssb.client())(req, res);
 });

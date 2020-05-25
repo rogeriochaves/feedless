@@ -34,6 +34,8 @@ struct FriendsScreen : View {
     func friendsLists() -> some View {
         if let ssbKey = context.ssbKey, let profile = profiles.profiles[ssbKey.id] {
             switch profile {
+            case .notAsked:
+                return AnyView(EmptyView())
             case .loading:
                 return AnyView(Text("Loading..."))
             case let .success(profile):

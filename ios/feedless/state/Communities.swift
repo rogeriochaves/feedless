@@ -71,7 +71,7 @@ class Communities: ObservableObject {
                         content: Post(text: reply)
                     )
                 )
-                community.topics[topicIndex].value.content.replies.insert(newPost, at: 0)
+                community.topics[topicIndex].value.content.replies.append(newPost)
                 self.communities[name] = .success(community)
             }
         }

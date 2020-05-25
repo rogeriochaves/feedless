@@ -22,6 +22,8 @@ struct CommunitiesShow : View {
     func communitiesList() -> some View {
         if let community = communities.communities[self.name] {
             switch community {
+            case .notAsked:
+                return AnyView(EmptyView())
             case .loading:
                 return AnyView(Text("Loading..."))
             case let .success(community):

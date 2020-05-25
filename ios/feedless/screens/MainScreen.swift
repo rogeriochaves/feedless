@@ -10,61 +10,41 @@ import SwiftUI
 
 struct MainScreen: View {
     @EnvironmentObject var context : Context
+    @EnvironmentObject var router : Router
     @State private var selection = 0
 
-    func menuButton(index: Int, emoji: String, text: String) -> some View {
-        return Button(action: { self.selection = index }) {
+    func menuButton(route: (String, AnyView), emoji: String, text: String) -> some View {
+        let isSelected = router.currentRoute.0 == route.0
+        return Button(action: {
+            self.router.changeRoute(to: route)
+        }) {
             VStack {
                 Image(uiImage: emoji.image()!)
-                    .renderingMode(selection == index ? .original : .template)
+                    .renderingMode(isSelected ? .original : .template)
                 Text(text)
                     .font(.system(size: 13))
                     .fixedSize(horizontal: true, vertical: false)
             }
             .frame(maxWidth: .infinity)
             .background(Color.white)
-            .foregroundColor(selection == index ? Styles.darkGray : Styles.gray)
+            .foregroundColor(isSelected ? Styles.darkGray : Styles.gray)
         }
     }
 
-    let profileScreen: some View = ProfileScreen(id: nil)
-    let friendsScreen: some View = FriendsScreen()
-    let secretsScreen: some View = SecretsScreen()
-    let communitiesList: some View = CommunitiesList()
-    let debugScreen: some View = Debug().navigationBarTitle(Text("Debug"))
-
     var body: some View {
         VStack(spacing: 0) {
-            if (selection == 0) {
-                NavigationMenu {
-                    profileScreen
-                }
-            } else if (selection == 1) {
-                NavigationMenu {
-                    secretsScreen
-                }
-            } else if (selection == 2) {
-                NavigationMenu {
-                    friendsScreen
-                }
-            } else if (selection == 3) {
-                NavigationMenu {
-                    communitiesList
-                }
-            } else if (selection == 4) {
-                NavigationMenu {
-                    debugScreen
-                }
+            NavigationMenu {
+                router.currentRoute.1
             }
 
             Divider()
              .padding(.bottom, 10)
             HStack(spacing: 0) {
-                menuButton(index: 0, emoji: "🙂", text: "Profile")
-                menuButton(index: 1, emoji: "🤫", text: "Secrets")
-                menuButton(index: 2, emoji: "👨‍👧‍👦", text: "Friends")
-                menuButton(index: 3, emoji: "🌆", text: "Communities")
-                menuButton(index: 4, emoji: "🛠", text: "Debug")
+                menuButton(route: router.profileScreen, emoji: "🙂", text: "Profile")
+                menuButton(route: router.secretsScreen, emoji: "🤫", text: "Secrets")
+                menuButton(route: router.friendsScreen, emoji: "👨‍👧‍👦", text: "Friends")
+                menuButton(route: router.communitiesList, emoji: "🌆", text: "Communities")
+                menuButton(route: router.searchScreen, emoji: "🔎", text: "Search")
             }
         }
     }

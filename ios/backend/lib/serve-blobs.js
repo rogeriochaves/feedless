@@ -8,6 +8,8 @@ const debug = require("debug")("server-blobs");
 
 const serveBlobs = (sbot) => {
   return (req, res) => {
+    if (!sbot) return respond(res, 404, "File not found");
+
     const parsed = URL.parse(req.url, true);
     const hash = decodeURIComponent(parsed.pathname.replace("/blob/", ""));
     debug("fetching", hash);
