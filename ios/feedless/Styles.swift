@@ -29,4 +29,40 @@ class Styles {
         green: 230 / 255,
         blue: 230 / 255
     )
+    static var uiBlue = UIColor(
+        red: 127 / 255,
+        green: 230 / 255,
+        blue: 230 / 255,
+        alpha: 1
+    )
+    static var uiDarkBlue = UIColor(
+        red: 0 / 255,
+        green: 68 / 255,
+        blue: 68 / 255,
+        alpha: 1
+    )
+    static var uiYellow = UIColor(
+        red: 255 / 255,
+        green: 238 / 255,
+        blue: 119 / 255,
+        alpha: 1
+    )
+    static var uiDarkYellow = UIColor(
+        red: 102 / 255,
+        green: 85 / 255,
+        blue: 0 / 255,
+        alpha: 1
+    )
+    static var uiPink = UIColor(
+        red: 255 / 255,
+        green: 187 / 255,
+        blue: 187 / 255,
+        alpha: 1
+    )
+    static var uiDarkPink = UIColor(
+        red: 102 / 255,
+        green: 0 / 255,
+        blue: 0 / 255,
+        alpha: 1
+    )
 }

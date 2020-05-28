@@ -10,6 +10,7 @@ import SwiftUI
 
 struct Debug: View {
     @EnvironmentObject var context : Context
+    @EnvironmentObject var router : Router
     @EnvironmentObject var entries : Entries
     @State private var selection = 0
 
@@ -34,6 +35,7 @@ struct Debug: View {
         entriesList()
         .onAppear() {
             self.entries.load(context: self.context)
+            self.router.changeNavigationBarColorWithDelay(route: .debug)
         }
     }
 }

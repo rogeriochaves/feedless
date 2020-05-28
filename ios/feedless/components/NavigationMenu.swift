@@ -28,6 +28,7 @@ struct NavigationMenu<C: View> : View {
                     }) {
                         Image(systemName: "line.horizontal.3")
                             .imageScale(.large)
+                            .foregroundColor(Color(self.router.navigationBarTextColor))
                     }.actionSheet(isPresented: $menuOpen) {
                         ActionSheet(
                             title: Text("Actions"),
@@ -46,6 +47,24 @@ struct NavigationMenu<C: View> : View {
                         )
                     }
                 ))
+                .background(NavigationConfigurator { nc, ni in
+                    let navBarAppearance = UINavigationBarAppearance()
+                    navBarAppearance.titleTextAttributes = [.foregroundColor: self.router.navigationBarTextColor]
+                    navBarAppearance.largeTitleTextAttributes = [.foregroundColor: self.router.navigationBarTextColor]
+                    navBarAppearance.backgroundColor = self.router.navigationBarBackgroundColor
+//                    navBarAppearance.backButtonAppearance = [.foregroundColor: self.router.navigationBarTextColor]
+
+                    nc.navigationBar.standardAppearance = navBarAppearance
+                    nc.navigationBar.scrollEdgeAppearance = navBarAppearance
+                    nc.navigationBar.compactAppearance = navBarAppearance
+                    nc.navigationBar.barTintColor = self.router.navigationBarBackgroundColor
+
+                    // ni.largeTitleDisplayMode = .never
+
+//                    nc.navigationBar.backgroundColor = self.router.navigationBarBackgroundColor
+//                    nc.navigationBar.barTintColor = self.router.navigationBarBackgroundColor
+//                    nc.navigationBar.titleTextAttributes = [.foregroundColor : self.router.navigationBarTextColor]
+                })
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

@@ -13,6 +13,7 @@ struct ProfileScreen : View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var imageLoader : ImageLoader
+    @EnvironmentObject var router : Router
     @State private var selection = 0
     @State private var post = ""
     @State private var isPostFocused = false
@@ -123,6 +124,7 @@ struct ProfileScreen : View {
                 if let id = self.id {
                     self.profiles.load(context: self.context, id: id)
                 }
+                self.router.changeNavigationBarColorWithDelay(route: .profile)
             }
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SearchScreen : View {
     @EnvironmentObject var context : Context
+    @EnvironmentObject var router : Router
     @EnvironmentObject var search : Search
     @EnvironmentObject var imageLoader : ImageLoader
     @State private var query = ""
@@ -128,6 +129,9 @@ struct SearchScreen : View {
         }
         .navigationBarTitle(Text("Search"))
         .navigationBarHidden(showCancelButton)
+        .onAppear {
+            self.router.changeNavigationBarColorWithDelay(route: .search)
+        }
     }
 }
 

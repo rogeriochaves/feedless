@@ -12,6 +12,7 @@ struct SecretsScreen : View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var secrets : Secrets
     @EnvironmentObject var imageLoader : ImageLoader
+    @EnvironmentObject var router : Router
     @State private var modal : SecretMessagesModal? = nil
 
     private var isModalOpen: Binding<Bool> { Binding (
@@ -82,13 +83,16 @@ struct SecretsScreen : View {
             .navigationBarTitle(Text("Secrets"))
             .onAppear() {
                 self.secrets.load(context: self.context)
+                self.router.changeNavigationBarColorWithDelay(route: .secrets)
             }
     }
 }
 
 struct SecretsScreen_Previews: PreviewProvider {
     static var previews: some View {
-        SecretsScreen()
+        NavigationMenu {
+            SecretsScreen()
+        }
             .environmentObject(Samples.context())
             .environmentObject(Samples.secrets())
             .environmentObject(ImageLoader())

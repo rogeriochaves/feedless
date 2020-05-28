@@ -12,7 +12,14 @@ struct FriendsScreen : View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var imageLoader : ImageLoader
+    @EnvironmentObject var router : Router
     @State private var selection = 0
+    @State private var showFriend : [String:Bool] = [:]
+
+    func isLinkActive(id : String) -> Binding<Bool> { Binding (
+        get: { self.showFriend[id, default: false] },
+        set: { _ in }
+    )}
 
     func friendsList(_ title: String, _ friends : [Profile]) -> some View {
         return Section {
@@ -31,7 +38,7 @@ struct FriendsScreen : View {
         }
     }
 
-    func friendsLists() -> some View {
+    var friendsLists : some View {
         if let ssbKey = context.ssbKey, let profile = profiles.profiles[ssbKey.id] {
             switch profile {
             case .notAsked:
@@ -61,8 +68,11 @@ struct FriendsScreen : View {
     }
 
     var body: some View {
-        friendsLists()
-            .navigationBarTitle(Text("Friends"))
+        friendsLists
+            .navigationBarTitle(Text("Friends"), displayMode: .automatic)
+            .onAppear {
+                self.router.changeNavigationBarColorWithDelay(route: .friends)
+            }
     }
 }
 

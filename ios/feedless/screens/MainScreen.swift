@@ -13,7 +13,7 @@ struct MainScreen: View {
     @EnvironmentObject var router : Router
     @State private var selection = 0
 
-    func menuButton(route: (String, AnyView), emoji: String, text: String) -> some View {
+    func menuButton(route: (Route, AnyView), emoji: String, text: String) -> some View {
         let isSelected = router.currentRoute.0 == route.0
         return Button(action: {
             self.router.changeRoute(to: route)
@@ -36,6 +36,7 @@ struct MainScreen: View {
             NavigationMenu {
                 router.currentRoute.1
             }
+            .id(router.currentRoute.0)
 
             Divider()
              .padding(.bottom, 10)
