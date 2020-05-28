@@ -13,6 +13,7 @@ struct CommunitiesTopic : View {
     @EnvironmentObject var communities : Communities
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var imageLoader : ImageLoader
+    @EnvironmentObject var router : Router
     @State private var selection = 0
     private var name : String
     private var topicKey : String
@@ -109,6 +110,7 @@ struct CommunitiesTopic : View {
                 if self.communities.communities[self.name] == nil {
                     self.communities.load(context: self.context, name: self.name)
                 }
+                self.router.changeNavigationBarColorWithDelay(route: .communities)
             }
     }
 }

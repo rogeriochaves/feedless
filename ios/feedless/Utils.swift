@@ -112,4 +112,10 @@ class Utils {
         UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
         UINavigationBar.appearance().tintColor = .white
     }
+
+    static func debug(_ str: String) {
+        if ProcessInfo.processInfo.environment["DEBUG_SWIFT"] != nil {
+            print(str)
+        }
+    }
 }

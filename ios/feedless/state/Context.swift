@@ -70,7 +70,7 @@ class Context: ObservableObject {
                         }
                     }
                 } catch {
-                    print("Error loading context")
+                    Utils.debug("Error loading context")
                 }
             }
         }.resume()

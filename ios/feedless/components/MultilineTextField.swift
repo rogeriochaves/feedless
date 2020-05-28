@@ -140,13 +140,9 @@ struct MultilineTextField: View {
 #if DEBUG
 struct MultilineTextField_Previews: PreviewProvider {
     static var test:String = ""//some very very very long description string to be initially wider than screen"
-    static var testBinding = Binding<String>(get: { test }, set: {
-//        print("New value: \($0)")
-        test = $0 } )
+    static var testBinding = Binding<String>(get: { test }, set: { test = $0 } )
     static var isResponder:Bool = false
-    static var bindingIsResponder = Binding<Bool>(get: { isResponder }, set: {
-    //        print("New value: \($0)")
-            isResponder = $0 } )
+    static var bindingIsResponder = Binding<Bool>(get: { isResponder }, set: { isResponder = $0 } )
 
     static var previews: some View {
         VStack(alignment: .leading) {

@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let bundlePath = Bundle.main.bundlePath
-        print("documentsPath", documentsPath)
+        Utils.debug("documentsPath \(documentsPath)")
         NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath])
     }
 

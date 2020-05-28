@@ -37,6 +37,8 @@ class Router: ObservableObject {
     func changeRoute(to: (Route, AnyView)) {
         DispatchQueue.main.async {
             self.currentRoute = to
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             self.changeNavigationBarColor(route: to.0)
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
@@ -85,6 +87,7 @@ class Router: ObservableObject {
             navbar.standardAppearance = navBarAppearance
             navbar.scrollEdgeAppearance = navBarAppearance
             navbar.compactAppearance = navBarAppearance
+            navbar.tintColor = self.navigationBarTextColor
             navbar.barTintColor = self.navigationBarBackgroundColor
         }
     }

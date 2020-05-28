@@ -33,6 +33,7 @@ struct Debug: View {
 
     var body: some View {
         entriesList()
+        .navigationBarTitle(Text("Debug"))
         .onAppear() {
             self.entries.load(context: self.context)
             self.router.changeNavigationBarColorWithDelay(route: .debug)

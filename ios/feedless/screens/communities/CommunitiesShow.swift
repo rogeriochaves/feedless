@@ -12,6 +12,7 @@ struct CommunitiesShow : View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var communities : Communities
     @EnvironmentObject var imageLoader : ImageLoader
+    @EnvironmentObject var router : Router
     @State private var selection = 0
     private var name : String
 
@@ -53,6 +54,7 @@ struct CommunitiesShow : View {
         communitiesList()
             .onAppear() {
                 self.communities.load(context: self.context, name: self.name)
+                self.router.changeNavigationBarColorWithDelay(route: .communities)
             }
     }
 }

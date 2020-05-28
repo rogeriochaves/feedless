@@ -12,6 +12,7 @@ struct CommunitiesList : View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var imageLoader : ImageLoader
+    @EnvironmentObject var router : Router
     @State private var selection = 0
 
     func communitiesList() -> some View {
@@ -44,6 +45,9 @@ struct CommunitiesList : View {
     var body: some View {
         communitiesList()
             .navigationBarTitle(Text("Communities"))
+            .onAppear {
+                self.router.changeNavigationBarColorWithDelay(route: .communities)
+            }
     }
 }
 

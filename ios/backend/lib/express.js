@@ -13,8 +13,6 @@ app.use(bodyParser.json());
 const router = asyncRouter(app);
 
 router.get("/context", { public: true }, (req, res) => {
-  console.log("sent status", req.context.status);
-
   const { current, target } = ssb.getIndexingState();
 
   res.json({

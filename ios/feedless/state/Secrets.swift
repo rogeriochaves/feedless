@@ -55,7 +55,7 @@ class Secrets: ObservableObject {
         }
 
         self.deletedKeys.append(contentsOf: keys)
-        print("going to delete", keys)
+        Utils.debug("going to delete \(keys)")
         DispatchQueue.main.async {
             self.secrets = self.filterDeleted(secrets: self.secrets)
         }

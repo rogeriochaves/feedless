@@ -24,11 +24,6 @@ const serveBlobs = (sbot) => {
         );
       }
 
-      // serve
-      const ONE_YEAR = 60 * 60 * 24 * 365;
-      res.setHeader("Cache-Control", `public, max-age=${ONE_YEAR}`);
-      res.setHeader("Content-Security-Policy", BlobCSP());
-
       respondSource(res, sbot.blobs.get(hash), false);
     });
   };
@@ -73,6 +68,10 @@ const serveBlobs = (sbot) => {
       pull(
         source,
         ident(function (type) {
+          const ONE_YEAR = 60 * 60 * 24 * 365;
+          res.setHeader("Cache-Control", `public, max-age=${ONE_YEAR}`);
+          res.setHeader("Content-Security-Policy", BlobCSP());
+
           if (type) res.writeHead(200, { "Content-Type": mime.lookup(type) });
         }),
         toPull.sink(res)

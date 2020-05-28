@@ -27,7 +27,7 @@ func dataPost<T: Decodable>(path: String, parameters: [String: Any], type: T.Typ
     do {
         request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
     } catch let error {
-        print(error.localizedDescription)
+        Utils.debug(error.localizedDescription)
     }
 
     dataTask(request, type, context, completionHandler)
@@ -52,11 +52,11 @@ private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ con
             do {
                 try decode(rawData)
             } catch {
-                print("\(identifier): Error loading posts \(error)")
+                Utils.debug("\(identifier): Error loading posts \(error)")
                 completionHandler(.error("\(error)"))
             }
         } else {
-            print("\(identifier): No data")
+            Utils.debug("\(identifier): No data")
             completionHandler(.error("No data"))
         }
     }
@@ -65,28 +65,28 @@ private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ con
         (response) in
 
         if let rawData = response?.data {
-            print("\(identifier): Cache hit");
+            Utils.debug("\(identifier): Cache hit");
             do {
                 try decode(rawData)
             } catch {
-                print("\(identifier): Error parsing cache");
+                Utils.debug("\(identifier): Error parsing cache");
             }
         } else {
-            print("\(identifier): Cache miss");
+            Utils.debug("\(identifier): Cache miss");
         }
 
         if context.status == .initializing || context.status == .indexing || context.indexing.current < context.indexing.target {
             if (!fetchingScheduled.contains(identifier)) {
                 fetchingScheduled.insert(identifier)
 
-                print("\(identifier): Server still indexing, postponing fetch");
+                Utils.debug("\(identifier): Server still indexing, postponing fetch");
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                     fetchingScheduled.remove(identifier)
                     dataTask(request, type, context, completionHandler)
                 }
             }
         } else {
-            print("\(identifier): Going to server");
+            Utils.debug("\(identifier): Going to server");
             task.resume();
         }
     }
