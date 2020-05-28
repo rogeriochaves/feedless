@@ -22,9 +22,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
+        let router = Router()
         let contentView = Index()
             .environmentObject(Context(ssbKey: nil, status: .initializing))
-            .environmentObject(Router())
+            .environmentObject(router)
             .environmentObject(Profiles())
             .environmentObject(ImageLoader())
             .environmentObject(Entries())
@@ -43,6 +44,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             tapGesture.requiresExclusiveTouchType = false
             tapGesture.cancelsTouchesInView = false
             window.addGestureRecognizer(tapGesture)
+
+            router.root = window.rootViewController
         }
     }
 

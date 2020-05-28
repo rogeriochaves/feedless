@@ -70,22 +70,3 @@ extension UIApplication {
             .endEditing(force)
     }
 }
-
-// From https://stackoverflow.com/questions/56505528/swiftui-update-navigation-bar-title-color
-struct NavigationConfigurator: UIViewControllerRepresentable {
-    @EnvironmentObject var router : Router
-
-    var configure: (UINavigationController, UINavigationItem) -> Void = { _,_  in }
-
-    func makeUIViewController(context: UIViewControllerRepresentableContext<NavigationConfigurator>) -> UIViewController {
-        let controller = UIViewController()
-        controller.navigationItem.largeTitleDisplayMode = .automatic
-        return controller
-    }
-    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavigationConfigurator>) {
-        if let nc = uiViewController.navigationController {
-            self.configure(nc, uiViewController.navigationItem)
-        }
-    }
-
-}
