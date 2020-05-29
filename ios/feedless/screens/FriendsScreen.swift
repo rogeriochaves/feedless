@@ -68,10 +68,12 @@ struct FriendsScreen : View {
     }
 
     var body: some View {
-        friendsLists
+        UITableView.appearance().backgroundColor = Styles.uiPink
+
+        return friendsLists
             .navigationBarTitle(Text("Friends"), displayMode: .automatic)
             .onAppear {
-                self.router.changeNavigationBarColorWithDelay(route: .friends)
+                self.router.updateNavigationBarColor(route: .friends)
             }
     }
 }

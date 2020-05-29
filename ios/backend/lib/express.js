@@ -103,11 +103,18 @@ router.get("/debug", { public: true }, async (req, res) => {
 router.get("/profile/:id(*)", {}, async (req, res) => {
   const id = req.params.id;
 
-  const [profile, posts, friends, communities] = await Promise.all([
+  const [
+    profile,
+    posts,
+    friends,
+    communities,
+    friendshipStatus,
+  ] = await Promise.all([
     queries.getProfile(id),
     queries.getPosts({ id }),
     queries.getFriends({ id }),
     queries.getProfileCommunities(req.context.key.id),
+    queries.getFriendshipStatus(req.context.key.id, id),
   ]);
 
   res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
@@ -116,6 +123,7 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
     posts,
     friends,
     communities,
+    friendshipStatus,
   });
 });
 
@@ -293,6 +301,44 @@ router.get("/search", async (req, res) => {
   }
 
   res.json(results);
+});
+
+router.post("/profile/:id(*)/add_friend", async (req, res) => {
+  const id = req.params.id;
+  if (id == req.context.key.id) {
+    throw "cannot befriend yourself";
+  }
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "contact",
+      contact: id,
+      following: true,
+    },
+  });
+
+  res.json({ result: "ok" });
+});
+
+router.post("/profile/:id(*)/reject_friend", async (req, res) => {
+  const id = req.params.id;
+  if (id == req.context.key.id) {
+    throw "cannot reject yourself";
+  }
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "contact",
+      contact: id,
+      following: false,
+    },
+  });
+
+  res.json({ result: "ok" });
 });
 
 router.get("/blob/*", { public: true }, (req, res) => {

@@ -118,4 +118,20 @@ class Utils {
             print(str)
         }
     }
+
+    static func clearCache(_ path: String) {
+        let url = URL(string: "http://127.0.0.1:3000\(path)")!
+        let task = session.dataTask(with: url)
+        URLCache.shared.removeCachedResponse(for: task)
+        task.suspend()
+    }
+
+    static let session = getURLSession()
+    private static func getURLSession() -> URLSession {
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        let session = URLSession(configuration: config)
+
+        return session
+    }
 }

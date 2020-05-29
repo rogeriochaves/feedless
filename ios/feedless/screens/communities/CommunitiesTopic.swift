@@ -105,12 +105,14 @@ struct CommunitiesTopic : View {
     }
 
     var body: some View {
-        topicReplies()
+        UITableView.appearance().backgroundColor = Styles.uiPink
+
+        return topicReplies()
             .onAppear() {
                 if self.communities.communities[self.name] == nil {
                     self.communities.load(context: self.context, name: self.name)
                 }
-                self.router.changeNavigationBarColorWithDelay(route: .communities)
+                self.router.updateNavigationBarColor(route: .communities)
             }
     }
 }

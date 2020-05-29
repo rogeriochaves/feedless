@@ -35,28 +35,16 @@ class Router: ObservableObject {
     }
 
     func changeRoute(to: (Route, AnyView)) {
+        self.changeNavigationBarColor(route: to.0)
         DispatchQueue.main.async {
             self.currentRoute = to
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            self.changeNavigationBarColor(route: to.0)
+            DispatchQueue.main.async {
+                self.updateNavbar()
+            }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
-            self.changeNavigationBarColor(route: to.0)
+            self.updateNavbar()
         }
-    }
-
-    // From https://stackoverflow.com/questions/56505528/swiftui-update-navigation-bar-title-color
-    func findNavbar(_ root: UIView?) -> UINavigationBar? {
-        guard root != nil else { return nil }
-
-        var navbar: UINavigationBar? = nil
-        for v in root!.subviews {
-            if type(of: v) == UINavigationBar.self { navbar = (v as! UINavigationBar); break }
-            else { navbar = findNavbar(v); if navbar != nil { break } }
-        }
-
-        return navbar
     }
 
     func changeNavigationBarColor(route: Route) {
@@ -77,7 +65,23 @@ class Router: ObservableObject {
             self.navigationBarBackgroundColor = UIColor.white
             self.navigationBarTextColor = UIColor.black
         }
+    }
 
+    // From https://stackoverflow.com/questions/56505528/swiftui-update-navigation-bar-title-color
+    func findNavbar(_ root: UIView?) -> UINavigationBar? {
+        guard root != nil else { return nil }
+
+        var navbar: UINavigationBar? = nil
+        for v in root!.subviews {
+            if type(of: v) == UINavigationBar.self { navbar = (v as! UINavigationBar); break }
+            else { navbar = findNavbar(v); if navbar != nil { break } }
+        }
+
+        return navbar
+    }
+
+
+    func updateNavbar() {
         if let navbar = self.findNavbar(self.root?.viewIfLoaded) {
             let navBarAppearance = UINavigationBarAppearance()
             navBarAppearance.titleTextAttributes = [.foregroundColor: self.navigationBarTextColor]
@@ -92,9 +96,8 @@ class Router: ObservableObject {
         }
     }
 
-    func changeNavigationBarColorWithDelay(route: Route) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.changeNavigationBarColor(route: route)
-        }
+    func updateNavigationBarColor(route: Route) {
+        self.changeNavigationBarColor(route: route)
+        self.updateNavbar()
     }
 }

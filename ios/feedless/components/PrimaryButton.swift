@@ -11,24 +11,29 @@ import SwiftUI
 struct PrimaryButton : View {
     private let action: () -> Void
     private let text: String
+    private let color: Color
 
     @EnvironmentObject var context : Context
     @State private var menuOpen = false
 
-    init(text: String, action: @escaping () -> Void) {
+    init(text: String, color: Color = Styles.primaryBlue, action: @escaping () -> Void) {
         self.action = action
         self.text = text
+        self.color = color
     }
 
     var body: some View {
         Button(action: action) {
-            Text("Publish")
+            Text(self.text)
         }
-            .padding(.vertical, 10)
-            .padding(.horizontal, 15)
-            .background(Styles.primaryBlue)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(self.color)
             .foregroundColor(Color.black)
-            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(Styles.darkGray, lineWidth: 1)
+            )
     }
 }
 

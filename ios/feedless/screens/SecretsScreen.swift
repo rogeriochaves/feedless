@@ -79,11 +79,13 @@ struct SecretsScreen : View {
     }
 
     var body: some View {
-        secretsFetchingState()
+        UITableView.appearance().backgroundColor = Styles.uiYellow
+
+        return secretsFetchingState()
             .navigationBarTitle(Text("Secrets"))
             .onAppear() {
                 self.secrets.load(context: self.context)
-                self.router.changeNavigationBarColorWithDelay(route: .secrets)
+                self.router.updateNavigationBarColor(route: .secrets)
             }
     }
 }

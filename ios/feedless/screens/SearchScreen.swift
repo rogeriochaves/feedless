@@ -121,7 +121,9 @@ struct SearchScreen : View {
     }
 
     var body: some View {
-        VStack {
+        UITableView.appearance().backgroundColor = UIColor.white
+
+        return VStack {
             List {
                 searchButton
                 resultsLists
@@ -130,7 +132,7 @@ struct SearchScreen : View {
         .navigationBarTitle(Text("Search"))
         .navigationBarHidden(showCancelButton)
         .onAppear {
-            self.router.changeNavigationBarColorWithDelay(route: .search)
+            self.router.updateNavigationBarColor(route: .search)
         }
     }
 }

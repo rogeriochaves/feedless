@@ -51,10 +51,12 @@ struct CommunitiesShow : View {
     }
 
     var body: some View {
-        communitiesList()
+        UITableView.appearance().backgroundColor = Styles.uiPink
+
+        return communitiesList()
             .onAppear() {
                 self.communities.load(context: self.context, name: self.name)
-                self.router.changeNavigationBarColorWithDelay(route: .communities)
+                self.router.updateNavigationBarColor(route: .communities)
             }
     }
 }

@@ -36,9 +36,7 @@ func dataPost<T: Decodable>(path: String, parameters: [String: Any], type: T.Typ
 private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ context: Context, _ completionHandler: @escaping (ServerData<T>) -> Void) {
     let identifier = "\(request.httpMethod ?? "GET") \(request.url?.path ?? "")"
 
-    let config = URLSessionConfiguration.default
-    config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-    let session = URLSession(configuration: config)
+    let session = Utils.session
 
     func decode(_ rawData: Data) throws {
         let decodedData = try JSONDecoder().decode(type, from: rawData)
@@ -87,7 +85,7 @@ private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ con
             }
         } else {
             Utils.debug("\(identifier): Going to server");
-            task.resume();
+            task.resume()
         }
     }
 }

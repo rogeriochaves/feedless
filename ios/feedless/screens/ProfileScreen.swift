@@ -69,9 +69,49 @@ struct ProfileScreen : View {
         .padding(.horizontal, 10)
     }
 
+    func actionButtons(_ profile: FullProfile) -> some View {
+        Group {
+            if profile.friendshipStatus == "request_received" {
+                Text((profile.profile.name ?? "unknown") + " sent you a friendship request")
+                    .font(.subheadline)
+            } else if profile.friendshipStatus == "request_rejected" {
+                Text("You rejected " + (profile.profile.name ?? "unknown") + " friendship request")
+                    .font(.subheadline)
+            }
+
+            HStack {
+                if profile.friendshipStatus == "no_relation" {
+                    PrimaryButton(text: "Add as friend") {
+                        self.profiles.addFriend(context: self.context, id: profile.profile.id)
+                    }
+                } else if profile.friendshipStatus == "friends" {
+                    PrimaryButton(text: "Undo Friendship", color: Styles.gray) {
+                        self.profiles.rejectFriend(context: self.context, id: profile.profile.id)
+                    }
+                } else if profile.friendshipStatus == "request_sent" {
+                    PrimaryButton(text: "Request sent  ✕", color: Styles.gray) {
+                        self.profiles.rejectFriend(context: self.context, id: profile.profile.id)
+                    }
+                } else if profile.friendshipStatus == "request_received" {
+                    PrimaryButton(text: "Accept") {
+                        self.profiles.addFriend(context: self.context, id: profile.profile.id)
+                    }
+                    PrimaryButton(text: "Reject", color: Styles.gray) {
+                        self.profiles.rejectFriend(context: self.context, id: profile.profile.id)
+                    }
+                } else if profile.friendshipStatus == "request_rejected" {
+                    PrimaryButton(text: "Add as friend") {
+                        self.profiles.addFriend(context: self.context, id: profile.profile.id)
+                    }
+                }
+            }
+        }
+        .padding(.top, 10)
+    }
+
     func profileView(_ profile: FullProfile) -> some View {
         ScrollView(.vertical) {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 5) {
                 HStack(spacing: 20) {
                     AsyncImage(url: Utils.avatarUrl(profile: profile.profile), imageLoader: self.imageLoader)
                         .aspectRatio(contentMode: .fit)
@@ -86,6 +126,10 @@ struct ProfileScreen : View {
                         Text(
                             profile.profile.description?.prefix(140).replacingOccurrences(of: "\n", with: "", options: .regularExpression) ?? ""
                         )
+
+                        if !self.isLoggedUser() {
+                            actionButtons(profile)
+                        }
                     }
                 }
                 Spacer()
@@ -124,16 +168,32 @@ struct ProfileScreen : View {
                 if let id = self.id {
                     self.profiles.load(context: self.context, id: id)
                 }
-                self.router.changeNavigationBarColorWithDelay(route: .profile)
+                self.router.updateNavigationBarColor(route: .profile)
             }
     }
 }
 
 struct Profile_Previews: PreviewProvider {
+
     static var previews: some View {
-        ProfileScreen(id: nil)
-            .environmentObject(Samples.context())
-            .environmentObject(Samples.profiles())
-            .environmentObject(ImageLoader())
+        let relations = ["no_relation", "request_received", "friends", "request_sent", "request_rejected"]
+        let profilesSamples : [(String, Profiles)] = relations.map { friedshipStatus in
+            let profiles = Samples.profiles()
+            var profile = Samples.fullProfile()
+            profile.friendshipStatus = friedshipStatus
+            profiles.profiles[profile.profile.id] = .success(profile)
+
+            return (friedshipStatus, profiles)
+        }
+
+        return Group {
+            ForEach(profilesSamples, id: \.0) { profiles in
+                ProfileScreen(id: nil)
+                    .environmentObject(Samples.context())
+                    .environmentObject(profiles.1)
+                    .environmentObject(ImageLoader())
+                    .environmentObject(Router())
+            }
+        }
     }
 }

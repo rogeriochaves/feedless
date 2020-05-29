@@ -43,10 +43,12 @@ struct CommunitiesList : View {
     }
 
     var body: some View {
-        communitiesList()
+        UITableView.appearance().backgroundColor = Styles.uiPink
+
+        return communitiesList()
             .navigationBarTitle(Text("Communities"))
             .onAppear {
-                self.router.changeNavigationBarColorWithDelay(route: .communities)
+                self.router.updateNavigationBarColor(route: .communities)
             }
     }
 }

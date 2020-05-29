@@ -17,6 +17,7 @@ struct FullProfile : Codable {
     public var posts: Posts
     public var friends: Friendslists
     public var communities: [String]
+    public var friendshipStatus: String
 }
 
 class Profiles: ObservableObject {
@@ -47,10 +48,7 @@ class Profiles: ObservableObject {
             case .success(var profile) = self.profiles[id],
             case .success(let authorProfile) = self.profiles[author]
         {
-            let url = URL(string: "http://127.0.0.1:3000/profile/\(id)")!
-            let config = URLSessionConfiguration.default
-            let session = URLSession(configuration: config)
-            URLCache.shared.removeCachedResponse(for: session.dataTask(with: url))
+            Utils.clearCache("/profile/\(id)")
 
             dataPost(path: "/profile/\(id)/publish", parameters: [ "message": message ], type: PostResult.self, context: context) {(result) in
                 self.load(context: context, id: id)
@@ -66,6 +64,48 @@ class Profiles: ObservableObject {
                     )
                 )
                 profile.posts.insert(newPost, at: 0)
+                self.profiles[id] = .success(profile)
+            }
+        }
+    }
+
+    func addFriend(context: Context, id: String) {
+        if case .success(var profile) = self.profiles[id] {
+            Utils.clearCache("/profile/\(id)")
+
+            dataPost(path: "/profile/\(id)/add_friend", parameters: [:], type: PostResult.self, context: context) {(result) in
+                self.load(context: context, id: id)
+            }
+
+            DispatchQueue.main.async {
+                if profile.friendshipStatus == "no_relation" {
+                    profile.friendshipStatus = "request_sent"
+                } else if profile.friendshipStatus == "request_received" {
+                    profile.friendshipStatus = "friends"
+                } else if profile.friendshipStatus == "request_rejected" {
+                   profile.friendshipStatus = "friends"
+                }
+                self.profiles[id] = .success(profile)
+            }
+        }
+    }
+
+    func rejectFriend(context: Context, id: String) {
+        if case .success(var profile) = self.profiles[id] {
+            Utils.clearCache("/profile/\(id)")
+
+            dataPost(path: "/profile/\(id)/reject_friend", parameters: [:], type: PostResult.self, context: context) {(result) in
+                self.load(context: context, id: id)
+            }
+
+            DispatchQueue.main.async {
+                if profile.friendshipStatus == "request_received" {
+                    profile.friendshipStatus = "request_rejected"
+                } else if profile.friendshipStatus == "friends" {
+                    profile.friendshipStatus = "request_received"
+                } else if profile.friendshipStatus == "request_sent" {
+                    profile.friendshipStatus = "no_relation"
+                }
                 self.profiles[id] = .success(profile)
             }
         }

@@ -71,9 +71,7 @@ struct Index: View {
             }
         }
         .onReceive(self.timer) { (_) in
-            if (self.context.status != .ready) {
-                self.context.fetch()
-            }
+            self.context.fetch()
         }
     }
 }
