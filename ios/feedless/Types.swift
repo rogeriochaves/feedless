@@ -34,7 +34,6 @@ struct Profile: Codable {
     public var id: String
     public var name: String?
     public var image: String?
-    public var description: String?
 }
 
 struct SSBKey : Decodable {

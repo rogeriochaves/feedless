@@ -428,10 +428,9 @@ const getProfile = async (id) => {
 
   let getKey = (key) => latestOwnerValue({ key, dest: id });
 
-  let [name, image, description] = await Promise.all([
+  let [name, image] = await Promise.all([
     getKey("name"),
     getKey("image"),
-    getKey("description"),
   ]).catch((err) => {
     console.error("Could not retrieve profile for", id, err);
   });
@@ -440,7 +439,7 @@ const getProfile = async (id) => {
     image = image.link;
   }
 
-  let profile = { id, name, image, description };
+  let profile = { id, name, image };
   profileCache[id] = profile;
 
   return profile;
@@ -702,4 +701,5 @@ module.exports = {
   autofollow,
   isMember,
   getProfileCommunities,
+  latestOwnerValue,
 };

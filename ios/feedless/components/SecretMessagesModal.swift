@@ -146,8 +146,7 @@ struct SecretMessagesModal_Previews: PreviewProvider {
                     authorProfile: Profile(
                         id: "foo",
                         name: nil,
-                        image: nil,
-                        description: nil
+                        image: nil
                     )
                 ),
             onClose: {},

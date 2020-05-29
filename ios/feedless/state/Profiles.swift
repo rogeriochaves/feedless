@@ -18,6 +18,7 @@ struct FullProfile : Codable {
     public var friends: Friendslists
     public var communities: [String]
     public var friendshipStatus: String
+    public var description: String?
 }
 
 class Profiles: ObservableObject {

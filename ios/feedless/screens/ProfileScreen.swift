@@ -124,7 +124,7 @@ struct ProfileScreen : View {
                             .bold()
 
                         Text(
-                            profile.profile.description?.prefix(140).replacingOccurrences(of: "\n", with: "", options: .regularExpression) ?? ""
+                            profile.description?.prefix(140).replacingOccurrences(of: "\n", with: "", options: .regularExpression) ?? ""
                         )
 
                         if !self.isLoggedUser() {
