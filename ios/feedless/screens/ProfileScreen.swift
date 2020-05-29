@@ -111,32 +111,47 @@ struct ProfileScreen : View {
 
     func profileView(_ profile: FullProfile) -> some View {
         ScrollView(.vertical) {
-            VStack(alignment: .leading, spacing: 5) {
-                HStack(spacing: 20) {
+            // From: https://jetrockets.pro/blog/stretchy-header-in-swiftui
+            GeometryReader { (geometry: GeometryProxy) in
+                if geometry.frame(in: .global).minY <= 0 {
                     AsyncImage(url: Utils.avatarUrl(profile: profile.profile), imageLoader: self.imageLoader)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 128, height: 128)
-                        .border(Styles.darkGray)
+                        .aspectRatio(contentMode: .fill)
+                        .offset(y: 50)
+                        .frame(width: geometry.size.width,
+                                height: geometry.size.height)
+                } else {
+                    AsyncImage(url: Utils.avatarUrl(profile: profile.profile), imageLoader: self.imageLoader)
+                        .aspectRatio(contentMode: .fill)
+                        .offset(y: -geometry.frame(in: .global).minY + 50)
+                        .frame(width: geometry.size.width,
+                                height: geometry.size.height +
+                                        geometry.frame(in: .global).minY)
+                }
+            }.frame(minHeight: 150, maxHeight: 150)
 
-                    VStack(alignment: .leading) {
-                        Text(profile.profile.name ?? "unknown")
-                            .font(.largeTitle)
-                            .bold()
+            VStack(alignment: .leading) {
+                VStack(alignment: .leading) {
+                    Text(profile.profile.name ?? "unknown")
+                        .font(.largeTitle)
+                        .bold()
 
-                        Text(
-                            profile.description?.prefix(140).replacingOccurrences(of: "\n", with: "", options: .regularExpression) ?? ""
-                        )
+                    Text(
+                        profile.description?.prefix(140).replacingOccurrences(of: "\n", with: "", options: .regularExpression) ?? ""
+                    )
 
-                        if !self.isLoggedUser() {
-                            actionButtons(profile)
-                        }
+                    if !self.isLoggedUser() {
+                        actionButtons(profile)
                     }
                 }
-                Spacer()
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+
                 self.composer(profile)
                 Divider()
                 PostsList(profile.posts)
             }
+            .frame(maxWidth: .infinity)
+            .background(Color.white)
         }
     }
 
