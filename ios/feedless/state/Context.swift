@@ -26,7 +26,6 @@ struct StatusReponse : Codable {
 
 class Context: ObservableObject {
     @Published var status:SSBStatus = .initializing
-    @Published var profile:Profile? = nil
     @Published var indexing = IndexingState(current: 0, target: 0)
     @Published var ssbKey:SSBKey? = nil
 

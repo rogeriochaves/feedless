@@ -38,7 +38,7 @@ struct PostsList : View {
     var body: some View {
         VStack {
             ForEach(posts, id: \.key) { post in
-                ForEach(Utils.splitInSmallPosts(post.value.content.text, limit: self.limit), id: \.self) { text in
+                ForEach(Utils.splitInSmallPosts(post.value.content.text ?? "", limit: self.limit), id: \.self) { text in
                     VStack (alignment: .leading) {
                         self.postItem(post, text)
                         Divider()

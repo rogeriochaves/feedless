@@ -9,7 +9,7 @@
 typealias Posts = [PostEntry]
 
 struct Post: Codable {
-    public var text: String
+    public var text: String?
 }
 
 typealias PostEntry = Entry<AuthorProfileContent<Post>>

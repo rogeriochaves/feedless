@@ -49,7 +49,7 @@ struct SecretMessagesModal : View {
                 ForEach((0..<self.messages.count), id: \.self) { index in
                     Group {
                         if (self.step == index) {
-                            Text(self.messages[index].value.content.text)
+                            Text(self.messages[index].value.content.text ?? "")
                                 .font(.system(size: 35))
                                 .lineSpacing(10)
                                 .multilineTextAlignment(.center)

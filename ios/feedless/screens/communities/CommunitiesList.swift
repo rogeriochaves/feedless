@@ -27,9 +27,7 @@ struct CommunitiesList : View {
                     Form {
                         ForEach(profile.communities, id: \.self) { community in
                             NavigationLink(destination: CommunitiesShow(name: community)) {
-                                HStack {
-                                    Text("#\(community)")
-                                }
+                                Text("#\(community)")
                             }
                         }
                     }

@@ -16,11 +16,6 @@ struct FriendsScreen : View {
     @State private var selection = 0
     @State private var showFriend : [String:Bool] = [:]
 
-    func isLinkActive(id : String) -> Binding<Bool> { Binding (
-        get: { self.showFriend[id, default: false] },
-        set: { _ in }
-    )}
-
     func friendsList(_ title: String, _ friends : [Profile]) -> some View {
         return Section {
             Text(title).font(.headline)

@@ -114,7 +114,7 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
     queries.getProfile(id),
     queries.getPosts({ id }),
     queries.getFriends({ id }),
-    queries.getProfileCommunities(req.context.key.id),
+    queries.getProfileCommunities(id),
     queries.getFriendshipStatus(req.context.key.id, id),
     queries.latestOwnerValue({ key: "description", dest: id }),
   ]);

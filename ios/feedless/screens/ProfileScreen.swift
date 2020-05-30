@@ -17,9 +17,11 @@ struct ProfileScreen : View {
     @State private var selection = 0
     @State private var post = ""
     @State private var isPostFocused = false
+    @State private var selectedTab : Int
 
-    init(id : String?) {
+    init(id : String?, selectedTab : Int = 0) {
         self.id = id
+        _selectedTab = State(initialValue: selectedTab)
     }
 
     func getId() -> String? {
@@ -109,46 +111,121 @@ struct ProfileScreen : View {
         .padding(.top, 10)
     }
 
+    func avatar(_ profile: FullProfile) -> some View {
+        // From: https://jetrockets.pro/blog/stretchy-header-in-swiftui
+        GeometryReader { (geometry: GeometryProxy) in
+            if geometry.frame(in: .global).minY <= 0 {
+                AsyncImage(url: Utils.avatarUrl(profile: profile.profile), imageLoader: self.imageLoader)
+                    .aspectRatio(contentMode: .fill)
+                    .offset(y: 50)
+                    .frame(width: geometry.size.width,
+                            height: geometry.size.height)
+            } else {
+                AsyncImage(url: Utils.avatarUrl(profile: profile.profile), imageLoader: self.imageLoader)
+                    .aspectRatio(contentMode: .fill)
+                    .offset(y: -geometry.frame(in: .global).minY + 50)
+                    .frame(width: geometry.size.width,
+                            height: geometry.size.height +
+                                    geometry.frame(in: .global).minY)
+            }
+        }.frame(minHeight: 150, maxHeight: 150)
+    }
+
+    func header(_ profile: FullProfile) -> some View {
+        VStack(alignment: .leading) {
+            Text(profile.profile.name ?? "unknown")
+                .font(.largeTitle)
+                .bold()
+
+            Text(
+                profile.description?.prefix(140).replacingOccurrences(of: "\n", with: "", options: .regularExpression) ?? ""
+            )
+
+            if !self.isLoggedUser() {
+                actionButtons(profile)
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+    }
+
+    let tabs = ["Wall", "Friends", "Communities"]
     func profileView(_ profile: FullProfile) -> some View {
         ScrollView(.vertical) {
-            // From: https://jetrockets.pro/blog/stretchy-header-in-swiftui
-            GeometryReader { (geometry: GeometryProxy) in
-                if geometry.frame(in: .global).minY <= 0 {
-                    AsyncImage(url: Utils.avatarUrl(profile: profile.profile), imageLoader: self.imageLoader)
-                        .aspectRatio(contentMode: .fill)
-                        .offset(y: 50)
-                        .frame(width: geometry.size.width,
-                                height: geometry.size.height)
-                } else {
-                    AsyncImage(url: Utils.avatarUrl(profile: profile.profile), imageLoader: self.imageLoader)
-                        .aspectRatio(contentMode: .fill)
-                        .offset(y: -geometry.frame(in: .global).minY + 50)
-                        .frame(width: geometry.size.width,
-                                height: geometry.size.height +
-                                        geometry.frame(in: .global).minY)
-                }
-            }.frame(minHeight: 150, maxHeight: 150)
+            self.avatar(profile)
 
             VStack(alignment: .leading) {
-                VStack(alignment: .leading) {
-                    Text(profile.profile.name ?? "unknown")
-                        .font(.largeTitle)
-                        .bold()
+                self.header(profile)
 
-                    Text(
-                        profile.description?.prefix(140).replacingOccurrences(of: "\n", with: "", options: .regularExpression) ?? ""
-                    )
+                if !self.isLoggedUser() {
+                    Divider()
 
-                    if !self.isLoggedUser() {
-                        actionButtons(profile)
+                    HStack {
+                        Spacer()
+                        Picker(selection: self.$selectedTab, label: Text("")) {
+                            ForEach(0 ..< self.tabs.count) {
+                                Text(self.tabs[$0])
+                            }
+                        }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .frame(width: 300)
+                        Spacer()
                     }
                 }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
 
-                self.composer(profile)
-                Divider()
-                PostsList(profile.posts)
+                if self.selectedTab == 0 {
+                    self.composer(profile)
+                    Divider()
+                    PostsList(profile.posts)
+                } else if self.selectedTab == 1 {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(profile.friends.friends, id: \.id) { friend in
+                            Group {
+                                NavigationLink(destination: ProfileScreen(id: friend.id)) {
+                                    HStack {
+                                        AsyncImage(url: Utils.avatarUrl(profile: friend), imageLoader: self.imageLoader)
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 32, height: 32)
+                                            .border(Styles.darkGray)
+                                        Text(friend.name ?? "unknown")
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(Styles.gray)
+                                    }
+                                }
+                                    .foregroundColor(Color.primary)
+                                    .padding(.horizontal, 20)
+
+                                if friend.id != profile.friends.friends.last?.id {
+                                    Divider()
+                                        .padding(.vertical, 10)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 10)
+                } else if self.selectedTab == 2 {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(profile.communities, id: \.self) { community in
+                            Group {
+                                NavigationLink(destination: CommunitiesShow(name: community)) {
+                                    Text("#\(community)")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(Styles.gray)
+                                }
+                                    .foregroundColor(Color.primary)
+                                    .padding(.horizontal, 20)
+
+                                if community != profile.communities.last {
+                                    Divider()
+                                        .padding(.vertical, 10)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 10)
+                }
             }
             .frame(maxWidth: .infinity)
             .background(Color.white)
@@ -192,20 +269,27 @@ struct Profile_Previews: PreviewProvider {
 
     static var previews: some View {
         let relations = ["no_relation", "request_received", "friends", "request_sent", "request_rejected"]
-        let profilesSamples : [(String, Profiles)] = relations.map { friedshipStatus in
+        let selectedTab = [
+            "no_relation": 0,
+            "request_received": 1,
+            "friends": 2
+        ]
+
+        let profilesSamples : [(String, Int, Profiles)] = relations.map { friedshipStatus in
             let profiles = Samples.profiles()
             var profile = Samples.fullProfile()
+            profile.profile.id = "foo"
             profile.friendshipStatus = friedshipStatus
             profiles.profiles[profile.profile.id] = .success(profile)
 
-            return (friedshipStatus, profiles)
+            return (friedshipStatus, selectedTab[friedshipStatus] ?? 0, profiles)
         }
 
         return Group {
             ForEach(profilesSamples, id: \.0) { profiles in
-                ProfileScreen(id: nil)
+                ProfileScreen(id: "foo", selectedTab: profiles.1)
                     .environmentObject(Samples.context())
-                    .environmentObject(profiles.1)
+                    .environmentObject(profiles.2)
                     .environmentObject(ImageLoader())
                     .environmentObject(Router())
             }
