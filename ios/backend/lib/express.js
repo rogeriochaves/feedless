@@ -7,6 +7,8 @@ const ssb = require("./ssb-client");
 const bodyParser = require("body-parser");
 const serveBlobs = require("./serve-blobs");
 const debug = require("debug")("express");
+const fs = require("fs");
+const { ssbFolder } = require("./utils");
 
 app.use(bodyParser.json());
 
@@ -339,6 +341,39 @@ router.post("/profile/:id(*)/reject_friend", async (req, res) => {
       contact: id,
       following: false,
     },
+  });
+
+  res.json({ result: "ok" });
+});
+
+const humanifyKey = (key) => {
+  return `
+  # WARNING: Never show this to anyone.
+  # WARNING: Never edit it or use it on multiple devices at once.
+  #
+  # This is your SECRET, it gives you magical powers. With your secret you can
+  # sign your messages so that your friends can verify that the messages came
+  # from you. If anyone learns your secret, they can use it to impersonate you.
+  #
+  # If you use this secret on more than one device you will create a fork and
+  # your friends will stop replicating your content.
+  #
+  ${JSON.stringify(key)}
+  #
+  # The only part of this file that's safe to share is your public name:
+  #
+  #   ${key.id}
+  `;
+};
+
+router.post("/logout", async (_req, res) => {
+  fs.writeFileSync(`${ssbFolder()}/logged-out`, "");
+  const key = await ssb.client().identities.createNewKey();
+
+  fs.unlinkSync(`${ssbFolder()}/secret`);
+  fs.writeFileSync(`${ssbFolder()}/secret`, humanifyKey(key), {
+    mode: 0x100,
+    flag: "wx",
   });
 
   res.json({ result: "ok" });

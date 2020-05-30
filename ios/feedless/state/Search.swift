@@ -31,7 +31,7 @@ class Search: ObservableObject {
         }
 
         if let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            dataLoad(path: "/search?query=\(encodedQuery)", type: SearchResults.self, context: context) {(result) in
+            dataLoad(path: "/search", query: "?query=\(encodedQuery)", type: SearchResults.self, context: context) {(result) in
                 DispatchQueue.main.async {
                     self.results = result
                 }

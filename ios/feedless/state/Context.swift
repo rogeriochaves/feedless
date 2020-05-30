@@ -42,11 +42,9 @@ class Context: ObservableObject {
     }
 
     func logout() {
-        FileManager.default.createFile(
-            atPath: Utils.ssbFolder() + "/logged-out",
-            contents: "".data(using: .utf8)
-        )
-        self.ssbKey = nil
+        dataPost(path: "/logout", parameters: [:], type: PostResult.self, context: self) {(result) in
+            self.ssbKey = nil
+        }
     }
 
     func fetch() {

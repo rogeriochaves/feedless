@@ -10,15 +10,17 @@ import Foundation
 
 var fetchingScheduled : Set<String> = Set()
 
-func dataLoad<T: Decodable>(path: String, type: T.Type, context: Context, completionHandler: @escaping (ServerData<T>) -> Void) {
-    let url = URL(string: "http://127.0.0.1:3000\(path)")!
+func dataLoad<T: Decodable>(path: String, query: String = "", type: T.Type, context: Context, completionHandler: @escaping (ServerData<T>) -> Void) {
+    guard let encodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { return }
+    guard let url = URL(string: "http://127.0.0.1:3000\(encodedPath)\(query)") else { return }
 
     let request = URLRequest(url: url)
     dataTask(request, type, context, completionHandler)
 }
 
 func dataPost<T: Decodable>(path: String, parameters: [String: Any], type: T.Type, context: Context, completionHandler: @escaping (ServerData<T>) -> Void) {
-    let url = URL(string: "http://127.0.0.1:3000\(path)")!
+    guard let encodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { return }
+    guard let url = URL(string: "http://127.0.0.1:3000\(encodedPath)") else { return }
 
     var request = URLRequest(url: url)
     request.httpMethod = "POST"

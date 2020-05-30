@@ -41,7 +41,6 @@ module.exports = (app) => {
       app.get(path, wrapper("GET", path, fn, opts));
     },
     post: (path, fn, opts) => {
-      debug(`POST ${path}`);
       app.post(path, wrapper("POST", path, fn, opts));
     },
   };
