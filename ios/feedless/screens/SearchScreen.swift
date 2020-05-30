@@ -14,7 +14,6 @@ struct SearchScreen : View {
     @EnvironmentObject var search : Search
     @EnvironmentObject var imageLoader : ImageLoader
     @State private var query = ""
-    @State private var showCancelButton: Bool = false
 
     init() {
         UITableView.appearance().tableHeaderView = UIView()
@@ -62,41 +61,41 @@ struct SearchScreen : View {
         switch search.results {
         case .notAsked:
             return AnyView(
-                EmptyView()
+                Spacer()
             )
         case .loading:
-            return AnyView(
-                Section {
-                    Text("Loading...")
-                }
-            )
+            return AnyView(Group {
+                Spacer()
+                Text("Loading...")
+                Spacer()
+            })
         case let .success(results):
             return AnyView(
-                Group {
+                List {
                     peopleResults(results.people)
                     communitiesResults(results.communities)
                 }
             )
         case let .error(message):
-            return AnyView(
-                Section {
-                    Text(message)
-                }
-            )
+            return AnyView(Group {
+                Spacer()
+                Text(message)
+                Spacer()
+            })
         }
     }
 
     // From: https://stackoverflow.com/a/58473985/996404
-    var searchButton : some View {
+    var searchField : some View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
 
-                TextField("search", text: $query, onEditingChanged: { isEditing in
-                    self.showCancelButton = true
-                }, onCommit: {
+                TextField("search", text: $query, onCommit: {
                     self.search.load(context: self.context, query: self.query)
-                }).foregroundColor(.primary)
+                })
+                    .foregroundColor(.primary)
+                    .keyboardType(.webSearch)
 
                 Button(action: {
                     self.query = ""
@@ -108,29 +107,17 @@ struct SearchScreen : View {
             .foregroundColor(.secondary)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(10.0)
-
-            if showCancelButton  {
-                Button("Cancel") {
-                    UIApplication.shared.endEditing(true) // this must be placed before the other commands here
-                    self.query = ""
-                    self.showCancelButton = false
-                }
-                .foregroundColor(Color(.systemBlue))
-            }
-        }
+        }.padding(.horizontal)
     }
 
     var body: some View {
         UITableView.appearance().backgroundColor = UIColor.white
 
         return VStack {
-            List {
-                searchButton
-                resultsLists
-            }
+            searchField
+            resultsLists
         }
         .navigationBarTitle(Text("Search"))
-        .navigationBarHidden(showCancelButton)
         .onAppear {
             self.router.updateNavigationBarColor(route: .search)
         }

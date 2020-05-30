@@ -88,6 +88,10 @@ class Router: ObservableObject {
             navBarAppearance.largeTitleTextAttributes = [.foregroundColor: self.navigationBarTextColor]
             navBarAppearance.backgroundColor = self.navigationBarBackgroundColor
 
+            if self.navigationBarBackgroundColor == UIColor.white {
+                navBarAppearance.configureWithTransparentBackground()
+            }
+
             navbar.standardAppearance = navBarAppearance
             navbar.scrollEdgeAppearance = navBarAppearance
             navbar.compactAppearance = navBarAppearance

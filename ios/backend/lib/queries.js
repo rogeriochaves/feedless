@@ -290,7 +290,7 @@ const search = async (search) => {
           },
         },
       ],
-      limit: 3000,
+      limit: 5000,
     })
   );
 
@@ -308,8 +308,14 @@ const search = async (search) => {
     return searchRegex.exec(normalizedName);
   });
 
+  // Remove duplicates
+  let peopleResult = {};
+  for (let person of mapValues(people)) {
+    peopleResult[person.author] = person;
+  }
+
   debugSearch("Done");
-  return { people: Object.values(mapValues(people)), communities };
+  return { people: Object.values(peopleResult), communities };
 };
 
 const getFriends = async (profile) => {
