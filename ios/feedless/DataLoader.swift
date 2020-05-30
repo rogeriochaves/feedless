@@ -10,15 +10,15 @@ import Foundation
 
 var fetchingScheduled : Set<String> = Set()
 
-func dataLoad<T: Decodable>(path: String, query: String = "", type: T.Type, context: Context, completionHandler: @escaping (ServerData<T>) -> Void) {
+func dataLoad<T: Decodable>(path: String, query: String = "", type: T.Type, context: Context, waitForIndexing: Bool = true, completionHandler: @escaping (ServerData<T>) -> Void) {
     guard let encodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { return }
     guard let url = URL(string: "http://127.0.0.1:3000\(encodedPath)\(query)") else { return }
 
     let request = URLRequest(url: url)
-    dataTask(request, type, context, completionHandler)
+    dataTask(request, type, context, waitForIndexing, completionHandler)
 }
 
-func dataPost<T: Decodable>(path: String, parameters: [String: Any], type: T.Type, context: Context, completionHandler: @escaping (ServerData<T>) -> Void) {
+func dataPost<T: Decodable>(path: String, parameters: [String: Any], type: T.Type, context: Context, waitForIndexing: Bool = true, completionHandler: @escaping (ServerData<T>) -> Void) {
     guard let encodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { return }
     guard let url = URL(string: "http://127.0.0.1:3000\(encodedPath)") else { return }
 
@@ -32,10 +32,10 @@ func dataPost<T: Decodable>(path: String, parameters: [String: Any], type: T.Typ
         Utils.debug(error.localizedDescription)
     }
 
-    dataTask(request, type, context, completionHandler)
+    dataTask(request, type, context, waitForIndexing, completionHandler)
 }
 
-private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ context: Context, _ completionHandler: @escaping (ServerData<T>) -> Void) {
+private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ context: Context, _ waitForIndexing: Bool, _ completionHandler: @escaping (ServerData<T>) -> Void) {
     let identifier = "\(request.httpMethod ?? "GET") \(request.url?.path ?? "")"
 
     let session = Utils.session
@@ -75,14 +75,14 @@ private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ con
             Utils.debug("\(identifier): Cache miss");
         }
 
-        if context.status == .initializing || context.status == .indexing || context.indexing.current < context.indexing.target {
+        if waitForIndexing && (context.status == .initializing || context.status == .indexing || context.indexing.current < context.indexing.target) {
             if (!fetchingScheduled.contains(identifier)) {
                 fetchingScheduled.insert(identifier)
 
                 Utils.debug("\(identifier): Server still indexing, postponing fetch");
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                     fetchingScheduled.remove(identifier)
-                    dataTask(request, type, context, completionHandler)
+                    dataTask(request, type, context, waitForIndexing, completionHandler)
                 }
             }
         } else {

@@ -379,6 +379,20 @@ router.post("/logout", async (_req, res) => {
   res.json({ result: "ok" });
 });
 
+router.get("/pubs", { public: true }, async (_req, res) => {
+  const peers = await ssb.client().gossip.peers();
+
+  res.json({ peers });
+});
+
+router.post("/pubs/add", async (req, res) => {
+  const inviteCode = req.body.invite_code;
+
+  await ssb.client().invite.accept(inviteCode);
+
+  res.json({ result: "ok" });
+});
+
 router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssb.client())(req, res);
 });

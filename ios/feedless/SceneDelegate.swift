@@ -32,6 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environmentObject(Secrets())
             .environmentObject(Communities())
             .environmentObject(Search())
+            .environmentObject(Pubs())
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

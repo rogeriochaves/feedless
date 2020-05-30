@@ -80,4 +80,18 @@ class Samples {
 
         return try! JSONDecoder().decode(SearchResults.self, from: data)
     }
+
+    static func pubs() -> Pubs {
+        let pubs = Pubs()
+        pubs.response = .success(pubsResponse())
+
+        return pubs
+    }
+
+    static func pubsResponse() -> PubsResponse {
+        let path = Bundle.main.path(forResource: "pubs", ofType: "json")!
+        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+
+        return try! JSONDecoder().decode(PubsResponse.self, from: data)
+    }
 }

@@ -52,6 +52,9 @@
 		90CDBA7F247676B6008EA9BE /* SecretsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA7E247676B6008EA9BE /* SecretsScreen.swift */; };
 		90CDBA81247676F4008EA9BE /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA80247676F4008EA9BE /* Secrets.swift */; };
 		90CDBA842476815E008EA9BE /* secrets.json in Resources */ = {isa = PBXBuildFile; fileRef = 90CDBA832476815E008EA9BE /* secrets.json */; };
+		90D618842482D96B00013CBB /* PubsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D618832482D96B00013CBB /* PubsScreen.swift */; };
+		90D618862482DF0500013CBB /* Pubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D618852482DF0500013CBB /* Pubs.swift */; };
+		90D618882482E3D800013CBB /* pubs.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D618872482E3D800013CBB /* pubs.json */; };
 		90DD38042477EF0500B236A3 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DD38032477EF0500B236A3 /* FocusableTextField.swift */; };
 /* End PBXBuildFile section */
 
@@ -141,6 +144,9 @@
 		90CDBA7E247676B6008EA9BE /* SecretsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretsScreen.swift; sourceTree = "<group>"; };
 		90CDBA80247676F4008EA9BE /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		90CDBA832476815E008EA9BE /* secrets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = secrets.json; sourceTree = "<group>"; };
+		90D618832482D96B00013CBB /* PubsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubsScreen.swift; sourceTree = "<group>"; };
+		90D618852482DF0500013CBB /* Pubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pubs.swift; sourceTree = "<group>"; };
+		90D618872482E3D800013CBB /* pubs.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pubs.json; sourceTree = "<group>"; };
 		90DD38032477EF0500B236A3 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -182,6 +188,7 @@
 				90CDBA7A24708D87008EA9BE /* FriendsScreen.swift */,
 				90CDBA7E247676B6008EA9BE /* SecretsScreen.swift */,
 				907A595C247B1A03007C0983 /* SearchScreen.swift */,
+				90D618832482D96B00013CBB /* PubsScreen.swift */,
 			);
 			path = screens;
 			sourceTree = "<group>";
@@ -304,6 +311,7 @@
 				907A595224791398007C0983 /* Communities.swift */,
 				907A595A247B1687007C0983 /* Search.swift */,
 				907A5960247B9D58007C0983 /* Router.swift */,
+				90D618852482DF0500013CBB /* Pubs.swift */,
 			);
 			path = state;
 			sourceTree = "<group>";
@@ -315,6 +323,7 @@
 				90CDBA832476815E008EA9BE /* secrets.json */,
 				907A595424791ABF007C0983 /* communityDetails.json */,
 				907A595E247B250C007C0983 /* search.json */,
+				90D618872482E3D800013CBB /* pubs.json */,
 			);
 			path = fixtures;
 			sourceTree = "<group>";
@@ -429,6 +438,7 @@
 				907A595524791ABF007C0983 /* communityDetails.json in Resources */,
 				902D04812458AAAA007CFE56 /* LaunchScreen.storyboard in Resources */,
 				907A595F247B250C007C0983 /* search.json in Resources */,
+				90D618882482E3D800013CBB /* pubs.json in Resources */,
 				90CDBA7D247123D9008EA9BE /* fullProfile.json in Resources */,
 				902D047E2458AAAA007CFE56 /* Preview Assets.xcassets in Resources */,
 				90CDBA842476815E008EA9BE /* secrets.json in Resources */,
@@ -507,7 +517,9 @@
 				907A594F24790EA0007C0983 /* CommunitiesList.swift in Sources */,
 				90CDBA77247026A5008EA9BE /* AsyncImage.swift in Sources */,
 				90CDBA6C246F5B77008EA9BE /* Entries.swift in Sources */,
+				90D618842482D96B00013CBB /* PubsScreen.swift in Sources */,
 				90CDBA81247676F4008EA9BE /* Secrets.swift in Sources */,
+				90D618862482DF0500013CBB /* Pubs.swift in Sources */,
 				9061FA9E246DA40500AA988A /* NavigationMenu.swift in Sources */,
 				907A595B247B1687007C0983 /* Search.swift in Sources */,
 				907A5951247912FA007C0983 /* CommunitiesShow.swift in Sources */,

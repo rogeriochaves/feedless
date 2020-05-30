@@ -12,7 +12,6 @@ struct Debug: View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var router : Router
     @EnvironmentObject var entries : Entries
-    @State private var selection = 0
 
     func entriesList() -> some View {
         switch entries.entries {

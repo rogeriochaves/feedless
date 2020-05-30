@@ -36,6 +36,10 @@ struct NavigationMenu<C: View> : View {
                                 .cancel { self.menuOpen = false },
                                 .default(Text("Edit Profile")),
                                 .default(Text("Feedback")),
+                                .default(Text("Pubs")) {
+                                    self.router.changeRoute(to: self.router.pubsScreen)
+                                    self.menuOpen = false
+                                },
                                 .default(Text("Debug")) {
                                     self.router.changeRoute(to: self.router.debugScreen)
                                     self.menuOpen = false

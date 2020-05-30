@@ -42,7 +42,7 @@ class Context: ObservableObject {
     }
 
     func logout() {
-        dataPost(path: "/logout", parameters: [:], type: PostResult.self, context: self) {(result) in
+        dataPost(path: "/logout", parameters: [:], type: PostResult.self, context: self, waitForIndexing: false) {(result) in
             self.ssbKey = nil
         }
     }

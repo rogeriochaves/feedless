@@ -15,6 +15,7 @@ enum Route {
     case communities
     case search
     case debug
+    case pubs
 }
 
 class Router: ObservableObject {
@@ -24,6 +25,7 @@ class Router: ObservableObject {
     let communitiesList = (Route.communities, AnyView(CommunitiesList()))
     let searchScreen = (Route.search, AnyView(SearchScreen()))
     let debugScreen = (Route.debug, AnyView(Debug()))
+    let pubsScreen = (Route.pubs, AnyView(PubsScreen()))
 
     @Published var currentRoute: (Route, AnyView)
     @Published var navigationBarBackgroundColor: UIColor = Styles.uiBlue
