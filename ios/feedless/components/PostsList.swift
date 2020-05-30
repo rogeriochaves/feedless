@@ -20,10 +20,12 @@ struct PostsList : View {
 
     func postItem(_ post: Entry<AuthorProfileContent<Post>>, _ text: String) -> some View {
         HStack(alignment: .top) {
-            AsyncImage(url: Utils.avatarUrl(profile: post.value.authorProfile), imageLoader: self.imageLoader)
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 48, height: 48)
-                .border(Styles.darkGray)
+            NavigationLink(destination: ProfileScreen(id: post.value.author)) {
+                AsyncImage(url: Utils.avatarUrl(profile: post.value.authorProfile), imageLoader: self.imageLoader)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 48, height: 48)
+                    .border(Styles.darkGray)
+            }
             Group {
                 Text(post.value.authorProfile.name ?? "unknown")
                 .bold()
@@ -36,12 +38,13 @@ struct PostsList : View {
     }
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(posts, id: \.key) { post in
                 ForEach(Utils.splitInSmallPosts(post.value.content.text ?? "", limit: self.limit), id: \.self) { text in
-                    VStack (alignment: .leading) {
+                    Group {
                         self.postItem(post, text)
                         Divider()
+                            .padding(.vertical, 10)
                     }
                 }
             }
