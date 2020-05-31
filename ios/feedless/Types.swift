@@ -28,7 +28,7 @@ struct AuthorProfileContent<T: Codable>: Codable {
 struct Entry<T: Codable>: Codable {
     public var key: String
     public var value: T
-    public var rts: Int
+    public var rts: Int?
 }
 
 struct Profile: Codable {

@@ -15,7 +15,7 @@ struct PostsList : View {
 
     init(_ posts: Posts, limit: Int = 140, reverseOrder: Bool = true) {
         self.posts = posts.sorted(by: { a, b in
-            reverseOrder ? b.rts < a.rts : a.rts < b.rts
+            reverseOrder ? b.rts ?? 0 < a.rts ?? 0 : a.rts ?? 0 < b.rts ?? 0
         })
 
         self.limit = limit

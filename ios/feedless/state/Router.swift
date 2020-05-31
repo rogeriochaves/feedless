@@ -17,6 +17,7 @@ enum Route {
     case debug
     case pubs
     case index
+    case editProfile
 }
 
 class Router: ObservableObject {
@@ -27,6 +28,7 @@ class Router: ObservableObject {
     let searchScreen = (Route.search, AnyView(SearchScreen()))
     let debugScreen = (Route.debug, AnyView(Debug()))
     let pubsScreen = (Route.pubs, AnyView(PubsScreen()))
+    let editProfileScreen = (Route.editProfile, AnyView(EditProfileScreen()))
 
     @Published var currentRoute: (Route, AnyView)
     @Published var navigationBarBackgroundColor: UIColor = Styles.uiBlue

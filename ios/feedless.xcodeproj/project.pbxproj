@@ -56,6 +56,7 @@
 		90D618862482DF0500013CBB /* Pubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D618852482DF0500013CBB /* Pubs.swift */; };
 		90D618882482E3D800013CBB /* pubs.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D618872482E3D800013CBB /* pubs.json */; };
 		90D6188A2483CC8400013CBB /* Signup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D618892483CC8400013CBB /* Signup.swift */; };
+		90D6188C248470EA00013CBB /* EditProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D6188B248470EA00013CBB /* EditProfileScreen.swift */; };
 		90DD38042477EF0500B236A3 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DD38032477EF0500B236A3 /* FocusableTextField.swift */; };
 /* End PBXBuildFile section */
 
@@ -149,6 +150,7 @@
 		90D618852482DF0500013CBB /* Pubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pubs.swift; sourceTree = "<group>"; };
 		90D618872482E3D800013CBB /* pubs.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pubs.json; sourceTree = "<group>"; };
 		90D618892483CC8400013CBB /* Signup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signup.swift; sourceTree = "<group>"; };
+		90D6188B248470EA00013CBB /* EditProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileScreen.swift; sourceTree = "<group>"; };
 		90DD38032477EF0500B236A3 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -192,6 +194,7 @@
 				907A595C247B1A03007C0983 /* SearchScreen.swift */,
 				90D618832482D96B00013CBB /* PubsScreen.swift */,
 				90D618892483CC8400013CBB /* Signup.swift */,
+				90D6188B248470EA00013CBB /* EditProfileScreen.swift */,
 			);
 			path = screens;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 				90CDBA7B24708D87008EA9BE /* FriendsScreen.swift in Sources */,
 				90CDBA792470613D008EA9BE /* ImageLoader.swift in Sources */,
 				900BE29A2458B05800C77595 /* Login.swift in Sources */,
+				90D6188C248470EA00013CBB /* EditProfileScreen.swift in Sources */,
 				907A5959247A5282007C0983 /* PrimaryButton.swift in Sources */,
 				90B6A2DA2476B94F004B0BFF /* SecretMessagesModal.swift in Sources */,
 				90CDBA7324701882008EA9BE /* Samples.swift in Sources */,

@@ -34,7 +34,10 @@ struct NavigationMenu<C: View> : View {
                             title: Text("Actions"),
                             buttons: [
                                 .cancel { self.menuOpen = false },
-                                .default(Text("Edit Profile")),
+                                .default(Text("Edit Profile")) {
+                                    self.router.changeRoute(to: self.router.editProfileScreen)
+                                    self.menuOpen = false
+                                },
                                 .default(Text("Feedback")),
                                 .default(Text("Pubs")) {
                                     self.router.changeRoute(to: self.router.pubsScreen)
