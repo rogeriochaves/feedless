@@ -130,7 +130,8 @@ struct SecretMessagesModal_Previews: PreviewProvider {
                                 content: Post(
                                     text: "first secret, don't tell anybody, and it's a big secret so we test line-breaking"
                                 )
-                            )
+                            ),
+                            rts: 0
                         ),
                         Entry(
                             key: "secret2key",
@@ -139,7 +140,8 @@ struct SecretMessagesModal_Previews: PreviewProvider {
                                 content: Post(
                                     text: "second secret!"
                                 )
-                            )
+                            ),
+                            rts: 0
                         )
                     ],
                     author: "foo",

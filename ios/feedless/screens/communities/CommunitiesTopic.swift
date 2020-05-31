@@ -64,7 +64,8 @@ struct CommunitiesTopic : View {
                 author: topic.value.author,
                 authorProfile: topic.value.authorProfile,
                 content: Post(text: topic.value.content.text)
-            )
+            ),
+            rts: topic.rts
         )
         var allPosts = [firstPost]
         allPosts.append(contentsOf: topic.value.content.replies)
@@ -84,7 +85,7 @@ struct CommunitiesTopic : View {
                         ScrollView {
                             VStack {
                                 Divider()
-                                PostsList(topicWithReplies(topic), limit: 10_000)
+                                PostsList(topicWithReplies(topic), limit: 10_000, reverseOrder: false)
                                 composer
                                     .padding(.bottom, 10)
                             }

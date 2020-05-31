@@ -62,7 +62,8 @@ class Profiles: ObservableObject {
                         author: author,
                         authorProfile: authorProfile.profile,
                         content: Post(text: message)
-                    )
+                    ),
+                    rts: Int(NSDate().timeIntervalSince1970)
                 )
                 profile.posts.insert(newPost, at: 0)
                 self.profiles[id] = .success(profile)

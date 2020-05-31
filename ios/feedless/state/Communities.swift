@@ -69,7 +69,8 @@ class Communities: ObservableObject {
                         author: author,
                         authorProfile: authorProfile.profile,
                         content: Post(text: reply)
-                    )
+                    ),
+                    rts: Int(NSDate().timeIntervalSince1970)
                 )
                 community.topics[topicIndex].value.content.replies.append(newPost)
                 self.communities[name] = .success(community)

@@ -13,8 +13,11 @@ struct PostsList : View {
     private let posts:Posts
     private let limit:Int
 
-    init(_ posts: Posts, limit: Int = 140) {
-        self.posts = posts
+    init(_ posts: Posts, limit: Int = 140, reverseOrder: Bool = true) {
+        self.posts = posts.sorted(by: { a, b in
+            reverseOrder ? b.rts < a.rts : a.rts < b.rts
+        })
+
         self.limit = limit
     }
 
