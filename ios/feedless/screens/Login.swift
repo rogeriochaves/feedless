@@ -65,7 +65,7 @@ struct Login: View {
         }
         .offset(y: keyboardOffset())
         .animation(.easeOut(duration: 0.16))
-        .navigationBarTitle(Text("Login"))
+        .navigationBarTitle("Login")
     }
 }
 

@@ -25,6 +25,7 @@ struct Index: View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var secrets : Secrets
+    @EnvironmentObject var router : Router
     @State var timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
 
     func progressBar() -> some View {
@@ -68,10 +69,10 @@ struct Index: View {
                             .padding(.vertical, 16)
                             .padding(.horizontal, 24)
                             .background(Styles.primaryBlue)
-                            .foregroundColor(Color.black)
+                            .foregroundColor(Color(Styles.uiDarkBlue))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Styles.darkGray, lineWidth: 1)
+                                    .stroke(Color(Styles.uiDarkBlue), lineWidth: 1)
                             )
                             .padding(.horizontal, 30)
                             .padding(.top, 20)
@@ -84,17 +85,25 @@ struct Index: View {
                             }
                                 .padding(.vertical, 8)
                                 .padding(.horizontal, 12)
-                                .background(Styles.primaryBlue)
-                                .foregroundColor(Color.black)
+                                .background(Color(Styles.uiPink))
+                                .foregroundColor(Color(Styles.uiDarkPink))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Styles.darkGray, lineWidth: 1)
+                                        .stroke(Color(Styles.uiDarkPink), lineWidth: 1)
                                 )
                             Spacer()
                         }
                         .padding(.horizontal, 30)
-                        .padding(.bottom, 20)
-                    }.navigationBarTitle("Feedless")
+                        .padding(.vertical, 30)
+                        .background(Color(red: 255 / 255, green: 200 / 255, blue: 200 / 255))
+                        .foregroundColor(Color(Styles.uiDarkPink))
+                    }
+                    .navigationBarTitle("Feedless")
+                    .background(Color(Styles.uiLightBlue))
+                    .foregroundColor(Color(Styles.uiDarkBlue))
+                    .onAppear() {
+                        self.router.updateNavigationBarColor(route: .index)
+                    }
                 }
             }
             if (context.status != .ready) {
@@ -133,8 +142,6 @@ struct Index_Previews: PreviewProvider {
                 .environmentObject(ImageLoader())
                 .environmentObject(Router())
                 .environmentObject(Secrets())
-                .environmentObject(Communities())
-                .environmentObject(Search())
         }
     }
 }

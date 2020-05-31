@@ -65,4 +65,10 @@ class Styles {
         blue: 0 / 255,
         alpha: 1
     )
+    static var uiLightBlue = UIColor(
+        red: 141 / 255,
+        green: 235 / 255,
+        blue: 245 / 255,
+        alpha: 1
+    )
 }

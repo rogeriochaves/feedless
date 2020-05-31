@@ -16,6 +16,7 @@ enum Route {
     case search
     case debug
     case pubs
+    case index
 }
 
 class Router: ObservableObject {
@@ -63,6 +64,9 @@ class Router: ObservableObject {
         case .communities:
             self.navigationBarBackgroundColor = Styles.uiPink
             self.navigationBarTextColor = Styles.uiDarkPink
+        case .index:
+            self.navigationBarBackgroundColor = Styles.uiLightBlue
+            self.navigationBarTextColor = Styles.uiDarkBlue
         default:
             self.navigationBarBackgroundColor = UIColor.white
             self.navigationBarTextColor = UIColor.black
@@ -90,8 +94,8 @@ class Router: ObservableObject {
             navBarAppearance.largeTitleTextAttributes = [.foregroundColor: self.navigationBarTextColor]
             navBarAppearance.backgroundColor = self.navigationBarBackgroundColor
 
-            if self.navigationBarBackgroundColor == UIColor.white {
-                navBarAppearance.configureWithTransparentBackground()
+            if let hairline = findHairlineImageViewUnder(navbar) {
+                hairline.isHidden = self.navigationBarBackgroundColor == UIColor.white || self.navigationBarBackgroundColor == Styles.uiLightBlue
             }
 
             navbar.standardAppearance = navBarAppearance
@@ -105,5 +109,17 @@ class Router: ObservableObject {
     func updateNavigationBarColor(route: Route) {
         self.changeNavigationBarColor(route: route)
         self.updateNavbar()
+    }
+
+    func findHairlineImageViewUnder(_ view: UIView) -> UIImageView? {
+        if view is UIImageView && view.bounds.size.height <= 1.0 {
+            return view as? UIImageView
+        }
+        for subview in view.subviews {
+            if let imageView = self.findHairlineImageViewUnder(subview) {
+                return imageView
+            }
+        }
+        return nil
     }
 }
