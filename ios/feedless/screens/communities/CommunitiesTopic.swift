@@ -18,7 +18,7 @@ struct CommunitiesTopic : View {
     private var name : String
     private var topicKey : String
 
-    @ObservedObject private var keyboard = KeyboardResponder()
+    @EnvironmentObject var keyboard : KeyboardResponder
     @State private var reply = ""
     @State private var isReplyFocused = false
 

@@ -83,7 +83,7 @@
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "DEBUG"
-            value = "express,router,queries:*"
+            value = "express,queries:*"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

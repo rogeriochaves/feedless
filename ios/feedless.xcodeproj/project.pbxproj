@@ -55,6 +55,7 @@
 		90D618842482D96B00013CBB /* PubsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D618832482D96B00013CBB /* PubsScreen.swift */; };
 		90D618862482DF0500013CBB /* Pubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D618852482DF0500013CBB /* Pubs.swift */; };
 		90D618882482E3D800013CBB /* pubs.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D618872482E3D800013CBB /* pubs.json */; };
+		90D6188A2483CC8400013CBB /* Signup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D618892483CC8400013CBB /* Signup.swift */; };
 		90DD38042477EF0500B236A3 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DD38032477EF0500B236A3 /* FocusableTextField.swift */; };
 /* End PBXBuildFile section */
 
@@ -147,6 +148,7 @@
 		90D618832482D96B00013CBB /* PubsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubsScreen.swift; sourceTree = "<group>"; };
 		90D618852482DF0500013CBB /* Pubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pubs.swift; sourceTree = "<group>"; };
 		90D618872482E3D800013CBB /* pubs.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pubs.json; sourceTree = "<group>"; };
+		90D618892483CC8400013CBB /* Signup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signup.swift; sourceTree = "<group>"; };
 		90DD38032477EF0500B236A3 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -189,6 +191,7 @@
 				90CDBA7E247676B6008EA9BE /* SecretsScreen.swift */,
 				907A595C247B1A03007C0983 /* SearchScreen.swift */,
 				90D618832482D96B00013CBB /* PubsScreen.swift */,
+				90D618892483CC8400013CBB /* Signup.swift */,
 			);
 			path = screens;
 			sourceTree = "<group>";
@@ -224,6 +227,12 @@
 				90CDBA822476812D008EA9BE /* fixtures */,
 				902D04742458AAA7007CFE56 /* AppDelegate.swift */,
 				902D04762458AAA7007CFE56 /* SceneDelegate.swift */,
+				9053055A245F7C23006C054D /* Utils.swift */,
+				9053055E245FE975006C054D /* Types.swift */,
+				90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */,
+				90CDBA7024700D88008EA9BE /* Styles.swift */,
+				90CDBA7224701882008EA9BE /* Samples.swift */,
+				907A5962247D7362007C0983 /* Extensions.swift */,
 				902D047A2458AAAA007CFE56 /* Assets.xcassets */,
 				902D047F2458AAAA007CFE56 /* LaunchScreen.storyboard */,
 				902D04822458AAAA007CFE56 /* Info.plist */,
@@ -232,12 +241,6 @@
 				90B81B93245ECBBB005C5D31 /* NodeRunner.h */,
 				90B81B95245ECC00005C5D31 /* NodeRunner.mm */,
 				90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */,
-				9053055A245F7C23006C054D /* Utils.swift */,
-				9053055E245FE975006C054D /* Types.swift */,
-				90CDBA6D246F5F2C008EA9BE /* DataLoader.swift */,
-				90CDBA7024700D88008EA9BE /* Styles.swift */,
-				90CDBA7224701882008EA9BE /* Samples.swift */,
-				907A5962247D7362007C0983 /* Extensions.swift */,
 			);
 			path = feedless;
 			sourceTree = "<group>";
@@ -501,6 +504,7 @@
 				907A595324791398007C0983 /* Communities.swift in Sources */,
 				907A5961247B9D58007C0983 /* Router.swift in Sources */,
 				90CDBA7F247676B6008EA9BE /* SecretsScreen.swift in Sources */,
+				90D6188A2483CC8400013CBB /* Signup.swift in Sources */,
 				90DD38042477EF0500B236A3 /* FocusableTextField.swift in Sources */,
 				907A59572479285B007C0983 /* CommunitiesTopic.swift in Sources */,
 				907002172466B77D00548946 /* Debug.swift in Sources */,

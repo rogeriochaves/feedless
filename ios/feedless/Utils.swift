@@ -16,14 +16,34 @@ class Utils {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         return documentsPath + "/.ssb";
     }
-    
+
+    static func clearKeyString(_ key: String) -> String {
+        var cleanKey = key
+        cleanKey = cleanKey.replacingOccurrences(of: "#.*?(\n|$)", with: "", options: [.regularExpression])
+        cleanKey = cleanKey.replacingOccurrences(of: "\n\n", with: "", options: [.regularExpression])
+        cleanKey = cleanKey.replacingOccurrences(of: "\n\\{", with: "{", options: [.regularExpression])
+
+        return cleanKey
+    }
+
+    static func ssbKeyJSON() -> String? {
+        guard
+            let data = try? Data(contentsOf: URL(fileURLWithPath: ssbFolder() + "/secret")),
+            let string = String(data: data, encoding: .utf8) as String?
+        else {
+            return nil
+        }
+        return clearKeyString(string)
+    }
+
     static func ssbKey() -> SSBKey? {
         if (FileManager.default.fileExists(atPath: ssbFolder() + "/logged-out")) {
-            return nil;
+            return nil
         }
         let decoder = JSONDecoder()
         guard
-            let data = try? Data(contentsOf: URL(fileURLWithPath: ssbFolder() + "/secret")),
+            let json = ssbKeyJSON(),
+            let data = json.data(using: .utf8),
             let ssbKey = try? decoder.decode(SSBKey.self, from: data)
         else {
             return nil

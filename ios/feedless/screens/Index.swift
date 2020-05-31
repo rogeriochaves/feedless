@@ -27,6 +27,7 @@ struct Index: View {
     @EnvironmentObject var secrets : Secrets
     @EnvironmentObject var router : Router
     @State var timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+    @State var ignoreEdges : Bool = false
 
     func progressBar() -> some View {
         let width = CGFloat(self.context.indexing.current) / CGFloat(self.context.indexing.target) * 100;
@@ -45,68 +46,82 @@ struct Index: View {
 
     let mainScreen = MainScreen()
 
+    var index: some View {
+        NavigationView {
+            VStack(alignment: .leading) {
+                Spacer()
+                Text("The non-addictive\nsocial network")
+                    .font(.system(size: 30))
+                    .padding(.horizontal, 30)
+                NavigationLink(destination: Signup()) {
+                    Spacer()
+                    Text("Create account")
+                        .font(.system(size: 24))
+                    Spacer()
+                }
+                .simultaneousGesture(TapGesture().onEnded { _ in
+                    self.ignoreEdges = false
+                })
+                .padding(.vertical, 16)
+                .padding(.horizontal, 24)
+                .background(Styles.primaryBlue)
+                .foregroundColor(Color(Styles.uiDarkBlue))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color(Styles.uiDarkBlue), lineWidth: 1)
+                )
+                .padding(.horizontal, 30)
+                .padding(.top, 20)
+                Spacer()
+                HStack {
+                    Spacer()
+                    Text("Have an account already?")
+                    NavigationLink(destination: Login()) {
+                        Text("Login")
+                    }
+                    .simultaneousGesture(TapGesture().onEnded { _ in
+                        self.ignoreEdges = false
+                    })
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .background(Color(Styles.uiPink))
+                    .foregroundColor(Color(Styles.uiDarkPink))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color(Styles.uiDarkPink), lineWidth: 1)
+                    )
+                    Spacer()
+                }
+                .padding(.horizontal, 30)
+                .padding(.top, 30)
+                .padding(.bottom, context.status != .ready ? 30 : 80)
+                .background(Color(red: 255 / 255, green: 200 / 255, blue: 200 / 255))
+                .foregroundColor(Color(Styles.uiDarkPink))
+                .edgesIgnoringSafeArea(.bottom)
+            }
+            .navigationBarTitle("Feedless")
+            .background(Color(Styles.uiLightBlue))
+            .foregroundColor(Color(Styles.uiDarkBlue))
+            .onAppear() {
+                self.ignoreEdges = true
+                self.router.updateNavigationBarColor(route: .index)
+            }
+            .edgesIgnoringSafeArea(.bottom)
+        }
+    }
+
     var body: some View {
-        VStack(spacing: 0) {
-            if (context.ssbKey != nil) {
+        UITableView.appearance().backgroundColor = UIColor.secondarySystemBackground
+
+        return VStack(spacing: 0) {
+            if context.ssbKey != nil {
                 mainScreen
                     .onAppear(perform: {
                         self.profiles.load(context: self.context, id: self.context.ssbKey!.id)
                         self.secrets.load(context: self.context)
                     })
             } else {
-                NavigationView {
-                    VStack(alignment: .leading) {
-                        Spacer()
-                        Text("The non-addictive\nsocial network")
-                            .font(.system(size: 30))
-                            .padding(.horizontal, 30)
-                        NavigationLink(destination: Login()) {
-                            Spacer()
-                            Text("Create account")
-                                .font(.system(size: 24))
-                            Spacer()
-                        }
-                            .padding(.vertical, 16)
-                            .padding(.horizontal, 24)
-                            .background(Styles.primaryBlue)
-                            .foregroundColor(Color(Styles.uiDarkBlue))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Color(Styles.uiDarkBlue), lineWidth: 1)
-                            )
-                            .padding(.horizontal, 30)
-                            .padding(.top, 20)
-                        Spacer()
-                        HStack {
-                            Spacer()
-                            Text("Have an account already?")
-                            NavigationLink(destination: Login()) {
-                                Text("Login")
-                            }
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 12)
-                                .background(Color(Styles.uiPink))
-                                .foregroundColor(Color(Styles.uiDarkPink))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color(Styles.uiDarkPink), lineWidth: 1)
-                                )
-                            Spacer()
-                        }
-                        .padding(.horizontal, 30)
-                        .padding(.top, 30)
-                        .padding(.bottom, context.status != .ready ? 30 : 80)
-                        .background(Color(red: 255 / 255, green: 200 / 255, blue: 200 / 255))
-                        .foregroundColor(Color(Styles.uiDarkPink))
-                        .edgesIgnoringSafeArea(.bottom)
-                    }
-                    .navigationBarTitle("Feedless")
-                    .background(Color(Styles.uiLightBlue))
-                    .foregroundColor(Color(Styles.uiDarkBlue))
-                    .onAppear() {
-                        self.router.updateNavigationBarColor(route: .index)
-                    }
-                }.edgesIgnoringSafeArea(.bottom)
+                index.edgesIgnoringSafeArea(ignoreEdges ? .bottom : .horizontal)
             }
             if (context.status != .ready) {
                 Divider()

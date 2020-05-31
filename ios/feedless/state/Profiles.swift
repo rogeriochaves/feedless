@@ -111,4 +111,10 @@ class Profiles: ObservableObject {
             }
         }
     }
+
+    func signup(context: Context, name: String, completeHandler: @escaping () -> Void) {
+        dataPost(path: "/signup", parameters: [ "name": name ], type: PostResult.self, context: context, waitForIndexing: false) {(result) in
+            completeHandler()
+        }
+    }
 }

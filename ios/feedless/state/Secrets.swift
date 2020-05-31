@@ -19,7 +19,7 @@ class Secrets: ObservableObject {
     var deletedKeys : [String] = []
 
     func filterDeleted(secrets: ServerData<[SecretChat]>) -> ServerData<[SecretChat]> {
-        if case .success(var secretChats) = self.secrets {
+        if case .success(var secretChats) = secrets {
             for index in 0..<secretChats.count {
                 let messages = secretChats[index].messages.filter { message in
                     !self.deletedKeys.contains(message.key)
