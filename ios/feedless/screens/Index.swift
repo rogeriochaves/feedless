@@ -43,7 +43,6 @@ struct Index: View {
     }
 
     let mainScreen = MainScreen()
-    let login = Login()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -55,8 +54,47 @@ struct Index: View {
                     })
             } else {
                 NavigationView {
-                    login
-                        .navigationBarTitle(Text("Login"))
+                    VStack(alignment: .leading) {
+                        Spacer()
+                        Text("The non-addictive\nsocial network")
+                            .font(.system(size: 30))
+                            .padding(.horizontal, 30)
+                        NavigationLink(destination: Login()) {
+                            Spacer()
+                            Text("Create account")
+                                .font(.system(size: 24))
+                            Spacer()
+                        }
+                            .padding(.vertical, 16)
+                            .padding(.horizontal, 24)
+                            .background(Styles.primaryBlue)
+                            .foregroundColor(Color.black)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(Styles.darkGray, lineWidth: 1)
+                            )
+                            .padding(.horizontal, 30)
+                            .padding(.top, 20)
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Text("Have an account already?")
+                            NavigationLink(destination: Login()) {
+                                Text("Login")
+                            }
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 12)
+                                .background(Styles.primaryBlue)
+                                .foregroundColor(Color.black)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .stroke(Styles.darkGray, lineWidth: 1)
+                                )
+                            Spacer()
+                        }
+                        .padding(.horizontal, 30)
+                        .padding(.bottom, 20)
+                    }.navigationBarTitle("Feedless")
                 }
             }
             if (context.status != .ready) {
@@ -87,11 +125,16 @@ struct Index_Previews: PreviewProvider {
         Group {
             Index()
                 .environmentObject(indexingContext())
+                .environmentObject(Router())
 
             Index()
                 .environmentObject(Samples.context())
                 .environmentObject(Samples.profiles())
                 .environmentObject(ImageLoader())
+                .environmentObject(Router())
+                .environmentObject(Secrets())
+                .environmentObject(Communities())
+                .environmentObject(Search())
         }
     }
 }

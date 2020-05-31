@@ -12,6 +12,11 @@ struct Login: View {
     @EnvironmentObject var context : Context
     @State var loginKey = "";
     @State var errorMessage = "";
+    @ObservedObject private var keyboard = KeyboardResponder()
+
+    func keyboardOffset() -> CGFloat {
+        return [keyboard.currentHeight - 200, CGFloat(0)].max()! * -1
+    }
 
     func login(key: String) {
         let decoder = JSONDecoder()
@@ -49,15 +54,18 @@ struct Login: View {
                 .padding()
             Button(action: { self.login(key: self.loginKey) }) {
                 HStack {
-                    Text("Submit")
+                    Text("Login")
                 }
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .padding()
                     .cornerRadius(40)
                     .background(Styles.primaryBlue)
-                    .foregroundColor(Color(.black))
+                    .foregroundColor(Color(Styles.uiDarkBlue))
             }
         }
+        .offset(y: keyboardOffset())
+        .animation(.easeOut(duration: 0.16))
+        .navigationBarTitle(Text("Login"))
     }
 }
 
