@@ -94,9 +94,11 @@ struct Index: View {
                             Spacer()
                         }
                         .padding(.horizontal, 30)
-                        .padding(.vertical, 30)
+                        .padding(.top, 30)
+                        .padding(.bottom, context.status != .ready ? 30 : 80)
                         .background(Color(red: 255 / 255, green: 200 / 255, blue: 200 / 255))
                         .foregroundColor(Color(Styles.uiDarkPink))
+                        .edgesIgnoringSafeArea(.bottom)
                     }
                     .navigationBarTitle("Feedless")
                     .background(Color(Styles.uiLightBlue))
@@ -104,17 +106,19 @@ struct Index: View {
                     .onAppear() {
                         self.router.updateNavigationBarColor(route: .index)
                     }
-                }
+                }.edgesIgnoringSafeArea(.bottom)
             }
             if (context.status != .ready) {
                 Divider()
-                .padding(.vertical, 10)
+                    .padding(0)
+                    .padding(.top, context.ssbKey != nil ? 10 : 0)
                 HStack {
                     Text(statusToString(status: context.status))
                     if ((context.status == .indexing || context.status == .syncing) && context.indexing.target > 0) {
                         progressBar()
                     }
                 }
+                .padding(.top, 10)
             }
         }
         .onReceive(self.timer) { (_) in
@@ -124,8 +128,15 @@ struct Index: View {
 }
 
 struct Index_Previews: PreviewProvider {
-    static func indexingContext () -> Context {
+    static func indexingContext() -> Context {
         let context = Context(ssbKey: nil, status: .indexing)
+        context.indexing = IndexingState(current: 30, target: 100)
+        return context
+    }
+
+    static func indexingSignedContext() -> Context {
+        let context = Samples.context()
+        context.status = .indexing
         context.indexing = IndexingState(current: 30, target: 100)
         return context
     }
@@ -137,7 +148,11 @@ struct Index_Previews: PreviewProvider {
                 .environmentObject(Router())
 
             Index()
-                .environmentObject(Samples.context())
+                .environmentObject(Context(ssbKey: nil, status: .ready))
+                .environmentObject(Router())
+
+            Index()
+                .environmentObject(indexingSignedContext())
                 .environmentObject(Samples.profiles())
                 .environmentObject(ImageLoader())
                 .environmentObject(Router())

@@ -1,6 +1,5 @@
 const fs = require("fs");
 const pull = require("pull-stream");
-const sharp = require("sharp");
 const split = require("split-buffer");
 
 const ssbFolder = () => {
@@ -52,11 +51,9 @@ module.exports.uploadPicture = async (ssbClient, picture) => {
   const maxSize = 5 * 1024 * 1024; // 5 MB
   if (picture.size > maxSize) throw "Max size exceeded";
 
-  const resizedPicture = await sharp(picture.data).resize(256, 256).toBuffer();
-
   return await new Promise((resolve, reject) =>
     pull(
-      pull.values(split(resizedPicture, 64 * 1024)),
+      pull.values(split(picture.data, 64 * 1024)),
       ssbClient.blobs.add((err, result) => {
         if (err) return reject(err);
         return resolve(result);

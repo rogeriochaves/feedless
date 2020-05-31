@@ -9,6 +9,7 @@ const serveBlobs = require("./serve-blobs");
 const debug = require("debug")("express");
 const fs = require("fs");
 const { ssbFolder, uploadPicture } = require("./utils");
+const ssbKeys = require("ssb-keys");
 
 app.use(bodyParser.json());
 
@@ -386,27 +387,27 @@ router.post("/signup", { public: true }, async (req, res) => {
 
   const pictureLink = picture && (await uploadPicture(ssb.client(), picture));
 
-  const key = await ssb.client().identities.createNewKey();
-
-  fs.unlinkSync(`${ssbFolder()}/logged-out`);
+  const key = ssbKeys.loadSync(`${ssbFolder()}/secret`);
+  const debugKey = Object.assign({}, key, { private: "[removed]" });
+  debug("Creating new account with key", debugKey);
 
   await ssb.client().identities.publishAs({
     key,
     private: false,
-    content: {
-      type: "about",
-      about: key.id,
-      name: name,
-      ...(pictureLink ? { image: pictureLink } : {}),
-    },
+    content: Object.assign(
+      {
+        type: "about",
+        about: key.id,
+        name: name,
+      },
+      pictureLink ? { image: pictureLink } : {}
+    ),
   });
-
-  const debugKey = { ...key, private: "[removed]" };
-  debug("Generated key", debugKey);
 
   debug("Published about", { about: key.id, name, image: pictureLink });
 
-  res.redirect("/keys");
+  fs.unlinkSync(`${ssbFolder()}/logged-out`);
+  res.json({ result: "ok" });
 });
 
 router.get("/pubs", { public: true }, async (_req, res) => {
