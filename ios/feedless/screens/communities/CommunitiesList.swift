@@ -13,7 +13,27 @@ struct CommunitiesList : View {
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var imageLoader : ImageLoader
     @EnvironmentObject var router : Router
+    @EnvironmentObject var communities : Communities
     @State private var selection = 0
+
+    func communitiesExplore() -> some View {
+        switch communities.exploreResponse {
+        case let .success(response):
+            return AnyView(
+                ForEach(response.communities, id: \.self) { community in
+                    NavigationLink(destination: CommunitiesShow(name: community)) {
+                        Text("#\(community)")
+                    }
+                }
+            )
+        case .loading:
+            return AnyView(
+                Text("Loading...")
+            )
+        default:
+            return AnyView(EmptyView())
+        }
+    }
 
     func communitiesList() -> some View {
         if let ssbKey = context.ssbKey, let profile = profiles.profiles[ssbKey.id] {
@@ -25,10 +45,18 @@ struct CommunitiesList : View {
             case let .success(profile):
                 return AnyView(
                     Form {
-                        ForEach(profile.communities, id: \.self) { community in
-                            NavigationLink(destination: CommunitiesShow(name: community)) {
-                                Text("#\(community)")
+                        Section {
+                            Text("My communities").font(.headline)
+                            ForEach(profile.communities, id: \.self) { community in
+                                NavigationLink(destination: CommunitiesShow(name: community)) {
+                                    Text("#\(community)")
+                                }
                             }
+                        }
+
+                        Section {
+                            Text("Explore").font(.headline)
+                            communitiesExplore()
                         }
                     }
                 )
@@ -47,6 +75,7 @@ struct CommunitiesList : View {
             .navigationBarTitle(Text("Communities"))
             .onAppear {
                 self.router.updateNavigationBarColor(route: .communities)
+                self.communities.loadExplore(context: self.context)
             }
     }
 }

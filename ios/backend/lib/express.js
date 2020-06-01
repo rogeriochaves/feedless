@@ -210,6 +210,12 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
   res.json({ result: "ok" });
 });
 
+router.get("/communities/explore", async (_req, res) => {
+  const communities = await queries.getCommunities();
+
+  res.json({ communities });
+});
+
 router.get("/communities/:name", async (req, res) => {
   const name = req.params.name;
 

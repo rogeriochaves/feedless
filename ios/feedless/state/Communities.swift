@@ -23,8 +23,13 @@ struct CommunityDetails : Codable {
     public var isMember: Bool
 }
 
+struct ExploreResponse : Codable {
+    public var communities : [String]
+}
+
 class Communities: ObservableObject {
     @Published var communities : [String: ServerData<CommunityDetails>] = [:]
+    @Published var exploreResponse : ServerData<ExploreResponse> = .loading
 
     func load(context: Context, name: String) {
         if self.communities[name] == nil {
@@ -42,6 +47,12 @@ class Communities: ObservableObject {
                     self.communities[name] = result
                 }
             }
+        }
+    }
+
+    func loadExplore(context: Context) {
+        dataLoad(path: "/communities/explore", type: ExploreResponse.self, context: context) {(result) in
+            self.exploreResponse = result
         }
     }
 
