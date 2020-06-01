@@ -1,10 +1,10 @@
 console.log("Loading nodejs");
 
 process.on("unhandledRejection", (reason, _promise) => {
-  console.error("unhandledRejection", reason);
+  console.log("unhandledRejection", reason);
 });
 process.on("uncaughtException", (err) => {
-  console.error("uncaughtException", err);
+  console.log("uncaughtException", err);
 });
 
 require("./lib/ssb");

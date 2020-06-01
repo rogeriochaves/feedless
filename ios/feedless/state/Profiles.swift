@@ -6,6 +6,8 @@
 //  Copyright © 2020 Rogerio Chaves. All rights reserved.
 //
 
+import SwiftUI
+
 struct Friendslists : Codable {
     public var requestsReceived: [Profile]
     public var friends: [Profile]
@@ -116,6 +118,28 @@ class Profiles: ObservableObject {
     func signup(context: Context, name: String, completeHandler: @escaping () -> Void) {
         dataPost(path: "/signup", parameters: [ "name": name ], type: PostResult.self, context: context, waitForIndexing: false) {(result) in
             completeHandler()
+        }
+    }
+
+    @Published var updateResult : ServerData<PostResult> = .notAsked
+    func updateProfile(context: Context, name: String, bio: String, image: UIImage?, completeHandler: @escaping () -> Void) {
+        if let id = context.ssbKey?.id {
+            self.updateResult = .loading
+
+            var resizedImage : UIImage? = nil
+            if let img = image {
+                resizedImage = Utils.resizeImage(image: img, targetSize: CGSize(width: 256, height: 256))
+            }
+
+            dataPostMultipart(path: "/about", image: resizedImage, parameters: [ "name": name, "description": bio ], type: PostResult.self, context: context) {(result) in
+                self.updateResult = result
+                if case .success(_) = result {
+                    self.profiles[id] = .loading
+                    Utils.clearCache("/profile/\(id)")
+                    self.load(context: context, id: id)
+                    completeHandler()
+                }
+            }
         }
     }
 }

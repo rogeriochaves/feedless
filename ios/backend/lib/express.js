@@ -10,8 +10,11 @@ const debug = require("debug")("express");
 const fs = require("fs");
 const { ssbFolder, uploadPicture } = require("./utils");
 const ssbKeys = require("ssb-keys");
+const fileUpload = require("express-fileupload");
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 const router = asyncRouter(app);
 
@@ -420,6 +423,45 @@ router.post("/pubs/add", async (req, res) => {
   const inviteCode = req.body.invite_code;
 
   await ssb.client().invite.accept(inviteCode);
+
+  res.json({ result: "ok" });
+});
+
+router.post("/about", async (req, res) => {
+  const { name, description } = req.body;
+  const picture = req.files && req.files.pic;
+
+  const pictureLink = picture && (await uploadPicture(ssb.client(), picture));
+
+  let profile = await queries.getProfile(req.context.key.id);
+
+  let update = {};
+  if (name && name != profile.name) {
+    update.name = name;
+  }
+  if (description && description != profile.description) {
+    update.description = description;
+  }
+  if (pictureLink) {
+    update.image = pictureLink;
+  }
+
+  if (update.name || update.image || update.description) {
+    await ssb.client().identities.publishAs({
+      key: req.context.key,
+      private: false,
+      content: Object.assign(
+        {
+          type: "about",
+          about: profile.id,
+        },
+        update
+      ),
+    });
+
+    profile = await queries.getProfile(profile.id);
+    queries.profileCache[profile.id] = Object.assign(profile, update);
+  }
 
   res.json({ result: "ok" });
 });

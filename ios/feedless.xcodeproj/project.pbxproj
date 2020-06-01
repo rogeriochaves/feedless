@@ -57,6 +57,7 @@
 		90D618882482E3D800013CBB /* pubs.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D618872482E3D800013CBB /* pubs.json */; };
 		90D6188A2483CC8400013CBB /* Signup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D618892483CC8400013CBB /* Signup.swift */; };
 		90D6188C248470EA00013CBB /* EditProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D6188B248470EA00013CBB /* EditProfileScreen.swift */; };
+		90D6188E2484DDCC00013CBB /* PhotoCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D6188D2484DDCC00013CBB /* PhotoCaptureView.swift */; };
 		90DD38042477EF0500B236A3 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DD38032477EF0500B236A3 /* FocusableTextField.swift */; };
 /* End PBXBuildFile section */
 
@@ -151,6 +152,7 @@
 		90D618872482E3D800013CBB /* pubs.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pubs.json; sourceTree = "<group>"; };
 		90D618892483CC8400013CBB /* Signup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signup.swift; sourceTree = "<group>"; };
 		90D6188B248470EA00013CBB /* EditProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileScreen.swift; sourceTree = "<group>"; };
+		90D6188D2484DDCC00013CBB /* PhotoCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCaptureView.swift; sourceTree = "<group>"; };
 		90DD38032477EF0500B236A3 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -277,6 +279,7 @@
 		9061FA9C246DA3EC00AA988A /* components */ = {
 			isa = PBXGroup;
 			children = (
+				90D6188D2484DDCC00013CBB /* PhotoCaptureView.swift */,
 				9061FA9D246DA40500AA988A /* NavigationMenu.swift */,
 				90CDBA742470245F008EA9BE /* PostsList.swift */,
 				90CDBA76247026A5008EA9BE /* AsyncImage.swift */,
@@ -531,6 +534,7 @@
 				9061FA9E246DA40500AA988A /* NavigationMenu.swift in Sources */,
 				907A595B247B1687007C0983 /* Search.swift in Sources */,
 				907A5951247912FA007C0983 /* CommunitiesShow.swift in Sources */,
+				90D6188E2484DDCC00013CBB /* PhotoCaptureView.swift in Sources */,
 				902D04792458AAA7007CFE56 /* MainScreen.swift in Sources */,
 				907A595D247B1A03007C0983 /* SearchScreen.swift in Sources */,
 			);

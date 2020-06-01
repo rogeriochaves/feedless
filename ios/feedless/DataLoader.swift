@@ -35,6 +35,65 @@ func dataPost<T: Decodable>(path: String, parameters: [String: Any], type: T.Typ
     dataTask(request, type, context, waitForIndexing, completionHandler)
 }
 
+
+// From: https://stackoverflow.com/a/32904778/996404
+func generateBoundaryString() -> String {
+    return "Boundary-\(NSUUID().uuidString)"
+}
+
+extension Data {
+  mutating func append(_ string: String) {
+    let data = string.data(
+        using: String.Encoding.utf8,
+        allowLossyConversion: true)
+    append(data!)
+  }
+}
+
+import SwiftUI
+func dataPostMultipart<T: Decodable>(path: String, image: UIImage?, parameters: [String: String], type: T.Type, context: Context, waitForIndexing: Bool = true, completionHandler: @escaping (ServerData<T>) -> Void) {
+    guard let encodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { return }
+    guard let url = URL(string: "http://127.0.0.1:3000\(encodedPath)") else { return }
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+
+    let boundary = generateBoundaryString()
+    request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+    let imageData = image?.jpegData(compressionQuality: 1)
+    request.httpBody = createBodyWithParameters(parameters: parameters, filePathKey: "pic", imageDataKey: imageData, boundary: boundary)
+
+    request.addValue("application/json", forHTTPHeaderField: "Accept")
+    dataTask(request, type, context, waitForIndexing, completionHandler)
+}
+
+func createBodyWithParameters(parameters: [String: String]?, filePathKey: String?, imageDataKey: Data?, boundary: String) -> Data {
+    var body = Data()
+
+    if parameters != nil {
+        for (key, value) in parameters! {
+            body.append("--\(boundary)\r\n")
+            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            body.append("\(value)\r\n")
+        }
+    }
+
+    if let imageData = imageDataKey {
+        let filename = "user-profile.jpg"
+        let mimetype = "image/jpg"
+        body.append("--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"\(filePathKey!)\"; filename=\"\(filename)\"\r\n")
+        body.append("Content-Type: \(mimetype)\r\n\r\n")
+        body.append(imageData)
+        body.append("\r\n")
+    }
+
+    body.append("--\(boundary)--\r\n")
+
+    return body
+}
+
 private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ context: Context, _ waitForIndexing: Bool, _ completionHandler: @escaping (ServerData<T>) -> Void) {
     let identifier = "\(request.httpMethod ?? "GET") \(request.url?.path ?? "")"
 
