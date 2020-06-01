@@ -523,7 +523,7 @@ router.post("/profile/:id(*)/publish", async (req, res) => {
       type: "post",
       text: text,
       wall: id,
-      mentions: [{link: id, name: profile.name}]
+      mentions: [{ link: id, name: profile.name }],
     },
   });
 
@@ -610,16 +610,6 @@ router.post("/about", async (req, res) => {
       update
     );
   }
-
-  await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
-    private: false,
-    content: {
-      type: "about",
-      about: req.context.profile.id,
-      publicWebHosting: true,
-    },
-  });
 
   res.redirect("/");
 });
