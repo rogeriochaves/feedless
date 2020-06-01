@@ -26,10 +26,20 @@ struct NavigationMenu<C: View> : View {
                     Button(action: {
                         self.menuOpen = true
                     }) {
-                        Image(systemName: "line.horizontal.3")
-                            .imageScale(.large)
-                            .foregroundColor(Color(self.router.navigationBarTextColor))
-                    }.actionSheet(isPresented: $menuOpen) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "line.horizontal.3")
+                                .imageScale(.large)
+                                .foregroundColor(Color(self.router.navigationBarTextColor))
+                                .padding(.trailing, 5)
+                        }
+                            // This is for increasing button click area
+                            .frame(width: 48, height: 48)
+                            .contentShape(
+                                Rectangle()
+                            )
+                    }
+                    .actionSheet(isPresented: $menuOpen) {
                         ActionSheet(
                             title: Text("Actions"),
                             buttons: [
