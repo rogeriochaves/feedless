@@ -115,8 +115,13 @@ class Profiles: ObservableObject {
         }
     }
 
-    func signup(context: Context, name: String, completeHandler: @escaping () -> Void) {
-        dataPost(path: "/signup", parameters: [ "name": name ], type: PostResult.self, context: context, waitForIndexing: false) {(result) in
+    func signup(context: Context, name: String, image: UIImage?, completeHandler: @escaping () -> Void) {
+        var resizedImage : UIImage? = nil
+        if let img = image {
+            resizedImage = Utils.resizeImage(image: img, targetSize: CGSize(width: 256, height: 256))
+        }
+
+        dataPostMultipart(path: "/signup", image: resizedImage, parameters: [ "name": name ], type: PostResult.self, context: context, waitForIndexing: false) {(result) in
             completeHandler()
         }
     }
