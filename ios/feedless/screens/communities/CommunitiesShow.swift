@@ -12,6 +12,7 @@ struct CommunitiesShow : View {
     @EnvironmentObject var context : Context
     @EnvironmentObject var communities : Communities
     @EnvironmentObject var imageLoader : ImageLoader
+    @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var router : Router
     @State private var selection = 0
     private var name : String
@@ -43,12 +44,25 @@ struct CommunitiesShow : View {
                         }
                     }
                     .navigationBarTitle("#\(community.name)")
+                    .navigationBarItems(trailing: joinLeaveButton(community: community))
                 )
             case let .error(message):
                 return AnyView(Text(message))
             }
         } else {
             return AnyView(Text("Loading..."))
+        }
+    }
+
+    func joinLeaveButton(community: CommunityDetails) -> PrimaryButton {
+        if community.isMember {
+            return PrimaryButton(text: "Leave", color: Color(Styles.uiPink)) {
+                self.communities.subscribe(context: self.context, profiles: self.profiles, name: self.name, subscribed: false)
+            }
+        } else {
+            return PrimaryButton(text: "Join", color: Color(Styles.uiPink)) {
+                self.communities.subscribe(context: self.context, profiles: self.profiles, name: self.name, subscribed: true)
+            }
         }
     }
 
@@ -71,5 +85,7 @@ struct CommunitiesShow_Previews: PreviewProvider {
             .environmentObject(Samples.context())
             .environmentObject(Samples.communities())
             .environmentObject(ImageLoader())
+            .environmentObject(Samples.profiles())
+            .environmentObject(Router())
     }
 }

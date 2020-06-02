@@ -139,12 +139,13 @@ class Utils {
         }
     }
 
-    static func clearCache(_ path: String) {
+    static func clearCache(_ path: String, query: String = "") {
         guard let encodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { return }
-        guard let url = URL(string: "http://127.0.0.1:3000\(encodedPath)") else { return }
-        let task = session.dataTask(with: url)
+        guard let url = URL(string: "http://127.0.0.1:3000\(encodedPath)\(query)") else { return }
+        let request = URLRequest(url: url)
+        debug("Removing cache for \(url)")
+        let task = session.dataTask(with: request)
         URLCache.shared.removeCachedResponse(for: task)
-        task.suspend()
     }
 
     static let session = getURLSession()

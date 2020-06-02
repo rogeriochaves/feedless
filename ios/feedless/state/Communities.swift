@@ -88,4 +88,21 @@ class Communities: ObservableObject {
             }
         }
     }
+
+    func subscribe(context: Context, profiles: Profiles, name: String, subscribed: Bool) {
+        if case .success(var community) = self.communities[name] {
+            community.isMember = subscribed
+            self.communities[name] = .success(community)
+        }
+
+        dataPost(path: "/communities/\(name)/subscribe", parameters: [ "subscribed": subscribed ], type: PostResult.self, context: context) {(result) in
+            Utils.clearCache("/communities/\(name)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.load(context: context, name: name)
+                if let id = context.ssbKey?.id {
+                    profiles.load(context: context, id: id)
+                }
+            }
+        }
+    }
 }

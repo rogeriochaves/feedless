@@ -79,12 +79,12 @@
          <EnvironmentVariable
             key = "DEBUG_SWIFT"
             value = "1"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "DEBUG"
-            value = "express,queries:*"
-            isEnabled = "YES">
+            value = "express,queries:*,router"
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>

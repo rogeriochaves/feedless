@@ -216,24 +216,6 @@ router.get("/communities/explore", async (_req, res) => {
   res.json({ communities });
 });
 
-router.get("/communities/:name", async (req, res) => {
-  const name = req.params.name;
-
-  const [topics, members, isMember] = await Promise.all([
-    queries.getCommunityPosts(name),
-    queries.getCommunityMembers(name),
-    queries.isMember(req.context.key.id, name),
-  ]);
-
-  res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
-  res.json({
-    name,
-    members,
-    isMember: !!isMember,
-    topics,
-  });
-});
-
 router.post("/communities/:name/new", async (req, res) => {
   const name = req.params.name;
   const title = req.body.title;
@@ -253,8 +235,9 @@ router.post("/communities/:name/new", async (req, res) => {
   res.json({ name, topicKey: topic.key });
 });
 
-router.post("/communities/:name/join", async (req, res) => {
+router.post("/communities/:name/subscribe", async (req, res) => {
   const name = req.params.name;
+  const subscribed = req.body.subscribed;
 
   await ssb.client().identities.publishAs({
     key: req.context.key,
@@ -262,23 +245,7 @@ router.post("/communities/:name/join", async (req, res) => {
     content: {
       type: "channel",
       channel: name,
-      subscribed: true,
-    },
-  });
-
-  res.json({ result: "ok" });
-});
-
-router.post("/communities/:name/leave", async (req, res) => {
-  const name = req.params.name;
-
-  await ssb.client().identities.publishAs({
-    key: req.context.key,
-    private: false,
-    content: {
-      type: "channel",
-      channel: name,
-      subscribed: false,
+      subscribed: subscribed,
     },
   });
 
@@ -302,6 +269,24 @@ router.post("/communities/:name/:key(*)/publish", async (req, res) => {
   });
 
   res.json({ result: "ok" });
+});
+
+router.get("/communities/:name", async (req, res) => {
+  const name = req.params.name;
+
+  const [topics, members, isMember] = await Promise.all([
+    queries.getCommunityPosts(name),
+    queries.getCommunityMembers(name),
+    queries.isMember(req.context.key.id, name),
+  ]);
+
+  res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
+  res.json({
+    name,
+    members,
+    isMember: !!isMember,
+    topics,
+  });
 });
 
 router.get("/search", async (req, res) => {
