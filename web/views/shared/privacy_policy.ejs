@@ -1,0 +1,61 @@
+<%- include('../desktop/_header') %>
+
+<style>
+  h2 {
+    padding-top: 10px;
+  }
+</style>
+<div style="max-width: 800px; margin: 0 auto;">
+  <h1>Privacy Policy</h1>
+
+  <h2>Account</h2>
+  <p>
+    Feedless servers does not store any credentials, upon signup or login, a
+    public/private key pair is generated and saved only on your local device. If
+    you are using iOS or desktop app, it is saved on your local filesystem and
+    it never leaves your device. If you are using the hosted version at
+    feedless.social, then it saved in an encrypted cookie, which is sent on
+    every request so the server is able to publish and read private messages on
+    your behalf, but then discarded after request is over. This is the only
+    cookie feedless uses and it is only used for this purpose.
+  </p>
+
+  <h2>Content</h2>
+  <p>
+    Content that you read and publish on Feedless are not stored in our
+    databased, but rather distributed using the decentralized gossip protocol
+    <a href="https://scuttlebutt.nz/">Secure Scuttlebutt</a>. Any content you
+    publish will be replicated by the network you are connected to and cannot be
+    completely deleted given distributed nature, just hidden. Private messages
+    follow the same path but are encrypted so only the recipients can read.
+  </p>
+
+  <h2>Analytics</h2>
+  <p>
+    Feedless does not deploy any analytics, trackers or cookies (other then
+    login one), we cannot track or identify users. If you are using web hosted
+    version, then we do have error tracking by Sentry in case anything goes
+    wrong, and server telemetry with metrics like CPU, RAM, and url paths
+    requested, used for keeping a stable service. If you are using iOS or
+    desktop app, then there is no error tracking or telemetry at all, nothing is
+    captured.
+  </p>
+
+  <h2>Pubs registration</h2>
+  <p>
+    <a href="https://scuttlebutt.nz/">Secure Scuttlebutt</a> has the concept of
+    pubs, used for replicating the network content. Feedless is a pub itself at
+    pub.feedless.social:8009. If you are web hosted version, then you are
+    reading the pub content directly. If you are using iOS or desktop app, and
+    have no pubs already, then this is the only time ever we make an external
+    http call from the apps, in order to get an invite from pub.feedless.social,
+    for a better initial user experience.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    For any questions, you can send an email to hello@feedless.social
+  </p>
+</div>
+
+<%- include('../desktop/_footer') %>

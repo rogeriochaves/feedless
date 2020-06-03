@@ -859,6 +859,10 @@ router.post("/frontend-error", (req, res) => {
   res.send("ok");
 });
 
+router.get("/privacy-policy", async (_req, res) => {
+  res.render("shared/privacy_policy");
+});
+
 router.get("/metrics", { public: true }, (_req, res) => {
   res.set("Content-Type", metrics.register.contentType);
   res.end(metrics.register.metrics());
