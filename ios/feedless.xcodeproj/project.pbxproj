@@ -706,7 +706,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "feedless/Preview\\ Content";
-				DEVELOPMENT_TEAM = 8FY84BDRUF;
+				DEVELOPMENT_TEAM = XC2B8QXW6P;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -718,7 +718,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
+				PRODUCT_BUNDLE_IDENTIFIER = social.feedless.app;
 				PRODUCT_NAME = Feedless;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
@@ -736,7 +736,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "feedless/Preview\\ Content";
-				DEVELOPMENT_TEAM = 8FY84BDRUF;
+				DEVELOPMENT_TEAM = XC2B8QXW6P;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -748,7 +748,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rogeriochaves.feedless;
+				PRODUCT_BUNDLE_IDENTIFIER = social.feedless.app;
 				PRODUCT_NAME = Feedless;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "feedless/feedless-Bridging-Header.h";
