@@ -2,12 +2,16 @@
 
 <div class="index-welcome">
   <div class="screen-center">
-    <h1 style="font-size: 60px; font-family: 'Lucida Grande', sans-serif">Welcome to Feedless</h1>
-    <h2 style="padding: 20px 0">The non-addictive social network</h2>
+    <h1 style="font-size: 60px; font-family: 'Lucida Grande', sans-serif;">
+      Welcome to Feedless
+    </h1>
+    <h2 style="padding: 20px 0;">The non-addictive social network</h2>
 
-    <div style="padding-top: 20px">
+    <div style="padding-top: 20px;">
       <a href="/signup" class="button button-big button-blue">Create account</a>
-      <a href="/login" class="button button-big" style="margin-left: 10px">Login</a>
+      <a href="/login" class="button button-big" style="margin-left: 10px;"
+        >Login</a
+      >
     </div>
   </div>
   <button class="index-more-details">
@@ -18,24 +22,50 @@
 <div class="index-explanation">
   <div class="screen-center">
     <p>
-      Feedless combines the best original ideas of popular social networks without the bad parts
+      Feedless combines the best original ideas of popular social networks
+      without the bad parts
     </p>
 
     <ul>
-      <li>You have your own wall, but you can only post with 140 characters, like original Twitter</li>
-      <li>If you want to check on others you have to go to their profile, like original Facebook or Orkut</li>
-      <li>You can send secret messages, like original Snapchat, but there are no stories</li>
-      <li>There is no feed to scroll forever, no cassino slot machine addiction</li>
-      <li>There are no likes nor any mindless interactions, if you like something, you tell the person, like a human</li>
+      <li>
+        You have your own wall, but you can only post with 140 characters, like
+        original Twitter
+      </li>
+      <li>
+        If you want to check on others you have to go to their profile, like
+        original Facebook or Orkut
+      </li>
+      <li>
+        You can send secret messages, like original Snapchat, but there are no
+        stories
+      </li>
+      <li>
+        There is no feed to scroll forever, no cassino slot machine addiction
+      </li>
+      <li>
+        There are no likes nor any mindless interactions, if you like something,
+        you tell the person, like a human
+      </li>
     </ul>
 
     <p>
-      Because Feedless is not a business, we don't need to make people
-      addicted just to sell more ads and please shareholders. Feedless is
-      <a href="https://github.com/rogeriochaves/feedless" target="_blank" style="color: #600">open-source</a>
+      Because Feedless is not a business, we don't need to make people addicted
+      just to sell more ads and please shareholders. Feedless is
+      <a
+        href="https://github.com/rogeriochaves/feedless"
+        target="_blank"
+        style="color: #600;"
+        >open-source</a
+      >
       and built on top of
-      <a href="https://scuttlebutt.nz/" target="_blank" style="color: #600">SSB</a>,
-      a decentralized social network protocol, which means the community sustains it, not a corporation.
+      <a href="https://scuttlebutt.nz/" target="_blank" style="color: #600;"
+        >SSB</a
+      >, a decentralized social network protocol, which means the community
+      sustains it, not a corporation.
+    </p>
+
+    <p>
+      <a href="/privacy-policy" style="color: #600;">Privacy Policy</a>
     </p>
   </div>
 </div>
@@ -44,15 +74,17 @@
   const scrollTo = document.querySelector(".index-welcome").clientHeight - 20;
   const scrollDuration = 500;
   const scrollStep = scrollTo / (scrollDuration / 15);
-  document.querySelector(".index-more-details").addEventListener("click", () => {
-    const scrollInterval = setInterval(() => {
-      if (window.scrollY < scrollTo) {
-        window.scrollBy(0, scrollStep);
-      } else {
-        clearInterval(scrollInterval);
-      }
-    }, 15);
-  });
+  document
+    .querySelector(".index-more-details")
+    .addEventListener("click", () => {
+      const scrollInterval = setInterval(() => {
+        if (window.scrollY < scrollTo) {
+          window.scrollBy(0, scrollStep);
+        } else {
+          clearInterval(scrollInterval);
+        }
+      }, 15);
+    });
 </script>
 
 <%- include('../desktop/_footer') %>

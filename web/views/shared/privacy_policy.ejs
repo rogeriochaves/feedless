@@ -14,7 +14,7 @@
     public/private key pair is generated and saved only on your local device. If
     you are using iOS or desktop app, it is saved on your local filesystem and
     it never leaves your device. If you are using the hosted version at
-    feedless.social, then it saved in an encrypted cookie, which is sent on
+    feedless.social, then it is saved in an encrypted cookie, which is sent on
     every request so the server is able to publish and read private messages on
     your behalf, but then discarded after request is over. This is the only
     cookie feedless uses and it is only used for this purpose.
@@ -23,11 +23,12 @@
   <h2>Content</h2>
   <p>
     Content that you read and publish on Feedless are not stored in our
-    databased, but rather distributed using the decentralized gossip protocol
-    <a href="https://scuttlebutt.nz/" target="_blank">Secure Scuttlebutt</a>. Any content you
-    publish will be replicated by the network you are connected to and cannot be
-    completely deleted given distributed nature, just hidden. Private messages
-    follow the same path but are encrypted so only the recipients can read.
+    database, but rather distributed using the decentralized gossip protocol
+    <a href="https://scuttlebutt.nz/" target="_blank">Secure Scuttlebutt</a>.
+    Any content you publish will be replicated by the network you are connected
+    to and cannot be completely deleted given distributed nature, just hidden.
+    Private messages follow the same path but are encrypted so only the
+    recipients can read.
   </p>
 
   <h2>Analytics</h2>
@@ -43,13 +44,13 @@
 
   <h2>Pubs registration</h2>
   <p>
-    <a href="https://scuttlebutt.nz/" target="_blank">Secure Scuttlebutt</a> has the concept of
-    pubs, used for replicating the network content. Feedless is a pub itself at
-    pub.feedless.social:8009. If you are web hosted version, then you are
-    reading the pub content directly. If you are using iOS or desktop app, and
-    have no pubs already, then this is the only time ever we make an external
-    http call from the apps, in order to get an invite from pub.feedless.social,
-    for a better initial user experience.
+    <a href="https://scuttlebutt.nz/" target="_blank">Secure Scuttlebutt</a> has
+    the concept of pubs, used for replicating the network content. Feedless is a
+    pub itself at pub.feedless.social:8009. If you are web hosted version, then
+    you are reading the pub content directly. If you are using iOS or desktop
+    app, and have no pubs already, then this is the only time ever we make an
+    external http call from the apps, in order to get an invite from
+    pub.feedless.social, for a better initial user experience.
   </p>
 
   <h2>Contact</h2>
