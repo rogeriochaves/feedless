@@ -58,7 +58,7 @@ fi
 function mv_and_sign {
   mv $1 $1.folder
   mv $1.folder/$2 $1
-  codesign -f -s "Apple Development: Rogerio Fernandes Junior" $1
+  codesign -f -s "Apple Development: Rogerio Chaves Fernandes Junior" $1
 }
 
 mv_and_sign "node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node" "sodium"
