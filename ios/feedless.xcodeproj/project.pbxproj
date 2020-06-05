@@ -345,11 +345,11 @@
 			buildConfigurationList = 902D049B2458AAAA007CFE56 /* Build configuration list for PBXNativeTarget "feedless" */;
 			buildPhases = (
 				902D046D2458AAA7007CFE56 /* Sources */,
+				90A1A5332460D24600D00245 /* Embed Frameworks */,
 				90FE79A3246298C1004CC526 /* [JS] Build native modules */,
 				905BE3A4248AD16C0025119B /* [JS] Concat script and copy backend to bundle */,
 				902D046F2458AAA7007CFE56 /* Resources */,
 				902D046E2458AAA7007CFE56 /* Frameworks */,
-				90A1A5332460D24600D00245 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

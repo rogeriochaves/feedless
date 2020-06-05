@@ -55,6 +55,7 @@ else # iphonesimulator
   PLATFORM_NAME="iphoneos" npm_config_arch="x64" npm rebuild --build-from-source
 fi
 
+rm -rf node_modules/leveldown/build/Release
 node ../build-nodejs-modules/node_modules/nodejs-mobile-react-native/scripts/ios-create-plists-and-dlopen-override.js .
 
 echo "$PLATFORM_NAME" > "NATIVE_BUILD.txt"

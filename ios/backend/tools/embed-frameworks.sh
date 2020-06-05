@@ -2,9 +2,6 @@
 
 echo "Embeding frameworks"
 
-/usr/bin/codesign --force --sign $EXPANDED_CODE_SIGN_IDENTITY --preserve-metadata=identifier,entitlements,flags --timestamp=none "node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node"
-/usr/bin/codesign --force --sign $EXPANDED_CODE_SIGN_IDENTITY --preserve-metadata=identifier,entitlements,flags --timestamp=none "node_modules/leveldown-nodejs-mobile/build/Release/leveldown.node"
-
 # Embed every resulting .framework in the application
 embed_framework() {
   FRAMEWORK_NAME="$(basename "$1")"
