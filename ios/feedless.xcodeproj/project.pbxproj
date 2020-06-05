@@ -714,10 +714,7 @@
 				);
 				INFOPLIST_FILE = feedless/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = social.feedless.app;
 				PRODUCT_NAME = Feedless;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -735,6 +732,7 @@
 				CODE_SIGN_ENTITLEMENTS = feedless/feedless.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_ASSET_PATHS = "feedless/Preview\\ Content";
 				DEVELOPMENT_TEAM = XC2B8QXW6P;
 				ENABLE_BITCODE = NO;
@@ -744,10 +742,7 @@
 				);
 				INFOPLIST_FILE = feedless/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = social.feedless.app;
 				PRODUCT_NAME = Feedless;
 				PROVISIONING_PROFILE_SPECIFIER = "";

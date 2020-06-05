@@ -55,13 +55,6 @@ else # iphonesimulator
   PLATFORM_NAME="iphoneos" npm_config_arch="x64" npm rebuild --build-from-source
 fi
 
-function mv_and_sign {
-  mv $1 $1.folder
-  mv $1.folder/$2 $1
-  codesign -f -s "Apple Development: Rogerio Chaves Fernandes Junior" $1
-}
-
-mv_and_sign "node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node" "sodium"
-mv_and_sign "node_modules/leveldown-nodejs-mobile/build/Release/leveldown.node" "leveldown"
+node ../build-nodejs-modules/node_modules/nodejs-mobile-react-native/scripts/ios-create-plists-and-dlopen-override.js .
 
 echo "$PLATFORM_NAME" > "NATIVE_BUILD.txt"
