@@ -345,7 +345,8 @@
 			buildConfigurationList = 902D049B2458AAAA007CFE56 /* Build configuration list for PBXNativeTarget "feedless" */;
 			buildPhases = (
 				902D046D2458AAA7007CFE56 /* Sources */,
-				90FE79A3246298C1004CC526 /* [JS] Build native modules, concat script and copy backend to bundle */,
+				90FE79A3246298C1004CC526 /* [JS] Build native modules */,
+				905BE3A4248AD16C0025119B /* [JS] Concat script and copy backend to bundle */,
 				902D046F2458AAA7007CFE56 /* Resources */,
 				902D046E2458AAA7007CFE56 /* Frameworks */,
 				90A1A5332460D24600D00245 /* Embed Frameworks */,
@@ -472,7 +473,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		90FE79A3246298C1004CC526 /* [JS] Build native modules, concat script and copy backend to bundle */ = {
+		905BE3A4248AD16C0025119B /* [JS] Concat script and copy backend to bundle */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[JS] Concat script and copy backend to bundle";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd backend\n./tools/noderify-mobile.sh\n./tools/sync-backend.sh\n";
+		};
+		90FE79A3246298C1004CC526 /* [JS] Build native modules */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
 			files = (
@@ -481,14 +500,14 @@
 			);
 			inputPaths = (
 			);
-			name = "[JS] Build native modules, concat script and copy backend to bundle";
+			name = "[JS] Build native modules";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd backend\nnpm run install:ios\nnpm run build\n\ncd ..\n./backend/tools/sync-backend.sh\n";
+			shellScript = "cd backend\n./tools/install-ios.sh\n./tools/apply-patches.sh\n./tools/embed-frameworks.sh\n./tools/remove-simulator-strip.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
