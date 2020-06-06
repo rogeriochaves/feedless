@@ -31,7 +31,7 @@ struct Debug: View {
     }
 
     var body: some View {
-        UITableView.appearance().backgroundColor = UIColor.white
+        UITableView.appearance().backgroundColor = Styles.uiWhite
 
         return entriesList()
         .navigationBarTitle(Text("Debug"))

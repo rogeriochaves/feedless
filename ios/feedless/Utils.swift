@@ -120,19 +120,6 @@ class Utils {
         return title
     }
 
-    static func changeNavigationColor(_ color: UIColor) {
-        let coloredAppearance = UINavigationBarAppearance()
-        coloredAppearance.configureWithTransparentBackground()
-        coloredAppearance.backgroundColor = color
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().compactAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
-        UINavigationBar.appearance().tintColor = .white
-    }
-
     static func debug(_ str: String) {
         if ProcessInfo.processInfo.environment["DEBUG_SWIFT"] != nil {
             print(str)

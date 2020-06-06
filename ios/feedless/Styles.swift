@@ -71,4 +71,9 @@ class Styles {
         blue: 245 / 255,
         alpha: 1
     )
+    // This will be black on dark mode
+    static var uiWhite = UIColor.systemBackground
+
+    // This will be white on dark mode
+    static var uiBlack = UIColor.label
 }

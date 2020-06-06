@@ -26,7 +26,7 @@ struct MainScreen: View {
                     .fixedSize(horizontal: true, vertical: false)
             }
             .frame(maxWidth: .infinity)
-            .background(Color.white)
+            .background(Color(Styles.uiWhite))
             .foregroundColor(isSelected ? Styles.darkGray : Styles.gray)
         }
     }

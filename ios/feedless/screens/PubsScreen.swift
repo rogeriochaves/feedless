@@ -46,7 +46,7 @@ struct PubsScreen: View {
     }
 
     var body: some View {
-        UITableView.appearance().backgroundColor = UIColor.white
+        UITableView.appearance().backgroundColor = Styles.uiWhite
 
         return VStack(alignment: .leading) {
             entriesList()

@@ -228,7 +228,7 @@ struct ProfileScreen : View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .background(Color.white)
+            .background(Color(Styles.uiWhite))
         }
     }
 

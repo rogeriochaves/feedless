@@ -70,8 +70,8 @@ class Router: ObservableObject {
             self.navigationBarBackgroundColor = Styles.uiLightBlue
             self.navigationBarTextColor = Styles.uiDarkBlue
         default:
-            self.navigationBarBackgroundColor = UIColor.white
-            self.navigationBarTextColor = UIColor.black
+            self.navigationBarBackgroundColor = Styles.uiWhite
+            self.navigationBarTextColor = Styles.uiBlack
         }
     }
 
@@ -97,7 +97,7 @@ class Router: ObservableObject {
             navBarAppearance.backgroundColor = self.navigationBarBackgroundColor
 
             if let hairline = findHairlineImageViewUnder(navbar) {
-                hairline.isHidden = self.navigationBarBackgroundColor == UIColor.white || self.navigationBarBackgroundColor == Styles.uiLightBlue
+                hairline.isHidden = self.navigationBarBackgroundColor == Styles.uiWhite || self.navigationBarBackgroundColor == Styles.uiLightBlue
             }
 
             navbar.standardAppearance = navBarAppearance

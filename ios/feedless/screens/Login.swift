@@ -66,7 +66,7 @@ struct Login: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
-                .background(Color.white)
+                .background(Color(Styles.uiWhite))
             }
             .offset(y: keyboardOffset())
             .animation(.easeOut(duration: 0.16))
