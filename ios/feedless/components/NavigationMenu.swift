@@ -48,7 +48,11 @@ struct NavigationMenu<C: View> : View {
                                     self.router.changeRoute(to: self.router.editProfileScreen)
                                     self.menuOpen = false
                                 },
-                                .default(Text("Feedback")),
+                                .default(Text("Feedback")) {
+                                    if let url = URL(string: "https://github.com/rogeriochaves/feedless/issues") {
+                                        UIApplication.shared.open(url)
+                                    }
+                                },
                                 .default(Text("Pubs")) {
                                     self.router.changeRoute(to: self.router.pubsScreen)
                                     self.menuOpen = false

@@ -56,6 +56,7 @@ else # iphonesimulator
 fi
 
 rm -rf node_modules/leveldown/build/Release
+rm -rf node_modules/leveldown/prebuilds
 node ../build-nodejs-modules/node_modules/nodejs-mobile-react-native/scripts/ios-create-plists-and-dlopen-override.js .
 
 echo "$PLATFORM_NAME" > "NATIVE_BUILD.txt"
