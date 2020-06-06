@@ -30,6 +30,7 @@ struct PrimaryButton : View {
             .padding(.horizontal, 12)
             .background(self.color)
             .foregroundColor(Color.black)
+            .cornerRadius(5)
             .overlay(
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(Styles.darkGray, lineWidth: 1)

@@ -41,19 +41,35 @@ struct FriendsScreen : View {
             case .loading:
                 return AnyView(Text("Loading..."))
             case let .success(profile):
-                return AnyView(
-                    Form {
-                        if profile.friends.requestsReceived.count > 0 {
-                            friendsList("Friend Requests", profile.friends.requestsReceived)
-                        }
+                if profile.friends.requestsReceived.count > 0 || profile.friends.friends.count > 0 || profile.friends.requestsSent.count > 0 {
+                    return AnyView(
+                        Form {
+                            if profile.friends.requestsReceived.count > 0 {
+                                friendsList("Friend Requests", profile.friends.requestsReceived)
+                            }
 
-                        friendsList("Friends", profile.friends.friends)
+                            if profile.friends.friends.count > 0 {
+                                friendsList("Friends", profile.friends.friends)
+                            }
 
-                        if profile.friends.requestsSent.count > 0 {
-                            friendsList("Requests Sent", profile.friends.requestsSent)
+                            if profile.friends.requestsSent.count > 0 {
+                                friendsList("Requests Sent", profile.friends.requestsSent)
+                            }
                         }
-                    }
-                )
+                    )
+                } else {
+                    return AnyView(
+                        VStack {
+                            Spacer()
+                            Text("👨‍👧‍👦\nYour friends list is empty, find some on the Communities or using the Search")
+                                .multilineTextAlignment(.center)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(Styles.uiPink))
+                    )
+                }
             case let .error(message):
                 return AnyView(Text(message))
             }

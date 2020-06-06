@@ -65,14 +65,27 @@ struct SecretsScreen : View {
         case .loading:
             return AnyView(Text("Loading..."))
         case let .success(secrets):
-            return AnyView(
-                Form {
+            if secrets.count > 0 {
+                return AnyView(Form {
                     secretChats(secrets)
                         .sheet(isPresented: isModalOpen, content: {
                             self.modal!
                         })
-                }
-            )
+                })
+            } else {
+                return AnyView(
+                    VStack {
+                        Spacer()
+                        Text("🤫\nYou don't have any secrets yet, go to a friend's profile and send them a secret!")
+                            .multilineTextAlignment(.center)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(Styles.uiYellow))
+
+                )
+            }
         case let .error(message):
             return AnyView(Text(message))
         }

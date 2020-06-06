@@ -176,7 +176,20 @@ struct ProfileScreen : View {
                 if self.selectedTab == 0 {
                     self.composer(profile)
                     Divider()
-                    PostsList(profile.posts)
+                    if profile.posts.count > 0 {
+                        PostsList(profile.posts)
+                    } else {
+                        HStack {
+                            Spacer()
+                            if isLoggedUser() {
+                                Text("✍️ You have no posts yet, share something!")
+                            } else {
+                                Text("No posts yet")
+                            }
+                            Spacer()
+                        }
+                        .padding(.top, 20)
+                    }
                 } else if self.selectedTab == 1 {
                     VStack(alignment: .leading, spacing: 0) {
                         ForEach(profile.friends.friends, id: \.id) { friend in

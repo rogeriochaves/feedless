@@ -45,11 +45,13 @@ struct CommunitiesList : View {
             case let .success(profile):
                 return AnyView(
                     Form {
-                        Section {
-                            Text("My communities").font(.headline)
-                            ForEach(profile.communities, id: \.self) { community in
-                                NavigationLink(destination: CommunitiesShow(name: community)) {
-                                    Text("#\(community)")
+                        if profile.communities.count > 0 {
+                            Section {
+                                Text("My communities").font(.headline)
+                                ForEach(profile.communities, id: \.self) { community in
+                                    NavigationLink(destination: CommunitiesShow(name: community)) {
+                                        Text("#\(community)")
+                                    }
                                 }
                             }
                         }
