@@ -13,11 +13,14 @@
           <b><%= post.value.authorProfile.name %></b>
         </a>
         <%- htmlify(text.replace(/^\s+/, "")) %>
-        <div class="meta-info" style="color: #999; font-size: 11px">
+        <div class="meta-info">
           <%= timeSince(new Date(post.rts)) %>
           <% if (post.value.content.inReplyTo) { %>
             in reply to <%= post.value.content.inReplyTo.name %>
           <% } %>
+          <a class="post-reply" href="javascript:replyTo('<%= encodeURIComponent(post.value.author) %>', '<%= post.value.authorProfile.name %>', '<%= encodeURIComponent(post.key) %>', '<%= encodeURIComponent(post.value.content.root || post.key) %>');">
+            ⬅️ Reply
+          </a>
         </div>
       </div>
     </div>

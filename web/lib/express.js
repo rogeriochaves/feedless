@@ -488,15 +488,43 @@ router.post("/profile/:id(*)/reject_friend", async (req, res) => {
   res.redirect(profileUrl(id));
 });
 
-router.post("/publish", async (req, res) => {
+const publish = async (id, req) => {
+  const { mentionId, mentionName, prev, root } = req.body;
+
+  let text = req.body.message;
+  let extra = {};
+  if (prev) {
+    extra.root = root;
+    extra.branch = prev;
+    extra.mentions = [{ link: mentionId, name: mentionName }];
+  }
+  if (mentionName) {
+    text.replace(`@${mentionName}`, `[@${mentionName}](${mentionId})`);
+  }
+
+  // Posting to somebody else's wall when its not a reply
+  if (id != req.context.profile.id && !prev) {
+    const profile = await queries.getProfile(id);
+    text = `[@${profile.name}](${id}) ${req.body.message}`;
+
+    extra.mentions = extra.mentions || [];
+    extra.mentions.push({ link: id, name: profile.name });
+    extra.wall = id;
+  }
+
   await ssb.client().identities.publishAs({
     key: req.context.profile.key,
     private: false,
     content: {
       type: "post",
-      text: req.body.message,
+      text: text,
+      ...extra,
     },
   });
+};
+
+router.post("/publish", async (req, res) => {
+  await publish(req.context.profile.id, req);
 
   res.redirect("/");
 });
@@ -539,18 +567,7 @@ router.post("/vanish", async (req, res) => {
 router.post("/profile/:id(*)/publish", async (req, res) => {
   const id = req.params.id;
 
-  const profile = await queries.getProfile(id);
-  const text = `[@${profile.name}](${id}) ${req.body.message}`;
-  await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
-    private: false,
-    content: {
-      type: "post",
-      text: text,
-      wall: id,
-      mentions: [{ link: id, name: profile.name }],
-    },
-  });
+  await publish(id, req);
 
   res.redirect(profileUrl(id));
 });

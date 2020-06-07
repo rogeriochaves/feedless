@@ -396,3 +396,16 @@ h2 {
   color: #ccc;
   font-weight: bold;
 }
+
+.meta-info {
+  color: #999;
+  font-size: 11px;
+}
+
+.post-reply {
+  display: none;
+}
+
+.post:hover .post-reply {
+  display: inline;
+}

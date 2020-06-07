@@ -47,3 +47,28 @@ if (letterCounter) {
   textarea.addEventListener("keyup", countLetters);
   countLetters();
 }
+
+window.replyTo = (id, name, prev, root) => {
+  const textarea = document.querySelector(".js-wall-post");
+  textarea.value = `@${name} `;
+  textarea.focus();
+
+  const mentionIdInput = document.querySelector(".js-post-mention-id");
+  const mentionNameInput = document.querySelector(".js-post-mention-name");
+  const prevInput = document.querySelector(".js-post-prev");
+  const rootInput = document.querySelector(".js-post-root");
+
+  mentionIdInput.value = id;
+  mentionNameInput.value = name;
+  prevInput.value = prev;
+  rootInput.value = root;
+
+  textarea.addEventListener("keyup", () => {
+    if (!textarea.value.includes(name)) {
+      mentionIdInput.value = "";
+      mentionNameInput.value = "";
+      prevInput.value = "";
+      rootInput.value = "";
+    }
+  });
+};

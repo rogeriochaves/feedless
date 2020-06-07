@@ -33,11 +33,7 @@
     </div>
 
     <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
-      <div class="letter-count js-letter-count">140</div>
-      <textarea name="message" class="compose-post" placeholder="Write something to <%= profile.name %>..."></textarea>
-      <div class="reverse-columns" style="margin-top: 10px">
-        <input type="submit" value="Publish" />
-      </div>
+      <%- include('../shared/_publish', { placeholder: `Write something to ${profile.name}...` }) %>
     </form>
 
     <h2 style="margin: 0"><%= profile.name %>'s Wall</h2>

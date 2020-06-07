@@ -20,11 +20,7 @@
     </div>
 
     <form action="/publish" method="POST">
-      <div class="letter-count js-letter-count">140</div>
-      <textarea name="message" class="compose-post" placeholder="Post something on your wall..."></textarea>
-      <div class="reverse-columns" style="margin-top: 10px">
-        <input type="submit" value="Publish" />
-      </div>
+      <%- include('../shared/_publish', { placeholder: "Post something on your wall..." }) %>
     </form>
 
     <h2 style="margin: 0">Your Wall</h2>
