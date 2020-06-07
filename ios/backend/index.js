@@ -7,7 +7,10 @@ process.on("uncaughtException", (err) => {
   console.log("uncaughtException", err);
 });
 
-require("../" + "override-dlopen-paths-preload"); // to go around noderify, as it overrides __dirname
+const targetEnvironment = process.argv[4];
+if (targetEnvironment == "iphoneos") {
+  require("../" + "override-dlopen-paths-preload"); // to go around noderify, as it overrides __dirname
+}
 
 require("./lib/ssb");
 

@@ -475,7 +475,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		905BE3A4248AD16C0025119B /* [JS] Concat script and copy backend to bundle */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (

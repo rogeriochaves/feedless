@@ -13,12 +13,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     @objc
     func startNode() {
+        var targetEnvironment = "iphoneos"
+        #if targetEnvironment(simulator)
+            targetEnvironment = "iphonesimulator"
+        #endif
         let jsFile = Bundle.main.path(forResource: "backend/out/index.js", ofType: nil)!
 
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let bundlePath = Bundle.main.bundlePath
         Utils.debug("documentsPath \(documentsPath)")
-        NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath])
+        NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath, targetEnvironment])
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

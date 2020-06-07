@@ -50,13 +50,22 @@ export npm_config_node_engine="chakracore" # nodejs-mobile uses chakracore
 # Rebuild modules with right environment
 if [ "$PLATFORM_NAME" == "iphoneos" ]; then
   npm_config_arch="arm64" npm rebuild --build-from-source
+
+  rm -rf node_modules/leveldown/build/Release
+  rm -rf node_modules/leveldown/prebuilds
+  node ../build-nodejs-modules/node_modules/nodejs-mobile-react-native/scripts/ios-create-plists-and-dlopen-override.js .
 else # iphonesimulator
   cp node_modules/sodium-native-nodejs-mobile/libsodium/dist-build/ios.sh node_modules/sodium-native-nodejs-mobile/patches/ios.sh
   PLATFORM_NAME="iphoneos" npm_config_arch="x64" npm rebuild --build-from-source
-fi
 
-rm -rf node_modules/leveldown/build/Release
-rm -rf node_modules/leveldown/prebuilds
-node ../build-nodejs-modules/node_modules/nodejs-mobile-react-native/scripts/ios-create-plists-and-dlopen-override.js .
+  function mv_and_sign {
+    mv $1 $1.folder
+    mv $1.folder/$2 $1
+    codesign -f -s $EXPANDED_CODE_SIGN_IDENTITY $1
+  }
+
+  mv_and_sign "node_modules/sodium-native-nodejs-mobile/build/Release/sodium.node" "sodium"
+  mv_and_sign "node_modules/leveldown-nodejs-mobile/build/Release/leveldown.node" "leveldown"
+fi
 
 echo "$PLATFORM_NAME" > "NATIVE_BUILD.txt"
