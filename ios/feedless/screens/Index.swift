@@ -12,6 +12,8 @@ func statusToString(status: SSBStatus) -> String {
     switch status {
     case .initializing:
         return "Initializing"
+    case .connecting:
+        return "Connecting"
     case .indexing:
         return "Indexing"
     case .syncing:

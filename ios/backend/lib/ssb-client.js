@@ -92,7 +92,11 @@ setInterval(checkIndexing, 1000);
 connectClient(ssbSecret);
 
 module.exports.client = () => ssbClient;
-module.exports.getStatus = () =>
-  syncing ? "syncing" : indexing ? "indexing" : "ready";
+module.exports.getStatus = () => {
+  if (!ssbClient) return "connecting";
+  if (syncing) return "syncing";
+  if (indexing) return "indexing";
+  return "ready";
+};
 module.exports.getIndexingState = () => indexingState;
 module.exports.reconnectWith = connectClient;

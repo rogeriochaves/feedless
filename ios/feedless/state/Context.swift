@@ -8,6 +8,7 @@
 
 enum SSBStatus {
     case initializing
+    case connecting
     case indexing
     case syncing
     case ready
@@ -56,7 +57,9 @@ class Context: ObservableObject {
                     let decodedData = try JSONDecoder().decode(StatusReponse.self, from: todoData)
                     DispatchQueue.main.async {
                         self.indexing = IndexingState(current: decodedData.indexingCurrent, target: decodedData.indexingTarget)
-                        if decodedData.status == "indexing" {
+                        if decodedData.status == "connecting" {
+                            self.status = .connecting
+                        } else if decodedData.status == "indexing" {
                             self.status = .indexing
                         } else if decodedData.status == "syncing" {
                             self.status = .syncing

@@ -10,12 +10,12 @@ import Foundation
 
 var fetchingScheduled : Set<String> = Set()
 
-func dataLoad<T: Decodable>(path: String, query: String = "", type: T.Type, context: Context, waitForIndexing: Bool = true, completionHandler: @escaping (ServerData<T>) -> Void) {
+func dataLoad<T: Decodable>(path: String, query: String = "", type: T.Type, context: Context, completionHandler: @escaping (ServerData<T>) -> Void) {
     guard let encodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { return }
     guard let url = URL(string: "http://127.0.0.1:3000\(encodedPath)\(query)") else { return }
 
     let request = URLRequest(url: url)
-    dataTask(request, type, context, waitForIndexing, completionHandler)
+    dataTask(request, type, context, false, completionHandler)
 }
 
 func dataPost<T: Decodable>(path: String, parameters: [String: Any], type: T.Type, context: Context, waitForIndexing: Bool = true, completionHandler: @escaping (ServerData<T>) -> Void) {
@@ -134,7 +134,9 @@ private func dataTask<T: Decodable>(_ request: URLRequest, _ type: T.Type, _ con
             Utils.debug("\(identifier): Cache miss");
         }
 
-        if waitForIndexing && (context.status == .initializing || context.status == .indexing || context.indexing.current < context.indexing.target) {
+        let isConnecting = context.status == .initializing || context.status == .connecting
+        let isIndexing = context.indexing.current < context.indexing.target
+        if isConnecting || (waitForIndexing && isIndexing) {
             if (!fetchingScheduled.contains(identifier)) {
                 fetchingScheduled.insert(identifier)
 
