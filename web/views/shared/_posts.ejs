@@ -13,6 +13,12 @@
           <b><%= post.value.authorProfile.name %></b>
         </a>
         <%- htmlify(text.replace(/^\s+/, "")) %>
+        <div class="meta-info" style="color: #999; font-size: 11px">
+          <%= timeSince(new Date(post.rts)) %>
+          <% if (post.value.content.inReplyTo) { %>
+            in reply to <%= post.value.content.inReplyTo.name %>
+          <% } %>
+        </div>
       </div>
     </div>
   <% }) %>

@@ -84,7 +84,7 @@ const getPosts = async (profile) => {
             },
           },
         ],
-        limit: 50,
+        limit: 30,
       }),
       // Deprecated way to see posts from others on your wall
       ssb.client().query.read({
@@ -101,7 +101,7 @@ const getPosts = async (profile) => {
             },
           },
         ],
-        limit: 50,
+        limit: 30,
       }),
       // Posts on your own wall
       ssb.client().query.read({
@@ -122,17 +122,68 @@ const getPosts = async (profile) => {
             },
           },
         ],
-        limit: 50,
+        limit: 30,
       }),
     ]),
     pull.filter((msg) => msg.value.content.type == "post"),
+    paramap(mapReplies),
     paramap(mapProfiles),
     paramap(removeWallMention)
   );
+  let flattenPosts = [];
+  let postsByKey = {};
+  for (const post of posts) {
+    postsByKey[post.key] = post;
+    for (const reply of post.value.content.replies) {
+      postsByKey[reply.key] = reply;
+    }
+  }
+
+  for (const post of posts) {
+    flattenPosts.push(post);
+    for (const reply of post.value.content.replies) {
+      flattenPosts.push(reply);
+      let branch = reply.value.content.branch;
+      if (!branch) continue;
+      let branchKey = typeof branch == "string" ? branch : branch[0];
+      let previous = postsByKey[branchKey];
+      if (!previous) continue;
+      reply.value.content.inReplyTo = previous.value.authorProfile;
+    }
+    delete post.value.content.replies;
+  }
 
   debugPosts("Done");
 
-  return posts;
+  return flattenPosts;
+};
+
+const mapReplies = async (data, callback) => {
+  try {
+    const replies = await promisePull(
+      ssb.client().query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                content: {
+                  root: data.key,
+                },
+              },
+            },
+          },
+        ],
+        limit: 100,
+      }),
+      paramap(mapProfiles)
+    );
+
+    data.value.content.replies = replies;
+    callback(null, data);
+  } catch (err) {
+    callback(err, null);
+  }
 };
 
 const getSecretMessages = async (profile) => {

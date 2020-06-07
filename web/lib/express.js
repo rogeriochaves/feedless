@@ -168,7 +168,9 @@ app.use((_req, res, next) => {
       if (nextPost.length + word.length + pageMarker.length + 1 < limit) {
         nextPost += word + " ";
       } else {
-        splittedPosts.push(nextPost + pageMarker);
+        if (nextPost.length > 0) {
+          splittedPosts.push(nextPost + pageMarker);
+        }
         nextPost = word + " ";
       }
     }
@@ -178,6 +180,29 @@ app.use((_req, res, next) => {
 
     return splittedPosts.reverse();
   };
+  res.locals.timeSince = (date) => {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    let interval = Math.floor(seconds / 31536000);
+
+    // Years
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      const dateTimeFormat = new Intl.DateTimeFormat("en", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+      });
+      return dateTimeFormat.format(new Date());
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) return interval + " days ago";
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) return interval + " hours ago";
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) return interval + " minutes ago";
+    return "just now";
+  };
+
   next();
 });
 
