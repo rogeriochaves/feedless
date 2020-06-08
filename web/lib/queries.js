@@ -589,7 +589,7 @@ const getCommunities = async () => {
           },
         },
       ],
-      limit: 500,
+      limit: 100,
     })
   );
 
@@ -705,30 +705,17 @@ const getProfileCommunities = async (id) => {
 };
 
 const getPostWithReplies = async (channel, key) => {
-  const postsByKey = await getCommunityPosts(channel, true);
-  const postWithReplies = postsByKey[key];
+  const posts = await getCommunityPosts(channel);
+  const topic = posts.find((x) => x.key == key);
 
-  const allReplies = [
-    postWithReplies,
-    ...postWithReplies.value.content.replies,
-  ];
-  const allRepliesWithProfiles = await Promise.all(
-    allReplies.map((data) =>
-      getProfile(data.value.author).then((author) => {
-        data.value.authorProfile = author;
-        return data;
-      })
-    )
-  );
-
-  return allRepliesWithProfiles;
+  return [topic, ...topic.value.content.replies];
 };
 
 const forceChannelIndex = {
   $sort: [["value", "content", "channel"], ["timestamp"]],
 };
 
-const getCommunityPosts = async (name, forReplies = false) => {
+const getCommunityPosts = async (name) => {
   debugCommunityPosts("Fetching");
 
   const communityPosts = await promisePull(
@@ -747,9 +734,9 @@ const getCommunityPosts = async (name, forReplies = false) => {
         },
         forceChannelIndex,
       ],
-      limit: 1000,
+      limit: 200,
     }),
-    forReplies ? undefined : paramap(mapProfiles)
+    paramap(mapProfiles)
   );
   let communityPostsByKey = {};
   let repliesByKey = {};
@@ -790,8 +777,6 @@ const getCommunityPosts = async (name, forReplies = false) => {
   }
 
   debugCommunityPosts("Done");
-
-  if (forReplies) return communityPostsByKey;
 
   let posts = Object.values(communityPostsByKey);
   posts = posts.sort((a, b) => b.rts - a.rts);
