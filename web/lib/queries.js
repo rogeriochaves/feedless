@@ -709,7 +709,7 @@ const getPostWithReplies = async (channel, key) => {
   const postsByKey = await getCommunityPosts(channel, true);
   const postWithReplies = postsByKey[key];
 
-  const allReplies = [postWithReplies, ...postWithReplies.value.replies];
+  const allReplies = [postWithReplies, ...postWithReplies.value.content.replies];
   const allRepliesWithProfiles = await Promise.all(
     allReplies.map((data) =>
       getProfile(data.value.author).then((author) => {
@@ -763,7 +763,7 @@ const getCommunityPosts = async (name, forReplies = false) => {
     if (getRootKey(post)) {
       repliesByKey[post.key] = post;
     } else {
-      post.value.replies = [];
+      post.value.content.replies = [];
       communityPostsByKey[post.key] = post;
     }
   }
@@ -771,7 +771,7 @@ const getCommunityPosts = async (name, forReplies = false) => {
     const rootKey = getRootKey(reply);
     const root = communityPostsByKey[rootKey];
     if (root) {
-      root.value.replies.push(reply);
+      root.value.content.replies.push(reply);
     }
 
     let nestedReply = repliesByKey[rootKey];
@@ -779,7 +779,7 @@ const getCommunityPosts = async (name, forReplies = false) => {
       const nestedRootKey = getRootKey(nestedReply);
       const nestedRoot = communityPostsByKey[nestedRootKey];
       if (nestedRoot) {
-        nestedRoot.value.replies.push(reply);
+        nestedRoot.value.content.replies.push(reply);
         nestedReply = null;
       } else {
         nestedReply = repliesByKey[nestedRootKey];
