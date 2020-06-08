@@ -202,6 +202,11 @@ app.use((_req, res, next) => {
     if (interval > 1) return interval + " minutes ago";
     return "just now";
   };
+  res.locals.getBranchKey = (post) => {
+    let branch = post.value.content.branch;
+    let branchKey = typeof branch == "string" ? branch : branch[0];
+    return branchKey;
+  };
 
   next();
 });
@@ -860,6 +865,21 @@ router.get("/search", { mobileVersion: "/mobile/search" }, async (req, res) => {
 
   res.render("desktop/search", { ...results, query });
 });
+
+router.get(
+  "/post/:key(*)",
+  { mobileVersion: "/mobile/post/:key" },
+  async (req, res) => {
+    const key = "%" + req.params.key;
+
+    const posts = await queries.getPost(key);
+
+    res.render("desktop/post", {
+      key,
+      posts,
+    });
+  }
+);
 
 router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssb.client())(req, res);

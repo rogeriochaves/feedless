@@ -1,4 +1,5 @@
 const pull = require("pull-stream");
+const once = require("pull-stream/sources/once");
 const cat = require("pull-cat");
 const debugPosts = require("debug")("queries:posts"),
   debugMessages = require("debug")("queries:messages"),
@@ -130,6 +131,52 @@ const getPosts = async (profile) => {
     paramap(mapProfiles),
     paramap(removeWallMention)
   );
+
+  debugPosts("Done");
+
+  return flattenPostsWithReplies(posts);
+};
+
+const getPost = async (key) => {
+  debugPosts("Fetching single");
+
+  let post;
+  try {
+    post = await ssb.client().get({ id: key, meta: true });
+    post.rts = post.value.timestamp;
+  } catch (err) {
+    if (err.name == "NotFoundError") {
+      return [];
+    } else {
+      throw err;
+    }
+  }
+
+  let root;
+  if (post.value.content.root) {
+    try {
+      root = await ssb
+        .client()
+        .get({ id: post.value.content.root, meta: true });
+      root.rts = root.value.timestamp;
+    } catch (e) {}
+  }
+
+  const posts = await promisePull(
+    // @ts-ignore
+    cat([once(root || post)]),
+    pull.filter((msg) => msg.value.content.type == "post"),
+    paramap(mapReplies),
+    paramap(mapProfiles),
+    paramap(removeWallMention)
+  );
+
+  debugPosts("Done");
+
+  return flattenPostsWithReplies(posts);
+};
+
+const flattenPostsWithReplies = (posts) => {
   let flattenPosts = [];
   let postsByKey = {};
   for (const post of posts) {
@@ -152,9 +199,6 @@ const getPosts = async (profile) => {
     }
     delete post.value.content.replies;
   }
-
-  debugPosts("Done");
-
   return flattenPosts;
 };
 
@@ -174,7 +218,7 @@ const mapReplies = async (data, callback) => {
             },
           },
         ],
-        limit: 100,
+        limit: 10,
       }),
       paramap(mapProfiles)
     );
@@ -762,6 +806,7 @@ if (!global.clearProfileInterval) {
 
 module.exports = {
   mapProfiles,
+  getPost,
   getPosts,
   search,
   getFriends,

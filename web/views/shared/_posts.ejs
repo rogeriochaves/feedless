@@ -1,8 +1,8 @@
-<% posts.sort((a, b) => typeof isTopic == "undefined" ? b.rts - a.rts : a.rts - b.rts).map(post => { %>
+<% posts.sort((a, b) => typeof isTopic == "undefined" && typeof isSingle == "undefined" ? b.rts - a.rts : a.rts - b.rts).map(post => { %>
   <% if (!post.value.content.text) return %>
 
   <% splittedPosts(post.value, typeof isTopic == "undefined" ? 140 : 10000).map(text => { %>
-    <div class="post">
+    <div class="post <%= typeof key != "undefined" && key == post.key ? "post-focused" : "" %>">
       <div>
         <a href="<%= profileUrl(post.value.author) %>">
           <img src="<%= profileImageUrl(post.value.authorProfile) %>" class="post-profile-pic" />
@@ -14,13 +14,19 @@
         </a>
         <%- htmlify(text.replace(/^\s+/, "")) %>
         <div class="meta-info">
-          <%= timeSince(new Date(post.rts)) %>
-          <% if (post.value.content.inReplyTo) { %>
-            in reply to <%= post.value.content.inReplyTo.name %>
-          <% } %>
-          <a class="post-reply" href="javascript:replyTo('<%= encodeURIComponent(post.value.author) %>', '<%= post.value.authorProfile.name %>', '<%= encodeURIComponent(post.key) %>', '<%= encodeURIComponent(post.value.content.root || post.key) %>');">
-            ⬅️ Reply
+          <a href="/post/<%= post.key.replace("%", "") %>">
+            <%= timeSince(new Date(post.rts)) %>
           </a>
+          <% if (post.value.content.inReplyTo) { %>
+            <a href="/post/<%= getBranchKey(post).replace("%", "") %>">
+              in reply to <%= post.value.content.inReplyTo.name %>
+            </a>
+          <% } %>
+          <% if (typeof isSingle == "undefined") { %>
+            <a class="post-reply" href="javascript:replyTo('<%= encodeURIComponent(post.value.author) %>', '<%= post.value.authorProfile.name %>', '<%= encodeURIComponent(post.key) %>', '<%= encodeURIComponent(post.value.content.root || post.key) %>');">
+              ⬅️ Reply
+            </a>
+          <% } %>
         </div>
       </div>
     </div>

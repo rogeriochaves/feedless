@@ -1,0 +1,13 @@
+<%- include('_header', { main_class: "screen-center" }) %>
+
+<div class="columns">
+  <div class="wall single-post" style="border-radius: 5px; padding-top: 15px;">
+    <% if (posts.length == 0) { %>
+    <div class="post">
+      Post not found
+    </div>
+    <% } else { %> <%- include('../shared/_posts', { posts, isSingle: true }) %> <% } %>
+  </div>
+</div>
+
+<%- include('_footer') %>

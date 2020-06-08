@@ -397,9 +397,15 @@ h2 {
   font-weight: bold;
 }
 
-.meta-info {
+.meta-info,
+.meta-info a {
   color: #999;
   font-size: 11px;
+  text-decoration: none;
+}
+
+.meta-info a:hover {
+  text-decoration: underline;
 }
 
 .post-reply {
@@ -408,4 +414,22 @@ h2 {
 
 .post:hover .post-reply {
   display: inline;
+}
+
+.single-post .post:first-child {
+  border-top: none;
+}
+
+.post.post-focused {
+  font-size: 25px;
+  line-height: 1.3em;
+}
+
+.post.post-focused .meta-info,
+.post.post-focused .meta-info a {
+  font-size: 16px;
+}
+
+.post.post-focused .post-profile-pic {
+  width: 64px;
 }
