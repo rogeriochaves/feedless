@@ -33,7 +33,7 @@
     </div>
 
     <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST">
-      <%- include('../shared/_publish', { placeholder: `Write something to ${profile.name}...` }) %>
+      <%- include('_publish', { placeholder: `Write something to ${profile.name}...` }) %>
     </form>
 
     <h2 style="margin: 0"><%= profile.name %>'s Wall</h2>

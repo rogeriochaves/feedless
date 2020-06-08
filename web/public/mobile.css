@@ -243,3 +243,7 @@ a.compose-new-button {
   padding: 14px;
   border-bottom: 1px solid #ddd;
 }
+
+.post-reply {
+  display: inline;
+}

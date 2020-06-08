@@ -181,4 +181,20 @@ module.exports.setupRoutes = (router) => {
       });
     }
   );
+
+  router.get(
+    "/mobile/post/:key(*)",
+    { desktopVersion: "/post/:key" },
+    async (req, res) => {
+      const key = "%" + req.params.key;
+
+      const posts = await queries.getPost(key);
+
+      res.render("mobile/post", {
+        key,
+        posts,
+        layout: "mobile/_layout",
+      });
+    }
+  );
 };

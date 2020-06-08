@@ -49,7 +49,7 @@ if (letterCounter) {
 }
 
 window.replyTo = (id, name, prev, root) => {
-  const textarea = document.querySelector(".js-wall-post");
+  const textarea = document.querySelector(".js-compose-post");
   textarea.value = `@${name} `;
   textarea.focus();
 

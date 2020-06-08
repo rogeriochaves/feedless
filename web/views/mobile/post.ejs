@@ -1,0 +1,9 @@
+<div class="single-post">
+  <% if (posts.length == 0) { %>
+    <div class="post">
+      Post not found
+    </div>
+  <% } else { %>
+    <%- include('../shared/_posts', { posts, isSingle: true }) %>
+  <% } %>
+</div>
