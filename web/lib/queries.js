@@ -532,15 +532,14 @@ const getProfile = async (id) => {
 
   let getKey = (key) => latestOwnerValue({ key, dest: id });
 
-  let [name, image, description] = await Promise.all([
+  let [name, image] = await Promise.all([
     getKey("name"),
     getKey("image"),
-    getKey("description"),
   ]).catch((err) => {
     console.error("Could not retrieve profile for", id, err);
   });
 
-  let profile = { id, name, image, description };
+  let profile = { id, name, image };
   profileCache[id] = profile;
 
   return profile;
@@ -709,7 +708,10 @@ const getPostWithReplies = async (channel, key) => {
   const postsByKey = await getCommunityPosts(channel, true);
   const postWithReplies = postsByKey[key];
 
-  const allReplies = [postWithReplies, ...postWithReplies.value.content.replies];
+  const allReplies = [
+    postWithReplies,
+    ...postWithReplies.value.content.replies,
+  ];
   const allRepliesWithProfiles = await Promise.all(
     allReplies.map((data) =>
       getProfile(data.value.author).then((author) => {
@@ -823,4 +825,5 @@ module.exports = {
   autofollow,
   isMember,
   getProfileCommunities,
+  latestOwnerValue,
 };

@@ -415,11 +415,18 @@ router.get(
     const id = req.params.id;
 
     if (id == req.context.profile.id) {
-      const [posts, friends, secretMessages, communities] = await Promise.all([
+      const [
+        posts,
+        friends,
+        secretMessages,
+        communities,
+        description,
+      ] = await Promise.all([
         queries.getPosts(req.context.profile),
         queries.getFriends(req.context.profile),
         queries.getSecretMessages(req.context.profile),
-        queries.getProfileCommunities(req.context.profile.id),
+        queries.getProfileCommunities(id),
+        queries.latestOwnerValue({ key: "description", dest: id }),
       ]);
 
       res.render("desktop/home", {
@@ -428,6 +435,7 @@ router.get(
         secretMessages,
         communities,
         profile: req.context.profile,
+        description,
       });
     } else {
       const [
@@ -436,12 +444,14 @@ router.get(
         friends,
         friendshipStatus,
         communities,
+        description,
       ] = await Promise.all([
         queries.getProfile(id),
         queries.getPosts({ id }),
         queries.getFriends({ id }),
         queries.getFriendshipStatus(req.context.profile.id, id),
         queries.getProfileCommunities(id),
+        queries.latestOwnerValue({ key: "description", dest: id }),
       ]);
 
       res.render("desktop/profile", {
@@ -450,6 +460,7 @@ router.get(
         friends,
         friendshipStatus,
         communities,
+        description,
       });
     }
   }
