@@ -785,10 +785,14 @@ const getCommunityPosts = async (name) => {
 };
 
 if (!global.clearProfileInterval) {
+  let oneHour = 60 * 60 * 1000;
+  let fiveMinutes = 5 * 60 * 1000;
+  let cacheDuration =
+    process.env.NODE_ENV == "production" ? oneHour : fiveMinutes;
   global.clearProfileInterval = setInterval(() => {
     debugProfile("Clearing profile cache");
     profileCache = {};
-  }, 5 * 60 * 1000);
+  }, cacheDuration);
 }
 
 module.exports = {
