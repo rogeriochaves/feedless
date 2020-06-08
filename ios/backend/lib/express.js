@@ -115,14 +115,12 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
     friends,
     communities,
     friendshipStatus,
-    description,
   ] = await Promise.all([
     queries.getProfile(id),
     queries.getPosts({ id }),
     queries.getFriends({ id }),
     queries.getProfileCommunities(id),
     queries.getFriendshipStatus(req.context.key.id, id),
-    queries.latestOwnerValue({ key: "description", dest: id }),
   ]);
 
   res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
@@ -132,7 +130,7 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
     friends,
     communities,
     friendshipStatus,
-    description,
+    description: profile.description,
   });
 });
 

@@ -17,34 +17,36 @@ const paramap = require("pull-paramap");
 const { promisePull, mapValues } = require("./utils");
 const ssb = require("./ssb-client");
 
-const latestOwnerValue = ({ key, dest }) => {
+const lastAboutValues = (dest) => {
   return promisePull(
     ssb.client().query.read({
-      reverse: true,
+      reverse: false,
       query: [
         {
           $filter: {
             value: {
               author: dest,
-              content: { type: "about", about: dest },
+              content: {
+                type: "about",
+                about: dest,
+              },
             },
           },
         },
       ],
-    }),
-    pull.filter((msg) => {
-      return (
-        msg.value.content &&
-        key in msg.value.content &&
-        !(msg.value.content[key] && msg.value.content[key].remove)
-      );
-    }),
-    pull.take(1)
-  ).then(([entry]) => {
-    if (entry) {
-      return entry.value.content[key];
+    })
+  ).then((msgs) => {
+    let abouts = {};
+    for (let msg of msgs) {
+      if (!msg.value.content) continue;
+      Object.assign(abouts, msg.value.content);
     }
-    return null;
+
+    for (let key in abouts) {
+      if (abouts[key] && abouts[key].remove) delete abouts[key];
+    }
+
+    return abouts;
   });
 };
 
@@ -432,20 +434,14 @@ let profileCache = {};
 const getProfile = async (id) => {
   if (profileCache[id]) return profileCache[id];
 
-  let getKey = (key) => latestOwnerValue({ key, dest: id });
-
-  let [name, image] = await Promise.all([
-    getKey("name"),
-    getKey("image"),
-  ]).catch((err) => {
-    console.error("Could not retrieve profile for", id, err);
-  });
+  let abouts = await lastAboutValues(id);
+  let image = abouts.image;
 
   if (image && typeof image == "object") {
     image = image.link;
   }
 
-  let profile = { id, name, image };
+  let profile = { id, name: abouts.name, image };
   profileCache[id] = profile;
 
   return profile;
@@ -707,5 +703,4 @@ module.exports = {
   autofollow,
   isMember,
   getProfileCommunities,
-  latestOwnerValue,
 };
