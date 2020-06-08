@@ -15,7 +15,7 @@
       <div style="padding-left: 20px">
         <h1><%= profile.name %></h1>
 
-        <%- escapeMarkdown(description || "").substr(0, 70) %>
+        <%- escapeMarkdown(profile.description || "").substr(0, 70) %>
       </div>
     </div>
 

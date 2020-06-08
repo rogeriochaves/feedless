@@ -45,15 +45,11 @@ module.exports.setupRoutes = (router) => {
       const id = req.params.id;
 
       if (id == req.context.profile.id) {
-        const [posts, description] = await Promise.all([
-          queries.getPosts(req.context.profile),
-          queries.latestOwnerValue({ key: "description", dest: id }),
-        ]);
+        const posts = queries.getPosts(req.context.profile);
 
         res.render("mobile/home", {
           posts,
           profile: req.context.profile,
-          description,
           layout: "mobile/_layout",
         });
       } else {
@@ -63,14 +59,12 @@ module.exports.setupRoutes = (router) => {
           friends,
           friendshipStatus,
           communities,
-          description,
         ] = await Promise.all([
           queries.getProfile(id),
           queries.getPosts({ id }),
           queries.getFriends({ id }),
           queries.getFriendshipStatus(req.context.profile.id, id),
           queries.getProfileCommunities(id),
-          queries.latestOwnerValue({ key: "description", dest: id }),
         ]);
 
         res.render("mobile/profile", {
@@ -79,7 +73,6 @@ module.exports.setupRoutes = (router) => {
           friends,
           friendshipStatus,
           communities,
-          description,
           layout: "mobile/_layout",
         });
       }
