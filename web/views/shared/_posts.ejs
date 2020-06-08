@@ -14,15 +14,19 @@
         </a>
         <%- htmlify(text.replace(/^\s+/, "")) %>
         <div class="meta-info">
-          <a href="/post/<%= post.key.replace("%", "") %>">
+          <% if (typeof isTopic == "undefined") { %>
+            <a href="/post/<%= post.key.replace("%", "") %>">
+              <%= timeSince(new Date(post.rts)) %>
+            </a>
+          <% } else { %>
             <%= timeSince(new Date(post.rts)) %>
-          </a>
+          <% } %>
           <% if (post.value.content.inReplyTo) { %>
             <a href="/post/<%= getBranchKey(post).replace("%", "") %>">
               in reply to <%= post.value.content.inReplyTo.name %>
             </a>
           <% } %>
-          <% if (typeof isSingle == "undefined") { %>
+          <% if (typeof isTopic == "undefined" && typeof isSingle == "undefined") { %>
             <a class="post-reply" href="javascript:replyTo('<%= encodeURIComponent(post.value.author) %>', '<%= post.value.authorProfile.name %>', '<%= encodeURIComponent(post.key) %>', '<%= encodeURIComponent(post.value.content.root || post.key) %>');">
               ⬅️ Reply
             </a>
