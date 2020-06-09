@@ -36,7 +36,7 @@
       "size" : "40x40"
     },
     {
-      "filename" : "smile(11).png",
+      "filename" : "smile(1).png",
       "idiom" : "iphone",
       "scale" : "1x",
       "size" : "57x57"
@@ -47,7 +47,7 @@
       "size" : "57x57"
     },
     {
-      "filename" : "smile(10).png",
+      "filename" : "smile(2).png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
@@ -103,7 +103,7 @@
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "smile(8).png",
+      "filename" : "smile1024.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

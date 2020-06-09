@@ -629,7 +629,7 @@ const getCommunityPosts = async (name) => {
         },
         forceChannelIndex,
       ],
-      limit: 200,
+      limit: 1000,
     }),
     paramap(mapProfiles)
   );
