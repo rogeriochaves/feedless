@@ -408,12 +408,21 @@ h2 {
   text-decoration: underline;
 }
 
-.post-reply {
+.post-reply,
+.post-more-button {
   display: none;
 }
 
-.post:hover .post-reply {
+.post:hover .post-reply,
+.post:hover .post-more-button {
   display: inline;
+}
+
+.post .popup-menu {
+  opacity: 0;
+}
+.post:hover .popup-menu {
+  opacity: 1;
 }
 
 .single-post .post:first-child {
@@ -432,4 +441,52 @@ h2 {
 
 .post.post-focused .post-profile-pic {
   width: 64px;
+}
+
+.arrow-down-icon {
+  width: 8px;
+  height: 8px;
+  box-sizing: border-box;
+  transform: rotate(135deg);
+  margin-right: 5px;
+}
+
+.arrow-down-icon::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-width: 2px 2px 0 0;
+  border-style: solid;
+  border-color: #999;
+  display: block;
+}
+
+button.button-transparent {
+  background: none;
+  border: none;
+  padding: 0;
+  height: auto;
+}
+
+.popup-menu {
+  position: absolute;
+  background: #fff;
+  max-width: 200px;
+  border: 1px solid #aaa;
+  transform: translateX(-100%);
+  display: none;
+  z-index: 2;
+  margin-left: 5px;
+}
+
+.popup-menu-item,
+input.popup-menu-item {
+  min-width: 100px;
+  width: 100%;
+  display: block;
+  background: none;
+  border: none;
+  text-align: left;
+  border-bottom: 1px solid #aaa;
+  border-radius: 0;
 }

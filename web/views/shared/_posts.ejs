@@ -1,5 +1,13 @@
 <% posts.sort((a, b) => typeof isTopic == "undefined" && typeof isSingle == "undefined" ? b.rts - a.rts : a.rts - b.rts).map(post => { %>
   <% if (!post.value.content.text) return %>
+  <% if (post.value.deleted) return %>
+
+  <% if (post.value.hidden) { %>
+    <div class="post">
+      Post not visible either because you hid it, blocked the user or they are not in your extended friends range
+    </div>
+    <% return %>
+  <% } %>
 
   <% splittedPosts(post.value, typeof isTopic == "undefined" ? 140 : 10000).map(text => { %>
     <div class="post <%= typeof key != "undefined" && key == post.key ? "post-focused" : "" %>">
@@ -9,6 +17,19 @@
         </a>
       </div>
       <div class="post-content">
+        <div style="float: right">
+          <button class="post-more-button button-transparent js-open-popup"><div class="arrow-down-icon"></div></button>
+          <% if (post.value.author == context.profile.id) { %>
+            <div class="popup-menu">
+              <button class="popup-menu-item js-delete" data-key="<%= post.key %>">Delete</button>
+            </div>
+          <% } else { %>
+            <div class="popup-menu">
+              <button class="popup-menu-item js-hide" data-key="<%= post.key %>">Hide</button>
+              <button class="popup-menu-item js-flag" data-key="<%= post.key %>">Flag</button>
+            </div>
+          <% } %>
+        </div>
         <a href="<%= profileUrl(post.value.author) %>" class="no-link-style">
           <b><%= post.value.authorProfile.name %></b>
         </a>

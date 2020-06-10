@@ -67,7 +67,60 @@ const removeWallMention = (data, callback) => {
   callback(null, data);
 };
 
-const getPosts = async (profile) => {
+let userDeletesCache = {};
+const getUserDeletes = async (userId) => {
+  if (userDeletesCache[userId]) return userDeletesCache[userId];
+
+  const deletes = await promisePull(
+    ssb.client().query.read({
+      reverse: false,
+      query: [
+        {
+          $filter: {
+            value: {
+              author: userId,
+              content: {
+                type: "delete",
+              },
+            },
+          },
+        },
+      ],
+    })
+  );
+  userDeletesCache[userId] = deletes.map((x) => x.value.content.dest);
+
+  return userDeletesCache[userId];
+};
+
+const mapDeletes = (currentUserId) => async (data, callback) => {
+  const authorDelete = await promisePull(
+    ssb.client().query.read({
+      reverse: false,
+      query: [
+        {
+          $filter: {
+            value: {
+              author: data.value.author,
+              content: {
+                type: "delete",
+                dest: data.key,
+              },
+            },
+          },
+        },
+      ],
+      limit: 1,
+    })
+  );
+  const userDeletes = await getUserDeletes(currentUserId);
+
+  data.value.deleted = authorDelete.length > 0;
+  data.value.hidden = userDeletes.includes(data.key);
+  callback(null, data);
+};
+
+const getPosts = async (currentUserId, profile) => {
   debugPosts("Fetching");
 
   const posts = await promisePull(
@@ -129,7 +182,8 @@ const getPosts = async (profile) => {
       }),
     ]),
     pull.filter((msg) => msg.value.content.type == "post"),
-    paramap(mapReplies),
+    paramap(mapReplies(currentUserId)),
+    paramap(mapDeletes(currentUserId)),
     paramap(mapProfiles),
     paramap(removeWallMention)
   );
@@ -139,7 +193,7 @@ const getPosts = async (profile) => {
   return flattenPostsWithReplies(posts);
 };
 
-const getPost = async (key) => {
+const getPost = async (currentUserId, key) => {
   debugPosts("Fetching single");
 
   let post;
@@ -168,7 +222,8 @@ const getPost = async (key) => {
     // @ts-ignore
     cat([once(root || post)]),
     pull.filter((msg) => msg.value.content.type == "post"),
-    paramap(mapReplies),
+    paramap(mapReplies(currentUserId)),
+    paramap(mapDeletes(currentUserId)),
     paramap(mapProfiles),
     paramap(removeWallMention)
   );
@@ -204,7 +259,7 @@ const flattenPostsWithReplies = (posts) => {
   return flattenPosts;
 };
 
-const mapReplies = async (data, callback) => {
+const mapReplies = (currentUserId) => async (data, callback) => {
   try {
     const replies = await promisePull(
       ssb.client().query.read({
@@ -222,7 +277,8 @@ const mapReplies = async (data, callback) => {
         ],
         limit: 10,
       }),
-      paramap(mapProfiles)
+      paramap(mapProfiles),
+      paramap(mapDeletes(currentUserId))
     );
 
     data.value.content.replies = replies;
@@ -809,4 +865,5 @@ module.exports = {
   autofollow,
   isMember,
   getProfileCommunities,
+  userDeletesCache,
 };

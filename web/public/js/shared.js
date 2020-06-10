@@ -72,3 +72,39 @@ window.replyTo = (id, name, prev, root) => {
     }
   });
 };
+
+const openPopupButtons = document.querySelectorAll(".js-open-popup");
+openPopupButtons.forEach((openPopupButton) => {
+  openPopupButton.addEventListener("click", () => {
+    const parent = openPopupButton.parentElement;
+    const popup = parent.querySelector(".popup-menu");
+    if (popup.style.display == "block") {
+      popup.style.display = "none";
+    } else {
+      popup.style.display = "block";
+    }
+  });
+});
+
+const deleteButtons = document.querySelectorAll(".js-delete");
+deleteButtons.forEach((deleteButton) => {
+  deleteButton.addEventListener("click", () => {
+    const key = deleteButton.dataset.key.replace("%", "");
+    fetch(`/delete/${key}`, { method: "POST" }).then(() => {
+      const post =
+        deleteButton.parentElement.parentElement.parentElement.parentElement;
+      post.parentElement.removeChild(post);
+    });
+  });
+});
+
+const hideButtons = document.querySelectorAll(".js-hide");
+hideButtons.forEach((hideButton) => {
+  hideButton.addEventListener("click", () => {
+    const key = hideButton.dataset.key.replace("%", "");
+    fetch(`/delete/${key}`, { method: "POST" }).then(() => {
+      hideButton.parentElement.parentElement.parentElement.parentElement.innerHTML =
+        "Post not visible either because you hid it, blocked the user or they are not in your extended friends range";
+    });
+  });
+});

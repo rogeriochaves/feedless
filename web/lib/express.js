@@ -416,7 +416,7 @@ router.get(
 
     if (id == req.context.profile.id) {
       const [posts, friends, secretMessages, communities] = await Promise.all([
-        queries.getPosts(req.context.profile),
+        queries.getPosts(req.context.profile.id, req.context.profile),
         queries.getFriends(req.context.profile),
         queries.getSecretMessages(req.context.profile),
         queries.getProfileCommunities(id),
@@ -438,7 +438,7 @@ router.get(
         communities,
       ] = await Promise.all([
         queries.getProfile(id),
-        queries.getPosts({ id }),
+        queries.getPosts(req.context.profile.id, { id }),
         queries.getFriends({ id }),
         queries.getFriendshipStatus(req.context.profile.id, id),
         queries.getProfileCommunities(id),
@@ -872,7 +872,7 @@ router.get(
   async (req, res) => {
     const key = "%" + req.params.key;
 
-    const posts = await queries.getPost(key);
+    const posts = await queries.getPost(req.context.profile.id, key);
 
     res.render("desktop/post", {
       key,
@@ -880,6 +880,78 @@ router.get(
     });
   }
 );
+
+router.post("/profile/:id(*)/block", async (req, res) => {
+  const id = req.params.id;
+  if (id == req.context.profile.id) {
+    throw "cannot block yourself";
+  }
+
+  await ssb.client().identities.publishAs({
+    key: req.context.profile.key,
+    private: false,
+    content: {
+      type: "contact",
+      contact: id,
+      following: false,
+      blocking: true,
+    },
+  });
+
+  res.redirect(profileUrl(id));
+});
+
+router.post("/profile/:id(*)/unblock", async (req, res) => {
+  const id = req.params.id;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.profile.key,
+    private: false,
+    content: {
+      type: "contact",
+      contact: id,
+      blocking: false,
+    },
+  });
+
+  res.redirect(profileUrl(id));
+});
+
+router.post("/delete/:key(*)", async (req, res) => {
+  const key = "%" + req.params.key;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.profile.key,
+    private: false,
+    content: {
+      type: "delete",
+      dest: key,
+    },
+  });
+
+  delete queries.userDeletesCache[req.context.profile.id];
+
+  res.json({ result: "ok" });
+});
+
+router.post("/flag/:key(*)", async (req, res) => {
+  const key = "%" + req.params.key;
+  const reason = req.body.reason;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.profile.key,
+    private: false,
+    content: {
+      type: "flag",
+      flag: {
+        link: key,
+        reason: reason,
+      },
+    },
+  });
+
+  res.json({ result: "ok" });
+});
 
 router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssb.client())(req, res);

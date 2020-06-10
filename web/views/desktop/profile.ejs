@@ -6,12 +6,22 @@
       <div>
         <img class="profile-pic" src="<%= profileImageUrl(profile) %>" />
       </div>
-      <div style="padding-left: 20px">
-        <div class="columns" style="align-items: center;">
-          <h1><%= profile.name %></h1>
-          <% if (friendshipStatus == "friends") { %>
-            <div style="margin-left: 14px">✅ Friends</div>
-          <% } %>
+      <div style="padding-left: 20px; width: 100%;">
+        <div class="columns" style="align-items: center; justify-content: space-between;">
+          <div class="columns" style="align-items: center">
+            <h1><%= profile.name %></h1>
+            <% if (friendshipStatus == "friends") { %>
+              <div style="margin-left: 14px">✅ Friends</div>
+            <% } %>
+          </div>
+          <div style="align-self: start;">
+            <button class="button-transparent js-open-popup" style="font-weight: bold;">...</button>
+            <div class="popup-menu">
+              <form action="<%= profileUrl(profile.id, "/block") %>" method="POST">
+                <input type="submit" class="popup-menu-item" value="Block" />
+              </form>
+            </div>
+          </div>
         </div>
         <div style="margin-bottom: 20px;"><%- escapeMarkdown(profile.description || "").substr(0, 70) %></div>
 

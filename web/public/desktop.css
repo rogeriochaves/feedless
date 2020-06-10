@@ -63,3 +63,7 @@ nav {
 .secret-chat .link-profile-pic {
   border: 1px solid #650;
 }
+
+.arrow-down-icon {
+  margin-top: -12px;
+}

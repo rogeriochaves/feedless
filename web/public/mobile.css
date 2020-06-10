@@ -247,3 +247,15 @@ a.compose-new-button {
 .post-reply {
   display: inline;
 }
+
+.post-more-button {
+  display: block;
+}
+
+.post .popup-menu {
+  opacity: 1;
+}
+
+.popup-menu {
+  margin-top: 12px;
+}
