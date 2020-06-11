@@ -98,13 +98,50 @@ deleteButtons.forEach((deleteButton) => {
   });
 });
 
+const hideItem = (key, post) => {
+  fetch(`/delete/${key}`, { method: "POST" }).then(() => {
+    post.innerHTML =
+      "Post not visible either because you have hidden it, blocked the user or they are not in your extended friends range";
+  });
+};
+
 const hideButtons = document.querySelectorAll(".js-hide");
 hideButtons.forEach((hideButton) => {
   hideButton.addEventListener("click", () => {
     const key = hideButton.dataset.key.replace("%", "");
-    fetch(`/delete/${key}`, { method: "POST" }).then(() => {
-      hideButton.parentElement.parentElement.parentElement.parentElement.innerHTML =
-        "Post not visible either because you have hidden it, blocked the user or they are not in your extended friends range";
-    });
+    const post =
+      hideButton.parentElement.parentElement.parentElement.parentElement;
+    hideItem(key, post);
+
+    if (confirm("Do you also want to flag the post?")) {
+      flagItem(key);
+    }
+  });
+});
+
+const flagItem = (key) => {
+  const reason = prompt("What is the reason to flag this?");
+  if (!reason) return;
+
+  fetch(`/flag/${key}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "reason=" + encodeURIComponent(reason),
+  }).then(() => {
+    alert("Post was flagged, thank you for reporting");
+  });
+};
+
+const flagButtons = document.querySelectorAll(".js-flag");
+flagButtons.forEach((flagButton) => {
+  flagButton.addEventListener("click", () => {
+    const key = flagButton.dataset.key.replace("%", "");
+    const post =
+      flagButton.parentElement.parentElement.parentElement.parentElement;
+    flagItem(key);
+
+    if (confirm("Do you also want to hide the post?")) {
+      hideItem(key, post);
+    }
   });
 });
