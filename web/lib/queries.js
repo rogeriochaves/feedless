@@ -482,21 +482,7 @@ const search = async (search) => {
 const getFriends = async (profile) => {
   debugFriends("Fetching");
 
-  let graph = await ssb.client().friends.getGraph();
-
-  let connections = {};
-  for (let key in graph) {
-    let isFollowing = graph[profile.id] && graph[profile.id][key] > 0;
-    let isFollowingBack = graph[key] && graph[key][profile.id] > 0;
-    if (isFollowing && isFollowingBack) {
-      connections[key] = "friends";
-    } else if (isFollowing && !isFollowingBack) {
-      connections[key] = "requestsSent";
-    } else if (!isFollowing && isFollowingBack) {
-      if (!graph[profile.id] || graph[profile.id][key] === undefined)
-        connections[key] = "requestsReceived";
-    }
-  }
+  let connections = await ssb.client().friends.getConnections(profile.id);
 
   const profilesList = await Promise.all(
     Object.keys(connections).map((id) => getProfile(id))
