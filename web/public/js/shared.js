@@ -104,7 +104,7 @@ hideButtons.forEach((hideButton) => {
     const key = hideButton.dataset.key.replace("%", "");
     fetch(`/delete/${key}`, { method: "POST" }).then(() => {
       hideButton.parentElement.parentElement.parentElement.parentElement.innerHTML =
-        "Post not visible either because you hid it, blocked the user or they are not in your extended friends range";
+        "Post not visible either because you have hidden it, blocked the user or they are not in your extended friends range";
     });
   });
 });
