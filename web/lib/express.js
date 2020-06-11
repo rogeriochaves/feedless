@@ -736,7 +736,7 @@ router.get(
 
     const [community, posts] = await Promise.all([
       communityData(req),
-      queries.getCommunityPosts(name),
+      queries.getCommunityPosts(req.context.profile.id, name),
     ]);
 
     res.render("desktop/communities/community", {
@@ -839,7 +839,7 @@ router.get(
 
     const [community, posts] = await Promise.all([
       communityData(req),
-      queries.getPostWithReplies(name, key),
+      queries.getPostWithReplies(req.context.profile.id, name, key),
     ]);
 
     res.render("desktop/communities/topic", {

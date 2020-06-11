@@ -118,7 +118,7 @@ module.exports.setupRoutes = (router) => {
       const name = req.params.name;
 
       const [posts, members, isMember] = await Promise.all([
-        queries.getCommunityPosts(name),
+        queries.getCommunityPosts(req.context.profile.id, name),
         queries.getCommunityMembers(name),
         queries.isMember(req.context.profile.id, name),
       ]);
@@ -151,7 +151,11 @@ module.exports.setupRoutes = (router) => {
       const name = req.params.name;
       const key = "%" + req.params.key;
 
-      const posts = await queries.getPostWithReplies(name, key);
+      const posts = await queries.getPostWithReplies(
+        req.context.profile.id,
+        name,
+        key
+      );
 
       res.render("mobile/communities/topic", {
         posts,

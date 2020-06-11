@@ -106,29 +106,35 @@ const getUserDeletes = async (userId) => {
   return userDeletesCache[userId];
 };
 
-const mapDeletes = (currentUserId) => async (data, callback) => {
-  const authorDelete = await promisePull(
-    ssb.client().query.read({
-      reverse: false,
-      query: [
-        {
-          $filter: {
-            value: {
-              author: data.value.author,
-              content: {
-                type: "delete",
-                dest: data.key,
+const mapDeletes = (currentUserId, onlyLocal = false) => async (
+  data,
+  callback
+) => {
+  let authorDelete;
+  if (!onlyLocal) {
+    authorDelete = await promisePull(
+      ssb.client().query.read({
+        reverse: false,
+        query: [
+          {
+            $filter: {
+              value: {
+                author: data.value.author,
+                content: {
+                  type: "delete",
+                  dest: data.key,
+                },
               },
             },
           },
-        },
-      ],
-      limit: 1,
-    })
-  );
+        ],
+        limit: 1,
+      })
+    );
+  }
   const { hiddenContent, blockedUsers } = await getUserDeletes(currentUserId);
 
-  data.value.deleted = authorDelete.length > 0;
+  data.value.deleted = authorDelete && authorDelete.length > 0;
   data.value.hidden =
     hiddenContent.includes(data.key) ||
     blockedUsers.includes(data.value.author);
@@ -765,8 +771,8 @@ const getProfileCommunities = async (id) => {
   return channelNames;
 };
 
-const getPostWithReplies = async (channel, key) => {
-  const posts = await getCommunityPosts(channel);
+const getPostWithReplies = async (currentUserId, channel, key) => {
+  const posts = await getCommunityPosts(currentUserId, channel);
   const topic = posts.find((x) => x.key == key);
 
   return [topic, ...topic.value.content.replies];
@@ -776,7 +782,7 @@ const forceChannelIndex = {
   $sort: [["value", "content", "channel"], ["timestamp"]],
 };
 
-const getCommunityPosts = async (name) => {
+const getCommunityPosts = async (currentUserId, name) => {
   debugCommunityPosts("Fetching");
 
   const communityPosts = await promisePull(
@@ -793,11 +799,12 @@ const getCommunityPosts = async (name) => {
             },
           },
         },
-        forceChannelIndex,
+        ...(name == "new-people" ? [] : [forceChannelIndex]),
       ],
       limit: 1000,
     }),
-    paramap(mapProfiles)
+    paramap(mapProfiles),
+    paramap(mapDeletes(currentUserId, true))
   );
   let communityPostsByKey = {};
   let repliesByKey = {};
