@@ -14,14 +14,6 @@
               <div style="margin-left: 14px">✅ Friends</div>
             <% } %>
           </div>
-          <div style="align-self: start;">
-            <button class="button-transparent js-open-popup" style="font-weight: bold;">...</button>
-            <div class="popup-menu">
-              <form action="<%= profileUrl(profile.id, "/block") %>" method="POST">
-                <input type="submit" class="popup-menu-item" value="Block" />
-              </form>
-            </div>
-          </div>
         </div>
         <div style="margin-bottom: 20px;"><%- escapeMarkdown(profile.description || "").substr(0, 70) %></div>
 
@@ -34,10 +26,16 @@
         <div class="columns profile-actions">
           <%- include('../shared/_friendship_button') %>
 
-          <button class="button-yellow js-compose-secret-message" style="margin-left: 5px" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
-            🤫 Secret Message
-          </button>
-          <%- include('secrets/_compose_single') %>
+          <% if (friendshipStatus != "blocked") { %>
+            <button class="button-yellow js-compose-secret-message" style="margin: 0 5px" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
+              🤫 Secret Message
+            </button>
+            <%- include('secrets/_compose_single') %>
+          <% } %>
+
+          <div style="align-self: start;">
+            <%- include('../shared/_profile_extra_menu') %>
+          </div>
         </div>
       </div>
     </div>
@@ -46,16 +44,20 @@
       <%- include('_publish', { placeholder: `Write something to ${profile.name}...` }) %>
     </form>
 
-    <h2 style="margin: 0"><%= profile.name %>'s Wall</h2>
-    <div style="padding-top: 15px;">
-      <% if (posts.length == 0) { %>
-        <div class="post">
-          No posts yet
-        </div>
-      <% } else { %>
-        <%- include('../shared/_posts', { posts }) %>
-      <% } %>
-    </div>
+    <% if (friendshipStatus == "blocked") { %>
+      You blocked <%= profile.name %>
+    <% } else { %>
+      <h2 style="margin: 0"><%= profile.name %>'s Wall</h2>
+      <div style="padding-top: 15px;">
+        <% if (posts.length == 0) { %>
+          <div class="post">
+            No posts yet
+          </div>
+        <% } else { %>
+          <%- include('../shared/_posts', { posts }) %>
+        <% } %>
+      </div>
+    <% } %>
   </div>
 
   <div class="friends-communities">

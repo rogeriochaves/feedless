@@ -45,7 +45,10 @@ module.exports.setupRoutes = (router) => {
       const id = req.params.id;
 
       if (id == req.context.profile.id) {
-        const posts = queries.getPosts(req.context.profile);
+        const posts = queries.getPosts(
+          req.context.profile.id,
+          req.context.profile
+        );
 
         res.render("mobile/home", {
           posts,
@@ -61,7 +64,7 @@ module.exports.setupRoutes = (router) => {
           communities,
         ] = await Promise.all([
           queries.getProfile(id),
-          queries.getPosts({ id }),
+          queries.getPosts(req.context.profile.id, { id }),
           queries.getFriends({ id }),
           queries.getFriendshipStatus(req.context.profile.id, id),
           queries.getProfileCommunities(id),
@@ -188,7 +191,7 @@ module.exports.setupRoutes = (router) => {
     async (req, res) => {
       const key = "%" + req.params.key;
 
-      const posts = await queries.getPost(key);
+      const posts = await queries.getPost(req.context.profile.id, key);
 
       res.render("mobile/post", {
         key,

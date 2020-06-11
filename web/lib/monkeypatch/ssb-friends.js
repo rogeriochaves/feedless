@@ -41,7 +41,10 @@ exports.init = function (sbot, config) {
       for (let key in graph) {
         let isFollowing = graph[id] && graph[id][key] > 0;
         let isFollowingBack = graph[key] && graph[key][id] > 0;
-        if (isFollowing && isFollowingBack) {
+        let isBlocked = graph[id] && graph[id][key] == -1;
+        if (isBlocked) {
+          connections[key] = "blocked";
+        } else if (isFollowing && isFollowingBack) {
           connections[key] = "friends";
         } else if (isFollowing && !isFollowingBack) {
           connections[key] = "requestsSent";

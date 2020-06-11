@@ -1,6 +1,6 @@
 <div class="columns">
   <div><img class="profile-pic" src="<%= profileImageUrl(profile) %>" style="display:block" /></div>
-  <div style="padding-left: 10px; max-width: calc(100% - 128px)">
+  <div style="padding-left: 10px; width: calc(100% - 138px)">
     <h1><%= profile.name %></h1>
 
     <%- escapeMarkdown(profile.description || "").substr(0, 70) %>
@@ -11,13 +11,19 @@
       <p>You rejected <%= profile.name %> friendship request</p>
     <% } %>
 
-    <div class="columns profile-actions" style="margin-top: 10px;">
+    <div class="columns profile-actions" style="margin-top: 10px; flex-wrap: wrap">
       <%- include('../shared/_friendship_button') %>
 
-      <button class="button-yellow js-compose-secret-message" style="margin-left: 5px" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
-        🤫 Secret
-      </button>
-      <%- include('secrets/_compose_single') %>
+      <% if (friendshipStatus != "blocked") { %>
+        <button class="button-yellow js-compose-secret-message" style="margin: 0 5px 5px 5px" data-url="<%= profileUrl(profile.id, "/publish_secret") %>">
+          🤫 Secret
+        </button>
+        <%- include('secrets/_compose_single') %>
+      <% } %>
+
+      <div>
+        <%- include('../shared/_profile_extra_menu') %>
+      </div>
     </div>
   </div>
 </div>
@@ -35,17 +41,21 @@
 </div>
 <div class="tab-content">
   <div class="tab-item js-tab-item">
-    <% if (posts.length > 0) { %>
-      <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST" style="padding: 0px 8px 5px 8px;">
-        <%- include('_publish', { placeholder: `Write something to ${profile.name}...` }) %>
-      </form>
-      <%- include('../shared/_posts', { posts }) %>
+    <% if (friendshipStatus == "blocked") { %>
+      <div style="padding: 15px">You blocked <%= profile.name %></div>
     <% } else { %>
-      <div style="padding-top: 15px;">
-        <div class="post">
-          No posts yet
+      <% if (posts.length > 0) { %>
+        <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST" style="padding: 0px 8px 5px 8px;">
+          <%- include('_publish', { placeholder: `Write something to ${profile.name}...` }) %>
+        </form>
+        <%- include('../shared/_posts', { posts }) %>
+      <% } else { %>
+        <div style="padding-top: 15px;">
+          <div class="post">
+            No posts yet
+          </div>
         </div>
-      </div>
+      <% } %>
     <% } %>
   </div>
   <div class="tab-item js-tab-item" style="display: none; padding: 10px">

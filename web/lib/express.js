@@ -898,6 +898,8 @@ router.post("/profile/:id(*)/block", async (req, res) => {
     },
   });
 
+  delete queries.userDeletesCache[req.context.profile.id];
+
   res.redirect(profileUrl(id));
 });
 
@@ -913,6 +915,8 @@ router.post("/profile/:id(*)/unblock", async (req, res) => {
       blocking: false,
     },
   });
+
+  delete queries.userDeletesCache[req.context.profile.id];
 
   res.redirect(profileUrl(id));
 });

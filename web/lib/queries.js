@@ -71,24 +71,37 @@ let userDeletesCache = {};
 const getUserDeletes = async (userId) => {
   if (userDeletesCache[userId]) return userDeletesCache[userId];
 
-  const deletes = await promisePull(
-    ssb.client().query.read({
-      reverse: false,
-      query: [
-        {
-          $filter: {
-            value: {
-              author: userId,
-              content: {
-                type: "delete",
+  const [deletes, connections] = await Promise.all([
+    promisePull(
+      ssb.client().query.read({
+        reverse: false,
+        query: [
+          {
+            $filter: {
+              value: {
+                author: userId,
+                content: {
+                  type: "delete",
+                },
               },
             },
           },
-        },
-      ],
-    })
-  );
-  userDeletesCache[userId] = deletes.map((x) => x.value.content.dest);
+        ],
+      })
+    ),
+    ssb.client().friends.getConnections(userId),
+  ]);
+
+  const dests = deletes.map((x) => x.value.content.dest);
+
+  let blocked = [];
+  for (let key in connections) {
+    if (connections[key] == "blocked") blocked.push(key);
+  }
+
+  userDeletesCache[userId] = {};
+  userDeletesCache[userId].hiddenContent = dests;
+  userDeletesCache[userId].blockedUsers = blocked;
 
   return userDeletesCache[userId];
 };
@@ -113,10 +126,12 @@ const mapDeletes = (currentUserId) => async (data, callback) => {
       limit: 1,
     })
   );
-  const userDeletes = await getUserDeletes(currentUserId);
+  const { hiddenContent, blockedUsers } = await getUserDeletes(currentUserId);
 
   data.value.deleted = authorDelete.length > 0;
-  data.value.hidden = userDeletes.includes(data.key);
+  data.value.hidden =
+    hiddenContent.includes(data.key) ||
+    blockedUsers.includes(data.value.author);
   callback(null, data);
 };
 
@@ -496,6 +511,7 @@ const getFriends = async (profile) => {
     friends: [],
     requestsSent: [],
     requestsReceived: [],
+    blocked: [],
   };
   for (let key in connections) {
     result[connections[key]].push(profilesHash[key]);
@@ -528,14 +544,22 @@ const getFriendshipStatus = async (source, dest) => {
     })
   ).then(mapValues);
 
-  const [isFollowing, isFollowingBack, requestRejections] = await Promise.all([
+  const [
+    isFollowing,
+    isFollowingBack,
+    isBlocked,
+    requestRejections,
+  ] = await Promise.all([
     ssb.client().friends.isFollowing({ source: source, dest: dest }),
     ssb.client().friends.isFollowing({ source: dest, dest: source }),
+    ssb.client().friends.isBlocking({ source: source, dest: dest }),
     requestRejectionsPromise.then((x) => x.map((y) => y.content.contact)),
   ]);
 
   let status = "no_relation";
-  if (isFollowing && isFollowingBack) {
+  if (isBlocked) {
+    status = "blocked";
+  } else if (isFollowing && isFollowingBack) {
     status = "friends";
   } else if (isFollowing && !isFollowingBack) {
     status = "request_sent";
