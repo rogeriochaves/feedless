@@ -473,11 +473,10 @@ button.button-transparent {
   position: absolute;
   background: #fff;
   max-width: 200px;
-  border: 1px solid #aaa;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
   transform: translateX(-100%);
   display: none;
   z-index: 2;
-  margin-left: 5px;
 }
 
 .popup-menu-item,

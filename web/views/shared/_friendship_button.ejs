@@ -1,5 +1,5 @@
 <% if (friendshipStatus == "blocked") { %>
-  ❌ Blocked
+  <div style="margin-right: 10px; line-height: 33px;">❌ Blocked</div>
 <% } else if (friendshipStatus == "no_relation") { %>
   <form action="<%= profileUrl(profile.id, "/add_friend") %>" method="POST">
     <input type="submit" class="button-blue" value="Add as friend" />

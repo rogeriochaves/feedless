@@ -45,7 +45,7 @@ module.exports.setupRoutes = (router) => {
       const id = req.params.id;
 
       if (id == req.context.profile.id) {
-        const posts = queries.getPosts(
+        const posts = await queries.getPosts(
           req.context.profile.id,
           req.context.profile
         );
