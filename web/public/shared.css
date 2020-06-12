@@ -477,6 +477,7 @@ button.button-transparent {
   transform: translateX(-100%);
   display: none;
   z-index: 2;
+  border: 1px solid #aaa;
 }
 
 .popup-menu-item,
