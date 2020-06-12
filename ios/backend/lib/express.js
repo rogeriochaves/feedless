@@ -117,7 +117,7 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
     friendshipStatus,
   ] = await Promise.all([
     queries.getProfile(id),
-    queries.getPosts({ id }),
+    queries.getPosts(req.context.key.id, { id }),
     queries.getFriends({ id }),
     queries.getProfileCommunities(id),
     queries.getFriendshipStatus(req.context.key.id, id),
@@ -135,9 +135,12 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
 });
 
 router.get("/secrets/:id(*)", async (req, res) => {
-  const secretMessages = await queries.getSecretMessages({
-    id: req.context.key.id,
-  });
+  const secretMessages = await queries.getSecretMessages(
+    {
+      id: req.context.key.id,
+    },
+    false
+  );
 
   res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
   res.json(secretMessages);
@@ -273,7 +276,7 @@ router.get("/communities/:name", async (req, res) => {
   const name = req.params.name;
 
   const [topics, members, isMember] = await Promise.all([
-    queries.getCommunityPosts(name),
+    queries.getCommunityPosts(req.context.key.id, name),
     queries.getCommunityMembers(name),
     queries.isMember(req.context.key.id, name),
   ]);

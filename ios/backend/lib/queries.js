@@ -1,4 +1,5 @@
 const pull = require("pull-stream");
+const once = require("pull-stream/sources/once");
 const cat = require("pull-cat");
 const debugPosts = require("debug")("queries:posts"),
   debugMessages = require("debug")("queries:messages"),
@@ -50,14 +51,6 @@ const lastAboutValues = (dest) => {
   });
 };
 
-const removeWallMention = (data, callback) => {
-  const { wall, text } = data.value.content;
-  if (wall && text) {
-    data.value.content.text = text.replace(/^\[.*?\]\(.*?\) /, "");
-  }
-  callback(null, data);
-};
-
 const mapProfiles = (data, callback) =>
   getProfile(data.value.author)
     .then((author) => {
@@ -66,7 +59,89 @@ const mapProfiles = (data, callback) =>
     })
     .catch((err) => callback(err, null));
 
-const getPosts = async (profile) => {
+const removeWallMention = (data, callback) => {
+  const { wall, text } = data.value.content;
+  if (wall && text) {
+    data.value.content.text = text.replace(/^\[.*?\]\(.*?\) /, "");
+  }
+  callback(null, data);
+};
+
+let userDeletesCache = {};
+const getUserDeletes = async (userId) => {
+  if (userDeletesCache[userId]) return userDeletesCache[userId];
+
+  const [deletes, connections] = await Promise.all([
+    promisePull(
+      ssb.client().query.read({
+        reverse: false,
+        query: [
+          {
+            $filter: {
+              value: {
+                author: userId,
+                content: {
+                  type: "delete",
+                },
+              },
+            },
+          },
+        ],
+      })
+    ),
+    ssb.client().friends.getConnections(userId),
+  ]);
+
+  const dests = deletes.map((x) => x.value.content.dest);
+
+  let blocked = [];
+  for (let key in connections) {
+    if (connections[key] == "blocked") blocked.push(key);
+  }
+
+  userDeletesCache[userId] = {};
+  userDeletesCache[userId].hiddenContent = dests;
+  userDeletesCache[userId].blockedUsers = blocked;
+
+  return userDeletesCache[userId];
+};
+
+const mapDeletes = (currentUserId, onlyLocal = false) => async (
+  data,
+  callback
+) => {
+  let authorDelete;
+  if (!onlyLocal) {
+    authorDelete = await promisePull(
+      ssb.client().query.read({
+        reverse: false,
+        query: [
+          {
+            $filter: {
+              value: {
+                author: data.value.author,
+                content: {
+                  type: "delete",
+                  dest: data.key,
+                },
+              },
+            },
+          },
+        ],
+        limit: 1,
+      })
+    );
+  }
+  const { hiddenContent, blockedUsers } = await getUserDeletes(currentUserId);
+
+  data.value.deleted = authorDelete && authorDelete.length > 0;
+  data.value.hidden =
+    hiddenContent.includes(data.key) ||
+    blockedUsers.includes(data.value.author);
+  callback(null, data);
+};
+
+const getPosts = async (currentUserId, profile) => {
   debugPosts("Fetching");
 
   const posts = await promisePull(
@@ -86,7 +161,7 @@ const getPosts = async (profile) => {
             },
           },
         ],
-        limit: 50,
+        limit: 30,
       }),
       // Deprecated way to see posts from others on your wall
       ssb.client().query.read({
@@ -103,7 +178,7 @@ const getPosts = async (profile) => {
             },
           },
         ],
-        limit: 50,
+        limit: 30,
       }),
       // Posts on your own wall
       ssb.client().query.read({
@@ -124,21 +199,119 @@ const getPosts = async (profile) => {
             },
           },
         ],
-        limit: 50,
+        limit: 30,
       }),
     ]),
     pull.filter((msg) => msg.value.content.type == "post"),
+    paramap(mapReplies(currentUserId)),
+    paramap(mapDeletes(currentUserId)),
     paramap(mapProfiles),
     paramap(removeWallMention)
   );
 
   debugPosts("Done");
 
-  return posts;
+  return flattenPostsWithReplies(posts);
 };
 
-const getSecretMessages = async (profile) => {
+const getPost = async (currentUserId, key) => {
+  debugPosts("Fetching single");
+
+  let post;
+  try {
+    post = await ssb.client().get({ id: key, meta: true });
+    post.rts = post.value.timestamp;
+  } catch (err) {
+    if (err.name == "NotFoundError") {
+      return [];
+    } else {
+      throw err;
+    }
+  }
+
+  let root;
+  if (post.value.content.root) {
+    try {
+      root = await ssb
+        .client()
+        .get({ id: post.value.content.root, meta: true });
+      root.rts = root.value.timestamp;
+    } catch (e) {}
+  }
+
+  const posts = await promisePull(
+    // @ts-ignore
+    cat([once(root || post)]),
+    pull.filter((msg) => msg.value.content.type == "post"),
+    paramap(mapReplies(currentUserId)),
+    paramap(mapDeletes(currentUserId)),
+    paramap(mapProfiles),
+    paramap(removeWallMention)
+  );
+
+  debugPosts("Done");
+
+  return flattenPostsWithReplies(posts);
+};
+
+const flattenPostsWithReplies = (posts) => {
+  let flattenPosts = [];
+  let postsByKey = {};
+  for (const post of posts) {
+    postsByKey[post.key] = post;
+    for (const reply of post.value.content.replies) {
+      postsByKey[reply.key] = reply;
+    }
+  }
+
+  for (const post of posts) {
+    flattenPosts.push(post);
+    for (const reply of post.value.content.replies) {
+      flattenPosts.push(reply);
+      let branch = reply.value.content.branch;
+      if (!branch) continue;
+      let branchKey = typeof branch == "string" ? branch : branch[0];
+      let previous = postsByKey[branchKey];
+      if (!previous) continue;
+      reply.value.content.inReplyTo = previous.value.authorProfile;
+    }
+    delete post.value.content.replies;
+  }
+  return flattenPosts;
+};
+
+const mapReplies = (currentUserId) => async (data, callback) => {
+  try {
+    const replies = await promisePull(
+      ssb.client().query.read({
+        reverse: true,
+        query: [
+          {
+            $filter: {
+              value: {
+                content: {
+                  root: data.key,
+                },
+              },
+            },
+          },
+        ],
+        limit: 10,
+      }),
+      paramap(mapProfiles),
+      paramap(mapDeletes(currentUserId))
+    );
+
+    data.value.content.replies = replies;
+    callback(null, data);
+  } catch (err) {
+    callback(err, null);
+  }
+};
+
+const getSecretMessages = async (profile, decryptOnTheFly = true) => {
   debugMessages("Fetching");
+
   const messagesPromise = promisePull(
     // @ts-ignore
     cat([
@@ -185,15 +358,31 @@ const getSecretMessages = async (profile) => {
     })
   ).then(Object.values);
 
-  const [messages, deleted] = await Promise.all([
+  let memoryEntriesPromise = Promise.resolve({ post: [], delete: [] });
+  if (decryptOnTheFly) {
+    memoryEntriesPromise = ssb
+      .client()
+      .encryptedView.memoryDecryptedEntries(profile);
+  }
+
+  const [messages, deleted, memoryEntries] = await Promise.all([
     messagesPromise,
     deletedPromise,
+    memoryEntriesPromise,
   ]);
 
-  const deletedIds = deleted.map((x) => x.value.content.dest);
+  debugMessages(
+    "Decrypted",
+    (memoryEntries.post || []).length,
+    " posts on the fly"
+  );
+
+  const deletedIds = deleted
+    .concat(memoryEntries.delete || [])
+    .map((x) => x.value.content.dest);
 
   const messagesByAuthor = {};
-  for (const message of messages) {
+  for (const message of messages.concat(memoryEntries.post || [])) {
     if (message.value.author == profile.id) {
       for (const recp of message.value.content.recps) {
         if (recp == profile.id) continue;
@@ -292,7 +481,7 @@ const search = async (search) => {
           },
         },
       ],
-      limit: 5000,
+      limit: 3000,
     })
   );
 
@@ -323,22 +512,7 @@ const search = async (search) => {
 const getFriends = async (profile) => {
   debugFriends("Fetching");
 
-  let graph = await ssb.client().friends.getGraph();
-
-  let connections = {};
-  for (let key in graph) {
-    let isFollowing = graph[profile.id] && graph[profile.id][key] > 0;
-    let isFollowingBack = graph[key] && graph[key][profile.id] > 0;
-    if (isFollowing && isFollowingBack) {
-      connections[key] = "friends";
-    } else if (isFollowing && !isFollowingBack) {
-      connections[key] = "requestsSent";
-    } else if (!isFollowing && isFollowingBack) {
-      if (!graph[profile.id] || graph[profile.id][key] === undefined)
-        connections[key] = "requestsReceived";
-    }
-    if (connections.length > 30) break;
-  }
+  let connections = await ssb.client().friends.getConnections(profile.id);
 
   const profilesList = await Promise.all(
     Object.keys(connections).map((id) => getProfile(id))
@@ -352,6 +526,7 @@ const getFriends = async (profile) => {
     friends: [],
     requestsSent: [],
     requestsReceived: [],
+    blocked: [],
   };
   for (let key in connections) {
     result[connections[key]].push(profilesHash[key]);
@@ -384,14 +559,22 @@ const getFriendshipStatus = async (source, dest) => {
     })
   ).then(mapValues);
 
-  const [isFollowing, isFollowingBack, requestRejections] = await Promise.all([
+  const [
+    isFollowing,
+    isFollowingBack,
+    isBlocked,
+    requestRejections,
+  ] = await Promise.all([
     ssb.client().friends.isFollowing({ source: source, dest: dest }),
     ssb.client().friends.isFollowing({ source: dest, dest: source }),
+    ssb.client().friends.isBlocking({ source: source, dest: dest }),
     requestRejectionsPromise.then((x) => x.map((y) => y.content.contact)),
   ]);
 
   let status = "no_relation";
-  if (isFollowing && isFollowingBack) {
+  if (isBlocked) {
+    status = "blocked";
+  } else if (isFollowing && isFollowingBack) {
     status = "friends";
   } else if (isFollowing && !isFollowingBack) {
     status = "request_sent";
@@ -441,7 +624,7 @@ const getProfile = async (id) => {
     image = image.link;
   }
 
-  let profile = { id, name: abouts.name, image };
+  let profile = { id, name: abouts.name, image: abouts.image };
   profileCache[id] = profile;
 
   return profile;
@@ -532,7 +715,6 @@ const isMember = async (id, channel) => {
 
 const getCommunityMembers = async (name) => {
   debugCommunityMembers("Fetching");
-
   const communityMembers = await promisePull(
     ssb.client().query.read({
       reverse: true,
@@ -547,6 +729,7 @@ const getCommunityMembers = async (name) => {
             },
           },
         },
+        forceChannelIndex,
       ],
       limit: 50,
     }),
@@ -606,11 +789,18 @@ const getProfileCommunities = async (id) => {
   return channelNames;
 };
 
+const getPostWithReplies = async (currentUserId, channel, key) => {
+  const posts = await getCommunityPosts(currentUserId, channel);
+  const topic = posts.find((x) => x.key == key);
+
+  return [topic, ...topic.value.content.replies];
+};
+
 const forceChannelIndex = {
   $sort: [["value", "content", "channel"], ["timestamp"]],
 };
 
-const getCommunityPosts = async (name) => {
+const getCommunityPosts = async (currentUserId, name) => {
   debugCommunityPosts("Fetching");
 
   const communityPosts = await promisePull(
@@ -627,11 +817,12 @@ const getCommunityPosts = async (name) => {
             },
           },
         },
-        forceChannelIndex,
+        ...(name == "new-people" ? [] : [forceChannelIndex]),
       ],
       limit: 1000,
     }),
-    paramap(mapProfiles)
+    paramap(mapProfiles),
+    paramap(mapDeletes(currentUserId, true))
   );
   let communityPostsByKey = {};
   let repliesByKey = {};
@@ -680,14 +871,16 @@ const getCommunityPosts = async (name) => {
 };
 
 if (!global.clearProfileInterval) {
+  let oneHour = 60 * 60 * 1000;
   global.clearProfileInterval = setInterval(() => {
     debugProfile("Clearing profile cache");
     profileCache = {};
-  }, 5 * 60 * 1000);
+  }, oneHour);
 }
 
 module.exports = {
   mapProfiles,
+  getPost,
   getPosts,
   search,
   getFriends,
@@ -699,8 +892,10 @@ module.exports = {
   getCommunities,
   getCommunityMembers,
   getCommunityPosts,
+  getPostWithReplies,
   progress,
   autofollow,
   isMember,
   getProfileCommunities,
+  userDeletesCache,
 };

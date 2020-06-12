@@ -15,7 +15,7 @@ exports.manifest = {
   onEdge: "sync",
   isFollowing: "async",
   isBlocking: "async",
-  getGraph: "async",
+  getConnections: "async",
   hops: "async",
   help: "sync",
   // createLayer: 'sync',       // not exposed over RPC as returns a function
@@ -33,10 +33,28 @@ exports.init = function (sbot, config) {
     3;
   var layered = LayeredGraph({ max: max, start: sbot.id });
 
-  function getGraph(cb) {
+  function getConnections(id, cb) {
     layered.onReady(function () {
-      var g = layered.getGraph();
-      cb(null, g);
+      var graph = layered.getGraph();
+
+      let connections = {};
+      for (let key in graph) {
+        let isFollowing = graph[id] && graph[id][key] > 0;
+        let isFollowingBack = graph[key] && graph[key][id] > 0;
+        let isBlocked = graph[id] && graph[id][key] == -1;
+        if (isBlocked) {
+          connections[key] = "blocked";
+        } else if (isFollowing && isFollowingBack) {
+          connections[key] = "friends";
+        } else if (isFollowing && !isFollowingBack) {
+          connections[key] = "requestsSent";
+        } else if (!isFollowing && isFollowingBack) {
+          if (!graph[id] || graph[id][key] === undefined)
+            connections[key] = "requestsReceived";
+        }
+      }
+
+      cb(null, connections);
     });
   }
 
@@ -116,7 +134,7 @@ exports.init = function (sbot, config) {
     onEdge: layered.onEdge,
     isFollowing: isFollowing,
     isBlocking: isBlocking,
-    getGraph: getGraph,
+    getConnections: getConnections,
 
     // expose createLayer, so that other plugins may express relationships
     createLayer: layered.createLayer,

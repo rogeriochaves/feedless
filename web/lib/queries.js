@@ -309,7 +309,7 @@ const mapReplies = (currentUserId) => async (data, callback) => {
   }
 };
 
-const getSecretMessages = async (profile) => {
+const getSecretMessages = async (profile, decryptOnTheFly = true) => {
   debugMessages("Fetching");
 
   const messagesPromise = promisePull(
@@ -358,9 +358,12 @@ const getSecretMessages = async (profile) => {
     })
   ).then(Object.values);
 
-  const memoryEntriesPromise = ssb
-    .client()
-    .encryptedView.memoryDecryptedEntries(profile);
+  let memoryEntriesPromise = Promise.resolve({ post: [], delete: [] });
+  if (decryptOnTheFly) {
+    memoryEntriesPromise = ssb
+      .client()
+      .encryptedView.memoryDecryptedEntries(profile);
+  }
 
   const [messages, deleted, memoryEntries] = await Promise.all([
     messagesPromise,
@@ -496,8 +499,14 @@ const search = async (search) => {
     return searchRegex.exec(normalizedName);
   });
 
+  // Remove duplicates
+  let peopleResult = {};
+  for (let person of mapValues(people)) {
+    peopleResult[person.author] = person;
+  }
+
   debugSearch("Done");
-  return { people: Object.values(mapValues(people)), communities };
+  return { people: Object.values(peopleResult), communities };
 };
 
 const getFriends = async (profile) => {
@@ -592,11 +601,15 @@ const getAllEntries = (query) => {
   const queryOpts = queries.length > 0 ? { query: queries } : {};
 
   return promisePull(
-    ssb.client().query.read({
-      reverse: true,
-      limit: 1000,
-      ...queryOpts,
-    })
+    ssb.client().query.read(
+      Object.assign(
+        {
+          reverse: true,
+          limit: 1000,
+        },
+        queryOpts
+      )
+    )
   );
 };
 
