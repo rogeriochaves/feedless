@@ -26,9 +26,9 @@ struct PostsList : View {
     func timeSince(timestamp: Int?) -> String {
         guard let timestamp_ = timestamp else { return "" }
 
-        let ts = Double(timestamp_)
+        let ts = Double(timestamp_) / 1000
         let now : Double = NSDate().timeIntervalSince1970
-        let seconds = floor((now - ts) / 1000)
+        let seconds = floor(now - ts)
         var interval = floor(seconds / 31536000)
 
         interval = floor(seconds / 2592000);
@@ -40,15 +40,15 @@ struct PostsList : View {
         }
         interval = floor(seconds / 86400)
         if interval > 1 {
-            return  "\(Int(interval)) days ago"
+            return  "\(Int(interval))d"
         }
         interval = floor(seconds / 3600)
         if interval > 1 {
-            return "\(Int(interval)) hours ago"
+            return "\(Int(interval))h"
         }
         interval = floor(seconds / 60)
         if interval > 1 {
-            return "\(Int(interval)) minutes ago"
+            return "\(Int(interval))m"
         }
         return "just now"
     };
@@ -75,15 +75,13 @@ struct PostsList : View {
                     Text(post.value.authorProfile.name ?? "unknown")
                     .bold()
                     +
-                    Text(" " + text)
-                }
-                Group {
-                    Text(timeSince(timestamp: post.rts))
+                    Text(" · " + timeSince(timestamp: post.rts))
                         .font(.subheadline)
                         .foregroundColor(Styles.darkGray)
                     +
                     inReplyToLink(post)
                 }
+                Text(text)
             }
         }
         .padding(.horizontal, 10)
