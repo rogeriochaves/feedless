@@ -181,10 +181,9 @@ app.use((_req, res, next) => {
     return splittedPosts.reverse();
   };
   res.locals.timeSince = (date) => {
-    const seconds = Math.floor((new Date() - date) / 1000);
+    const seconds = Math.floor((Date.now() - date) / 1000);
     let interval = Math.floor(seconds / 31536000);
 
-    // Years
     interval = Math.floor(seconds / 2592000);
     if (interval > 1) {
       const dateTimeFormat = new Intl.DateTimeFormat("en", {
@@ -192,7 +191,7 @@ app.use((_req, res, next) => {
         month: "short",
         day: "2-digit",
       });
-      return dateTimeFormat.format(new Date());
+      return dateTimeFormat.format(new Date(date));
     }
     interval = Math.floor(seconds / 86400);
     if (interval > 1) return interval + " days ago";

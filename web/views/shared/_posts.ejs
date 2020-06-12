@@ -37,10 +37,10 @@
         <div class="meta-info">
           <% if (typeof isTopic == "undefined") { %>
             <a href="/post/<%= post.key.replace("%", "") %>">
-              <%= timeSince(new Date(post.rts)) %>
+              <%= timeSince(post.rts) %>
             </a>
           <% } else { %>
-            <%= timeSince(new Date(post.rts)) %>
+            <%= timeSince(post.rts) %>
           <% } %>
           <% if (post.value.content.inReplyTo) { %>
             <a href="/post/<%= getBranchKey(post).replace("%", "") %>">
