@@ -100,9 +100,7 @@ app.use(async (req, res, next) => {
 });
 app.use((_req, res, next) => {
   res.locals.profileUrl = profileUrl;
-  res.locals.imageUrl = (blob) => {
-    const imageHash = blob && typeof blob == "object" ? blob.link : blob;
-
+  res.locals.imageUrl = (imageHash) => {
     return imageHash && `/blob/${encodeURIComponent(imageHash)}`;
   };
   res.locals.profileImageUrl = (profile) => {

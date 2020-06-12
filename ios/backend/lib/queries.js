@@ -624,7 +624,7 @@ const getProfile = async (id) => {
     image = image.link;
   }
 
-  let profile = { id, name: abouts.name, image: abouts.image };
+  let profile = { id, name: abouts.name, image };
   profileCache[id] = profile;
 
   return profile;

@@ -618,8 +618,13 @@ const getProfile = async (id) => {
   if (profileCache[id]) return profileCache[id];
 
   let abouts = await lastAboutValues(id);
+  let image = abouts.image;
 
-  let profile = { id, name: abouts.name, image: abouts.image };
+  if (image && typeof image == "object") {
+    image = image.link;
+  }
+
+  let profile = { id, name: abouts.name, image };
   profileCache[id] = profile;
 
   return profile;
