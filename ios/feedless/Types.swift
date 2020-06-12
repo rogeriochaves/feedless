@@ -10,6 +10,7 @@ typealias Posts = [PostEntry]
 
 struct Post: Codable {
     public var text: String?
+    public var inReplyTo: Profile?
 }
 
 typealias PostEntry = Entry<AuthorProfileContent<Post>>
@@ -23,6 +24,8 @@ struct AuthorProfileContent<T: Codable>: Codable {
     public var author: String
     public var authorProfile: Profile
     public var content: T
+    public var deleted: Bool?
+    public var hidden: Bool?
 }
 
 struct Entry<T: Codable>: Codable {

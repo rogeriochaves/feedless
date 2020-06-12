@@ -42,7 +42,7 @@
           <% } else { %>
             <%= timeSince(post.rts) %>
           <% } %>
-          <% if (post.value.content.inReplyTo) { %>
+          <% if (typeof isTopic == "undefined" && post.value.content.inReplyTo) { %>
             <a href="/post/<%= getBranchKey(post).replace("%", "") %>">
               in reply to <%= post.value.content.inReplyTo.name %>
             </a>
