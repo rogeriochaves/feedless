@@ -18,6 +18,7 @@ struct ProfileScreen : View {
     @State private var post = ""
     @State private var isPostFocused = false
     @State private var selectedTab : Int
+    @State private var moreActionsOpen = false
 
     init(id : String?, selectedTab : Int = 0) {
         self.id = id
@@ -82,7 +83,9 @@ struct ProfileScreen : View {
             }
 
             HStack {
-                if profile.friendshipStatus == "no_relation" {
+                if profile.friendshipStatus == "blocked" {
+                    Text("❌ Blocked")
+                } else if profile.friendshipStatus == "no_relation" {
                     PrimaryButton(text: "Add as friend") {
                         self.profiles.addFriend(context: self.context, id: profile.profile.id)
                     }
@@ -104,6 +107,34 @@ struct ProfileScreen : View {
                 } else if profile.friendshipStatus == "request_rejected" {
                     PrimaryButton(text: "Add as friend") {
                         self.profiles.addFriend(context: self.context, id: profile.profile.id)
+                    }
+                }
+                PrimaryButton(text: "...", color: Styles.gray) {
+                    self.moreActionsOpen = true
+                }
+                .actionSheet(isPresented: $moreActionsOpen) {
+                    if profile.friendshipStatus == "blocked" {
+                        return ActionSheet(
+                            title: Text("Actions"),
+                            buttons: [
+                                .cancel { self.moreActionsOpen = false },
+                                .default( Text("Unblock") ) {
+                                    self.profiles.unblock(context: self.context, id: profile.profile.id)
+                                    self.moreActionsOpen = false
+                                },
+                            ]
+                        )
+                    } else {
+                        return ActionSheet(
+                            title: Text("Actions"),
+                            buttons: [
+                                .cancel { self.moreActionsOpen = false },
+                                .default( Text("Block") ) {
+                                    self.profiles.block(context: self.context, id: profile.profile.id)
+                                    self.moreActionsOpen = false
+                                },
+                            ]
+                        )
                     }
                 }
             }
@@ -176,7 +207,14 @@ struct ProfileScreen : View {
                 if self.selectedTab == 0 {
                     self.composer(profile)
                     Divider()
-                    if profile.posts.count > 0 {
+                    if profile.friendshipStatus == "blocked" {
+                        HStack {
+                            Spacer()
+                            Text("You blocked " + (profile.profile.name ?? "unknown"))
+                            Spacer()
+                        }
+                        .padding(.top, 20)
+                    } else if profile.posts.count > 0 {
                         PostsList(profile.posts, reference: .WallId(profile.profile.id))
                     } else {
                         HStack {
@@ -281,7 +319,7 @@ struct ProfileScreen : View {
 struct Profile_Previews: PreviewProvider {
 
     static var previews: some View {
-        let relations = ["no_relation", "request_received", "friends", "request_sent", "request_rejected"]
+        let relations = ["no_relation", "blocked", "request_received", "friends", "request_sent", "request_rejected"]
         let selectedTab = [
             "no_relation": 0,
             "request_received": 1,

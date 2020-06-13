@@ -25,6 +25,7 @@ struct FullProfile : Codable {
 
 class Profiles: ObservableObject {
     @Published var profiles : [String: ServerData<FullProfile>] = [:]
+    @Published var blockeds : Set<String> = Set.init()
 
     func load(context: Context, id: String) {
         if self.profiles[id] == nil {
@@ -110,6 +111,38 @@ class Profiles: ObservableObject {
                 } else if profile.friendshipStatus == "request_sent" {
                     profile.friendshipStatus = "no_relation"
                 }
+                self.profiles[id] = .success(profile)
+            }
+        }
+    }
+
+    func block(context: Context, id: String) {
+        if case .success(var profile) = self.profiles[id] {
+            Utils.clearCache("/profile/\(id)")
+
+            blockeds.insert(id)
+            dataPost(path: "/profile/\(id)/block", parameters: [:], type: PostResult.self, context: context) {(result) in
+                self.load(context: context, id: id)
+            }
+
+            DispatchQueue.main.async {
+                profile.friendshipStatus = "blocked"
+                self.profiles[id] = .success(profile)
+            }
+        }
+    }
+
+    func unblock(context: Context, id: String) {
+        if case .success(var profile) = self.profiles[id] {
+            Utils.clearCache("/profile/\(id)")
+
+            blockeds.remove(id)
+            dataPost(path: "/profile/\(id)/unblock", parameters: [:], type: PostResult.self, context: context) {(result) in
+                self.load(context: context, id: id)
+            }
+
+            DispatchQueue.main.async {
+                profile.friendshipStatus = "no_relation"
                 self.profiles[id] = .success(profile)
             }
         }

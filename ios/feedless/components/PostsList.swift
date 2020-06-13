@@ -123,7 +123,7 @@ struct PostsList : View {
     func postIfVisible(_ post: Entry<AuthorProfileContent<Post>>) -> some View {
         if post.value.deleted == true || post.value.content.text == nil {
             return AnyView(EmptyView())
-        } else if post.value.hidden == true {
+        } else if post.value.hidden == true || self.profiles.blockeds.contains(post.value.author) {
             return AnyView(
                 Group {
                     HStack(alignment: .top) {
