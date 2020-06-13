@@ -32,7 +32,7 @@ struct CommunitiesShow : View {
                 return AnyView(
                     Form {
                         ForEach(community.topics.sorted(by: { a, b in
-                            a.rts ?? 0 < b.rts ?? 0
+                            b.rts ?? 0 < a.rts ?? 0
                         }), id: \.key) { topic in
                             NavigationLink(destination: CommunitiesTopic(name: community.name, topicKey: topic.key)) {
                                 HStack {

@@ -85,7 +85,7 @@ struct CommunitiesTopic : View {
                         ScrollView {
                             VStack {
                                 Divider()
-                                PostsList(topicWithReplies(topic), limit: 10_000, reverseOrder: false, showInReplyTo: false)
+                                PostsList(topicWithReplies(topic), reference: .CommunityName(self.name))
                                 composer
                                     .padding(.bottom, 10)
                             }

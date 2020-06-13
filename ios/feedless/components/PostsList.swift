@@ -8,20 +8,42 @@
 
 import SwiftUI
 
+enum PostsReference {
+    case WallId(String)
+    case CommunityName(String)
+}
+
 struct PostsList : View {
     @EnvironmentObject var imageLoader : ImageLoader
+    @EnvironmentObject var profiles : Profiles
+    @EnvironmentObject var context : Context
+    @EnvironmentObject var communities : Communities
     private let posts:Posts
     private let limit:Int
     private let showInReplyTo:Bool
+    private let reference:PostsReference
+    @State var postMenuOpen:PostEntry? = nil
 
-    init(_ posts: Posts, limit: Int = 140, reverseOrder: Bool = true, showInReplyTo: Bool = true) {
-        self.posts = posts.sorted(by: { a, b in
-            reverseOrder ? b.rts ?? 0 < a.rts ?? 0 : a.rts ?? 0 < b.rts ?? 0
-        })
+    init(_ posts: Posts, reference: PostsReference) {
+        self.reference = reference
 
-        self.limit = limit
-        self.showInReplyTo = showInReplyTo
+        switch reference {
+        case .WallId(_):
+            // Reverse order
+            self.posts = posts.sorted(by: { a, b in b.rts ?? 0 < a.rts ?? 0 })
+            self.limit = 140
+            self.showInReplyTo = true
+        case .CommunityName(_):
+            self.posts = posts.sorted(by: { a, b in a.rts ?? 0 < b.rts ?? 0 })
+            self.limit = 10_000
+            self.showInReplyTo = false
+        }
     }
+
+    private var isPostMenuOpen: Binding<Bool> { Binding (
+        get: { self.postMenuOpen != nil },
+        set: { _ in }
+    )}
 
     func timeSince(timestamp: Int?) -> String {
         guard let timestamp_ = timestamp else { return "" }
@@ -71,15 +93,25 @@ struct PostsList : View {
                     .border(Styles.darkGray)
             }
             VStack(alignment: .leading, spacing: 5) {
-                Group {
-                    Text(post.value.authorProfile.name ?? "unknown")
-                    .bold()
-                    +
-                    Text(" · " + timeSince(timestamp: post.rts))
-                        .font(.subheadline)
-                        .foregroundColor(Styles.darkGray)
-                    +
-                    inReplyToLink(post)
+                HStack(alignment: .center) {
+                    (
+                        Text(post.value.authorProfile.name ?? "unknown")
+                        .bold()
+                        +
+                        Text(" · " + timeSince(timestamp: post.rts))
+                            .font(.subheadline)
+                            .foregroundColor(Styles.darkGray)
+                        +
+                        inReplyToLink(post)
+                        ).lineLimit(1).truncationMode(.tail)
+                    Spacer()
+                    Button(action: {
+                        self.postMenuOpen = post
+                    }) {
+                        Image(systemName: "chevron.down")
+                            .foregroundColor(Styles.gray)
+                            .padding(.trailing, 5)
+                    }
                 }
                 Text(text)
             }
@@ -89,7 +121,9 @@ struct PostsList : View {
     }
 
     func postIfVisible(_ post: Entry<AuthorProfileContent<Post>>) -> some View {
-        if post.value.hidden == true {
+        if post.value.deleted == true || post.value.content.text == nil {
+            return AnyView(EmptyView())
+        } else if post.value.hidden == true {
             return AnyView(
                 Group {
                     HStack(alignment: .top) {
@@ -101,18 +135,55 @@ struct PostsList : View {
                     .padding(.vertical, 10)
                 }
             )
-        } else if post.value.deleted != true && post.value.content.text != nil {
-            return AnyView(
-                ForEach(Utils.splitInSmallPosts(post.value.content.text ?? "", limit: self.limit), id: \.self) { text in
-                    Group {
-                        self.postItem(post, text)
-                        Divider()
-                            .padding(.vertical, 10)
-                    }
-                }
-            )
         }
-        return AnyView(EmptyView())
+
+        return AnyView(
+            ForEach(Utils.splitInSmallPosts(post.value.content.text ?? "", limit: self.limit), id: \.self) { text in
+                Group {
+                    self.postItem(post, text)
+                    Divider()
+                        .padding(.vertical, 10)
+                }
+            }
+        )
+    }
+
+    func confirmDialog(message: String, onConfirm: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: onConfirm))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+
+    func deletePost(_ post: PostEntry) {
+        switch reference {
+        case .WallId(let wallId):
+            self.profiles.deletePost(context: self.context, wall: wallId, post: post)
+        case .CommunityName(let name):
+            self.communities.deletePost(context: self.context, name: name, post: post)
+        }
+    }
+
+    func flagPost(_ post: PostEntry, onConfirm: (() -> Void)?) {
+        let alert = UIAlertController(title: "Flag post", message: "Please type a reason for flagging this", preferredStyle: .alert)
+
+        alert.addTextField { (textField) in
+            textField.text = ""
+        }
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            let textField = alert?.textFields![0]
+            self.profiles.flagPost(context: self.context, post: post, reason: textField?.text ?? "")
+
+            if let cb = onConfirm {
+                cb()
+            }
+        }))
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+
+        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 
     var body: some View {
@@ -121,14 +192,59 @@ struct PostsList : View {
                 self.postIfVisible(post)
             }
         }
+        .actionSheet(isPresented: isPostMenuOpen) {
+            if self.postMenuOpen?.value.author == self.context.ssbKey?.id {
+                return ActionSheet(
+                    title: Text("Actions"),
+                    buttons: [
+                        .cancel { self.postMenuOpen = nil },
+                        .default( Text("Delete") ) {
+                            if let post = self.postMenuOpen {
+                                self.deletePost(post)
+                            }
+                            self.postMenuOpen = nil
+                        },
+                        ]
+                )
+            } else {
+                return ActionSheet(
+                    title: Text("Actions"),
+                    buttons: [
+                        .cancel { self.postMenuOpen = nil },
+                        .default( Text("Hide") ) {
+                            if let post = self.postMenuOpen {
+                                self.deletePost(post)
+                                self.confirmDialog(message: "Do you also want to flag the post?", onConfirm: { _ in
+                                    self.flagPost(post, onConfirm: nil)
+                                })
+                            }
+                            self.postMenuOpen = nil
+                        },
+                        .default( Text("Flag") ) {
+                            if let post = self.postMenuOpen {
+                                self.flagPost(post, onConfirm: {
+                                    self.confirmDialog(message: "Do you also want to hide the post?", onConfirm: { _ in
+                                        self.deletePost(post)
+                                    })
+                                })
+                            }
+                            self.postMenuOpen = nil
+                        },
+                        ]
+                )
+            }
+        }
     }
 }
 
 struct PostsList_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView {
-            PostsList(Samples.posts())
+            PostsList(Samples.posts(), reference: .WallId("foo"))
                 .environmentObject(ImageLoader())
+                .environmentObject(Samples.context())
+                .environmentObject(Profiles())
+                .environmentObject(Communities())
         }
     }
 }

@@ -105,4 +105,33 @@ class Communities: ObservableObject {
             }
         }
     }
+
+    func deletePost(context: Context, name: String, post: PostEntry) {
+        let cleanKey = post.key.replacingOccurrences(of: "%", with: "")
+        let author = post.value.author
+        if case .success(var community) = self.communities[name] {
+            Utils.clearCache("/communities/\(name)")
+
+            dataPost(path: "/delete/\(cleanKey)", parameters: [:], type: PostResult.self, context: context) {(result) in
+                self.load(context: context, name: name)
+            }
+
+            DispatchQueue.main.async {
+                for topicIndex in 0..<community.topics.count {
+                    let postIndex = community.topics[topicIndex].value.content.replies.firstIndex(where: { p in
+                        p.key == post.key
+                    })
+                    if let index = postIndex {
+                        if context.ssbKey?.id == author {
+                            community.topics[topicIndex].value.content.replies[index].value.deleted = true
+                        } else {
+                            community.topics[topicIndex].value.content.replies[index].value.hidden = true
+                        }
+                        self.communities[name] = .success(community)
+                    }
+                }
+
+            }
+        }
+    }
 }

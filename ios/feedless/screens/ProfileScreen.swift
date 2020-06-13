@@ -177,7 +177,7 @@ struct ProfileScreen : View {
                     self.composer(profile)
                     Divider()
                     if profile.posts.count > 0 {
-                        PostsList(profile.posts)
+                        PostsList(profile.posts, reference: .WallId(profile.profile.id))
                     } else {
                         HStack {
                             Spacer()

@@ -135,12 +135,9 @@ router.get("/profile/:id(*)", {}, async (req, res) => {
 });
 
 router.get("/secrets/:id(*)", async (req, res) => {
-  const secretMessages = await queries.getSecretMessages(
-    {
-      id: req.context.key.id,
-    },
-    false
-  );
+  const secretMessages = await queries.getSecretMessages({
+    id: req.context.key.id,
+  });
 
   res.set("Cache-Control", `public, max-age=${ONE_WEEK}`);
   res.json(secretMessages);
@@ -454,6 +451,82 @@ router.post("/about", async (req, res) => {
     profile = await queries.getProfile(profile.id);
     queries.profileCache[profile.id] = Object.assign(profile, update);
   }
+
+  res.json({ result: "ok" });
+});
+
+router.post("/profile/:id(*)/block", async (req, res) => {
+  const id = req.params.id;
+  if (id == req.context.key.id) {
+    throw "cannot block yourself";
+  }
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "contact",
+      contact: id,
+      following: false,
+      blocking: true,
+    },
+  });
+
+  delete queries.userDeletesCache[req.context.key.id];
+
+  res.json({ result: "ok" });
+});
+
+router.post("/profile/:id(*)/unblock", async (req, res) => {
+  const id = req.params.id;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "contact",
+      contact: id,
+      blocking: false,
+    },
+  });
+
+  delete queries.userDeletesCache[req.context.key.id];
+
+  res.json({ result: "ok" });
+});
+
+router.post("/delete/:key(*)", async (req, res) => {
+  const key = "%" + req.params.key;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "delete",
+      dest: key,
+    },
+  });
+
+  delete queries.userDeletesCache[req.context.key.id];
+
+  res.json({ result: "ok" });
+});
+
+router.post("/flag/:key(*)", async (req, res) => {
+  const key = "%" + req.params.key;
+  const reason = req.body.reason;
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: {
+      type: "flag",
+      flag: {
+        link: key,
+        reason: reason,
+      },
+    },
+  });
 
   res.json({ result: "ok" });
 });

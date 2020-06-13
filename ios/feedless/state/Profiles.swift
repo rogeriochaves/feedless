@@ -147,4 +147,37 @@ class Profiles: ObservableObject {
             }
         }
     }
+
+    func deletePost(context: Context, wall: String, post: PostEntry) {
+        let cleanKey = post.key.replacingOccurrences(of: "%", with: "")
+        if case .success(var profile) = self.profiles[wall] {
+            Utils.clearCache("/profile/\(wall)")
+
+            dataPost(path: "/delete/\(cleanKey)", parameters: [:], type: PostResult.self, context: context) {(result) in
+                // nothing
+            }
+
+            DispatchQueue.main.async {
+                let postIndex = profile.posts.firstIndex(where: { p in
+                    p.key == post.key
+                })
+                if let index = postIndex {
+                    if context.ssbKey?.id == post.value.author {
+                        profile.posts[index].value.deleted = true
+                    } else {
+                        profile.posts[index].value.hidden = true
+                    }
+                    self.profiles[wall] = .success(profile)
+                }
+            }
+        }
+    }
+
+    func flagPost(context: Context, post: PostEntry, reason: String) {
+        let cleanKey = post.key.replacingOccurrences(of: "%", with: "")
+
+        dataPost(path: "/flag/\(cleanKey)", parameters: ["reason": reason], type: PostResult.self, context: context) {(result) in
+            // nothing
+        }
+    }
 }
