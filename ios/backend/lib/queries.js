@@ -309,7 +309,7 @@ const mapReplies = (currentUserId) => async (data, callback) => {
   }
 };
 
-const getSecretMessages = async (profile, decryptOnTheFly = true) => {
+const getSecretMessages = async (profile, key = null) => {
   debugMessages("Fetching");
 
   const messagesPromise = promisePull(
@@ -359,7 +359,7 @@ const getSecretMessages = async (profile, decryptOnTheFly = true) => {
   ).then(Object.values);
 
   let memoryEntriesPromise = Promise.resolve({ post: [], delete: [] });
-  if (decryptOnTheFly) {
+  if (key) {
     memoryEntriesPromise = ssb
       .client()
       .encryptedView.memoryDecryptedEntries(profile);

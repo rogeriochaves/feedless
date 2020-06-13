@@ -17,7 +17,7 @@ module.exports.setupRoutes = (router) => {
   router.get("/mobile/secrets", { desktopVersion: "/" }, async (req, res) => {
     const [friends, secretMessages] = await Promise.all([
       queries.getFriends(req.context.profile),
-      queries.getSecretMessages(req.context.profile),
+      queries.getSecretMessages(req.context.profile, req.context.key),
     ]);
 
     res.render("mobile/secrets", {

@@ -88,7 +88,7 @@ app.use(async (req, res, next) => {
 
   ssb.client().identities.addUnboxer(key);
   req.context.profile = (await queries.getProfile(key.id)) || {};
-  req.context.profile.key = key;
+  req.context.key = key;
 
   const isRootUser =
     req.context.profile.id == ssb.client().id ||
@@ -332,7 +332,7 @@ router.post("/signup", { public: true }, async (req, res) => {
 router.get("/keys", (req, res) => {
   res.render("shared/keys", {
     useEmail: process.env.SENDGRID_API_KEY,
-    key: JSON.stringify(req.context.profile.key),
+    key: JSON.stringify(req.context.key),
   });
 });
 
@@ -346,7 +346,7 @@ router.post("/keys/email", async (req, res) => {
    */
   const email = req.body.email;
   const origin = req.body.origin;
-  const ssb_key = JSON.stringify(req.context.profile.key);
+  const ssb_key = JSON.stringify(req.context.key);
   const login_key = Buffer.from(ssb_key).toString("base64");
 
   if (process.env.NODE_ENV == "production") {
@@ -373,7 +373,7 @@ router.post("/keys/email", async (req, res) => {
 
 router.get("/keys/copy", (req, res) => {
   res.render("shared/keys_copy", {
-    key: JSON.stringify(req.context.profile.key),
+    key: JSON.stringify(req.context.key),
   });
 });
 
@@ -398,7 +398,7 @@ const humanifyKey = (key) => {
 };
 
 router.get("/keys/download", async (req, res) => {
-  const secretFile = humanifyKey(req.context.profile.key);
+  const secretFile = humanifyKey(req.context.key);
 
   res.contentType("text/plain");
   res.header("Content-Disposition", "attachment; filename=secret");
@@ -415,7 +415,7 @@ router.get(
       const [posts, friends, secretMessages, communities] = await Promise.all([
         queries.getPosts(req.context.profile.id, req.context.profile),
         queries.getFriends(req.context.profile),
-        queries.getSecretMessages(req.context.profile),
+        queries.getSecretMessages(req.context.profile, req.context.key),
         queries.getProfileCommunities(id),
       ]);
 
@@ -459,7 +459,7 @@ router.post("/profile/:id(*)/add_friend", async (req, res) => {
   }
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "contact",
@@ -478,7 +478,7 @@ router.post("/profile/:id(*)/reject_friend", async (req, res) => {
   }
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "contact",
@@ -515,7 +515,7 @@ const publish = async (id, req) => {
   }
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "post",
@@ -535,7 +535,7 @@ router.post("/publish_secret", async (req, res) => {
   const recipients = req.body.recipients;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: true,
     content: {
       type: "post",
@@ -554,7 +554,7 @@ router.post("/vanish", async (req, res) => {
   for (const key of keys) {
     debug("Vanishing message", key);
     await ssb.client().identities.publishAs({
-      key: req.context.profile.key,
+      key: req.context.key,
       private: false,
       content: {
         type: "delete",
@@ -578,7 +578,7 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
   const id = req.params.id;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: true,
     content: {
       type: "post",
@@ -639,7 +639,7 @@ router.post("/about", async (req, res) => {
 
   if (update.name || update.image || update.description) {
     await ssb.client().identities.publishAs({
-      key: req.context.profile.key,
+      key: req.context.key,
       private: false,
       content: {
         type: "about",
@@ -690,7 +690,7 @@ router.post("/communities/new", async (req, res) => {
   const post = req.body.post;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "post",
@@ -701,7 +701,7 @@ router.post("/communities/new", async (req, res) => {
   });
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "channel",
@@ -763,7 +763,7 @@ router.post("/communities/:name/new", async (req, res) => {
   const post = req.body.post;
 
   const topic = await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "post",
@@ -780,7 +780,7 @@ router.post("/communities/:name/join", async (req, res) => {
   const name = req.params.name;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "channel",
@@ -796,7 +796,7 @@ router.post("/communities/:name/leave", async (req, res) => {
   const name = req.params.name;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "channel",
@@ -814,7 +814,7 @@ router.post("/communities/:name/:key(*)/publish", async (req, res) => {
   const reply = req.body.reply;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "post",
@@ -885,7 +885,7 @@ router.post("/profile/:id(*)/block", async (req, res) => {
   }
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "contact",
@@ -904,7 +904,7 @@ router.post("/profile/:id(*)/unblock", async (req, res) => {
   const id = req.params.id;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "contact",
@@ -922,7 +922,7 @@ router.post("/delete/:key(*)", async (req, res) => {
   const key = "%" + req.params.key;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "delete",
@@ -940,7 +940,7 @@ router.post("/flag/:key(*)", async (req, res) => {
   const reason = req.body.reason;
 
   await ssb.client().identities.publishAs({
-    key: req.context.profile.key,
+    key: req.context.key,
     private: false,
     content: {
       type: "flag",

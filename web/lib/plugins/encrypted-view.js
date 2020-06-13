@@ -40,18 +40,18 @@ exports.init = function (ssb) {
   });
 
   let decryptedEntries = {};
-  const memoryDecrypt = (profile) => {
-    debug("Decrypting messages on the fly for", profile.id);
+  const memoryDecrypt = (id, key) => {
+    debug("Decrypting messages on the fly for", id);
 
     let entries = {};
-    decryptedEntries[profile.id] = entries;
+    decryptedEntries[id] = entries;
 
     pull(
       pull.values(values),
       pull.drain((data) => {
         if (!data.value || typeof data.value.content != "string") return;
 
-        const content = ssbkeys.unbox(data.value.content, profile.key);
+        const content = ssbkeys.unbox(data.value.content, key);
         if (content) {
           debug("Found an entry!");
           data.value.content = content;
@@ -64,22 +64,22 @@ exports.init = function (ssb) {
   };
 
   return {
-    memoryDecryptedEntries: (profile, cb) => {
+    memoryDecryptedEntries: (id, key, cb) => {
       if (!values) {
         // Index is not ready yet
         cb(null, {});
         return;
       }
 
-      const entries = decryptedEntries[profile.id];
+      const entries = decryptedEntries[id];
       if (entries) {
         cb(null, entries);
       } else {
         // While messages start getting decrypted on background, we wait 1s to get the first ones
         // and return a quick answer already, but next fetch should get full messages
-        memoryDecrypt(profile);
+        memoryDecrypt(id, key);
         setTimeout(() => {
-          cb(null, decryptedEntries[profile.id]);
+          cb(null, decryptedEntries[id]);
         }, 1000);
       }
     },
