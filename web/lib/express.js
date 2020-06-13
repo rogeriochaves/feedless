@@ -91,7 +91,7 @@ app.use(async (req, res, next) => {
   req.context.key = key;
 
   const isRootUser =
-    req.context.profile.id == ssb.client().id ||
+    req.context.key.id == ssb.client().id ||
     process.env.NODE_ENV != "production";
 
   req.context.profile.admin = isRootUser;
@@ -216,7 +216,7 @@ router.get(
   { public: true, mobileVersion: "/mobile" },
   async (req, res) => {
     if (req.context.profile) {
-      return res.redirect(`/profile/${req.context.profile.id}`);
+      return res.redirect(`/profile/${req.context.key.id}`);
     } else {
       return res.render("shared/index");
     }
@@ -411,9 +411,9 @@ router.get(
   async (req, res) => {
     const id = req.params.id;
 
-    if (id == req.context.profile.id) {
+    if (id == req.context.key.id) {
       const [posts, friends, secretMessages, communities] = await Promise.all([
-        queries.getPosts(req.context.profile.id, req.context.profile),
+        queries.getPosts(req.context.key.id, req.context.profile),
         queries.getFriends(req.context.profile),
         queries.getSecretMessages(req.context.profile, req.context.key),
         queries.getProfileCommunities(id),
@@ -435,9 +435,9 @@ router.get(
         communities,
       ] = await Promise.all([
         queries.getProfile(id),
-        queries.getPosts(req.context.profile.id, { id }),
+        queries.getPosts(req.context.key.id, { id }),
         queries.getFriends({ id }),
-        queries.getFriendshipStatus(req.context.profile.id, id),
+        queries.getFriendshipStatus(req.context.key.id, id),
         queries.getProfileCommunities(id),
       ]);
 
@@ -454,7 +454,7 @@ router.get(
 
 router.post("/profile/:id(*)/add_friend", async (req, res) => {
   const id = req.params.id;
-  if (id == req.context.profile.id) {
+  if (id == req.context.key.id) {
     throw "cannot befriend yourself";
   }
 
@@ -473,7 +473,7 @@ router.post("/profile/:id(*)/add_friend", async (req, res) => {
 
 router.post("/profile/:id(*)/reject_friend", async (req, res) => {
   const id = req.params.id;
-  if (id == req.context.profile.id) {
+  if (id == req.context.key.id) {
     throw "cannot reject yourself";
   }
 
@@ -505,7 +505,7 @@ const publish = async (id, req) => {
   }
 
   // Posting to somebody else's wall when its not a reply
-  if (id != req.context.profile.id && !prev) {
+  if (id != req.context.key.id && !prev) {
     const profile = await queries.getProfile(id);
     text = `[@${profile.name}](${id}) ${req.body.message}`;
 
@@ -526,7 +526,7 @@ const publish = async (id, req) => {
 };
 
 router.post("/publish", async (req, res) => {
-  await publish(req.context.profile.id, req);
+  await publish(req.context.key.id, req);
 
   res.redirect("/");
 });
@@ -540,7 +540,7 @@ router.post("/publish_secret", async (req, res) => {
     content: {
       type: "post",
       text: req.body.message,
-      recps: [req.context.profile.id].concat(recipients.split(",")),
+      recps: [req.context.key.id].concat(recipients.split(",")),
     },
   });
 
@@ -583,7 +583,7 @@ router.post("/profile/:id(*)/publish_secret", async (req, res) => {
     content: {
       type: "post",
       text: req.body.message,
-      recps: [req.context.profile.id, id],
+      recps: [req.context.key.id, id],
     },
   });
 
@@ -643,16 +643,13 @@ router.post("/about", async (req, res) => {
       private: false,
       content: {
         type: "about",
-        about: req.context.profile.id,
+        about: req.context.key.id,
         ...update,
       },
     });
 
-    let profile = await queries.getProfile(req.context.profile.id);
-    queries.profileCache[req.context.profile.id] = Object.assign(
-      profile,
-      update
-    );
+    let profile = await queries.getProfile(req.context.key.id);
+    queries.profileCache[req.context.key.id] = Object.assign(profile, update);
   }
 
   res.redirect("/");
@@ -664,7 +661,7 @@ router.get(
   async (req, res) => {
     const [communities, participating] = await Promise.all([
       queries.getCommunities(),
-      queries.getProfileCommunities(req.context.profile.id),
+      queries.getProfileCommunities(req.context.key.id),
     ]);
 
     res.render("desktop/communities/list", { communities, participating });
@@ -717,7 +714,7 @@ const communityData = (req) => {
   const name = req.params.name;
   return Promise.all([
     queries.getCommunityMembers(name),
-    queries.isMember(req.context.profile.id, name),
+    queries.isMember(req.context.key.id, name),
   ]).then(([members, isMember]) => ({
     name,
     members,
@@ -733,7 +730,7 @@ router.get(
 
     const [community, posts] = await Promise.all([
       communityData(req),
-      queries.getCommunityPosts(req.context.profile.id, name),
+      queries.getCommunityPosts(req.context.key.id, name),
     ]);
 
     res.render("desktop/communities/community", {
@@ -836,7 +833,7 @@ router.get(
 
     const [community, posts] = await Promise.all([
       communityData(req),
-      queries.getPostWithReplies(req.context.profile.id, name, key),
+      queries.getPostWithReplies(req.context.key.id, name, key),
     ]);
 
     res.render("desktop/communities/topic", {
@@ -869,7 +866,7 @@ router.get(
   async (req, res) => {
     const key = "%" + req.params.key;
 
-    const posts = await queries.getPost(req.context.profile.id, key);
+    const posts = await queries.getPost(req.context.key.id, key);
 
     res.render("desktop/post", {
       key,
@@ -880,7 +877,7 @@ router.get(
 
 router.post("/profile/:id(*)/block", async (req, res) => {
   const id = req.params.id;
-  if (id == req.context.profile.id) {
+  if (id == req.context.key.id) {
     throw "cannot block yourself";
   }
 
@@ -895,7 +892,7 @@ router.post("/profile/:id(*)/block", async (req, res) => {
     },
   });
 
-  delete queries.userDeletesCache[req.context.profile.id];
+  delete queries.userDeletesCache[req.context.key.id];
 
   res.redirect(profileUrl(id));
 });
@@ -913,7 +910,7 @@ router.post("/profile/:id(*)/unblock", async (req, res) => {
     },
   });
 
-  delete queries.userDeletesCache[req.context.profile.id];
+  delete queries.userDeletesCache[req.context.key.id];
 
   res.redirect(profileUrl(id));
 });
@@ -930,7 +927,7 @@ router.post("/delete/:key(*)", async (req, res) => {
     },
   });
 
-  delete queries.userDeletesCache[req.context.profile.id];
+  delete queries.userDeletesCache[req.context.key.id];
 
   res.json({ result: "ok" });
 });
