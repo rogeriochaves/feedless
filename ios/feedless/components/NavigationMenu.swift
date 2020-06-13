@@ -57,10 +57,10 @@ struct NavigationMenu<C: View> : View {
                                     self.router.changeRoute(to: self.router.pubsScreen)
                                     self.menuOpen = false
                                 },
-                                .default(Text("Debug")) {
-                                    self.router.changeRoute(to: self.router.debugScreen)
-                                    self.menuOpen = false
-                                },
+//                                .default(Text("Debug")) {
+//                                    self.router.changeRoute(to: self.router.debugScreen)
+//                                    self.menuOpen = false
+//                                },
                                 .destructive(Text("Logout")) {
                                     self.context.logout()
                                 }
