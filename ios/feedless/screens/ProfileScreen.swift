@@ -14,11 +14,14 @@ struct ProfileScreen : View {
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var imageLoader : ImageLoader
     @EnvironmentObject var router : Router
+    @EnvironmentObject var secrets : Secrets
+    @EnvironmentObject var keyboard : KeyboardResponder
     @State private var selection = 0
     @State private var post = ""
     @State private var isPostFocused = false
     @State private var selectedTab : Int
     @State private var moreActionsOpen = false
+    @State private var secretsModalOpen = false
 
     init(id : String?, selectedTab : Int = 0) {
         self.id = id
@@ -72,6 +75,10 @@ struct ProfileScreen : View {
         .padding(.horizontal, 10)
     }
 
+    func chatFor(_ profile: FullProfile) -> SecretChat {
+        return SecretChat(messages: [], author: profile.profile.id, authorProfile: profile.profile)
+    }
+
     func actionButtons(_ profile: FullProfile) -> some View {
         Group {
             if profile.friendshipStatus == "request_received" {
@@ -109,6 +116,22 @@ struct ProfileScreen : View {
                         self.profiles.addFriend(context: self.context, id: profile.profile.id)
                     }
                 }
+
+                PrimaryButton(text: "🤫 Secret Message", color: Color(Styles.uiYellow)) {
+                    self.secretsModalOpen = true
+                }
+                .sheet(isPresented: $secretsModalOpen, content: {
+                    SecretMessagesModal(
+                        chat: self.chatFor(profile),
+                        onClose: {
+                            self.secretsModalOpen = false
+                        },
+                        onSubmit: { message in
+                            self.secrets.publish(context: self.context, chat: self.chatFor(profile), message: message)
+                        }
+                    ).environmentObject(self.keyboard)
+                })
+
                 PrimaryButton(text: "...", color: Styles.gray) {
                     self.moreActionsOpen = true
                 }
@@ -343,6 +366,8 @@ struct Profile_Previews: PreviewProvider {
                     .environmentObject(profiles.2)
                     .environmentObject(ImageLoader())
                     .environmentObject(Router())
+                    .environmentObject(Secrets())
+                    .environmentObject(KeyboardResponder())
             }
         }
     }

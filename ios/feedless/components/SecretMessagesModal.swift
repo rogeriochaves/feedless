@@ -16,7 +16,7 @@ struct SecretMessagesModal : View {
     @State private var menuOpen = false
     @State private var step = 0
     @State var message = ""
-    @ObservedObject private var keyboard = KeyboardResponder()
+    @EnvironmentObject private var keyboard : KeyboardResponder
     @State private var focusOnCompose : Bool? = false
     @State private var composePlaceholder : String? = "Write a message"
 

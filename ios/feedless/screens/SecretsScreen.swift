@@ -13,7 +13,8 @@ struct SecretsScreen : View {
     @EnvironmentObject var secrets : Secrets
     @EnvironmentObject var imageLoader : ImageLoader
     @EnvironmentObject var router : Router
-    @State private var modal : SecretMessagesModal? = nil
+    @EnvironmentObject var keyboard : KeyboardResponder
+    @State private var modal : AnyView? = nil
 
     private var isModalOpen: Binding<Bool> { Binding (
         get: { self.modal != nil },
@@ -33,7 +34,7 @@ struct SecretsScreen : View {
             ForEach(secrets, id: \.author) { chat in
                 Button(action: {
                     self.secrets.vanish(context: self.context, chat: chat)
-                    self.modal = SecretMessagesModal(
+                    self.modal = AnyView(SecretMessagesModal(
                         chat: chat,
                         onClose: {
                             self.modal = nil
@@ -41,7 +42,7 @@ struct SecretsScreen : View {
                         onSubmit: { message in
                             self.secrets.publish(context: self.context, chat: chat, message: message)
                         }
-                    )
+                    ).environmentObject(self.keyboard))
                 }) {
                     HStack {
                         AsyncImage(url: Utils.avatarUrl(profile: chat.authorProfile), imageLoader: self.imageLoader)
@@ -111,6 +112,7 @@ struct SecretsScreen_Previews: PreviewProvider {
             .environmentObject(Samples.context())
             .environmentObject(Samples.secrets())
             .environmentObject(ImageLoader())
+            .environmentObject(KeyboardResponder())
     }
 }
 

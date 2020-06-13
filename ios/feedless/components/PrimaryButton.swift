@@ -24,7 +24,7 @@ struct PrimaryButton : View {
 
     var body: some View {
         Button(action: action) {
-            Text(self.text)
+            Text(self.text).lineLimit(1)
         }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
