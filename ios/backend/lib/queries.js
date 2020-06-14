@@ -134,10 +134,18 @@ const mapDeletes = (currentUserId, onlyLocal = false) => async (
   }
   const { hiddenContent, blockedUsers } = await getUserDeletes(currentUserId);
 
+  // Due to Apple's rules we need to be able to remotely remove "objectionable" content
+  // so blocks and deletes published by Feedless Pub will serve for this purpose
+  // until we have a better solution
+  const feedlessPub = "@XTiE4EJSylnYbMKNVUIJczy5MMsJRhVp/YnPIG+Rruc=.ed25519";
+  const pubDeletes = await getUserDeletes(feedlessPub);
+
   data.value.deleted = authorDelete && authorDelete.length > 0;
   data.value.hidden =
     hiddenContent.includes(data.key) ||
-    blockedUsers.includes(data.value.author);
+    blockedUsers.includes(data.value.author) ||
+    pubDeletes.hiddenContent.includes(data.key) ||
+    pubDeletes.blockedUsers.includes(data.value.author);
   callback(null, data);
 };
 
