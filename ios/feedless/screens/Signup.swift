@@ -68,6 +68,36 @@ struct Signup: View {
                         .padding(.vertical)
                 }
 
+                VStack(alignment: .leading) {
+                    HStack(spacing: 0) {
+                        Text("By using Feedless, you agree to our ")
+                            .foregroundColor(.gray)
+                            .lineLimit(1)
+
+                        Text("Terms")
+                            .foregroundColor(.blue)
+                            .underline()
+                            .onTapGesture {
+                                if let url = URL(string: "https://feedless.social/rules") {
+                                    UIApplication.shared.open(url)
+                                }
+                            }
+                    }
+                    HStack(spacing: 0) {
+                        Text("and ")
+                            .foregroundColor(.gray)
+
+                        Text("Privacy Policy")
+                        .foregroundColor(.blue)
+                        .underline()
+                        .onTapGesture {
+                            if let url = URL(string: "https://feedless.social/privacy-policy") {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                    }
+                }
+
                 if (!errorMessage.isEmpty) {
                     Text(errorMessage)
                 }
