@@ -991,6 +991,10 @@ router.post("/frontend-error", (req, res) => {
   res.send("ok");
 });
 
+router.get("/rules", { public: true }, async (_req, res) => {
+  res.render("shared/rules");
+});
+
 router.get("/privacy-policy", { public: true }, async (_req, res) => {
   res.render("shared/privacy_policy");
 });
