@@ -462,6 +462,11 @@ const search = async (search) => {
         .replace(/[\u0300-\u036f]/g, "");
       return searchRegex.exec(normalizedName);
     }),
+    pull.map((msg) => {
+      // Quick workaround for mapProfiles which only looks at value.author
+      msg.value.author = msg.value.content.about;
+      return msg;
+    }),
     paramap(mapProfiles)
   );
 
