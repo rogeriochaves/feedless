@@ -478,39 +478,42 @@ const search = async (search) => {
     paramap(mapProfiles)
   );
 
-  const communitiesPostsPromise = promisePull(
+  const subscriptionsPromise = await promisePull(
     ssb.client().query.read({
       reverse: true,
       query: [
         {
           $filter: {
             value: {
-              private: { $not: true },
               content: {
-                type: "post",
-                channel: { $truthy: true },
+                type: "channel",
               },
             },
           },
         },
       ],
-      limit: 3000,
+      limit: 10000,
     })
   );
 
-  const [people, communitiesPosts] = await Promise.all([
+  const [people, subscriptions] = await Promise.all([
     peoplePromise,
-    communitiesPostsPromise,
+    subscriptionsPromise,
   ]);
 
-  const communities = Array.from(
-    new Set(communitiesPosts.map((p) => p.value.content.channel))
-  ).filter((name) => {
-    const normalizedName = name
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-    return searchRegex.exec(normalizedName);
-  });
+  const subscriptionsChannels = subscriptions.map(
+    (p) => p.value.content.channel
+  );
+
+  const communities = Array.from(new Set(subscriptionsChannels)).filter(
+    (name) => {
+      if (!name) return false;
+      const normalizedName = name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+      return searchRegex.exec(normalizedName);
+    }
+  );
 
   // Remove duplicates
   let peopleResult = {};
