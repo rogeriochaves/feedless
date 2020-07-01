@@ -44,10 +44,10 @@
     <% if (friendshipStatus == "blocked") { %>
       <div style="padding: 15px">You blocked <%= profile.name %></div>
     <% } else { %>
+      <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST" style="padding: 0px 8px 5px 8px;">
+        <%- include('_publish', { placeholder: `Write something to ${profile.name}...` }) %>
+      </form>
       <% if (posts.length > 0) { %>
-        <form action="<%= profileUrl(profile.id, "/publish") %>" method="POST" style="padding: 0px 8px 5px 8px;">
-          <%- include('_publish', { placeholder: `Write something to ${profile.name}...` }) %>
-        </form>
         <%- include('../shared/_posts', { posts }) %>
       <% } else { %>
         <div style="padding-top: 15px;">
