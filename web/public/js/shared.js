@@ -145,3 +145,22 @@ flagButtons.forEach((flagButton) => {
     }
   });
 });
+
+const shareButtons = document.querySelectorAll(".js-share");
+shareButtons.forEach((shareButton) => {
+  if (navigator.share) {
+    shareButton.addEventListener("click", () => {
+      const key = shareButton.dataset.key.replace("%", "");
+      const text = shareButton.parentElement.parentElement.parentElement.querySelector(
+        ".js-post-text"
+      ).innerText;
+      navigator.share({
+        title: "Feedless",
+        text: text,
+        url: `https://feedless.social/post/${key}`,
+      });
+    });
+  } else {
+    shareButton.style.display = "none";
+  }
+});

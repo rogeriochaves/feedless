@@ -21,21 +21,20 @@
       <div class="post-content">
         <div style="float: right">
           <button class="post-more-button button-transparent js-open-popup"><div class="arrow-down-icon"></div></button>
-          <% if (post.value.author == context.profile.id) { %>
-            <div class="popup-menu">
+          <div class="popup-menu">
+            <button class="popup-menu-item js-share" data-key="<%= post.key %>">Share</button>
+            <% if (post.value.author == context.profile.id) { %>
               <button class="popup-menu-item js-delete" data-key="<%= post.key %>">Delete</button>
-            </div>
-          <% } else { %>
-            <div class="popup-menu">
+            <% } else { %>
               <button class="popup-menu-item js-hide" data-key="<%= post.key %>">Hide</button>
               <button class="popup-menu-item js-flag" data-key="<%= post.key %>">Flag</button>
-            </div>
-          <% } %>
+            <% } %>
+          </div>
         </div>
         <a href="<%= profileUrl(post.value.author) %>" class="no-link-style">
           <b><%= post.value.authorProfile.name %></b>
         </a>
-        <%- htmlify(text.replace(/^\s+/, "")) %>
+        <div class="js-post-text"><%- htmlify(text.replace(/^\s+/, "")) %></div>
         <div class="meta-info">
           <% if (typeof isTopic == "undefined") { %>
             <a href="/post/<%= post.key.replace("%", "") %>">
