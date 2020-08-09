@@ -9,7 +9,9 @@
     <% return %>
   <% } %>
 
-  <% splittedPosts(post.value, typeof isTopic == "undefined" ? 140 : 10000).map(text => { %>
+  <% splitted = splittedPosts(post.value, typeof isTopic == "undefined" ? 140 : 10000) %>
+  <% if (typeof isSingle !== "undefined") splitted = splitted.reverse() %>
+  <% splitted.map(text => { %>
     <div class="post <%= typeof key != "undefined" && key == post.key ? "post-focused" : "" %>">
       <div>
         <a href="<%= profileUrl(post.value.author) %>">
