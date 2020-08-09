@@ -4,6 +4,7 @@ const split = require("split-buffer");
 const metrics = require("./metrics");
 const isMobile = require("ismobilejs").default;
 const sharp = require("sharp");
+const urlLib = require("url");
 
 const isPhone = (req) => isMobile(req.headers["user-agent"]).phone;
 module.exports.isPhone = isPhone;
@@ -18,7 +19,7 @@ module.exports.asyncRouter = (app) => {
         res.status(401);
         return res.send("You are not logged in");
       }
-      return res.redirect("/");
+      return res.redirect(`/?returnTo=${req.originalUrl}`);
     }
     if (
       (opts.mobileVersion && isPhone(req)) ||
@@ -28,7 +29,8 @@ module.exports.asyncRouter = (app) => {
       for (let key in req.params) {
         url = url.replace(`:${key}`, req.params[key]);
       }
-      return res.redirect(url);
+      const search = urlLib.parse(req.url, true).search || "";
+      return res.redirect(url + search);
     }
 
     req.context.path = path;

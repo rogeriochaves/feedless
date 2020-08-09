@@ -39,7 +39,11 @@
     <p style="margin: 30px 0 20px 0">
       <a class="button button-big" href="/keys/download">Download Key</a>
     </p>
-    <p>then <a href="/">continue to profile</a></p>
+    <% if (returnTo) { %>
+      <p>then <a href="<%= returnTo %>">continue to the page you were trying to access</a></p>
+    <% } else { %>
+      <p>then <a href="/">continue to profile</a></p>
+    <% } %>
   <% } %>
 </div>
 

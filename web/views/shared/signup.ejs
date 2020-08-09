@@ -21,6 +21,9 @@
         <input type="text" name="name" />
       </label>
     </div>
+    <% if (returnTo) { %>
+      <input type="hidden" name="returnTo" value="<%= returnTo %>" />
+    <% } %>
     <p>
       <input class="button-big button-blue" type="submit" value="Sign up" />
     </p>

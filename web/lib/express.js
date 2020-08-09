@@ -222,12 +222,12 @@ router.get(
     if (req.context.profile) {
       return res.redirect(`/profile/${req.context.key.id}`);
     } else {
-      return res.render("shared/index");
+      return res.render("shared/index", { returnTo: req.query.returnTo });
     }
   }
 );
 
-const doLogin = async (submittedKey, res) => {
+const doLogin = async (submittedKey, req, res) => {
   let decodedKey;
   try {
     decodedKey = reconstructKeys(submittedKey);
@@ -251,7 +251,8 @@ const doLogin = async (submittedKey, res) => {
   decodedKey.private = "[removed]";
   debug("Login with key", decodedKey);
 
-  res.redirect("/");
+  const returnTo = req.body.returnTo;
+  res.redirect(returnTo ? returnTo : "/");
 };
 
 router.get("/login", { public: true }, async (req, res) => {
@@ -259,9 +260,9 @@ router.get("/login", { public: true }, async (req, res) => {
     req.query.key && Buffer.from(req.query.key, "base64").toString("utf8");
 
   if (loginKey) {
-    await doLogin(loginKey, res);
+    await doLogin(loginKey, req, res);
   } else {
-    res.render("shared/login", { mode });
+    res.render("shared/login", { mode, returnTo: req.query.returnTo });
   }
 });
 
@@ -271,7 +272,7 @@ router.post("/login", { public: true }, async (req, res) => {
       ? req.files.ssb_key.data.toString()
       : req.body.ssb_key;
 
-  await doLogin(submittedKey, res);
+  await doLogin(submittedKey, req, res);
 });
 
 router.get("/download", { public: true }, (_req, res) => {
@@ -292,7 +293,7 @@ router.get("/signup", { public: true }, (req, res) => {
     return res.redirect("/");
   }
 
-  res.render("shared/signup", { mode });
+  res.render("shared/signup", { mode, returnTo: req.query.returnTo });
 });
 
 router.post("/signup", { public: true }, async (req, res) => {
@@ -330,13 +331,15 @@ router.post("/signup", { public: true }, async (req, res) => {
 
   debug("Published about", { about: key.id, name, image: pictureLink });
 
-  res.redirect("/keys");
+  const returnTo = req.body.returnTo;
+  res.redirect(`/keys${returnTo ? `?returnTo=${returnTo}` : ""}`);
 });
 
 router.get("/keys", (req, res) => {
   res.render("shared/keys", {
     useEmail: process.env.SENDGRID_API_KEY,
     key: JSON.stringify(req.context.key),
+    returnTo: req.query.returnTo,
   });
 });
 

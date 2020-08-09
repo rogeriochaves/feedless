@@ -9,7 +9,7 @@ module.exports.setupRoutes = (router) => {
       if (req.context.profile) {
         return res.redirect(`/mobile/profile/${req.context.profile.id}`);
       } else {
-        return res.render("shared/index");
+        return res.render("shared/index", { returnTo: req.query.returnTo });
       }
     }
   );

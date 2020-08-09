@@ -1,31 +1,36 @@
 <%- include('../desktop/_header') %>
 
-<div style="max-width: 800px; margin: 0 auto">
+<div style="max-width: 800px; margin: 0 auto;">
   <h1>Login</h1>
 
-  <p style="padding-top: 15px">
-    You should probably have received your login button by email, search for "Feedless login button", if not, then you must have saved your key, you can input it here
+  <p style="padding-top: 15px;">
+    You should probably have received your login button by email, search for
+    "Feedless login button", if not, then you must have saved your key, you can
+    input it here
   </p>
 
   <form method="POST" action="/login" enctype="multipart/form-data">
-    <div style="padding: 20px 0 10px 0">
+    <div style="padding: 20px 0 10px 0;">
       <label>
         Select your key: <br />
         <input type="file" name="ssb_key" />
       </label>
     </div>
-    <div style="padding: 20px 0 30px 0">
+    <div style="padding: 20px 0 30px 0;">
       Or paste it here: <br />
-      <textarea name="ssb_key" style="max-width: 300px"></textarea>
+      <textarea name="ssb_key" style="max-width: 300px;"></textarea>
     </div>
+    <% if (returnTo) { %>
+      <input type="hidden" name="returnTo" value="<%= returnTo %>" />
+    <% } %>
     <p>
       <input class="button-big button-blue" type="submit" value="Login" />
     </p>
     <% if (mode == "server") { %>
-      <p>or</p>
-      <p>
-        <a href="/download">I don't trust this server</a>
-      </p>
+    <p>or</p>
+    <p>
+      <a href="/download">I don't trust this server</a>
+    </p>
     <% } %>
   </form>
 </div>

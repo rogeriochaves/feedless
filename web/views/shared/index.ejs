@@ -8,8 +8,8 @@
     <h2 style="padding: 20px 0;">The non-addictive social network</h2>
 
     <div style="padding-top: 20px;">
-      <a href="/signup" class="button button-big button-blue">Create account</a>
-      <a href="/login" class="button button-big" style="margin-left: 10px;"
+      <a href="/signup<%= returnTo ? `?returnTo=${returnTo}` : "" %>" class="button button-big button-blue">Create account</a>
+      <a href="/login<%= returnTo ? `?returnTo=${returnTo}` : "" %>" class="button button-big" style="margin-left: 10px;"
         >Login</a
       >
     </div>
