@@ -1,3 +1,5 @@
+console.log("Starting feedless web");
+
 require("./lib/errors");
 
 require("./lib/ssb");
