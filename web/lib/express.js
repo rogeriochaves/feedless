@@ -98,7 +98,7 @@ app.use(async (req, res, next) => {
 
   next();
 });
-app.use((_req, res, next) => {
+app.use((req, res, next) => {
   res.locals.profileUrl = profileUrl;
   res.locals.imageUrl = (imageHash) => {
     return imageHash && `/blob/${encodeURIComponent(imageHash)}`;
@@ -130,17 +130,21 @@ app.use((_req, res, next) => {
   };
   res.locals.htmlify = (str) => {
     let result = ejsUtils.escapeXML(str);
+    let target = 'target="_blank"';
+    if (isPhone(req)) {
+      target = "";
+    }
     result = result.replace(
       /(\s|^)&amp;(\S*?=\.sha\d+)/g, // Blobs
-      `$1<a target="_blank" href="/blob/&$2">&$2</a>`
+      `$1<a ${target} href="/blob/&$2">&$2</a>`
     );
     result = result.replace(
       /(https?:\/\/\S+)/g, // Urls with http in front
-      `<a target="_blank" href="$1">$1</a>`
+      `<a ${target} href="$1">$1</a>`
     );
     result = result.replace(
       /(\s|^)(([a-z-_])*(\.[^\s.]{2,})+)/gm, // Domains without http
-      `$1<a target="_blank" href="http://$2">$2</a>`
+      `$1<a ${target} href="http://$2">$2</a>`
     );
     result = result.replace(
       /(\s|^)#([a-z0-9-]+)/g, // Communities
