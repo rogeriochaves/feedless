@@ -801,6 +801,7 @@ const getPostWithReplies = async (currentUserId, channel, key) => {
   const posts = await getCommunityPosts(currentUserId, channel);
   const topic = posts.find((x) => x.key == key);
 
+  if (!topic) return [];
   return [topic, ...topic.value.content.replies];
 };
 
