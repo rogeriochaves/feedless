@@ -22,8 +22,8 @@
         <div style="float: right">
           <button class="post-more-button button-transparent js-open-popup"><div class="arrow-down-icon"></div></button>
           <div class="popup-menu js-popup-menu" data-key="<%= post.key %>">
-            <button class="popup-menu-item js-copy-id">Copy Post ID</button>
             <button class="popup-menu-item js-share">Share</button>
+            <button class="popup-menu-item js-copy-id">Copy Post ID</button>
             <% if (post.value.author == context.profile.id) { %>
               <button class="popup-menu-item js-delete">Delete</button>
             <% } else { %>
