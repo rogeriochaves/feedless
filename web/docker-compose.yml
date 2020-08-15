@@ -9,9 +9,9 @@ services:
       - feedless_ssb:/root/.ssb
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:$PORT/metrics"]
-      interval: 30s
+      interval: 20s
       timeout: 5s
-      retries: 2
+      retries: 1
       start_period: 20s
 
 volumes:
