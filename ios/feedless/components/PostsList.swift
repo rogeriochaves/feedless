@@ -113,7 +113,7 @@ struct PostsList : View {
                             .padding(.trailing, 5)
                     }
                 }
-                Text(text)
+                LinkedText(text)
             }
         }
         .padding(.horizontal, 10)
