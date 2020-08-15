@@ -1,5 +1,5 @@
 <button class="js-open-popup" style="font-weight: bold;">...</button>
-<div class="popup-menu" style="margin-left: 15px">
+<div class="popup-menu js-popup-menu" style="margin-left: 15px">
   <% if (friendshipStatus == "blocked") { %>
     <form action="<%= profileUrl(profile.id, "/unblock") %>" method="POST">
       <input type="submit" class="popup-menu-item" value="Unblock" />

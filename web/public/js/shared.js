@@ -77,7 +77,7 @@ const openPopupButtons = document.querySelectorAll(".js-open-popup");
 openPopupButtons.forEach((openPopupButton) => {
   openPopupButton.addEventListener("click", () => {
     const parent = openPopupButton.parentElement;
-    const popup = parent.querySelector(".popup-menu");
+    const popup = parent.querySelector(".js-popup-menu");
     if (popup.style.display == "block") {
       popup.style.display = "none";
     } else {
@@ -89,7 +89,7 @@ openPopupButtons.forEach((openPopupButton) => {
 const deleteButtons = document.querySelectorAll(".js-delete");
 deleteButtons.forEach((deleteButton) => {
   deleteButton.addEventListener("click", () => {
-    const key = deleteButton.dataset.key.replace("%", "");
+    const key = deleteButton.parentElement.dataset.key.replace("%", "");
     fetch(`/delete/${key}`, { method: "POST" }).then(() => {
       const post =
         deleteButton.parentElement.parentElement.parentElement.parentElement;
@@ -108,7 +108,7 @@ const hideItem = (key, post) => {
 const hideButtons = document.querySelectorAll(".js-hide");
 hideButtons.forEach((hideButton) => {
   hideButton.addEventListener("click", () => {
-    const key = hideButton.dataset.key.replace("%", "");
+    const key = hideButton.parentElement.dataset.key.replace("%", "");
     const post =
       hideButton.parentElement.parentElement.parentElement.parentElement;
     hideItem(key, post);
@@ -135,7 +135,7 @@ const flagItem = (key) => {
 const flagButtons = document.querySelectorAll(".js-flag");
 flagButtons.forEach((flagButton) => {
   flagButton.addEventListener("click", () => {
-    const key = flagButton.dataset.key.replace("%", "");
+    const key = flagButton.parentElement.dataset.key.replace("%", "");
     const post =
       flagButton.parentElement.parentElement.parentElement.parentElement;
     flagItem(key);
@@ -150,7 +150,7 @@ const shareButtons = document.querySelectorAll(".js-share");
 shareButtons.forEach((shareButton) => {
   if (navigator.share) {
     shareButton.addEventListener("click", () => {
-      const key = shareButton.dataset.key.replace("%", "");
+      const key = shareButton.parentElement.dataset.key.replace("%", "");
       const text = shareButton.parentElement.parentElement.parentElement.querySelector(
         ".js-post-text"
       ).innerText;
@@ -160,7 +160,21 @@ shareButtons.forEach((shareButton) => {
         url: `https://feedless.social/post/${key}`,
       });
     });
+    const popupMenu = shareButton.parentElement;
+    popupMenu.style.display = "none";
   } else {
     shareButton.style.display = "none";
   }
+});
+
+const copyButtons = document.querySelectorAll(".js-copy-id");
+copyButtons.forEach((copyButton) => {
+  copyButton.addEventListener("click", () => {
+    const key = copyButton.parentElement.dataset.key;
+    navigator.clipboard.writeText(key).catch(() => {
+      alert("Copy failed");
+    });
+    const popupMenu = copyButton.parentElement;
+    popupMenu.style.display = "none";
+  });
 });
