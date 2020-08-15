@@ -4,6 +4,17 @@
 
 @implementation NodeRunner
 
+NSPipe *controlPipe;
+NSFileHandle *pipeControlReadHandle;
+NSFileHandle *pipeControlWriteHandle;
+
++ (void) CreateControlPipe
+{
+  controlPipe = [NSPipe pipe];
+  pipeControlReadHandle = [controlPipe fileHandleForReading];
+  pipeControlWriteHandle = [controlPipe fileHandleForWriting];
+}
+
 //node's libUV requires all arguments being on contiguous memory.
 + (void) startEngineWithArguments:(NSArray*)arguments
 {
@@ -44,6 +55,13 @@
         current_args_position+=strlen(current_args_position)+1;
     }
 
+    [self CreateControlPipe];
+    NSString* controlFileDescriptorNS = [NSString stringWithFormat:@"%d",[pipeControlReadHandle fileDescriptor]];
+    const char* current_argument=[controlFileDescriptorNS UTF8String];
+    strncpy(current_args_position, current_argument, strlen(current_argument));
+    argv[argument_count] = current_args_position;
+    argument_count++;
+
     //Start node, with argc and argv.
     @try {
         node_start(argument_count,argv);
@@ -54,4 +72,10 @@
     }
     free(args_buffer);
 }
+
++(void) sendControlMessage:(NSString*)message
+{
+  [pipeControlWriteHandle writeData:[[NSString stringWithFormat: @"%@\n", message] dataUsingEncoding:NSUTF8StringEncoding]];
+}
+
 @end

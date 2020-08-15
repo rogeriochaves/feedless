@@ -126,5 +126,6 @@ struct CommunitiesTopic_Previews: PreviewProvider {
             .environmentObject(Samples.context())
             .environmentObject(Samples.communities())
             .environmentObject(ImageLoader())
+            .environmentObject(KeyboardResponder())
     }
 }

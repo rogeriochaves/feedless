@@ -4,6 +4,7 @@
 
 @interface NodeRunner : NSObject {}
 + (void) startEngineWithArguments:(NSArray*)arguments;
++ (void) sendControlMessage:(NSString*)message;
 @end
 
 #endif

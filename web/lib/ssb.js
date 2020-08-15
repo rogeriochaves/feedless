@@ -30,7 +30,23 @@ const Server = require("secret-stack")()
   .use(require("./plugins/encrypted-view"));
 
 const config = require("./ssb-config");
-const server = Server(config);
+let server = Server(config);
+server.on("close", () => {
+  console.log("Server closed, restarting");
+  setTimeout(() => {
+    server = Server(config);
+  }, 5000);
+});
+server.on("error", (err) => {
+  console.log("Restarting server due to error:", err);
+  setTimeout(() => {
+    server = Server(config);
+  }, 5000);
+});
+console.log("server", server);
+setTimeout(() => {
+  server.destroy();
+}, 5000);
 console.log("SSB server started at", config.port);
 
 // save an updated list of methods this server has made public

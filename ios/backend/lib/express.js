@@ -535,6 +535,13 @@ router.get("/blob/*", { public: true }, (req, res) => {
   serveBlobs(ssb.client())(req, res);
 });
 
-app.listen(port, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
-);
+let server;
+module.exports.startExpressServer = () => {
+  server = app.listen(port, () =>
+    console.log(`Example app listening at http://localhost:${port}`)
+  );
+};
+
+module.exports.stopExpressServer = () => {
+  server.close();
+};

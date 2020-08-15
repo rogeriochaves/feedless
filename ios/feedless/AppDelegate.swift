@@ -19,9 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
         let jsFile = Bundle.main.path(forResource: "backend/out/index.js", ofType: nil)!
 
+//        DispatchQueue.global().asyncAfter(deadline: .now() + 6) {
+//            Thread.exit()
+//        }
+
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let bundlePath = Bundle.main.bundlePath
         Utils.debug("documentsPath \(documentsPath)")
+        NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath, targetEnvironment])
+        Utils.debug("after node start engine")
         NodeRunner.startEngine(withArguments: ["node", jsFile, documentsPath, bundlePath, targetEnvironment])
     }
 
@@ -30,7 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" {
             let nodejsThread = Thread(target:self, selector:#selector(startNode), object:nil)
-            nodejsThread.stackSize = 4*1024*1024;
+            nodejsThread.stackSize = 1024*1024
+            print("Is main thread? \(nodejsThread.isMainThread)")
+            print("thread priority \(nodejsThread.threadPriority)")
             nodejsThread.start()
         }
 
@@ -50,7 +58,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
-
 }
 

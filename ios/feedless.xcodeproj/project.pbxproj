@@ -38,6 +38,8 @@
 		907A5963247D7362007C0983 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907A5962247D7362007C0983 /* Extensions.swift */; };
 		90B6A2DA2476B94F004B0BFF /* SecretMessagesModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B6A2D92476B94F004B0BFF /* SecretMessagesModal.swift */; };
 		90B81B96245ECC00005C5D31 /* NodeRunner.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90B81B95245ECC00005C5D31 /* NodeRunner.mm */; };
+		90C0255E24E7B7C9009D3195 /* LockNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C0255D24E7B7C9009D3195 /* LockNotification.m */; };
+		90C0256024E7B7EA009D3195 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90C0255F24E7B7EA009D3195 /* NotificationCenter.framework */; };
 		90CDBA66246F5923008EA9BE /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA65246F5923008EA9BE /* Context.swift */; };
 		90CDBA68246F5971008EA9BE /* Profiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA67246F5971008EA9BE /* Profiles.swift */; };
 		90CDBA6C246F5B77008EA9BE /* Entries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CDBA6B246F5B77008EA9BE /* Entries.swift */; };
@@ -132,6 +134,9 @@
 		90B81B93245ECBBB005C5D31 /* NodeRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NodeRunner.h; sourceTree = "<group>"; };
 		90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "feedless-Bridging-Header.h"; sourceTree = "<group>"; };
 		90B81B95245ECC00005C5D31 /* NodeRunner.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeRunner.mm; sourceTree = "<group>"; };
+		90C0255C24E7B7AA009D3195 /* LockNotification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockNotification.h; sourceTree = "<group>"; };
+		90C0255D24E7B7C9009D3195 /* LockNotification.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LockNotification.m; sourceTree = "<group>"; };
+		90C0255F24E7B7EA009D3195 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		90CDBA65246F5923008EA9BE /* Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
 		90CDBA67246F5971008EA9BE /* Profiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profiles.swift; sourceTree = "<group>"; };
 		90CDBA6B246F5B77008EA9BE /* Entries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entries.swift; sourceTree = "<group>"; };
@@ -161,6 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90C0256024E7B7EA009D3195 /* NotificationCenter.framework in Frameworks */,
 				907002132465A53400548946 /* NodeMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,6 +252,8 @@
 				90B81B93245ECBBB005C5D31 /* NodeRunner.h */,
 				90B81B95245ECC00005C5D31 /* NodeRunner.mm */,
 				90B81B94245ECBFF005C5D31 /* feedless-Bridging-Header.h */,
+				90C0255C24E7B7AA009D3195 /* LockNotification.h */,
+				90C0255D24E7B7C9009D3195 /* LockNotification.m */,
 			);
 			path = feedless;
 			sourceTree = "<group>";
@@ -304,6 +312,7 @@
 		90B81B8E245ECB25005C5D31 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				90C0255F24E7B7EA009D3195 /* NotificationCenter.framework */,
 				907002122465A53400548946 /* NodeMobile.framework */,
 			);
 			name = Frameworks;
@@ -539,6 +548,7 @@
 				90CDBA68246F5971008EA9BE /* Profiles.swift in Sources */,
 				902D04772458AAA7007CFE56 /* SceneDelegate.swift in Sources */,
 				902B7236247829E1007F4990 /* MultilineTextField.swift in Sources */,
+				90C0255E24E7B7C9009D3195 /* LockNotification.m in Sources */,
 				900BE2972458AEEC00C77595 /* Index.swift in Sources */,
 				9053055F245FE975006C054D /* Types.swift in Sources */,
 				9061FAA0246E713C00AA988A /* ProfileScreen.swift in Sources */,

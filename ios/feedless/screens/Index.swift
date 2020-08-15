@@ -139,6 +139,7 @@ struct Index: View {
             }
         }
         .onReceive(self.timer) { (_) in
+            print("context fetching")
             self.context.fetch()
         }
     }

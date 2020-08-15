@@ -28,20 +28,22 @@ const connectClient = (ssbSecret) => {
         setTimeout(() => connectClient(ssbSecret), 1000);
         return;
       }
-      console.log("conncetion successfull!");
+      console.log("connection successfull!");
 
       ssbClient = server;
 
-      queries.progress((data) => {
-        const { incompleteFeeds } = data;
-        if (incompleteFeeds > 0) {
-          if (!syncing) debug("syncing");
-          syncing = true;
-        } else {
-          if (syncing) debug("ready");
-          syncing = false;
-        }
-      });
+      if (!brokenClient) {
+        queries.progress((data) => {
+          const { incompleteFeeds } = data;
+          if (incompleteFeeds > 0) {
+            if (!syncing) debug("syncing");
+            syncing = true;
+          } else {
+            if (syncing) debug("ready");
+            syncing = false;
+          }
+        });
+      }
 
       console.log("SSB Client ready");
 
@@ -69,11 +71,24 @@ const addFirstPub = async () => {
 };
 
 let indexingState = { current: 0, target: 0 };
+let brokenClient = false;
 
 const checkIndexing = async () => {
+  console.log("checkIndexing");
   if (!ssbClient) return;
+  if (brokenClient) return;
 
-  const { indexes } = await ssbClient.progress();
+  let indexes;
+  try {
+    const progress = await ssbClient.progress();
+    indexes = progress.indexes;
+  } catch (e) {
+    process.exit();
+    brokenClient = true;
+    throw "CheckIndexingError";
+  }
+  indexing = false;
+  return;
   const { start, current, target } = indexes;
 
   indexingState = { current: current - start, target: target - start };
@@ -100,3 +115,10 @@ module.exports.getStatus = () => {
 };
 module.exports.getIndexingState = () => indexingState;
 module.exports.reconnectWith = connectClient;
+module.exports.reconnectSSBClient = () => {
+  connectClient(ssbSecret);
+};
+module.exports.stopSSBClient = () => {
+  ssbClient.close();
+  ssbClient = null;
+};

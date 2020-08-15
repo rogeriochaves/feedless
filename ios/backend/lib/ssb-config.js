@@ -33,4 +33,7 @@ module.exports = configInject("ssb", {
       net: [{ transform: "shs" }],
     },
   },
+  replicate: {
+    legacy: false,
+  },
 });
