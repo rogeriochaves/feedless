@@ -33,16 +33,23 @@ struct Index: View {
 
     func progressBar() -> some View {
         let width = CGFloat(self.context.indexing.current) / CGFloat(self.context.indexing.target) * 100;
+        var percentageString = String(format: "%.1f", Float(width)) + "%";
+        percentageString = percentageString.replacingOccurrences(of: ".0", with: "")
 
         return ZStack(alignment: .leading) {
             Capsule()
                 .foregroundColor(Styles.lightGray)
-                .frame(width: 100, height: 10)
+                .frame(width: 100, height: 12)
 
             Capsule()
-                .frame(width: width, height: 10)
+                .frame(width: width, height: 12)
                 .foregroundColor(Styles.primaryBlue)
                 .animation(.easeIn)
+
+            Text(percentageString)
+                .font(.system(size: 11))
+                .frame(width: 100, height: 12)
+                .multilineTextAlignment(.center)
         }
     }
 
@@ -147,14 +154,14 @@ struct Index: View {
 struct Index_Previews: PreviewProvider {
     static func indexingContext() -> Context {
         let context = Context(ssbKey: nil, status: .indexing)
-        context.indexing = IndexingState(current: 30, target: 100)
+        context.indexing = IndexingState(current: 30, target: 105)
         return context
     }
 
     static func indexingSignedContext() -> Context {
         let context = Samples.context()
         context.status = .indexing
-        context.indexing = IndexingState(current: 30, target: 100)
+        context.indexing = IndexingState(current: 30, target: 105)
         return context
     }
 
