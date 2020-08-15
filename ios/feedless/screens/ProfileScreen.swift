@@ -40,7 +40,7 @@ struct ProfileScreen : View {
     }
 
     func keyboardOffset() -> CGFloat {
-        let adjustment : CGFloat = self.isLoggedUser() ? 360 : 260;
+        let adjustment : CGFloat = self.isLoggedUser() ? 300 : 260;
         return [keyboard.currentHeight - adjustment, CGFloat(0)].max()! * -1
     }
 
