@@ -73,7 +73,15 @@ let indexingState = { current: 0, target: 0 };
 const checkIndexing = async () => {
   if (!ssbClient) return;
 
-  const { indexes } = await ssbClient.progress();
+  let indexes;
+  try {
+    const progress = await ssbClient.progress();
+    indexes = progress.indexes;
+  } catch (e) {
+    // Check indexing error, continuing is dangerous, app won't work, I tried everything
+    // I think it's better to just wait for the Rust implementation to replace this
+    process.exit(1);
+  }
   const { start, current, target } = indexes;
 
   indexingState = { current: current - start, target: target - start };
