@@ -14,8 +14,6 @@ const Server = require("secret-stack")({
   .use(require("ssb-gossip"))
   .use(require("ssb-replicate"))
   .use(require("./monkeypatch/ssb-friends"))
-  // FIXME: see issue https://gith`ub.com/ssbc/ssb-ebt/issues/33
-  .use(require("ssb-ebt-fork-staltz")) // needs: db, replicate, friends
   .use(require("ssb-query"))
   .use(require("ssb-blobs"))
   .use(require("ssb-invite"))
