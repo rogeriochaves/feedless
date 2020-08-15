@@ -39,6 +39,11 @@ struct ProfileScreen : View {
         return self.getId() == context.ssbKey?.id
     }
 
+    func keyboardOffset() -> CGFloat {
+        let adjustment : CGFloat = self.isLoggedUser() ? 360 : 260;
+        return [keyboard.currentHeight - adjustment, CGFloat(0)].max()! * -1
+    }
+
     func composer(_ profile: FullProfile) -> some View {
         VStack {
             MultilineTextField(
@@ -303,6 +308,8 @@ struct ProfileScreen : View {
             }
             .frame(maxWidth: .infinity)
             .background(Color(Styles.uiWhite))
+            .offset(y: keyboardOffset())
+            .animation(.easeOut(duration: 0.16), value: keyboardOffset())
         }
     }
 

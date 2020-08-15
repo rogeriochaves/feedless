@@ -87,7 +87,7 @@ struct PubsScreen: View {
                             .padding(.horizontal)
                             .padding(.bottom)
             }
-            .background(Color.white)
+            .background(Color(Styles.uiWhite))
             .offset(y: keyboardOffset())
             .animation(.easeOut(duration: 0.16))
         }
