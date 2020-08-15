@@ -46,7 +46,7 @@ struct LinkColoredText: View {
                 return Text(verbatim: text)
             case .link(let text, _):
                 return Text(verbatim: text)
-                    .foregroundColor(Color(Styles.uiLightBlue))
+                    .foregroundColor(Color(Styles.uiLinkBlue))
             }
         }.reduce(Text(""), +)
     }
@@ -84,8 +84,13 @@ private struct LinkTapOverlay: UIViewRepresentable {
 
         view.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.didTapLabel(_:)))
+        let forceTouchGestureRecognizer = ForceTouchGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.didForceTouchLabel(_:)))
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.didLongPressLabel(_:)))
+
         tapGesture.delegate = context.coordinator
         view.addGestureRecognizer(tapGesture)
+        view.addGestureRecognizer(forceTouchGestureRecognizer)
+        view.addGestureRecognizer(longPressGestureRecognizer)
 
         return view
     }
@@ -124,15 +129,31 @@ private struct LinkTapOverlay: UIViewRepresentable {
 
         @objc func didTapLabel(_ gesture: UITapGestureRecognizer) {
             let location = gesture.location(in: gesture.view!)
-            guard let result = link(at: location) else {
-                return
-            }
-
-            guard let url = result.url else {
+            guard let result = link(at: location), let url = result.url else {
                 return
             }
 
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+
+        @objc func didForceTouchLabel(_ gesture: ForceTouchGestureRecognizer) {
+            let location = gesture.location(in: gesture.view!)
+            guard let result = link(at: location), let url = result.url else {
+                return
+            }
+
+            let controller = UIDocumentInteractionController(url: url)
+            controller.presentOpenInMenu(from: gesture.view!.bounds, in: gesture.view!, animated: true)
+        }
+
+        @objc func didLongPressLabel(_ gesture: UILongPressGestureRecognizer) {
+            let location = gesture.location(in: gesture.view!)
+            guard let result = link(at: location), let url = result.url else {
+                return
+            }
+
+            let controller = UIDocumentInteractionController(url: url)
+            controller.presentOpenInMenu(from: gesture.view!.bounds, in: gesture.view!, animated: true)
         }
 
         private func link(at point: CGPoint) -> NSTextCheckingResult? {
@@ -161,4 +182,44 @@ private class LinkTapOverlayView: UIView {
         newSize.height += 20 // need some extra space here to actually get the last line
         textContainer.size = newSize
     }
+}
+
+import UIKit.UIGestureRecognizerSubclass
+
+final class ForceTouchGestureRecognizer: UIGestureRecognizer {
+
+    private let threshold: CGFloat = 0.75
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesBegan(touches, with: event)
+        if let touch = touches.first {
+            handleTouch(touch)
+        }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesMoved(touches, with: event)
+        if let touch = touches.first {
+            handleTouch(touch)
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesEnded(touches, with: event)
+        state = UIGestureRecognizer.State.failed
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesCancelled(touches, with: event)
+        state = UIGestureRecognizer.State.failed
+    }
+
+    private func handleTouch(_ touch: UITouch) {
+        guard touch.force != 0 && touch.maximumPossibleForce != 0 else { return }
+
+        if touch.force / touch.maximumPossibleForce >= threshold {
+            state = UIGestureRecognizer.State.recognized
+        }
+    }
+
 }

@@ -9,30 +9,16 @@
 import SwiftUI
 
 class Styles {
-    static var darkGray = Color(
-        red: 0.4,
-        green: 0.4,
-        blue: 0.4
-    )
-    static var gray = Color(
-        red: 0.8,
-        green: 0.8,
-        blue: 0.8
-    )
-    static var lightGray = Color(
-        red: 230 / 255,
-        green: 230 / 255,
-        blue: 230 / 255
-    )
-    static var primaryBlue = Color(
-        red: 127 / 255,
-        green: 230 / 255,
-        blue: 230 / 255
-    )
     static var uiBlue = UIColor(
         red: 127 / 255,
         green: 230 / 255,
         blue: 230 / 255,
+        alpha: 1
+    )
+    static var uiLinkBlue = UIColor(
+        red: 33 / 255,
+        green: 110 / 255,
+        blue: 150 / 255,
         alpha: 1
     )
     static var uiDarkBlue = UIColor(
@@ -71,6 +57,22 @@ class Styles {
         blue: 245 / 255,
         alpha: 1
     )
+    static var darkGray = Color(
+        red: 102 / 255,
+        green: 102 / 255,
+        blue: 102 / 255
+    )
+    static var gray = Color(
+        red: 0.8,
+        green: 0.8,
+        blue: 0.8
+    )
+    static var lightGray = Color(
+        red: 230 / 255,
+        green: 230 / 255,
+        blue: 230 / 255
+    )
+    static var primaryBlue = Color(uiBlue)
     // This will be black on dark mode
     static var uiWhite = UIColor.systemBackground
 
