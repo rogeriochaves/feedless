@@ -33,9 +33,9 @@ fileprivate struct UITextViewWrapper: UIViewRepresentable {
         if uiView.text != self.text {
             uiView.text = self.text
         }
-//        if uiView.window != nil, !uiView.isFirstResponder {
-//            uiView.becomeFirstResponder()
-//        }
+        if uiView.window != nil, !uiView.isFirstResponder && isResponder {
+            uiView.becomeFirstResponder()
+        }
         UITextViewWrapper.recalculateHeight(view: uiView, result: $calculatedHeight)
     }
 
@@ -103,12 +103,10 @@ struct MultilineTextField: View {
     private var internalText: Binding<String> {
         Binding<String>(get: { self.text } ) {
             self.text = $0
-            self.showingPlaceholder = $0.isEmpty
         }
     }
 
     @State private var dynamicHeight: CGFloat = 50
-    @State private var showingPlaceholder = false
 
     @Binding private var isResponder: Bool
 
@@ -117,7 +115,6 @@ struct MultilineTextField: View {
         self.onCommit = onCommit
         self._text = text
         self._isResponder = isResponder
-        self._showingPlaceholder = State<Bool>(initialValue: self.text.isEmpty)
     }
 
     var body: some View {
@@ -128,7 +125,7 @@ struct MultilineTextField: View {
 
     var placeholderView: some View {
         Group {
-            if showingPlaceholder {
+            if self.text.isEmpty {
                 Text(placeholder).foregroundColor(.gray)
                     .padding(.leading, 4)
                     .padding(.top, 8)

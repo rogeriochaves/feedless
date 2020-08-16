@@ -23,9 +23,12 @@ struct PostsList : View {
     private let showInReplyTo:Bool
     private let reference:PostsReference
     @State var postMenuOpen:PostEntry? = nil
+    private let replyCallback : ((PostEntry) -> Void)?
 
-    init(_ posts: Posts, reference: PostsReference) {
+
+    init(_ posts: Posts, reference: PostsReference, replyCallback: ((PostEntry) -> Void)? = nil) {
         self.reference = reference
+        self.replyCallback = replyCallback
 
         switch reference {
         case .WallId(_):
@@ -189,6 +192,59 @@ struct PostsList : View {
         UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 
+    func postActions() -> [ActionSheet.Button] {
+        var actions : [ActionSheet.Button] = [
+            .cancel { self.postMenuOpen = nil }
+        ]
+
+        if case .WallId(_) = self.reference {
+            actions += [
+                .default( Text("Reply") ) {
+                    if let post = self.postMenuOpen,
+                        let replyCallback = self.replyCallback {
+                        replyCallback(post)
+                    }
+                    self.postMenuOpen = nil
+                }
+            ]
+        }
+
+        if self.postMenuOpen?.value.author == self.context.ssbKey?.id {
+            actions += [
+                .default( Text("Delete") ) {
+                    if let post = self.postMenuOpen {
+                        self.deletePost(post)
+                    }
+                    self.postMenuOpen = nil
+                },
+            ]
+        } else {
+            actions += [
+                .default( Text("Hide") ) {
+                    if let post = self.postMenuOpen {
+                        self.deletePost(post)
+                        self.confirmDialog(message: "Do you also want to flag the post?", onConfirm: { _ in
+                            self.flagPost(post, onConfirm: nil)
+                        })
+                    }
+                    self.postMenuOpen = nil
+                },
+                .default( Text("Flag") ) {
+                    if let post = self.postMenuOpen {
+                        self.flagPost(post, onConfirm: {
+                            self.confirmDialog(message: "Do you also want to hide the post?", onConfirm: { _ in
+                                self.deletePost(post)
+                            })
+                        })
+                    }
+                    self.postMenuOpen = nil
+                },
+            ]
+        }
+
+        return actions
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(posts, id: \.key) { post in
@@ -196,46 +252,10 @@ struct PostsList : View {
             }
         }
         .actionSheet(isPresented: isPostMenuOpen) {
-            if self.postMenuOpen?.value.author == self.context.ssbKey?.id {
-                return ActionSheet(
-                    title: Text("Actions"),
-                    buttons: [
-                        .cancel { self.postMenuOpen = nil },
-                        .default( Text("Delete") ) {
-                            if let post = self.postMenuOpen {
-                                self.deletePost(post)
-                            }
-                            self.postMenuOpen = nil
-                        },
-                        ]
-                )
-            } else {
-                return ActionSheet(
-                    title: Text("Actions"),
-                    buttons: [
-                        .cancel { self.postMenuOpen = nil },
-                        .default( Text("Hide") ) {
-                            if let post = self.postMenuOpen {
-                                self.deletePost(post)
-                                self.confirmDialog(message: "Do you also want to flag the post?", onConfirm: { _ in
-                                    self.flagPost(post, onConfirm: nil)
-                                })
-                            }
-                            self.postMenuOpen = nil
-                        },
-                        .default( Text("Flag") ) {
-                            if let post = self.postMenuOpen {
-                                self.flagPost(post, onConfirm: {
-                                    self.confirmDialog(message: "Do you also want to hide the post?", onConfirm: { _ in
-                                        self.deletePost(post)
-                                    })
-                                })
-                            }
-                            self.postMenuOpen = nil
-                        },
-                        ]
-                )
-            }
+            return ActionSheet(
+                title: Text("Actions"),
+                buttons: postActions()
+            )
         }
     }
 }

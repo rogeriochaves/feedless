@@ -161,33 +161,47 @@ router.post("/vanish", async (req, res) => {
   res.json({ result: "ok" });
 });
 
+const publish = async (id, req) => {
+  const { mentionId, mentionName, prev, root } = req.body;
+
+  let text = req.body.message;
+  let extra = {};
+  if (prev) {
+    extra.root = root;
+    extra.branch = prev;
+    extra.mentions = [{ link: mentionId, name: mentionName }];
+  }
+  if (mentionName) {
+    text.replace(`@${mentionName}`, `[@${mentionName}](${mentionId})`);
+  }
+
+  // Posting to somebody else's wall when its not a reply
+  if (id != req.context.key.id && !prev) {
+    const profile = await queries.getProfile(id);
+    text = `[@${profile.name}](${id}) ${req.body.message}`;
+
+    extra.mentions = extra.mentions || [];
+    extra.mentions.push({ link: id, name: profile.name });
+    extra.wall = id;
+  }
+
+  await ssb.client().identities.publishAs({
+    key: req.context.key,
+    private: false,
+    content: Object.assign(
+      {
+        type: "post",
+        text: text,
+      },
+      extra
+    ),
+  });
+};
+
 router.post("/profile/:id(*)/publish", async (req, res) => {
   const id = req.params.id;
 
-  if (id == req.context.key.id) {
-    // posting to your own wall
-    await ssb.client().identities.publishAs({
-      key: req.context.key,
-      private: false,
-      content: {
-        type: "post",
-        text: req.body.message,
-      },
-    });
-  } else {
-    const profile = await queries.getProfile(id);
-    const text = `[@${profile.name}](${id}) ${req.body.message}`;
-    await ssb.client().identities.publishAs({
-      key: req.context.key,
-      private: false,
-      content: {
-        type: "post",
-        text: text,
-        wall: id,
-        mentions: [{ link: id, name: profile.name }],
-      },
-    });
-  }
+  await publish(id, req);
 
   res.json({ result: "ok" });
 });

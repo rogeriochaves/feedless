@@ -46,7 +46,7 @@ class Profiles: ObservableObject {
         }
     }
 
-    func publish(context: Context, id: String, message: String) {
+    func publish(context: Context, id: String, message: String, replyTo: PostEntry?) {
         if
             let author = context.ssbKey?.id,
             case .success(var profile) = self.profiles[id],
@@ -54,7 +54,15 @@ class Profiles: ObservableObject {
         {
             Utils.clearCache("/profile/\(id)")
 
-            dataPost(path: "/profile/\(id)/publish", parameters: [ "message": message ], type: PostResult.self, context: context) {(result) in
+            var parameters = [ "message": message ]
+            if let replyTo_ = replyTo {
+                parameters["mentionId"] = replyTo_.value.author
+                parameters["mentionName"] = replyTo_.value.authorProfile.name ?? ""
+                parameters["prev"] = replyTo_.key
+                parameters["root"] = replyTo_.value.content.root ?? replyTo_.key
+            }
+
+            dataPost(path: "/profile/\(id)/publish", parameters: parameters, type: PostResult.self, context: context) {(result) in
                 self.load(context: context, id: id)
             }
 
@@ -64,7 +72,7 @@ class Profiles: ObservableObject {
                     value: AuthorProfileContent(
                         author: author,
                         authorProfile: authorProfile.profile,
-                        content: Post(text: message)
+                        content: Post(text: message, inReplyTo: replyTo?.value.authorProfile)
                     ),
                     rts: Int(NSDate().timeIntervalSince1970)
                 )

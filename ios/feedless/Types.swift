@@ -11,6 +11,7 @@ typealias Posts = [PostEntry]
 struct Post: Codable {
     public var text: String?
     public var inReplyTo: Profile?
+    public var root: String?
 }
 
 typealias PostEntry = Entry<AuthorProfileContent<Post>>

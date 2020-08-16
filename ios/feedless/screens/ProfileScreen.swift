@@ -18,10 +18,21 @@ struct ProfileScreen : View {
     @EnvironmentObject var keyboard : KeyboardResponder
     @State private var selection = 0
     @State private var post = ""
+    private var postBinding: Binding<String> { Binding (
+        get: { self.post },
+        set: { (post) in
+            self.post = post
+            if post.isEmpty {
+                self.replyTo = nil
+            }
+        }
+    )}
+
     @State private var isPostFocused = false
     @State private var selectedTab : Int
     @State private var moreActionsOpen = false
     @State private var secretsModalOpen = false
+    @State private var replyTo : PostEntry? = nil
 
     init(id : String?, selectedTab : Int = 0) {
         self.id = id
@@ -44,13 +55,19 @@ struct ProfileScreen : View {
         return [keyboard.currentHeight - adjustment, CGFloat(0)].max()! * -1
     }
 
+    func reply(to: PostEntry) -> Void {
+        self.post = "@" + (to.value.authorProfile.name ?? "") + " "
+        self.isPostFocused = true
+        self.replyTo = to
+    }
+
     func composer(_ profile: FullProfile) -> some View {
         VStack {
             MultilineTextField(
                 self.isLoggedUser() ?
                     "Post something on your wall..." :
                     "Write something to " + (profile.profile.name ?? "unknown"),
-                text: $post,
+                text: postBinding,
                 isResponder: $isPostFocused
             )
                 .padding(5)
@@ -70,8 +87,9 @@ struct ProfileScreen : View {
                             return
                         }
                         if let id = self.getId() {
-                            self.profiles.publish(context: self.context, id: id, message: self.post)
+                            self.profiles.publish(context: self.context, id: id, message: self.post, replyTo: self.replyTo)
                             self.post = ""
+                            self.replyTo = nil
                         }
                     })
                 }
@@ -243,7 +261,7 @@ struct ProfileScreen : View {
                         }
                         .padding(.top, 20)
                     } else if profile.posts.count > 0 {
-                        PostsList(profile.posts, reference: .WallId(profile.profile.id))
+                        PostsList(profile.posts, reference: .WallId(profile.profile.id), replyCallback: self.reply)
                     } else {
                         HStack {
                             Spacer()
