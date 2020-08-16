@@ -8,11 +8,12 @@
 import SwiftUI
 
 private let linkDetector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+private let blobDetector = try! NSRegularExpression(pattern: "(\\s|^)&(\\S*?=\\.sha\\d+)", options: .caseInsensitive)
 
 struct LinkColoredText: View {
     enum Component {
         case text(String)
-        case link(String, URL)
+        case link(String)
     }
 
     let text: String
@@ -28,7 +29,7 @@ struct LinkColoredText: View {
             if result.range.location > index {
                 components.append(.text(nsText.substring(with: NSRange(location: index, length: result.range.location - index))))
             }
-            components.append(.link(nsText.substring(with: result.range), result.url!))
+            components.append(.link(nsText.substring(with: result.range)))
             index = result.range.location + result.range.length
         }
 
@@ -44,7 +45,7 @@ struct LinkColoredText: View {
             switch component {
             case .text(let text):
                 return Text(verbatim: text)
-            case .link(let text, _):
+            case .link(let text):
                 return Text(verbatim: text)
                     .foregroundColor(Color(Styles.uiLinkBlue))
             }
@@ -55,6 +56,7 @@ struct LinkColoredText: View {
 struct LinkedText: View {
     let text: String
     let links: [NSTextCheckingResult]
+    let blobs: [NSTextCheckingResult]
 
     init (_ text: String) {
         self.text = text
@@ -63,12 +65,13 @@ struct LinkedText: View {
         // find the ranges of the string that have URLs
         let wholeString = NSRange(location: 0, length: nsText.length)
         links = linkDetector.matches(in: text, options: [], range: wholeString)
+        blobs = blobDetector.matches(in: text, options: [], range: wholeString)
     }
 
     var body: some View {
-        LinkColoredText(text: text, links: links)
+        LinkColoredText(text: text, links: links + blobs)
             .font(.body) // enforce here because the link tapping won't be right if it's different
-            .overlay(LinkTapOverlay(text: text, links: links))
+            .overlay(LinkTapOverlay(text: text, links: links, blobs: blobs))
     }
 }
 
@@ -77,6 +80,7 @@ private struct LinkTapOverlay: UIViewRepresentable {
 
     let text: String
     let links: [NSTextCheckingResult]
+    let blobs: [NSTextCheckingResult]
 
     func makeUIView(context: UIViewRepresentableContext<LinkTapOverlay>) -> LinkTapOverlayView {
         let view = LinkTapOverlayView()
@@ -87,7 +91,6 @@ private struct LinkTapOverlay: UIViewRepresentable {
         let forceTouchGestureRecognizer = ForceTouchGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.didForceTouchLabel(_:)))
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.didLongPressLabel(_:)))
 
-        tapGesture.delegate = context.coordinator
         view.addGestureRecognizer(tapGesture)
         view.addGestureRecognizer(forceTouchGestureRecognizer)
         view.addGestureRecognizer(longPressGestureRecognizer)
@@ -105,7 +108,7 @@ private struct LinkTapOverlay: UIViewRepresentable {
         Coordinator(self)
     }
 
-    class Coordinator: NSObject, UIGestureRecognizerDelegate {
+    class Coordinator: NSObject {
         let overlay: LinkTapOverlay
 
         let layoutManager = NSLayoutManager()
@@ -121,39 +124,38 @@ private struct LinkTapOverlay: UIViewRepresentable {
             layoutManager.addTextContainer(textContainer)
         }
 
-        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-            let location = touch.location(in: gestureRecognizer.view!)
-            let result = link(at: location)
-            return result != nil
+        func getUrl(_ location: CGPoint) -> URL? {
+            if let result = link(at: location) {
+                return result.url
+            } else if let result = blob(at: location) {
+                let stringMatch = textStorage?.attributedSubstring(from: result.range).string.replacingOccurrences(of: "\n", with: "")
+                if let url = stringMatch {
+                    return URL(string: "https://feedless.social/blob/" + url)
+                }
+            }
+
+            return nil
         }
 
         @objc func didTapLabel(_ gesture: UITapGestureRecognizer) {
             let location = gesture.location(in: gesture.view!)
-            guard let result = link(at: location), let url = result.url else {
-                return
-            }
+            guard let url = getUrl(location) else { return }
 
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
 
         @objc func didForceTouchLabel(_ gesture: ForceTouchGestureRecognizer) {
             let location = gesture.location(in: gesture.view!)
-            guard let result = link(at: location), let url = result.url else {
-                return
-            }
+            guard let url = getUrl(location) else { return }
 
-            let controller = UIDocumentInteractionController(url: url)
-            controller.presentOpenInMenu(from: gesture.view!.bounds, in: gesture.view!, animated: true)
+            UIApplication.share(url)
         }
 
         @objc func didLongPressLabel(_ gesture: UILongPressGestureRecognizer) {
             let location = gesture.location(in: gesture.view!)
-            guard let result = link(at: location), let url = result.url else {
-                return
-            }
+            guard let url = getUrl(location) else { return }
 
-            let controller = UIDocumentInteractionController(url: url)
-            controller.presentOpenInMenu(from: gesture.view!.bounds, in: gesture.view!, animated: true)
+            UIApplication.share(url)
         }
 
         private func link(at point: CGPoint) -> NSTextCheckingResult? {
@@ -168,6 +170,20 @@ private struct LinkTapOverlay: UIViewRepresentable {
             )
 
             return overlay.links.first { $0.range.contains(indexOfCharacter) }
+        }
+
+        private func blob(at point: CGPoint) -> NSTextCheckingResult? {
+            guard !overlay.blobs.isEmpty else {
+                return nil
+            }
+
+            let indexOfCharacter = layoutManager.characterIndex(
+                for: point,
+                in: textContainer,
+                fractionOfDistanceBetweenInsertionPoints: nil
+            )
+
+            return overlay.blobs.first { $0.range.contains(indexOfCharacter) }
         }
     }
 }
@@ -222,4 +238,37 @@ final class ForceTouchGestureRecognizer: UIGestureRecognizer {
         }
     }
 
+}
+
+// From: https://stackoverflow.com/questions/37938722/how-to-implement-share-button-in-swift
+extension UIApplication {
+    class var topViewController: UIViewController? { return getTopViewController() }
+    private class func getTopViewController(base: UIViewController? = UIApplication.shared.windows.first!.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController { return getTopViewController(base: nav.visibleViewController) }
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController { return getTopViewController(base: selected) }
+        }
+        if let presented = base?.presentedViewController { return getTopViewController(base: presented) }
+        return base
+    }
+
+    static var currentActivity : UIActivityViewController?  = nil
+    private class func _share(_ data: [Any],
+                              applicationActivities: [UIActivity]?) {
+        if currentActivity != nil { return }
+        let activityViewController = UIActivityViewController(activityItems: data, applicationActivities: nil)
+        currentActivity = activityViewController
+        UIApplication.topViewController?.present(activityViewController, animated: true) { () in
+            currentActivity = nil
+        }
+    }
+
+    class func share(_ data: Any...,
+                     applicationActivities: [UIActivity]? = nil) {
+        _share(data, applicationActivities: applicationActivities)
+    }
+    class func share(_ data: [Any],
+                     applicationActivities: [UIActivity]? = nil) {
+        _share(data, applicationActivities: applicationActivities)
+    }
 }
