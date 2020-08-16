@@ -150,6 +150,7 @@ private struct LinkTapOverlay: UIViewRepresentable {
 
         enum LinkedUrl {
             case web(URL)
+            case blob(String)
             case community(String)
         }
 
@@ -163,9 +164,7 @@ private struct LinkTapOverlay: UIViewRepresentable {
                         return .web(url)
                     }
                 case .blobLink:
-                    if let url = URL(string: "https://feedless.social/blob/" + stringMatch) {
-                        return .web(url)
-                    }
+                    return .blob(stringMatch)
                 case .communityLink:
                     return .community(stringMatch.replacingOccurrences(of: "#", with: ""))
                 }
@@ -181,6 +180,10 @@ private struct LinkTapOverlay: UIViewRepresentable {
             switch url {
             case .web(let url_):
                 UIApplication.shared.open(url_, options: [:], completionHandler: nil)
+            case .blob(let blob):
+                self.overlay.changeRoute(
+                    AnyView(BlobScreen(blob: blob))
+                )
             case .community(let name):
                 self.overlay.changeRoute(
                     AnyView(CommunitiesShow(name: name))

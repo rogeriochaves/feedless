@@ -10,6 +10,8 @@ import SwiftUI
 
 class ImageLoader: ObservableObject {
     @Published var images : [String: UIImage] = [:]
+    @Published var notImages : [String: (String, Data)] = [:]
+    @Published var imagesNotFound : [String: Bool] = [:]
     var attempts : [String: Int] = [:]
     var scheduled : [String: Bool] = [:]
 
@@ -34,11 +36,21 @@ class ImageLoader: ObservableObject {
 
         Utils.debug("Requests to load image \(url_)")
         session.dataTask(with: url_) {(data, response, error) in
-            if let rawData = data, let image = UIImage(data: rawData) {
-                Utils.debug("Image loaded \(url_)")
-                DispatchQueue.main.async {
-                    self.scheduled[url] = false
-                    self.images[url] = image
+            if let rawData = data {
+                if let image = UIImage(data: rawData) {
+                    Utils.debug("Image loaded \(url_)")
+                    DispatchQueue.main.async {
+                        self.scheduled[url] = false
+                        self.images[url] = image
+                    }
+                } else {
+                    if let httpResponse = response as? HTTPURLResponse {
+                        if httpResponse.statusCode == 404 {
+                            self.imagesNotFound[url] = true
+                        } else if let mimeType = httpResponse.mimeType {
+                            self.notImages[url] = (mimeType, rawData)
+                        }
+                    }
                 }
             } else {
                 Utils.debug("No data for image \(url_), trying again in 5s")
