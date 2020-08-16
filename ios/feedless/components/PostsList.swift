@@ -138,7 +138,10 @@ struct PostsList : View {
         }
 
         return AnyView(
-            ForEach(Utils.splitInSmallPosts(post.value.content.text ?? "", limit: self.limit), id: \.self) { text in
+            ForEach(
+                Array(Utils.splitInSmallPosts(post.value.content.text ?? "", limit: self.limit).prefix(50)),
+                id: \.self
+            ) { text in
                 Group {
                     self.postItem(post, text)
                     Divider()
