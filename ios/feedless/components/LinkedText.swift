@@ -9,6 +9,7 @@ import SwiftUI
 
 private let linkDetector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
 private let blobDetector = try! NSRegularExpression(pattern: "(\\s|^)&(\\S*?=\\.sha\\d+)", options: .caseInsensitive)
+private let communityDetector = try! NSRegularExpression(pattern: "(\\s|^)#([a-z0-9-]+)", options: .caseInsensitive)
 
 struct LinkColoredText: View {
     enum Component {
@@ -19,13 +20,13 @@ struct LinkColoredText: View {
     let text: String
     let components: [Component]
 
-    init(text: String, links: [NSTextCheckingResult]) {
+    init(text: String, links: [LinkedResult]) {
         self.text = text
         let nsText = text as NSString
 
         var components: [Component] = []
         var index = 0
-        for result in links {
+        for (_, result) in links {
             if result.range.location > index {
                 components.append(.text(nsText.substring(with: NSRange(location: index, length: result.range.location - index))))
             }
@@ -53,10 +54,21 @@ struct LinkColoredText: View {
     }
 }
 
+enum LinkedType {
+    case httpLink
+    case blobLink
+    case communityLink
+}
+
+typealias LinkedResult = (LinkedType, NSTextCheckingResult)
+
 struct LinkedText: View {
     let text: String
-    let links: [NSTextCheckingResult]
-    let blobs: [NSTextCheckingResult]
+    var links: [LinkedResult]
+    @EnvironmentObject var router : Router
+    @State var isLinkActive: Bool = false
+    @State var communityName: String = ""
+    @State var destination : AnyView = AnyView(EmptyView())
 
     init (_ text: String) {
         self.text = text
@@ -64,14 +76,26 @@ struct LinkedText: View {
 
         // find the ranges of the string that have URLs
         let wholeString = NSRange(location: 0, length: nsText.length)
-        links = linkDetector.matches(in: text, options: [], range: wholeString)
-        blobs = blobDetector.matches(in: text, options: [], range: wholeString)
+        links = linkDetector.matches(in: text, options: [], range: wholeString).map { (.httpLink, $0) }
+        links += blobDetector.matches(in: text, options: [], range: wholeString).map { (.blobLink, $0) }
+        links += communityDetector.matches(in: text, options: [], range: wholeString).map { (.communityLink, $0) }
+    }
+
+    func changeRoute(view: AnyView) {
+        self.destination = view
+        self.isLinkActive = true
     }
 
     var body: some View {
-        LinkColoredText(text: text, links: links + blobs)
-            .font(.body) // enforce here because the link tapping won't be right if it's different
-            .overlay(LinkTapOverlay(text: text, links: links, blobs: blobs))
+        ZStack {
+            LinkColoredText(text: text, links: links)
+                .font(.body) // enforce here because the link tapping won't be right if it's different
+                .overlay(LinkTapOverlay(text: text, links: links, changeRoute: changeRoute))
+
+            NavigationLink(destination: destination, isActive: $isLinkActive) {
+                Text("")
+            }
+        }
     }
 }
 
@@ -79,8 +103,8 @@ private struct LinkTapOverlay: UIViewRepresentable {
     typealias UIViewType = LinkTapOverlayView
 
     let text: String
-    let links: [NSTextCheckingResult]
-    let blobs: [NSTextCheckingResult]
+    let links: [LinkedResult]
+    let changeRoute : (AnyView) -> Void
 
     func makeUIView(context: UIViewRepresentableContext<LinkTapOverlay>) -> LinkTapOverlayView {
         let view = LinkTapOverlayView()
@@ -124,13 +148,26 @@ private struct LinkTapOverlay: UIViewRepresentable {
             layoutManager.addTextContainer(textContainer)
         }
 
-        func getUrl(_ location: CGPoint) -> URL? {
-            if let result = link(at: location) {
-                return result.url
-            } else if let result = blob(at: location) {
-                let stringMatch = textStorage?.attributedSubstring(from: result.range).string.replacingOccurrences(of: "\n", with: "")
-                if let url = stringMatch {
-                    return URL(string: "https://feedless.social/blob/" + url)
+        enum LinkedUrl {
+            case web(URL)
+            case community(String)
+        }
+
+        func getUrl(_ location: CGPoint) -> LinkedUrl? {
+            if let (type, result) = link(at: location) {
+                let stringMatch = textStorage?.attributedSubstring(from: result.range).string.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: " ", with: "") ?? ""
+
+                switch type {
+                case .httpLink:
+                    if let url = result.url {
+                        return .web(url)
+                    }
+                case .blobLink:
+                    if let url = URL(string: "https://feedless.social/blob/" + stringMatch) {
+                        return .web(url)
+                    }
+                case .communityLink:
+                    return .community(stringMatch.replacingOccurrences(of: "#", with: ""))
                 }
             }
 
@@ -141,24 +178,35 @@ private struct LinkTapOverlay: UIViewRepresentable {
             let location = gesture.location(in: gesture.view!)
             guard let url = getUrl(location) else { return }
 
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            switch url {
+            case .web(let url_):
+                UIApplication.shared.open(url_, options: [:], completionHandler: nil)
+            case .community(let name):
+                self.overlay.changeRoute(
+                    AnyView(CommunitiesShow(name: name))
+                )
+            }
         }
 
         @objc func didForceTouchLabel(_ gesture: ForceTouchGestureRecognizer) {
             let location = gesture.location(in: gesture.view!)
             guard let url = getUrl(location) else { return }
 
-            UIApplication.share(url)
+            if case let .web(url_) = url {
+                UIApplication.share(url_)
+            }
         }
 
         @objc func didLongPressLabel(_ gesture: UILongPressGestureRecognizer) {
             let location = gesture.location(in: gesture.view!)
             guard let url = getUrl(location) else { return }
 
-            UIApplication.share(url)
+            if case let .web(url_) = url {
+                UIApplication.share(url_)
+            }
         }
 
-        private func link(at point: CGPoint) -> NSTextCheckingResult? {
+        private func link(at point: CGPoint) -> LinkedResult? {
             guard !overlay.links.isEmpty else {
                 return nil
             }
@@ -169,21 +217,7 @@ private struct LinkTapOverlay: UIViewRepresentable {
                 fractionOfDistanceBetweenInsertionPoints: nil
             )
 
-            return overlay.links.first { $0.range.contains(indexOfCharacter) }
-        }
-
-        private func blob(at point: CGPoint) -> NSTextCheckingResult? {
-            guard !overlay.blobs.isEmpty else {
-                return nil
-            }
-
-            let indexOfCharacter = layoutManager.characterIndex(
-                for: point,
-                in: textContainer,
-                fractionOfDistanceBetweenInsertionPoints: nil
-            )
-
-            return overlay.blobs.first { $0.range.contains(indexOfCharacter) }
+            return overlay.links.first { (_, result) in result.range.contains(indexOfCharacter) }
         }
     }
 }
