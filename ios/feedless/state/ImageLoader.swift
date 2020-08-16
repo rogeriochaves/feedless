@@ -34,6 +34,15 @@ class ImageLoader: ObservableObject {
         config.requestCachePolicy = .returnCacheDataElseLoad
         let session = URLSession(configuration: config)
 
+        func retry() {
+            Utils.debug("No data for image \(url_), trying again in 5s")
+            URLCache.shared.removeCachedResponse(for: session.dataTask(with: url_))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.scheduled[url] = false
+                self.load(url: url)
+            }
+        }
+
         Utils.debug("Requests to load image \(url_)")
         session.dataTask(with: url_) {(data, response, error) in
             if let rawData = data {
@@ -46,19 +55,18 @@ class ImageLoader: ObservableObject {
                 } else {
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 404 {
-                            self.imagesNotFound[url] = true
+                            if self.attempts[url]! > 10 {
+                                self.imagesNotFound[url] = true
+                            } else {
+                                retry()
+                            }
                         } else if let mimeType = httpResponse.mimeType {
                             self.notImages[url] = (mimeType, rawData)
                         }
                     }
                 }
             } else {
-                Utils.debug("No data for image \(url_), trying again in 5s")
-                URLCache.shared.removeCachedResponse(for: session.dataTask(with: url_))
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                    self.scheduled[url] = false
-                    self.load(url: url)
-                }
+                retry()
             }
         }.resume()
     }
