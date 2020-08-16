@@ -59,9 +59,9 @@ struct PostsList : View {
         interval = floor(seconds / 2592000);
         if (interval > 1) {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM dd, yyyy"
+            dateFormatter.dateFormat = "dd MMM yyyy"
             dateFormatter.timeZone = TimeZone.current
-            return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timestamp_)))
+            return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(ts)))
         }
         interval = floor(seconds / 86400)
         if interval > 1 {
