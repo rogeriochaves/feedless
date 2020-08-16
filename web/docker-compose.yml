@@ -8,7 +8,7 @@ services:
     volumes:
       - feedless_ssb:/root/.ssb
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:$PORT/metrics"]
+      test: "CMD curl --fail http://localhost:$PORT/metrics || kill 1"
       interval: 20s
       timeout: 5s
       retries: 1
