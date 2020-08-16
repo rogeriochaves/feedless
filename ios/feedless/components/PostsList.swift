@@ -194,7 +194,19 @@ struct PostsList : View {
 
     func postActions() -> [ActionSheet.Button] {
         var actions : [ActionSheet.Button] = [
-            .cancel { self.postMenuOpen = nil }
+            .cancel { self.postMenuOpen = nil },
+            .default( Text("Share") ) {
+                if let post = self.postMenuOpen {
+                    UIApplication.share("https://feedless.social/post/" + post.key.replacingOccurrences(of: "%", with: ""))
+                }
+                self.postMenuOpen = nil
+            },
+            .default( Text("Copy Post ID") ) {
+                if let post = self.postMenuOpen {
+                    UIPasteboard.general.string = post.key
+                }
+                self.postMenuOpen = nil
+            }
         ]
 
         if case .WallId(_) = self.reference {

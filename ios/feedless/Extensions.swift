@@ -70,3 +70,36 @@ extension UIApplication {
             .endEditing(force)
     }
 }
+
+// From: https://stackoverflow.com/questions/37938722/how-to-implement-share-button-in-swift
+extension UIApplication {
+    class var topViewController: UIViewController? { return getTopViewController() }
+    private class func getTopViewController(base: UIViewController? = UIApplication.shared.windows.first!.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController { return getTopViewController(base: nav.visibleViewController) }
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController { return getTopViewController(base: selected) }
+        }
+        if let presented = base?.presentedViewController { return getTopViewController(base: presented) }
+        return base
+    }
+
+    static var currentActivity : UIActivityViewController?  = nil
+    private class func _share(_ data: [Any],
+                              applicationActivities: [UIActivity]?) {
+        if currentActivity != nil { return }
+        let activityViewController = UIActivityViewController(activityItems: data, applicationActivities: nil)
+        currentActivity = activityViewController
+        UIApplication.topViewController?.present(activityViewController, animated: true) { () in
+            currentActivity = nil
+        }
+    }
+
+    class func share(_ data: Any...,
+                     applicationActivities: [UIActivity]? = nil) {
+        _share(data, applicationActivities: applicationActivities)
+    }
+    class func share(_ data: [Any],
+                     applicationActivities: [UIActivity]? = nil) {
+        _share(data, applicationActivities: applicationActivities)
+    }
+}
