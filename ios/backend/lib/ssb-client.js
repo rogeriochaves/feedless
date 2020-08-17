@@ -28,7 +28,6 @@ const connectClient = (ssbSecret) => {
         setTimeout(() => connectClient(ssbSecret), 1000);
         return;
       }
-      console.log("conncetion successfull!");
 
       ssbClient = server;
 

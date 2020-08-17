@@ -10,6 +10,7 @@ import SwiftUI
 private let linkDetector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
 private let blobDetector = try! NSRegularExpression(pattern: "(\\s|^)&(\\S*?=\\.sha\\d+)", options: .caseInsensitive)
 private let communityDetector = try! NSRegularExpression(pattern: "(\\s|^)#([a-z0-9-]+)", options: .caseInsensitive)
+private let postDetector = try! NSRegularExpression(pattern: "(\\s|^)%(\\S*?=\\.sha\\d+)", options: .caseInsensitive)
 
 struct LinkColoredText: View {
     enum Component {
@@ -58,6 +59,7 @@ enum LinkedType {
     case httpLink
     case blobLink
     case communityLink
+    case postLink
 }
 
 typealias LinkedResult = (LinkedType, NSTextCheckingResult)
@@ -79,6 +81,7 @@ struct LinkedText: View {
         links = linkDetector.matches(in: text, options: [], range: wholeString).map { (.httpLink, $0) }
         links += blobDetector.matches(in: text, options: [], range: wholeString).map { (.blobLink, $0) }
         links += communityDetector.matches(in: text, options: [], range: wholeString).map { (.communityLink, $0) }
+        links += postDetector.matches(in: text, options: [], range: wholeString).map { (.postLink, $0) }
     }
 
     func changeRoute(view: AnyView) {
@@ -152,6 +155,7 @@ private struct LinkTapOverlay: UIViewRepresentable {
             case web(URL)
             case blob(String)
             case community(String)
+            case post(String)
         }
 
         func getUrl(_ location: CGPoint) -> LinkedUrl? {
@@ -167,6 +171,8 @@ private struct LinkTapOverlay: UIViewRepresentable {
                     return .blob(stringMatch)
                 case .communityLink:
                     return .community(stringMatch.replacingOccurrences(of: "#", with: ""))
+                case .postLink:
+                    return .post(stringMatch)
                 }
             }
 
@@ -187,6 +193,10 @@ private struct LinkTapOverlay: UIViewRepresentable {
             case .community(let name):
                 self.overlay.changeRoute(
                     AnyView(CommunitiesShow(name: name))
+                )
+            case .post(let key):
+                self.overlay.changeRoute(
+                    AnyView(ThreadScreen(key: key))
                 )
             }
         }

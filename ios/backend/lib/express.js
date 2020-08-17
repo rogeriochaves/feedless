@@ -469,6 +469,18 @@ router.post("/about", async (req, res) => {
   res.json({ result: "ok" });
 });
 
+router.get(
+  "/post/:key(*)",
+  { mobileVersion: "/mobile/post/:key" },
+  async (req, res) => {
+    const key = "%" + req.params.key;
+
+    const posts = await queries.getPost(req.context.key.id, key);
+
+    res.json(posts);
+  }
+);
+
 router.post("/profile/:id(*)/block", async (req, res) => {
   const id = req.params.id;
   if (id == req.context.key.id) {

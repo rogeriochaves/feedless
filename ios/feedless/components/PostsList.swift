@@ -11,6 +11,7 @@ import SwiftUI
 enum PostsReference {
     case WallId(String)
     case CommunityName(String)
+    case Thread(String)
 }
 
 struct PostsList : View {
@@ -18,6 +19,7 @@ struct PostsList : View {
     @EnvironmentObject var profiles : Profiles
     @EnvironmentObject var context : Context
     @EnvironmentObject var communities : Communities
+    @EnvironmentObject var threads : Threads
     private let posts:Posts
     private let limit:Int
     private let showInReplyTo:Bool
@@ -40,6 +42,10 @@ struct PostsList : View {
             self.posts = posts.sorted(by: { a, b in a.rts ?? 0 < b.rts ?? 0 })
             self.limit = 10_000
             self.showInReplyTo = false
+        case .Thread(_):
+            self.posts = posts.sorted(by: { a, b in a.rts ?? 0 < b.rts ?? 0 })
+            self.limit = 140
+            self.showInReplyTo = true
         }
     }
 
@@ -78,13 +84,36 @@ struct PostsList : View {
         return "just now"
     };
 
-    func inReplyToLink(_ post: Entry<AuthorProfileContent<Post>>) -> Text {
+    func postInfo(_ post: Entry<AuthorProfileContent<Post>>) -> some View {
         if showInReplyTo, let inReplyTo = post.value.content.inReplyTo {
-            return Text(" in reply to " + (inReplyTo.name ?? "unknown"))
-                .font(.subheadline)
-                .foregroundColor(Styles.darkGray)
+            return AnyView(NavigationLink(destination: ThreadScreen(key: post.key)) {
+                (
+                    Text(post.value.authorProfile.name ?? "unknown")
+                    .bold()
+                    .foregroundColor(Color(Styles.uiBlack))
+                    +
+                    Text(" · " + timeSince(timestamp: post.rts))
+                        .font(.subheadline)
+                        .foregroundColor(Styles.darkGray)
+                    +
+                    Text(" in reply to " + (inReplyTo.name ?? "unknown"))
+                    .font(.subheadline)
+                    .foregroundColor(Styles.darkGray)
+                ).lineLimit(1).truncationMode(.tail)
+            })
         }
-        return Text("")
+
+        return AnyView(
+            (
+                Text(post.value.authorProfile.name ?? "unknown")
+                .bold()
+                .foregroundColor(Color(Styles.uiBlack))
+                +
+                Text(" · " + timeSince(timestamp: post.rts))
+                    .font(.subheadline)
+                    .foregroundColor(Styles.darkGray)
+            ).lineLimit(1).truncationMode(.tail)
+        )
     }
 
     func postItem(_ post: Entry<AuthorProfileContent<Post>>, _ text: String) -> some View {
@@ -97,16 +126,7 @@ struct PostsList : View {
             }
             VStack(alignment: .leading, spacing: 5) {
                 HStack(alignment: .center) {
-                    (
-                        Text(post.value.authorProfile.name ?? "unknown")
-                        .bold()
-                        +
-                        Text(" · " + timeSince(timestamp: post.rts))
-                            .font(.subheadline)
-                            .foregroundColor(Styles.darkGray)
-                        +
-                        inReplyToLink(post)
-                        ).lineLimit(1).truncationMode(.tail)
+                    postInfo(post)
                     Spacer()
                     Button(action: {
                         self.postMenuOpen = post
@@ -123,7 +143,15 @@ struct PostsList : View {
         .padding(.vertical, 5)
     }
 
-    func postIfVisible(_ post: Entry<AuthorProfileContent<Post>>) -> some View {
+    func splittedPosts(_ post : PostEntry) -> [String] {
+        let posts = Array(Utils.splitInSmallPosts(post.value.content.text ?? "", limit: self.limit).prefix(50))
+        if case .WallId(_) = self.reference {
+            return posts
+        }
+        return posts.reversed()
+    }
+
+    func postIfVisible(_ post: PostEntry) -> some View {
         if post.value.deleted == true || post.value.content.text == nil {
             return AnyView(EmptyView())
         } else if post.value.hidden == true || self.profiles.blockeds.contains(post.value.author) {
@@ -142,7 +170,7 @@ struct PostsList : View {
 
         return AnyView(
             ForEach(
-                Array(Utils.splitInSmallPosts(post.value.content.text ?? "", limit: self.limit).prefix(50)),
+                splittedPosts(post),
                 id: \.self
             ) { text in
                 Group {
@@ -168,6 +196,8 @@ struct PostsList : View {
             self.profiles.deletePost(context: self.context, wall: wallId, post: post)
         case .CommunityName(let name):
             self.communities.deletePost(context: self.context, name: name, post: post)
+        case .Thread(let threadKey):
+            self.threads.deletePost(context: self.context, threadKey: threadKey, post: post)
         }
     }
 
@@ -280,6 +310,7 @@ struct PostsList_Previews: PreviewProvider {
                 .environmentObject(Samples.context())
                 .environmentObject(Profiles())
                 .environmentObject(Communities())
+                .environmentObject(Threads())
         }
     }
 }
