@@ -750,6 +750,7 @@
 				INFOPLIST_FILE = feedless/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = social.feedless.app;
 				PRODUCT_NAME = Feedless;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -778,6 +779,7 @@
 				INFOPLIST_FILE = feedless/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = social.feedless.app;
 				PRODUCT_NAME = Feedless;
 				PROVISIONING_PROFILE_SPECIFIER = "";
