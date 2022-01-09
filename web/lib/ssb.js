@@ -26,6 +26,7 @@ const Server = require("secret-stack")()
   .use(require("ssb-query"))
   .use(require("./plugins/memory-identities"))
   .use(require("ssb-blobs"))
+  .use(require("./monkeypatch/ssb-blobs-purge"))
   .use(require("./plugins/feedless-index"))
   .use(require("./plugins/encrypted-view"));
 
@@ -46,3 +47,5 @@ const mode = process.env.MODE || "standalone";
 if (mode == "standalone" && !secretExists) {
   fs.writeFileSync(`${ssbFolder()}/logged-out`, "");
 }
+
+server.blobsPurge.start();

@@ -25,4 +25,8 @@ module.exports = configInject(process.env.CONFIG_FOLDER || "ssb", {
       net: [{ transform: "shs" }],
     },
   },
+  blobsPurge: {
+    cpuMax: 60,
+    storageLimit: 3e9, // 3 gigabytes
+  },
 });
